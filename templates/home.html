@@ -8,7 +8,7 @@
         <title>Home</title>
         <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
-        <link href="{% static 'css/message-style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/profile-style.css' %}" rel="stylesheet">
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
         <link href="{% static 'css/media-flip.css' %}" rel="stylesheet">
         <link href="{% static 'css/chat.css' %}" rel="stylesheet">
@@ -134,6 +134,8 @@
         let cardId = "0";
         let chatInterfaceClicked = false;
         const chat_message = document.getElementById("message-box");
+        let chat_time_stamp = 0;
+        const stride_sec = 150;
         const message_window = document.getElementById("message-window");
         const send_message = $('#send_message');
         const chat_length = document.getElementById("chat-length");
@@ -170,12 +172,11 @@
         }
         function add_message(username,id,image_path,content,self,is_html,identity,time){
             const main_div = document.createElement("div");main_div.classList.add("chat-line");
+            if (chat_time_stamp + stride_sec <= time){chat_time_stamp = time;let dt = new Date(time * 1000).toLocaleTimeString();/*stamp s -> ms*/ const date = document.createElement("p"); date.classList.add("chat-time"); date.innerText = dt; main_div.appendChild(date);}
             const link = document.createElement("a");link.href = "/profile/id="+id;link.target='_blank';
             const obj = document.createElement("div");obj.classList.add("chat-object");
-            const content_div = document.createElement("div");content_div.classList.add("chat-content-auto");
-            content_div.appendChild(add_identity(identity, username));
+            const content_div = document.createElement("div");content_div.classList.add("chat-content-auto"); content_div.appendChild(add_identity(identity, username));
             const content_span = document.createElement("span");content_span.classList.add("chat-content");
-            console.log(time);
             if (is_html){content_span.innerHTML = content}else{content_span.innerText = content} /* 防止 XSS 攻击 innerHtml -> innerText */
             content_div.appendChild(content_span);obj.appendChild(content_div);
             const image = document.createElement("img");image.src = image_path;image.alt = "";image.classList.add("user-image");link.appendChild(image);obj.appendChild(link);

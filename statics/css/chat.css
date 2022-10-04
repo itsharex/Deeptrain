@@ -8,7 +8,7 @@
     40% {opacity: 0;}
     100% {opacity: 1;}
 }
-.clearfix{zoom: 1;}  .clearfix:after{content: "\20";display: block;height: 0;clear: both;} /* chat element clearfix*/
+. {zoom: 1;}  .clearfix:after{content: "\20";display: block;height: 0;clear: both;} /* chat element clearfix*/
 .chat-interface{
     width: 98%;
     height: 98%;
@@ -33,12 +33,19 @@ button.send {
     z-index: 3;
 }
 
-.chat-line{ /*避免多个chat-object重叠与一行之内.*/
+.chat-line{ /*chat-object主div 避免多个chat-object重叠与一行之内.*/
     width: 100%;
     height: auto;
+    margin: 10px 0;
+}
+.chat-time{
+    width: 100%;
+    text-align: center;
+    color: gray;
+    font-size: 45%;
+    transform: translateY(6px);
 }
 .chat-object{
-    margin: 10px 0;
     animation: fade-in;
     animation-duration: 0.8s;
     -webkit-animation: fade-in 0.8s;

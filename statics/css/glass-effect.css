@@ -164,8 +164,10 @@ div.glass-box .list:hover .content p{
     padding: 0;
     border: none;
     margin: 8px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(2px);
 }
-.glass-button:hover {color: #fff;background: transparent;box-shadow: none;}
+.glass-button:hover {color: #fff;background: transparent;box-shadow: none;backdrop-filter: none;}
 .glass-button:before, .glass-button:after {content: '';position: absolute;top: 0;right: 0;height: 2px;width: 0;background: #fff;box-shadow: -1px -1px 5px 0 #fff, 7px 7px 20px 0 #0003, 4px 4px 5px 0 #0002;transition: 400ms ease all;}
 .glass-button:after {right: inherit;top: inherit;left: 0;bottom: 0;}
 .glass-button:hover:before, .glass-button:hover:after {width: 100%;transition: 800ms ease all;}

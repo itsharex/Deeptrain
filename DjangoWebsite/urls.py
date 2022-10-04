@@ -21,6 +21,7 @@ from django.views.generic.base import RedirectView
 import views
 from django.conf import settings
 from applications.application import appHandler
+from IMServer.views import chat
 
 urlpatterns = [
     path("favicon.ico", RedirectView.as_view(url="/static/images/favicon.png")),
@@ -33,4 +34,5 @@ urlpatterns = [
     path("logout/", views.logout),
     path("home/", views.home),
     path("profile/id=<int:uid>", views.profile),
+    path("chat/", chat),
 ] + appHandler.as_wsgi_urlpatterns()

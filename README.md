@@ -3,14 +3,14 @@
 
 <br></br>
 ## 预览 | Preview
-![banner](https://github.com/zmh-program/Zh-Website/blob/django-channels(main)/preview/main-banner.PNG)
-![cookies](https://github.com/zmh-program/Zh-Website/blob/django-channels(main)/preview/cookies-adt.PNG)
-![app](https://github.com/zmh-program/Zh-Website/blob/django-channels(main)/preview/emapp.PNG)
-![features](https://github.com/zmh-program/Zh-Website/blob/django-channels(main)/preview/main-features.PNG)
-![website info](https://github.com/zmh-program/Zh-Website/blob/django-channels(main)/preview/main-info.PNG)
-![profile](https://github.com/zmh-program/Zh-Website/blob/django-channels(main)/preview/profile.PNG)
-![profile page](https://github.com/zmh-program/Zh-Website/blob/django-channels(main)/preview/profile-page.PNG)
-![register](https://github.com/zmh-program/Zh-Website/blob/django-channels(main)/preview/register.PNG)
+![banner](https://github.com/zmh-program/Zh-Website/blob/django(main)/preview/main-banner.PNG)
+![cookies](https://github.com/zmh-program/Zh-Website/blob/django(main)/preview/cookies-adt.PNG)
+![app](https://github.com/zmh-program/Zh-Website/blob/django(main)/preview/emapp.PNG)
+![features](https://github.com/zmh-program/Zh-Website/blob/django(main)/preview/main-features.PNG)
+![website info](https://github.com/zmh-program/Zh-Website/blob/django(main)/preview/main-info.PNG)
+![profile](https://github.com/zmh-program/Zh-Website/blob/django(main)/preview/profile.PNG)
+![profile page](https://github.com/zmh-program/Zh-Website/blob/django(main)/preview/profile-page.PNG)
+![register](https://github.com/zmh-program/Zh-Website/blob/django(main)/preview/register.PNG)
 ## 用前须知 | Before Using
 - 确保已在`localhost:3306`运行`MySQL`， 且用户名与密码都符合
 >更改处 | Replacement `DjangoWebsite / settings.py / line:94`
