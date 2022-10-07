@@ -8,6 +8,7 @@ from controller import webtoken_validate, get_user_from_name
 from django import urls
 from django.db import models
 from DjangoWebsite.settings import APPLICATIONS_DIR, BASE_APPLICATION_DIR
+from model.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -187,7 +188,7 @@ class AbstractApplicationConsumer(WebsocketConsumer):
 
 class JSONApplicationConsumer(AbstractApplicationConsumer):
     app: "UserApplication"  # without String: not defined.
-    object: models.Model
+    object: User
 
     def __init__(self, *args, **kwargs):
         super(JSONApplicationConsumer, self).__init__(*args, **kwargs)
@@ -290,7 +291,7 @@ class UserApplication(AbstractApplication):
     def filter_user(self) -> set:
         return set(filter(lambda user: user.is_login(), self.__users))
 
-    def get_avaliable_user_length(self) -> int:
+    def get_available_user_length(self) -> int:
         return len(self.filter_user())
 
     def remove_user(self, user: JSONApplicationConsumer):
