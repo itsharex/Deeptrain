@@ -42,7 +42,7 @@ button.send {
     width: 100%;
     text-align: center;
     color: gray;
-    font-size: 45%;
+    font-size: 15px;
     transform: translateY(6px);
 }
 .chat-object{
@@ -84,6 +84,7 @@ span.name{
     color: black;
     position: absolute;
     width: auto;
+    white-space: nowrap;
 }
 img.user-image{
     width: 25px;

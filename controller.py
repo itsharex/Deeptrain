@@ -1,4 +1,5 @@
 from hashlib import md5
+from typing import List, Tuple, Union
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import QuerySet
@@ -26,7 +27,7 @@ def is_available_password(password: str) -> bool:
     return 6 <= len(password) <= 14 and regular_string(password)
 
 
-def login(username: str, password: str) -> (bool, str):
+def login(username: str, password: str) -> Tuple[bool, str]:
     if not is_available_username(username):
         return False, "账户名格式错误!"
     if not is_available_password(password):
@@ -64,7 +65,7 @@ def login_with_cookie_or_token(username: str, md5_password: str) -> bool:
     return resp.first().password == md5_password if resp else False
 
 
-def get_userinfo_from_cookies(request: WSGIRequest) -> (str, str):
+def get_userinfo_from_cookies(request: WSGIRequest) -> Tuple[str, str]:
     return request.COOKIES.get("username", str()), request.COOKIES.get("password", str())
 
 
@@ -97,7 +98,7 @@ def get_user_from_name(username: str) -> User:
     return User.objects.get(username=username)
 
 
-def get_user_from_id(uid: int) -> [User, None]:
+def get_user_from_id(uid: int) -> Union[User, None]:
     Query = User.objects.filter(id=uid)
     return Query.first() if Query else None
 
@@ -106,7 +107,7 @@ def get_profile_from_user(userObj: User) -> Profile:
     return Profile.objects.get(user_bind=userObj)
 
 
-def update_data_from_user(userObj: User, detail=None, identity=None) -> [int, str]:
+def update_data_from_user(userObj: User, detail=None, identity=None) -> Union[int, str, None]:
     """2 channels:
         <1. change detail>
         <2. change identity>
@@ -122,12 +123,12 @@ def update_data_from_user(userObj: User, detail=None, identity=None) -> [int, st
     return None
 
 
-def get_data_from_username(username: str) -> (User, (Profile.detail, Profile.identity)):
+def get_data_from_username(username: str) -> [User, (Profile.detail, Profile.identity)]:
     obj = get_user_from_name(username)
     return obj, get_profile_from_user(obj).get_data(default_detail=default_detail)
 
 
-def get_data_from_uid(uid: int) -> [(User, (Profile.detail, Profile.identity)), None]:
+def get_data_from_uid(uid: int) -> [(User, [Profile.detail, Profile.identity]), None]:
     obj = get_user_from_id(uid)
     return (obj, get_profile_from_user(obj).get_data(default_detail=default_detail)) if obj else None
 
@@ -135,6 +136,6 @@ def get_data_from_uid(uid: int) -> [(User, (Profile.detail, Profile.identity)), 
 webtoken_encode = webtoken.encode
 
 
-def webtoken_validate(token: str) -> (bool, str):
+def webtoken_validate(token: str) -> Tuple[bool, str]:
     username, password = webtoken.decode(token)
     return login_with_cookie_or_token(username, password), username

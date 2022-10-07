@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 import jwt
 from DjangoWebsite.settings import SECRET_KEY as salt
 
@@ -14,6 +16,6 @@ def _decode(token: str) -> dict:
                       algorithms='HS256')
 
 
-def decode(token: str) -> (str, str):
-    resp = _decode(token)
+def decode(token: str) -> Tuple[str, str]:
+    resp: dict = _decode(token)
     return resp["username"], resp["password"]

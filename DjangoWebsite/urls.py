@@ -34,5 +34,5 @@ urlpatterns = [
     path("logout/", views.logout),
     path("home/", views.home),
     path("profile/id=<int:uid>", views.profile),
-    path("chat/", chat),
+    path("chat/<str:token>/", chat),
 ] + appHandler.as_wsgi_urlpatterns()

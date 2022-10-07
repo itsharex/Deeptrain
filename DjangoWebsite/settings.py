@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dwebsocket',
     'model',
     'IMServer',
 ] + APPLICATIONS_DIR
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'dwebsocket.middleware.WebSocketMiddleware',
 ]
 
 ROOT_URLCONF = 'DjangoWebsite.urls'
@@ -78,7 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'DjangoWebsite.wsgi.application'
-WEBSOCKET_FACTORY_CLASS = 'dwebsocket.backends.uwsgi.factory.uWsgiWebSocketFactory'
+# WEBSOCKET_FACTORY_CLASS = 'dwebsocket.backends.uwsgi.factory.uWsgiWebSocketFactory'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -87,7 +89,7 @@ DATABASES = {
     'default':
         {
             'ENGINE': 'django.db.backends.mysql',  # module
-            'NAME': 'django-database',  # database name
+            'NAME': 'django_database',  # database name
             'HOST': 'localhost',  # ip
             'PORT': 3306,
             'USER': 'root',
@@ -124,6 +126,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# Encode / Decode
+CODING = "utf-8"
+WS_INTERVAL = 0.04
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 

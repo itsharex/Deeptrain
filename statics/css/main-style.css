@@ -6,7 +6,9 @@ html {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility
 }
-
+*{
+    font-family: "Consolas", Monospace;
+}
 body {
     border: 0;
     margin: 0;
@@ -50,11 +52,11 @@ ul,li {
 }
 
 body,p {
-    font: normal 14px/22px "Consolas",'STXinwei',sans-serif
+    font: normal 14px/22px "Consolas", Monospace
 }
 
 h1,h2,h3,h4,h5,h6 {
-    font-family: "Consolas",'STXinwei',sans-serif
+    font-family: "Consolas", Monospace
 }
 
 h1 {
@@ -724,7 +726,7 @@ img {
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2,.timeline-centered .timeline-entry .timeline-entry-inner .timeline-label p {
     color: #737881;
-    font: normal 16px/30px "Consolas",'STXinwei',sans-serif
+    font: normal 16px/30px "Consolas", Monospace
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label p + p {
