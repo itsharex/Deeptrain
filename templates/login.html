@@ -47,12 +47,13 @@
     .error{
         color:red;
     }
-    *{font-family:"Consolas",Monospace;}
+    *{
+        font-family: "Consolas", Monospace, monospace;}
 </style>
 </head>
 
 <body>
-    <section>
+    <section class="login-section">
         <!-- 背景颜色 -->
         <div class="color"></div>
         <div class="color"></div>
@@ -67,13 +68,13 @@
             <!-- 登录框 -->
             <div class="container">
                 <div class="form">
-                    <h2>登录</h2>
+                    <div class="title-div"><h2>Login</h2></div>
                     <form id = "loginform" action="/login/" method="post">
                         {% csrf_token %}
                         <div class="inputBox"><input type="text" placeholder="账户" name="username" id="username" value="{{ username|default:'' }}"></div>
                         <div class="inputBox"><input type="password" placeholder="密码" name="password" id="password" value="{{ password|default:'' }}"></div>
                         <div class="error" align="center"><br>{{ err_code|default:"" }}</div>
-                        <div class="inputBox"><input type="submit" value="登录" id="input1"></div>
+                        <div class="inputBox"><input type="submit" value="login" id="input1"></div>
                     </form>
                     <p class="forget">没有账户?<a href="/register/">注册</a></p>
                     <br>

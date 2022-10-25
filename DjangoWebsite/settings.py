@@ -34,17 +34,17 @@ APPLICATIONS_DIR = [f"applications.{app_path}" for app_path in os.listdir(BASE_A
                     if os.path.isdir(os.path.join(BASE_APPLICATION_DIR, app_path)) and app_path != "__pycache__"]
 
 INSTALLED_APPS = [
-    'simpleui',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'dwebsocket',
-    'model',
-    'IMServer',
-] + APPLICATIONS_DIR
+                     'simpleui',
+                     'django.contrib.admin',
+                     'django.contrib.auth',
+                     'django.contrib.contenttypes',
+                     'django.contrib.sessions',
+                     'django.contrib.messages',
+                     'django.contrib.staticfiles',
+                     'dwebsocket',
+                     'model',
+                     'IMServer',
+                 ] + APPLICATIONS_DIR
 #  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,7 +74,7 @@ TEMPLATES = [
             ],
             'builtins': [
                 'django.templatetags.static'
-             ],
+            ],
         },
     },
 ]
@@ -89,7 +89,7 @@ DATABASES = {
     'default':
         {
             'ENGINE': 'django.db.backends.mysql',  # module
-            'NAME': 'django_database',  # database name
+            'NAME': 'django-database',  # database name
             'HOST': 'localhost',  # ip
             'PORT': 3306,
             'USER': 'root',
@@ -126,7 +126,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Encode / Decode
 CODING = "utf-8"
 WS_INTERVAL = 0.04
@@ -148,9 +147,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "statics"),
+    os.path.join(BASE_DIR, "static"),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "/statics/")
+STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

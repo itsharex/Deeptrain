@@ -60,7 +60,7 @@
 </head>
 
 <body>
-    <section>
+    <section class="register-section">
         <!-- 背景颜色 -->
         <div class="color"></div>
         <div class="color"></div>
@@ -75,14 +75,14 @@
             <!-- 登录框 -->
             <div class="container">
                 <div class="form">
-                    <h2>注册</h2>
+                    <div class="title-div"><h2>Register</h2></div>
                     <form id = "loginform" action="/register/" method="post">
                         {% csrf_token %}
                         <div class="inputBox"><input type="text" placeholder="请输入3~12位账户名" name="username" id="username" value="{{ username|default:'' }}"></div>
                         <div class="inputBox"><input type="password" placeholder="请输入6~14位密码" name="password" id="password" value="{{ password|default:'' }}"></div>
                         <div class="inputBox"><input type="password" placeholder="再次输入密码" name="re_password" id="re_password" value="{{ re_password|default:'' }}"></div>
                         <div class="error" align="center"><br>{{ err_code|default:"" }}</div>
-                        <div class="inputBox"><input type="submit" value="注册" id="input1"></div>
+                        <div class="inputBox"><input type="submit" value="register" id="input1"></div>
                     </form>
                     <p class="forget">已有账户?<a href="/login/">点击登录</a></p>
                     <br>
