@@ -24,7 +24,7 @@ from applications.application import appHandler
 from IMServer.views import chat
 
 urlpatterns = [
-    path("favicon.ico", RedirectView.as_view(url="/static/images/favicon.png")),
+    path("favicon.ico", RedirectView.as_view(url="/static/images/favicon.ico")),
     url(r'^static/(?P<path>.*)$', static.serve,
         {'document_root': settings.STATIC_ROOT}, name='static'),
     path("", views.main),

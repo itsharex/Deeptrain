@@ -7,7 +7,7 @@ import django
 from django.core.cache import cache
 
 ip = "127.0.0.1"
-port = 8000
+port = 80
 
 logging.basicConfig(level=logging.INFO,
                     format="[%(asctime)s - %(levelname)s]: %(message)s")
@@ -15,10 +15,10 @@ logging.basicConfig(level=logging.INFO,
 
 def init_on_CVM_server(exec_):
     # MySQL Database
-    exec_(sys.argv + ["makemigrations"])
-    exec_(sys.argv + ["migrate"])
+    exec_([sys.argv[0], "makemigrations"])
+    exec_([sys.argv[0], "migrate"])
     # Static Files Collect
-    exec_(sys.argv + ["collectstatic"])
+    exec_([sys.argv[0], "collectstatic"])
 
 
 if __name__ == '__main__':
@@ -42,5 +42,4 @@ if __name__ == '__main__':
         logging.info(f"start server at process {os.getpid()}.")
     else:
         cache.set("start-application", True, timeout=10)
-
     execute_from_command_line(sys.argv if sys.argv[1:] else sys.argv + ["runserver", f"{ip}:{port}"])
