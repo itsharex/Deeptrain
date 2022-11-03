@@ -433,7 +433,7 @@ h2.title span {
 }
 
 .contact-left ul li a {
-    color: #08C2E6;
+    color: #08C2E6 !important;
     margin-left: 40px
 }
 
@@ -808,6 +808,15 @@ a.goto-user:hover::after{
     width: calc(100% - 5px);
 }
 
+.icp{
+    color: orangered;
+    transition: 0.5s;
+    font-weight: bold;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    cursor: text;
+}
 @media (min-width:1200px) {
 }
 
