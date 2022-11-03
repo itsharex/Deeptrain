@@ -1,18 +1,18 @@
 from typing import List, Tuple
 
 import jwt
-from DjangoWebsite.settings import SECRET_KEY as salt
+from DjangoWebsite.settings import SECRET_KEY as SALT
 
 
 def encode(username, password) -> str:
     return jwt.encode({"username": username, "password": password},
-                      key=salt,
+                      key=SALT,
                       algorithm='HS256')
 
 
 def _decode(token: str) -> dict:
     return jwt.decode(token,
-                      key=salt,
+                      key=SALT,
                       algorithms='HS256')
 
 

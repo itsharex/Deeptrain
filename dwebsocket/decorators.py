@@ -5,20 +5,22 @@ from .middleware import WebSocketMiddleware
 
 __all__ = ('accept_websocket', 'require_websocket')
 
-
-WEBSOCKET_MIDDLEWARE_INSTALLED = 'dwebsocket.middleware.WebSocketMiddleware' in getattr(settings,'MIDDLEWARE_CLASSES', [])
+WEBSOCKET_MIDDLEWARE_INSTALLED = 'dwebsocket.middleware.WebSocketMiddleware' in getattr(settings, 'MIDDLEWARE_CLASSES',
+                                                                                        [])
 
 
 def _setup_websocket(func):
     from functools import wraps
+
     @wraps(func)
     def new_func(request, *args, **kwargs):
         response = func(request, *args, **kwargs)
         if response is None and request.is_websocket():
-            response =  HttpResponse()
-            response.__len__ = lambda : 0
+            response = HttpResponse()
+            response.__len__ = lambda: 0
             return response
         return response
+
     if not WEBSOCKET_MIDDLEWARE_INSTALLED:
         decorator = decorator_from_middleware(WebSocketMiddleware)
         new_func = decorator(new_func)

@@ -5,7 +5,6 @@ from django.http import HttpResponseBadRequest
 from django.middleware.common import CommonMiddleware
 from .factory import WebSocketFactory
 
-
 WEBSOCKET_ACCEPT_ALL = getattr(settings, 'WEBSOCKET_ACCEPT_ALL', False)
 WEBSOCKET_FACTORY_CLASS = getattr(
     settings,
@@ -25,10 +24,10 @@ class WebSocketMiddleware(CommonMiddleware):
     def process_request(cls, request):
         try:
             offset = WEBSOCKET_FACTORY_CLASS.rindex(".")
-            
+
             factory_cls = getattr(
                 importlib.import_module(WEBSOCKET_FACTORY_CLASS[:offset]),
-                WEBSOCKET_FACTORY_CLASS[offset+1:]
+                WEBSOCKET_FACTORY_CLASS[offset + 1:]
             )
             request.websocket = factory_cls(request).create_websocket()
         except ValueError as e:
@@ -47,7 +46,7 @@ class WebSocketMiddleware(CommonMiddleware):
         if request.is_websocket():
             # deny websocket request if view can't handle websocket
             if not WEBSOCKET_ACCEPT_ALL and \
-                not getattr(view_func, 'accept_websocket', False):
+                    not getattr(view_func, 'accept_websocket', False):
                 return HttpResponseBadRequest()
             # everything is fine .. so prepare connection by sending handshake
             request.websocket.accept_connection()

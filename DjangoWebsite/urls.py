@@ -16,11 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.views import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.views.generic.base import RedirectView
 import views
 from django.conf import settings
-from applications.application import appHandler
 from IMServer.views import chat
 
 urlpatterns = [
@@ -35,4 +34,5 @@ urlpatterns = [
     path("home/", views.home),
     path("profile/id=<int:uid>", views.profile),
     path("chat/<str:token>/", chat),
-] + appHandler.as_wsgi_urlpatterns()
+    path("applications/", include("applications.urls"), name="applications"),
+]

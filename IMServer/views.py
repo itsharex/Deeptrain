@@ -38,7 +38,7 @@ class IMClient(websocket.WebClient):
 
 class IMServerClientGroup(websocket.WebClientGroup):
     _socks: List[IMClient]
-    _client_type = IMClient
+    client_type = IMClient
 
     def host_send(self, message=""):
         for client in self.get_available_clients():

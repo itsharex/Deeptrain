@@ -153,10 +153,10 @@ h2.heading-title {
 }
 
 #section-banner {
-    background: url("/static/images/background/index.jpg");
-    background-size: cover;
+    background-size: cover !important;
 }
-
+@media screen and (orientation: landscape) {#section-banner{background: url("/static/images/background/index.jpg");}}
+@media screen and (orientation: portrait) {#section-banner{background: url("/static/images/background/index-flip.jpg");}}
 .banner-content {
     padding: 250px 0 300px 0;
 }
@@ -743,7 +743,6 @@ img {
 }
 
 .timeline-centered .timeline-entry .timeline-entry-inner .timeline-label h2 span {
-    -webkit-opacity: .6;
     -moz-opacity: .6;
     opacity: .6;
     -ms-filter: alpha(opacity=60);
@@ -774,6 +773,39 @@ img {
 
 .socail-link a:hover i {
     color: #fff
+}
+
+div.button-list{
+    width: max-content;
+}
+
+@keyframes fade-in {0%{opacity: 0;}100%{opacity: 1;}}
+
+a.goto-user{
+    animation-name: fade-in;
+    animation-duration: 1.5s;
+    transition: .2s;
+    animation-timing-function: linear;
+
+    background: #449d44 !important;
+    text-transform: initial !important;
+    color: white;
+    left:50%;  transform: translateX(-55%);
+}
+a.goto-user:hover,
+a.goto-user:active,
+a.goto-user:focus{
+    background: #449d44;
+}
+
+a.goto-user::before,
+a.goto-user::after{
+    background: gold;
+}
+
+a.goto-user:hover::before,
+a.goto-user:hover::after{
+    width: calc(100% - 5px);
 }
 
 @media (min-width:1200px) {

@@ -8,7 +8,7 @@ textarea{
     width: 100%;
     height: auto;
 }
-*{font-family:"Consolas",monospace;margin:0;padding:0;}
+*{margin:0;padding:0;}
 .card{margin:3px;background-color:black;}
 .icon{height:22px;width:22px;}
 .img-button {
@@ -68,12 +68,12 @@ textarea{
 }
 
 
-span.User, span.VIP, span.Admin, span.ServerHost{font-weight: bold;}
-img.User, img.VIP, img.Admin, img.ServerHost{width: 18px; height: 18px;}
+span.User, span.VIP, span.Admin, span.Server-Owner{font-weight: bold;}
+img.User, img.VIP, img.Admin, img.Server-Owner{width: 18px; height: 18px;}
 img.User{content: url("https://cdn-icons-png.flaticon.com/128/3237/3237472.png");} span.User{color: gray;}
 img.VIP{content: url("https://cdn-icons-png.flaticon.com/128/7108/7108023.png");}  span.VIP{color: orange;}
 img.Admin{content: url("https://cdn-icons-png.flaticon.com/128/6830/6830335.png");} span.Admin{color: dodgerblue;}
-img.ServerHost{content: url("https://cdn-icons-png.flaticon.com/128/3165/3165611.png");} span.ServerHost{color: red;}
+img.Server-Owner{content: url("https://cdn-icons-png.flaticon.com/128/3165/3165611.png");} span.Server-Owner{color: red;}
 
 
 @keyframes fade-in {
@@ -125,7 +125,7 @@ img.ServerHost{content: url("https://cdn-icons-png.flaticon.com/128/3165/3165611
 
 .menu{
     background-color: black;
-    padding: 0 12px 12px 12px;
+    padding: 0 !important;
     flex-direction: column;
     justify-content: space-between;
     border-radius: 10px;

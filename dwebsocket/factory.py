@@ -1,18 +1,17 @@
 import logging
 import socket
 
-
 logger = logging.getLogger(__name__)
 
 
-class WebSocketFactory(object): 
+class WebSocketFactory(object):
     def __init__(self, request):
         self.request = request
 
     def is_websocket(self):
         """check the websocket"""
         if self.request.META.get(
-            'HTTP_UPGRADE', ""
+                'HTTP_UPGRADE', ""
         ).lower() == 'websocket':
             return True
         else:

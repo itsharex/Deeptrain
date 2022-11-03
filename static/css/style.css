@@ -11,7 +11,6 @@ section {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /*background: linear-gradient(to bottom, #f1f4f9, #dff1ff);*/
     background-size: cover;
 }
 
@@ -93,7 +92,7 @@ section .color:nth-child(3) {
 
 .box .circle:nth-child(2) {
     top: 150px;
-    left: -100px;
+    left: 250px;
     width: 120px;
     height: 120px;
     z-index: 2;

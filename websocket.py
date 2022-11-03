@@ -1,10 +1,12 @@
 import json
 from typing import List, Any, Union
 import jwt.exceptions
+from django.db.models import AutoField
+
 from dwebsocket.backends.default import websocket
-from DjangoWebsite.settings import CODING, WS_INTERVAL
+from DjangoWebsite.settings import CODING
 from controller import webtoken_validate, get_user_from_name, get_profile_from_user
-from model.models import User, Profile, identitys
+from model.models import User, Profile, identities
 
 
 class AbstractSocket(object):
@@ -57,19 +59,19 @@ class AbstractSocket(object):
 
 class AbstractGroup(object):
     _socks: List[AbstractSocket]
-    _client_type: AbstractSocket = AbstractSocket
+    client_type: AbstractSocket = AbstractSocket
 
     def __init__(self):
         self._socks = []
 
-    def append_client_to_socks(self, sock: AbstractSocket) -> AbstractSocket:
+    def append_client_to_socks(self, sock: client_type) -> client_type:
         self._socks.append(sock)
         return sock
 
-    def add_client(self, request) -> AbstractSocket:
-        return self.append_client_to_socks(self._client_type(request.websocket, self, _start=False)).listen()
+    def add_client(self, request) -> client_type:
+        return self.append_client_to_socks(self.client_type(request.websocket, self, _start=False)).listen()
 
-    def remove_client(self, sock: AbstractSocket):
+    def remove_client(self, sock: client_type):
         if sock in self._socks:
             if sock.is_alive():
                 sock.close()
@@ -77,10 +79,10 @@ class AbstractGroup(object):
             return True
         return False
 
-    def get_sockets(self) -> List[AbstractSocket]:
+    def get_sockets(self) -> List[client_type]:
         return self._socks
 
-    def get_available_clients(self) -> List[AbstractSocket]:
+    def get_available_clients(self) -> List[client_type]:
         return list(filter(lambda sock: sock.is_alive(), self.get_sockets()))
 
     def get_available_clients_length(self) -> int:
@@ -113,7 +115,7 @@ class JSONSocket(AbstractSocket):
 
 class JSONGroup(AbstractGroup):
     _socks: List[JSONSocket]
-    _client_type = JSONSocket
+    client_type = JSONSocket
 
 
 class WebClient(JSONSocket):
@@ -126,14 +128,14 @@ class WebClient(JSONSocket):
         self.id: int = user_obj.id  # user_obj.id: int
         self.username = user_obj.username
         self.admin: bool = self.profile.is_admin()
-        self.identity: str = identitys.get(self.profile.identity)
+        self.identity: str = identities.get(self.profile.identity)
 
 
 class WebClientGroup(JSONGroup):
     _socks: List[WebClient]
-    _client_type = WebClient
+    client_type = WebClient
 
-    def append_client_to_socks(self, sock: WebClient) -> WebClient:
+    def append_client_to_socks(self, sock: client_type) -> client_type:
         return super(WebClientGroup, self).append_client_to_socks(sock)
 
     def add_client(self, request, token: str = "") -> Union[WebClient, bool]:
@@ -141,7 +143,7 @@ class WebClientGroup(JSONGroup):
             _validate, username = webtoken_validate(token)
             if _validate:
                 user = get_user_from_name(username)
-                sock = self.append_client_to_socks(self._client_type(request.websocket, user, self, _start=False))
+                sock = self.append_client_to_socks(self.client_type(request.websocket, user, self, _start=False))
                 self.joinEvent(sock)
                 return sock.listen()
             return False

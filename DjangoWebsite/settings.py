@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 import os
 from pathlib import Path
 
@@ -29,23 +28,28 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
+APPLICATIONS_CONFIG_FILE = "config.json"
 BASE_APPLICATION_DIR = os.path.join(BASE_DIR, "applications")
 APPLICATIONS_DIR = [f"applications.{app_path}" for app_path in os.listdir(BASE_APPLICATION_DIR)
-                    if os.path.isdir(os.path.join(BASE_APPLICATION_DIR, app_path)) and app_path != "__pycache__"]
+                    if os.path.isdir(os.path.join(BASE_APPLICATION_DIR, app_path)) and app_path != "__pycache__"
+                    and os.path.isfile(os.path.join(BASE_APPLICATION_DIR, app_path, APPLICATIONS_CONFIG_FILE))]
 
 INSTALLED_APPS = [
-                     'simpleui',
-                     'django.contrib.admin',
-                     'django.contrib.auth',
-                     'django.contrib.contenttypes',
-                     'django.contrib.sessions',
-                     'django.contrib.messages',
-                     'django.contrib.staticfiles',
-                     'dwebsocket',
-                     'model',
-                     'IMServer',
-                 ] + APPLICATIONS_DIR
+    'simpleui',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'dwebsocket',
+    'model',
+    'IMServer',
+    'fileHandler',
+] + APPLICATIONS_DIR
+
 #  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -54,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middleware.CodecMiddleware.CodecMiddleware'
     # 'dwebsocket.middleware.WebSocketMiddleware',
 ]
 

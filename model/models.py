@@ -1,13 +1,13 @@
 from django.db import models
 
-identitys = {
+identities = {
     0: "User",
     1: "VIP",  # Very Important Person
     2: "Admin",
-    3: "ServerHost",
+    3: "Server-Owner",
 }
 
-identity_choices = list(identitys.items())
+identity_choices = list(identities.items())
 
 
 class User(models.Model):
@@ -40,7 +40,7 @@ class Profile(models.Model):
         return self.id
 
     def __get_identity(self):
-        return identitys.get(self.identity)
+        return identities.get(self.identity)
 
     def get_data(self, default_detail="") -> ("detail", "identity"):
         return (self.detail or default_detail), self.__get_identity()

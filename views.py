@@ -2,29 +2,27 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import controller
-from applications import application
-
-applications_templates = application.appHandler.get_templates()
 
 
 def login_required(_decorate_exec: callable) -> callable:
     def _exec_function(request: WSGIRequest, *args, **kwargs) -> HttpResponse:
         if controller.could_login_by_cookies(request):
-            return _decorate_exec(request, *args, **kwargs)
+            return _decorate_exec(
+                request,
+                controller.get_user_from_name(controller.get_userinfo_from_cookies(request)[0]),
+                *args, **kwargs
+            )
         else:
             return redirect("/login/")
-
     return _exec_function
 
 
-@controller.with_encoding
 def main(request: WSGIRequest) -> HttpResponse:
-    return render(request, "main.html",
+    return render(request, "index.html",
                   {"username": controller.get_userinfo_from_cookies(request)[0]} if controller.could_login_by_cookies(
                       request) else {})
 
 
-@controller.with_encoding
 def login(request: WSGIRequest) -> HttpResponse:
     if request.POST:
         username, password = request.POST.get("username", None), request.POST.get("password", None)
@@ -38,7 +36,6 @@ def login(request: WSGIRequest) -> HttpResponse:
         return render(request, 'login.html')
 
 
-@controller.with_encoding
 def register(request: WSGIRequest) -> HttpResponse:
     if request.POST:
         username, password, re_password = request.POST.get("username", None), \
@@ -55,7 +52,6 @@ def register(request: WSGIRequest) -> HttpResponse:
         return render(request, 'register.html')
 
 
-@controller.with_encoding
 def logout(request: WSGIRequest) -> HttpResponse:
     if controller.could_login_by_cookies(request):
         return controller.delete_cookies(render(request, 'login.html'), "username", "password")
@@ -63,19 +59,16 @@ def logout(request: WSGIRequest) -> HttpResponse:
         return redirect("/login/")
 
 
-@controller.with_encoding
 @login_required
-def home(request: WSGIRequest) -> HttpResponse:
-    username, password = controller.get_userinfo_from_cookies(request)
-    user, (detail, identity) = controller.get_data_from_username(username)
+def home(request: WSGIRequest, user) -> HttpResponse:
+    username, password = user.username, user.password
+    detail, identity = controller.get_profile_from_user(user).get_data(default_detail=controller.default_detail)
     if request.POST:
         detail = controller.update_data_from_user(user, detail=request.POST.get("text").strip()[:100])
     return render(request, "home.html", {"name": username, "profile": detail, "id": identity,
-                                         "token": controller.webtoken_encode(username, password),
-                                         "templates": applications_templates})
+                                         "token": controller.webtoken_encode(username, password)})
 
 
-@controller.with_encoding
 def profile(request: WSGIRequest, uid) -> HttpResponse:
     result = controller.get_data_from_uid(uid)
     if result:

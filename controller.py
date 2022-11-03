@@ -1,5 +1,5 @@
 from hashlib import md5
-from typing import List, Tuple, Union
+from typing import Tuple, Union
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import QuerySet
@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from model.models import *
 import webtoken
 
-spec_string = "\'\"<>~`?/\\*&^%$#@!"  # 抵御大部分SQL注入
+spec_string = "\'\"<>~`?/\\*&^%$#@!:"  # 抵御大部分SQL注入, emoji导致长度识别错位
 default_detail = "nothing..."
 
 
@@ -73,14 +73,6 @@ def could_login_by_cookies(request: WSGIRequest) -> bool:
     return login_with_cookie_or_token(*get_userinfo_from_cookies(request))
 
 
-def with_encoding(_decorate_exec: callable) -> callable:
-    def _exec_function(request: WSGIRequest, *args, **kwargs) -> HttpResponse:
-        request.encoding = 'utf-8'
-        return _decorate_exec(request, *args, **kwargs)
-
-    return _exec_function
-
-
 def set_cookies(response: HttpResponse, **kwargs):
     for key, value in kwargs.items():
         response.set_cookie(key, value, max_age=60 * 60 * 24 * 30 * 2)  # max_age: second. <2 months>
@@ -117,7 +109,7 @@ def update_data_from_user(userObj: User, detail=None, identity=None) -> Union[in
         if detail != default_detail and detail != get_profile_from_user(userObj).get_data(default_detail)[0]:
             Profile.objects.filter(user_bind=userObj).update(detail=detail)
         return get_profile_from_user(userObj).get_data(default_detail)[0]
-    elif isinstance(identity, int):  # User<iden>: 0
+    elif isinstance(identity, int):  # User<identity>: 0
         Profile.objects.filter(user_bind=userObj).update(identity=identity)
         return identity
     return None

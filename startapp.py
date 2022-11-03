@@ -1,4 +1,5 @@
 import logging
+from typing import *
 from DjangoWebsite import settings
 from rich import console
 import os
@@ -7,6 +8,8 @@ from rich.filesize import decimal
 from rich.markup import escape
 from rich.text import Text
 from rich.tree import Tree
+from applications.config import json_writer, RepositoryAddress
+
 # from rich.layout import Layout
 # from rich.panel import Panel
 
@@ -79,26 +82,26 @@ def _strict_name(data: str) -> bool:
     return all([char in available_char for char in data.lower()])
 
 
-"""def result_output(app_name, author, profile, github_addr, ASGISupport, WSGISupport):
-    layout = Layout()
-    layout.split_column(
-        Layout(name="app-info"),
-        Layout(Panel(profile), name="profile"),
-        Layout(Panel(github_addr), name="Github address"),
-        Layout(name="Support"),
-    )
-
-    layout["app-info"].split_row(
-        Layout(Panel(app_name), name="app-name"),
-        Layout(Panel(author), name="author"),
-    )
-
-    layout["Support"].split_row(
-        Layout(Panel(str(ASGISupport)), name="ASGISupport"),
-        Layout(Panel(str(WSGISupport)), name="WSGISupport"),
-    )
-
-    console.print(layout)"""
+# def result_output(app_name, author, profile, github_addr, ASGISupport, WSGISupport):
+#     layout = Layout()
+#     layout.split_column(
+#         Layout(name="app-info"),
+#         Layout(Panel(profile), name="profile"),
+#         Layout(Panel(github_addr), name="Github address"),
+#         Layout(name="Support"),
+#     )
+#
+#     layout["app-info"].split_row(
+#         Layout(Panel(app_name), name="app-name"),
+#         Layout(Panel(author), name="author"),
+#     )
+#
+#     layout["Support"].split_row(
+#         Layout(Panel(str(ASGISupport)), name="ASGISupport"),
+#         Layout(Panel(str(WSGISupport)), name="WSGISupport"),
+#     )
+#
+#     console.print(layout)
 
 
 def console_check(content: str, default: (bool, None) = True) -> bool:
@@ -130,6 +133,10 @@ def console_check(content: str, default: (bool, None) = True) -> bool:
         return bool(_res)
 
 
+_console_char = _rich_decorate(' '.join(available_char), 'bold')
+_console_not_required = _rich_decorate('not required', 'sky_blue1')
+
+
 def console_content(content: str, strict: bool = False, required: bool = True) -> str:
     """
 
@@ -148,7 +155,8 @@ def console_content(content: str, strict: bool = False, required: bool = True) -
                 return _dt
             else:
                 console.log(
-                    f"{_rich_decorate('Please enter legal characters!', 'bold red')} ({_rich_decorate(' '.join(available_char), 'bold')})")
+                    f"{_rich_decorate('Please enter legal characters!', 'bold red')} ({_console_char})"
+                )
     else:
         if required:
             while True:
@@ -171,6 +179,11 @@ def console_multiline_content(content: str, required: bool = True) -> str:
             return "\n".join(content_list)
 
 
+def console_list_input(title: str, elements: List[str], strict=False, required=True):
+    console.print(f"{title}:")
+    return {element: console_content(element, strict, required) for element in elements}
+
+
 def repr_string(obj: str):
     return repr(obj) if isinstance(obj, str) else ""
 
@@ -180,34 +193,49 @@ def console_create_app():
         console_content(f"Please enter the{_rich_decorate('application name', 'yellow')}", strict=True),
         console_content(f"Please enter the your(author's){_rich_decorate('name', 'yellow')}"),
         console_multiline_content(
-            f"Please enter the{_rich_decorate('application profile', 'yellow')}({_rich_decorate('not required', 'sky_blue1')})",
+            f"Please enter the{_rich_decorate('application profile', 'yellow')}({_console_not_required})",
             required=False),
-        console_content(
-            f"Please enter the{_rich_decorate('github repository address', 'yellow')}({_rich_decorate('not required', 'sky_blue1')})",
-            required=False),
-        console_check(f"Please select whether HTTP requests are supported ({_rich_decorate('WSGI', 'red')})",
+        console_list_input(
+            f"{_rich_decorate('Repository Address(es)', 'yellow')}({_console_not_required})",
+            [sup for sup in RepositoryAddress.support],
+            required=False,
+        ),
+        console_content(f"Please enter the app {_rich_decorate('image-url', 'yellow')}", required=False),
+        console_check(f"Whether to configure the url ({_rich_decorate('same as the application name', 'red')})",
                       default=True),
-        console_check(f"Select whether WebSocket requests are supported ({_rich_decorate('ASGI', 'red')})",
-                      default=True)
     )
 
 
-def create_app(app_name, author, profile="", github_addr="", ASGISupport=True, WSGISupport=True):
+def create_app(app_name, author, profile="", repo: dict = None, image="", UrlRoute=True):
     console.print("")
     console.rule("[bold blue]Create Application")
     console.print("")
     parent_dir = os.path.join(settings.BASE_APPLICATION_DIR, app_name)
     if os.path.isdir(parent_dir) and os.listdir(parent_dir):
+        warns = 'Warning: Files already exist in the software directory. Continue execution may overwrite the ' \
+                'original file. '
         if not console_check(
-                f"{_rich_decorate('Warning: Files already exist in the software directory. Continue execution may overwrite the original file.', 'bold red')}Continue or not?",
+                f"{_rich_decorate(warns, 'bold red')}Continue or not?",
                 default=False):
             return
     else:
         os.mkdir(parent_dir)
 
+    # config
+    json_writer(
+        repo,
+        app_name,
+        author,
+        profile,
+        image,
+        UrlRoute,
+        path=parent_dir,
+    )
+
     # migrations
     migrations_dir = os.path.join(parent_dir, "migrations")
-    os.mkdir(migrations_dir)
+    if not os.path.isdir(migrations_dir):
+        os.mkdir(migrations_dir)
     with open(os.path.join(migrations_dir, "__init__.py"), "w", encoding="utf-8"):
         pass
 
@@ -220,7 +248,8 @@ def create_app(app_name, author, profile="", github_addr="", ASGISupport=True, W
 
     with open(os.path.join(parent_dir, "apps.py"), "w", encoding="utf-8") as fp:
         fp.write(
-            f"from django.apps import AppConfig\n\n\nclass SnakeConfig(AppConfig):\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'applications.{app_name}'")
+            f"from django.apps import AppConfig\n\n\nclass SnakeConfig(AppConfig):\n    default_auto_field = "
+            f"'django.db.models.BigAutoField'\n    name = 'applications.{app_name}'\n")
 
     with open(os.path.join(parent_dir, "models.py"), "w", encoding="utf-8") as fp:
         fp.write("from django.db import models\n\n# Create your models here.\n")
@@ -233,35 +262,12 @@ def create_app(app_name, author, profile="", github_addr="", ASGISupport=True, W
 
     # application files
     with open(os.path.join(parent_dir, "application.py"), "w", encoding="utf-8") as fp:
-        fp.write(f"""from applications.application import appHandler, UserApplication, JSONApplicationConsumer
-
-
-class Application(UserApplication):
-    name = {repr(app_name)}
-    author = {repr(author)}
-    profile = \"\"\"{profile}\"\"\"
-    github_addr = {repr(github_addr)}
-    image = ""
-    
-    WSGISupport = {str(WSGISupport)}
-    ASGISupport = {str(ASGISupport)}
-
-
-@appHandler.register(Application)
-class Consumer(JSONApplicationConsumer):
-    pass
-""")
+        fp.write(f"""from applications.application import *
+\n\n@appHandler.register\nclass Application(SyncApplication):\n    pass\n""")
 
     with open(os.path.join(parent_dir, "urls.py"), "w", encoding="utf-8") as fp:
         fp.write(f"""from django.conf.urls import url
-from django.urls import path
-
-from applications.{app_name} import views
-
-urlpatterns = [
-
-]
-""")
+from django.urls import path\n\nfrom applications.{app_name} import views\n\nurlpatterns = [\n    \n]\n""")
         application_directory(parent_dir)
 
 

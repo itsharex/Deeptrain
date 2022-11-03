@@ -118,9 +118,12 @@ body{
 .app-container .box .content a.start{
     background-color: #fff;
 }
-.app-container .box .content a.github{
+.app-container .box .content a.repo{
     font-size: 27px;
+    color: #fff;
 }
+.fa-gitee{background: url("https://gitee.com/favicon.ico");border-radius: 50%;background-size: cover; width: 27px; height: 27px; position: relative; top: 3px;}
+.fa-gitcode{background: url("/static/images/gitcode.png");border-radius: 50%;background-size: cover; width: 27px; height: 27px; position: relative; top: 3px;}
 .app-container .box h2.index{
     position: absolute;
     right: 30px;
