@@ -48,6 +48,9 @@ class UserLoginForm(forms.Form):
 
     def clean(self):
         super().clean()
+        captcha_error = self.errors.get("captcha")
+        if captcha_error:
+            raise ValidationError(captcha_error)
         username, password = self.cleaned_data.get("username"), self.cleaned_data.get("password")
         success, response = controller.login(username, password)
         if success:
@@ -120,6 +123,9 @@ class UserRegisterForm(forms.Form):
 
     def clean(self):
         super().clean()
+        captcha_error = self.errors.get("captcha")
+        if captcha_error:
+            raise ValidationError(captcha_error)
         username, password, re_password = \
             self.cleaned_data.get("username"), self.cleaned_data.get("password"), self.cleaned_data.get("re_password")
         success, response = controller.register(username, password, re_password)
