@@ -117,6 +117,8 @@ class AbstractApplication(object):
         GitHub repository address
     :param profile
         Application profile
+    :param InfoHtml
+        like //img.shields.io/
     :param image
         url
     :param UrlRoute

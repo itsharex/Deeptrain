@@ -194,19 +194,30 @@ def console_create_app():
         console_content(f"Please enter the your(author's){_rich_decorate('name', 'yellow')}"),
         console_multiline_content(
             f"Please enter the{_rich_decorate('application profile', 'yellow')}({_console_not_required})",
-            required=False),
+            required=False,
+        ),
         console_list_input(
             f"{_rich_decorate('Repository Address(es)', 'yellow')}({_console_not_required})",
             [sup for sup in RepositoryAddress.support],
             required=False,
         ),
-        console_content(f"Please enter the app {_rich_decorate('image-url', 'yellow')}", required=False),
-        console_check(f"Whether to configure the url ({_rich_decorate('same as the application name', 'red')})",
-                      default=True),
+        console_multiline_content(
+            f"Please enter the{_rich_decorate('Repository information urls(List) - shield.io', 'yellow')}({_console_not_required})",
+            required=False,
+        ),
+        console_content(
+            f"Please enter the app {_rich_decorate('image-url', 'yellow')}",
+            required=False,
+        ),
+        console_check(
+            f"Whether to configure the url ({_rich_decorate('same as the application name', 'red')})",
+            default=True,
+        ),
     )
 
 
-def create_app(app_name, author, profile="", repo: dict = None, image="", UrlRoute=True):
+def create_app(app_name, author, profile="", repo: dict = None, info_urls_string: str = "", image="", UrlRoute=True):
+    info_urls = [url.strip() for url in info_urls_string.split("\n") if url.strip()]
     console.print("")
     console.rule("[bold blue]Create Application")
     console.print("")
@@ -228,6 +239,7 @@ def create_app(app_name, author, profile="", repo: dict = None, image="", UrlRou
         author,
         profile,
         image,
+        info_urls,
         UrlRoute,
         path=parent_dir,
     )

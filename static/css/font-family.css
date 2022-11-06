@@ -1,2 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 *{font-family: "Consolas", Monospace, monospace !important;}
 .fa{font-family: FontAwesome, monospace !important;}
+.poppins{font-family: 'Poppins', Consolas, Monospace, monospace !important;}

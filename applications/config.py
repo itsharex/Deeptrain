@@ -46,7 +46,7 @@ class RepositoryAddress(object):  # NamedTuple: AttributeError: attribute '__dic
                 setattr(self, addr, res.strip(" "))
 
     def get_dict(self) -> dict:  # __dict__: RecursionError
-        return {addr: getattr(self, addr) for i, addr in enumerate(self.support) if getattr(self, addr)}
+        return {addr: getattr(self, addr) for addr in self.support if getattr(self, addr)}
 
     def __iter__(self) -> Iterable[Tuple[str, str]]:
         return iter(self.get_dict().items())
@@ -102,6 +102,7 @@ class _BaseConfig(object):
     author: str = ""
     profile: str = """..."""
     image: str = ""
+    info_urls: str = ""
 
     UrlRoute: bool = True
 
@@ -120,6 +121,7 @@ class _BaseConfig(object):
             "author": self.author,
             "profile": self.profile,
             "image": self.image,
+            "info_urls": self.info_urls,
             "UrlRoute": self.UrlRoute,
         }
 
@@ -170,6 +172,7 @@ def json_writer(repository_address: dict = None,
                 author: str = "",
                 profile: str = "",
                 image: str = "",
+                info_urls: list = None,
                 UrlRoute: bool = True,
                 path: str = "") -> _BaseConfig:
     path = os.path.join(path, APPLICATIONS_CONFIG_FILE)
@@ -179,6 +182,7 @@ def json_writer(repository_address: dict = None,
         author=author,
         profile=profile,
         image=image,
+        info_urls=info_urls,
         UrlRoute=UrlRoute,
     )
     # _conf = _BaseConfig(**locals())
@@ -187,6 +191,7 @@ def json_writer(repository_address: dict = None,
         open(path, "w", encoding=CODING),
     )
     return _conf
+
 
 if __name__ == '__main__':
     js = json_parser("Snake")

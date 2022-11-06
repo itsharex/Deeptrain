@@ -16,19 +16,21 @@
                 <div class="box">
                 <span></span>
                 <h2 class="index">{{ template.index }}</h2>
-                  <div class="content">
-                      {% if template.image %}
-                          <img src="{{ template.image }}" alt>
-                      {% endif %}
-                      <h2>{{ template.name }}</h2>
-                      <p>{{ template.profile }}</p>
-                      <a class="start" href="{{ template.path }}">Start!</a>
-                      <hr>
-                      <p class="author">author: {{ template.author }}</p>
-                      {% for repo, addr in template.repository_address.items %}
-                          <a href="{{ addr }}" target="_blank" class="repo"><i class="fa fa-{{ repo }}"></i></a>
-                      {% endfor %}
-                  </div>
+                    <div class="content">
+                        {% if template.image %}
+                            <img src="{{ template.image }}" alt>
+                        {% endif %}
+                        <h2>{{ template.name }}</h2>
+                        <p>{{ template.profile }}</p>
+                        <a class="start" href="{{ template.path }}">Read More</a>
+                        <hr>
+                        <p class="author">author: {{ template.author }}</p>
+                        {% for url in template.info_urls %} <img src="{{ url }}" alt> {% endfor %}
+                        {% if template.info_urls %} <br> {% endif %}
+                        {% for repo, addr in template.repository_address.items %}
+                            <a href="{{ addr }}" target="_blank" class="repo"><i class="fa fa-{{ repo }}"></i></a>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
         </section>

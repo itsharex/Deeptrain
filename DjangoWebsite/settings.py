@@ -34,6 +34,20 @@ APPLICATIONS_DIR = [f"applications.{app_path}" for app_path in os.listdir(BASE_A
                     if os.path.isdir(os.path.join(BASE_APPLICATION_DIR, app_path)) and app_path != "__pycache__"
                     and os.path.isfile(os.path.join(BASE_APPLICATION_DIR, app_path, APPLICATIONS_CONFIG_FILE))]
 
+# Captcha  /captcha/conf/settings
+CAPTCHA_IMAGE_SIZE = (80, 30)
+CAPTCHA_LENGTH = 4
+CAPTCHA_TIMEOUT = 1  # minutes
+CAPTCHA_FONT_SIZE = 20
+CAPTCHA_OUTPUT_FORMAT = '%(text_field)s %(image)s %(hidden_field)s'
+CAPTCHA_NOISE_FUNCTIONS = (
+   'captcha.helpers.noise_null',
+   'captcha.helpers.noise_arcs',
+   'captcha.helpers.noise_dots',
+)
+# 随机字符验证码
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+
 INSTALLED_APPS = [
     'simpleui',
     'django.contrib.admin',
@@ -43,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dwebsocket',
+    'captcha',
     'model',
     'IMServer',
     'fileHandler',

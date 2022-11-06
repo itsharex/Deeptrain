@@ -1,10 +1,14 @@
 # Zh Website
-
+![GitHub forks](https://img.shields.io/github/forks/zmh-program/Zh-Website)
+![GitHub Repo stars](https://img.shields.io/github/stars/zmh-program/Zh-Website)
+![GitHub repo size](https://img.shields.io/github/repo-size/zmh-program/Zh-Website)
+![GitHub repo file count](https://img.shields.io/github/directory-file-count/zmh-program/Zh-Website)
+![GitHub](https://img.shields.io/github/license/zmh-program/Zh-Website)
 > 🧡Django Website, and you can extend applications in the website.
 
 <br></br>
 
-## 🚀️预览 | Preview
+## 🚀️预览 | ScreenShot
 
 ![banner](/preview/main-banner.PNG)
 ![cookies](/preview/cookies-adt.PNG)

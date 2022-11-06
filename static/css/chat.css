@@ -8,6 +8,9 @@
     40% {opacity: 0;}
     100% {opacity: 1;}
 }
+.webname{
+    letter-spacing: 0.02cm;
+}
 . {zoom: 1;}  .clearfix:after{content: "\20";display: block;height: 0;clear: both;} /* chat element clearfix*/
 .chat-interface{
     width: 98%;

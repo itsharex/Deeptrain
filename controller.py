@@ -29,9 +29,9 @@ def is_available_password(password: str) -> bool:
 
 def login(username: str, password: str) -> Tuple[bool, str]:
     if not is_available_username(username):
-        return False, "账户名格式错误!"
+        return False, "账户名格式错误, 请勿输入非法字符!"
     if not is_available_password(password):
-        return False, "密码格式错误!"
+        return False, "密码格式错误, 请勿输入非法字符!"
 
     Objs = User.objects.filter(username=username)
 
@@ -47,9 +47,9 @@ def login(username: str, password: str) -> Tuple[bool, str]:
 
 def register(username: str, password: str, re_password: str) -> (bool, str):
     if not is_available_username(username):
-        return False, "账户名格式错误!"
+        return False, "账户名格式错误, 请勿输入非法字符!"
     if not is_available_password(password):
-        return False, "密码格式错误!"
+        return False, "密码格式错误, 请勿输入非法字符!"
     if not password == re_password:
         return False, "校验密码错误!"
     if User.objects.filter(username=username):

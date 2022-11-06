@@ -95,7 +95,7 @@ section .color:nth-child(3) {
     left: 250px;
     width: 120px;
     height: 120px;
-    z-index: 2;
+    z-index: 0;
 }
 
 .box .circle:nth-child(3) {
@@ -183,7 +183,7 @@ section .color:nth-child(3) {
     width: 100%;
 }
 
-.form .inputBox {
+.form .input-box {
     width: 100%;
     margin-top: 20px;
 }
@@ -195,7 +195,7 @@ section .color:nth-child(3) {
 }
 
 
-.form .inputBox input {
+.form .input-box input {
     width: 100%;
     padding: 10px 20px;
     background: rgba(255, 255, 255, 0.2);
@@ -211,8 +211,8 @@ section .color:nth-child(3) {
     transition: 0.4s;
 }
 
-.form .inputBox input:hover,
-.form .inputBox input:active{
+.form .input-box input:hover,
+.form .input-box input:active{
     color: #000;
 }
 
@@ -231,17 +231,17 @@ section .color:nth-child(3) {
 
 }
 
-.form .inputBox input::placeholder {
+.form .input-box input::placeholder {
     color: #666;
     /*transition: 0.5s; placeholder非元素, 不可用 */
 }
 
-.form .inputBox input:hover::placeholder,
-.form .inputBox input:active::placeholder {
+.form .input-box input:hover::placeholder,
+.form .input-box input:active::placeholder {
     color: #112;
 }
 
-.form .inputBox input[type="submit"] {
+.form .input-box input[type="submit"] {
     background: #fff;
     color: #666;
     width: min-content;
@@ -251,7 +251,7 @@ section .color:nth-child(3) {
     transition: 0.4s;
 }
 
-.form .inputBox input[type="submit"]:hover {
+.form .input-box input[type="submit"]:hover {
     color: #000;
 }
 
@@ -267,8 +267,38 @@ section .color:nth-child(3) {
     text-decoration: none;
 }
 
+.error{
+    color:red;
+}
+.valid-error{
+    color:red;
+    height: min-content;
+    text-align: center;
+}
+.valid-error span{
+    width: max-content;
+}
 .login-section {
     background-image: url("/static/images/background/login.jpg");
+}
+.captcha-form {
+    display: flex;
+    flex-direction: row;
+}
+.captcha-form input{
+    text-transform: uppercase;
+}
+.captcha-form input::placeholder{
+    content: "输入验证码";
+}
+.captcha-form .captcha{
+    height: 100%;
+    max-height: 50px;
+    position: relative;
+    border-radius: 4px;
+    object-fit: cover;
+    z-index: 3;
+    transform: translateY(15%);
 }
 
 .register-section {
