@@ -36,8 +36,8 @@
     <main>
       <div id="menu" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width:160px;height:100%;float:left;z-index: 3;">
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <i class='bx bxl-c-plus-plus'></i>
-            <span class="webname">Zh-Website</span>
+            <i class='bx bxl-python'></i>
+            <span class="poppins webname">Zh-Website</span>
         </a>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto menu">
@@ -93,13 +93,14 @@
               </div>
           </div>
           <iframe id="page2" class="full" src="/applications/" hidden></iframe>
-          <iframe id="page3" class="full" src="/" onload="console.log('选择时间')" hidden></iframe>
+          <iframe id="page3" class="full" src="/" hidden></iframe>
           <div id="page4" class="full" hidden>...</div>
       </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
     <script src="{% static 'js/message.js' %}"></script>
+    <script src="{% static 'js/websocket_url.js' %}"></script>
     <script>
         let cardId = "0";
         let chatInterfaceClicked = false;
@@ -109,7 +110,7 @@
         const message_window = document.getElementById("message-window");
         const send_message = $('#send_message');
         const chat_length = document.getElementById("chat-length");
-        const websocket_address = `ws://${window.location.host}/chat/{{ token }}/`;
+        let ChatSocket = null;
         function clicked(id){
             id = String(id)
             if (id !== cardId){
@@ -119,7 +120,11 @@
             }
             if (id === "1" && !chatInterfaceClicked){
                 chatInterfaceClicked = true;
-                new_socket();
+                ChatSocket = new websocket("chat", "{{ token }}", message_window);
+                ChatSocket.get_websocket().onmessage = function(e) {
+                    const data = JSON.parse(e.data);
+                    add_message(data["username"], data["id"], data["image_path"], data["content"], data["self"], data["is_html"], data["identity"], data["time"]);
+                }
             }
         }
         function edit_profile(){
@@ -154,21 +159,6 @@
             else {link.classList.add("left"); content_div.classList.add("right"); content_span.classList.add("left-chat");obj.classList.add("left")}
             main_div.appendChild(obj);main_div.appendChild(clearfix_main);chat_message.append(main_div);if (id_div.offsetWidth > content_span.offsetWidth){content_span.style.width=id_div.offsetWidth+2+"px"}; chat_message.scrollTop = chat_message.scrollHeight;
         }
-        let ChatSocket = undefined;
-        function new_socket() {
-            ChatSocket = new WebSocket(websocket_address);
-            ChatSocket.onopen = function (e) {
-                alerts(["alert-success", "message-data"], `服务器 ${window.location.host} 连接成功!`, message_window);
-            }
-            ChatSocket.onclose = function(e) {
-                alerts(["alert-danger", "message-data"], `服务器 ${window.location.host} 断开连接!`, message_window);
-            }
-            ChatSocket.onmessage = function(e) {
-                const data = JSON.parse(e.data);
-                add_message(data["username"], data["id"], data["image_path"], data["content"], data["self"], data["is_html"], data["identity"], data["time"]);
-            }
-        }
-
         function send() {
             let content = $.trim(send_message.val());
             let length = content.length;

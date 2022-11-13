@@ -31,7 +31,11 @@ class ApplicationHandler(object):
     def __init__(self):
         self.ApplicationsList: List[AbstractApplication] = []
         self.__is_stp = False
-        self.loop = asyncio.get_event_loop()
+        # gunicorn 中 worker不存在 event loop (django 在当前线程 Dummy-n 报错)
+        # 默认情况下, 在主线程中时, 若没有event loop, 则 asyncio 会自动创建一个新的
+        # 而在一个其他线程中, 则不会自动创建. 因此在新线程中，需要手动设置一个 event loop
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
         self.loop_thread = Thread(target=self.loop.run_forever)
         self.loop_thread.setDaemon(True)
 

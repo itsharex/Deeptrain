@@ -43,7 +43,7 @@ class IMServerClientGroup(websocket.WebClientGroup):
     def host_send(self, message=""):
         for client in self.get_available_clients():
             client: IMClient
-            client.send("host", message, -1, host_image, False, "ServerHost")
+            client.send("host", message, -1, host_image, False, "Server-Owner")
 
     def group_send(self, sender: IMClient, message="", image=user_image):
         for client in self.get_available_clients():
