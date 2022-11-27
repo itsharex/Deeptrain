@@ -20,13 +20,13 @@ from django.urls import path, include
 from django.views.generic.base import RedirectView
 import views
 from django.conf import settings
-from IMServer.views import chat
+from im.views import chat
 
 urlpatterns = [
+    path("", views.index),
     path("favicon.ico", RedirectView.as_view(url="/static/images/favicon.ico")),
     url(r'^static/(?P<path>.*)$', static.serve,
         {'document_root': settings.STATIC_ROOT}, name='static'),
-    path("", views.index),
     path('captcha/', include('captcha.urls')),
     path("admin/", admin.site.urls),
     path("register/", views.register),
@@ -35,5 +35,6 @@ urlpatterns = [
     path("home/", views.home),
     path("profile/id=<int:uid>", views.profile),
     path("chat/<str:token>/", chat),
-    path("applications/", include("applications.urls"), name="applications"),
+    path("applications/", include(("applications.urls", "applications")), name="applications"),
+    path("files/", include(("files.urls", "files")), name="files"),
 ]

@@ -85,7 +85,7 @@ class ApplicationHandler(object):
                           name=app.name)
                 for app in self.ApplicationsList if app.config.UrlRoute]
 
-    def run_app(self):
+    def setup_app(self):
         if self.__is_stp is True:
             return
         for path in APPLICATIONS_DIR:
@@ -94,14 +94,15 @@ class ApplicationHandler(object):
                 __import__(_file)
             except ModuleNotFoundError:
                 raise ModuleNotFoundError(f"\n\tApplication {path}:\n\t\tNo application file <{_file}> !")
+        self.__is_stp = True
 
+    def run_app(self):
         for __sync in self._sync_app:
             __sync.start()
 
         for __async in self._async_app:
             __async.start(self.loop)
         self.loop_thread.start()
-        self.__is_stp = True
 
     @staticmethod
     def app_settings():

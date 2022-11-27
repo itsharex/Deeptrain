@@ -14,4 +14,4 @@ def applications_index(request: WSGIRequest, _) -> HttpResponse:
     return render(request, "applications.html", {"templates": applications_templates})
 
 
-urlpatterns = [path("", applications_index)] + appHandler.as_wsgi_urlpatterns()
+urlpatterns = [path("", applications_index, name="index")] + appHandler.as_wsgi_urlpatterns()

@@ -92,8 +92,8 @@
                   <button class="btn btn-success btn-xs send" onclick="send()">发送</button>
               </div>
           </div>
-          <iframe id="page2" class="full" src="/applications/" hidden></iframe>
-          <iframe id="page3" class="full" src="/" hidden></iframe>
+          <iframe id="page2" class="full" src="{% url 'applications:index' %}" hidden></iframe>
+          <iframe id="page3" class="full" src="{% url 'files:upload' %}" hidden></iframe>
           <div id="page4" class="full" hidden>...</div>
       </div>
     </main>

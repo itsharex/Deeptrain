@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -59,8 +60,8 @@ INSTALLED_APPS = [
     'dwebsocket',
     'captcha',
     'model',
-    'IMServer',
-    'fileHandler',
+    'im',
+                     'files',
 ] + APPLICATIONS_DIR
 
 #  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
@@ -170,6 +171,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
+
+FILE_DATABASE_DIR = os.path.join(BASE_DIR, "files", "database")
+MAX_FILE_NAME_LENGTH = 30
+
+SIZE_UNIT = 1024
+MAX_FILE_SIZE = (1024 ** 2) * 10  # 10 MiB
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

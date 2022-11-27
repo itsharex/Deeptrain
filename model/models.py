@@ -27,7 +27,7 @@ class User(models.Model):
 
 class Profile(models.Model):
     id: models.AutoField
-    user_bind = models.OneToOneField("User", on_delete=models.CASCADE)  # django -> user_bind_id.
+    user_bind = models.OneToOneField(User, on_delete=models.CASCADE)  # django -> user_bind_id.
     detail = models.TextField(default="", max_length=200)
     identity = models.SmallIntegerField(choices=identity_choices)
 

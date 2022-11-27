@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Files</title>
+    <link href="{% static 'css/files/upload.css' %}" rel="stylesheet">
+    <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.css" rel="stylesheet">
+    <link href="https://lib.baomitu.com/font-awesome/6.2.1/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<form  id="fileform" action="{% url 'files:upload' %}" method="post" enctype="multipart/form-data" class="modal">
+    {% csrf_token %}
+	<div class="modal-header"><div class="modal-logo"><span class="logo-circle"><i class="fa fa-solid fa-file-arrow-up"></i></span></div><button class="btn-close"><i class="fa-solid fa-upload"></i></button></div>
+	<div class="modal-body">
+		<h2 class="modal-title">Upload a file</h2>
+		<p class="modal-description">Attach the file below</p>
+        <label for="id_{{ form.files.name }}" class="upload-area">
+            <span class="upload-area-icon"><i class='bx bxs-cloud-upload'></i></span>
+			<span class="upload-area-title" id="area">Drag a file here to upload.</span>
+			<span class="upload-area-description" id="desc">Alternatively, you can select a file by <br><strong>clicking here</strong></span>
+        </label>
+		{{ form.files }}
+	</div>
+    <div class="message-line">
+        {% if error_code %}
+            <div class="error"><i class="fa fa-solid fa-circle-xmark"></i>&nbsp;{{ error_code }}</div>
+        {% elif name and link %}
+            <div class="success"><i class="fa fa-solid fa-circle-check"></i>&nbsp;Successfully upload file {{ name }}</div>
+            <a href="{{ link }}" class="link"><i class="fa fa-solid fa-circle-chevron-right"></i>&nbsp; Download the submitted file</a>
+        {% endif %}
+    </div>
+
+	<div class="modal-footer">
+		<button class="btn-secondary">Cancel</button>
+		<input type="submit" class="btn-primary" value="Upload File">
+	</div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+<script>
+    let input = document.querySelector("#id_{{ form.files.name }}");
+    let area = document.querySelector("#area");
+    let desc = document.querySelector("#desc");
+    let msg = document.querySelector(".message-line");
+    input.onchange = change => {
+        area.innerText = change.target.value;
+        desc.innerHTML = "<strong>Changed</strong>";
+        msg.classList.add("hidden");
+    }
+</script>
+</body>
+</html>
