@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload Files</title>
-    <link href="{% static 'css/files/upload.css' %}" rel="stylesheet">
+    <title>Upload</title>
     <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.css" rel="stylesheet">
     <link href="https://lib.baomitu.com/font-awesome/6.2.1/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/files/upload.css' %}" rel="stylesheet">
 </head>
 <body>
-<form  id="fileform" action="{% url 'files:upload' %}" method="post" enctype="multipart/form-data" class="modal">
+<form id="fileform" class="modal">
     {% csrf_token %}
 	<div class="modal-header"><div class="modal-logo"><span class="logo-circle"><i class="fa fa-solid fa-file-arrow-up"></i></span></div><button class="btn-close"><i class="fa-solid fa-upload"></i></button></div>
 	<div class="modal-body">
-		<h2 class="modal-title">Upload a file</h2>
+		<h2 class="modal-title">Upload</h2>
 		<p class="modal-description">Attach the file below</p>
         <label for="id_{{ form.files.name }}" class="upload-area">
             <span class="upload-area-icon"><i class='bx bxs-cloud-upload'></i></span>
@@ -31,21 +31,25 @@
     </div>
 
 	<div class="modal-footer">
-		<button class="btn-secondary">Cancel</button>
-		<input type="submit" class="btn-primary" value="Upload File">
-	</div>
+		<div class="btn-secondary" id="cancel-file">Cancel</div>
+        <div class="btn-primary" id="commit">
+            <span id="commit-span">Upload File</span>
+            <svg id="loading" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="20px" viewBox="0 0 30 30" style="stroke: white;" xml:space="preserve"><rect x="0" y="13" width="4" height="5" fill="white"><animate attributeName="height" attributeType="XML" values="5;21;5" begin="0s" dur="0.6s" repeatCount="indefinite"></animate><animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0s" dur="0.6s" repeatCount="indefinite"></animate></rect><rect x="10" y="13" width="4" height="5" fill="white"><animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.15s" dur="0.6s" repeatCount="indefinite"></animate><animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.15s" dur="0.6s" repeatCount="indefinite"></animate></rect><rect x="20" y="13" width="4" height="5" fill="white"><animate attributeName="height" attributeType="XML" values="5;21;5" begin="0.3s" dur="0.6s" repeatCount="indefinite"></animate><animate attributeName="y" attributeType="XML" values="13; 5; 13" begin="0.3s" dur="0.6s" repeatCount="indefinite"></animate></rect></svg>
+        </div>
+    </div>
 </form>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="{% static 'js/file.js' %}"></script>
+<script src="{% static 'js/files/upload.js' %}"></script>
 <script>
-    let input = document.querySelector("#id_{{ form.files.name }}");
-    let area = document.querySelector("#area");
-    let desc = document.querySelector("#desc");
-    let msg = document.querySelector(".message-line");
-    input.onchange = change => {
-        area.innerText = change.target.value;
-        desc.innerHTML = "<strong>Changed</strong>";
-        msg.classList.add("hidden");
-    }
+    init (
+        "#id_{{ form.files.name }}",
+        {{ max_size }},
+        {{ max_name }},
+        "{% url 'files:upload' %}",
+    );
+
+    input.onchange = updateInput;
 </script>
 </body>
 </html>

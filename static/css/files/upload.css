@@ -149,6 +149,11 @@ input, button, select, textarea {
   align-self: center;
   display: inline-block;
   animation: fadeIn 1.5s;
+  transition: .5s;
+}
+.message-line div {
+  transition: .5s;
+  animation: fadeIn .5s;
 }
 .message-line .fa {
   transform: translateY(2px);
@@ -196,6 +201,7 @@ input, button, select, textarea {
 }
 
 .btn-secondary, .btn-primary {
+  cursor: pointer;
   padding: .5rem 1rem;
   font-weight: 300;
   border: 2px solid var(--c-action-secondary);
@@ -204,6 +210,7 @@ input, button, select, textarea {
 }
 
 .btn-primary {
+  cursor: pointer;
   color: #FFF;
   background-color: var(--c-action-primary);
   border-color: var(--c-action-primary);

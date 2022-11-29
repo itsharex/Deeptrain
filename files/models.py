@@ -31,6 +31,8 @@ def get_file_url(user: User, ufile):
 
 
 def save_file(user: User, file: File):
+    if file is None:
+        raise ValidationError("File is none.")
     real_filename = file.name
     if len(file.name) > MAX_FILE_NAME_LENGTH:
         raise ValidationError("File name is too long.")
