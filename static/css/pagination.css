@@ -1,0 +1,90 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-container {
+  background: #fdfdfd;
+  padding: 1rem;
+  margin: 3rem auto;
+  border-radius: 0.2rem;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.3);
+  counter-reset: pagination;
+  text-align: center;
+}
+
+.page-container:after {
+  clear: both;
+  display: table;
+}
+
+.page-container ul {
+  width: 100%;
+}
+
+.middle {
+  width: max-content;
+}
+
+ul, li {
+  list-style: none;
+  display: inline;
+  padding-left: 0;
+}
+
+li {
+  counter-increment: pagination;
+}
+
+li:hover a {
+  color: #fdfdfd;
+  background-color: #1d1f20;
+  border: solid 1px #1d1f20;
+}
+
+li.active a {
+  color: #fdfdfd;
+  background-color: #1d1f20;
+  border: solid 1px #1d1f20;
+}
+
+li a {
+  border: solid 1px #d7d7d7;
+  border-radius: 0.2rem;
+  color: #7d7d7d;
+  text-decoration: none;
+  text-transform: uppercase;
+  display: inline-block;
+  text-align: center;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  transition: .2s;
+  user-select: none;
+}
+
+.middle li a {
+  display: inline-block;
+}
+
+.more {
+  content: "...";
+  cursor: inherit;
+}
+
+.more a {
+  cursor: inherit;
+  border: 0 !important;
+}
+
+.more a:hover {
+  border: 0 !important;
+  color: #7d7d7d !important;
+  background: transparent !important;
+}

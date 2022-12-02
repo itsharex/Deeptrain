@@ -1,8 +1,20 @@
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 import controller
 from model.forms import UserRegisterForm, UserLoginForm
+
+
+def ajax_required(_decorate_exec: callable) -> callable:
+    def _exec_function(request: WSGIRequest, *args, **kwargs) -> HttpResponse:
+        if request.is_ajax():
+            return _decorate_exec(
+                request,
+                *args, **kwargs,
+            )
+        else:
+            raise Http404("404")
+    return _exec_function
 
 
 def login_required(_decorate_exec: callable) -> callable:

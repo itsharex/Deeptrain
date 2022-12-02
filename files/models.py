@@ -4,10 +4,14 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import models
 from django.urls import reverse
+from django.utils.functional import cached_property
 from model.models import User
 from DjangoWebsite.settings import FILE_DATABASE_DIR, MAX_FILE_NAME_LENGTH, MAX_FILE_SIZE
+from controller import get_profile_from_user
 
 registered_files = []
+
+TOTAL_FILES = 0
 
 
 def register_file(app, path):
@@ -46,7 +50,7 @@ def save_file(user: User, file: File):
         for chunk in file.chunks():
             f.write(chunk)
 
-    UserFile.objects.create(real_name=real_filename, uuid_name=uuid_filename, user_bind=user)
+    UserFile.objects.create(real_name=real_filename, uuid_name=uuid_filename, user_bind=user, size=file.size)
     return get_file_url(user, uuid_filename)
 
 
@@ -54,7 +58,19 @@ class UserFile(models.Model):
     id: models.AutoField
     real_name = models.CharField(max_length=MAX_FILE_NAME_LENGTH, default="")
     uuid_name = models.UUIDField(default=uuid.uuid4())
+    size = models.PositiveIntegerField(default=0)
     time = models.DateTimeField(auto_now_add=True)
     user_bind = models.ForeignKey(User, on_delete=models.CASCADE)
 
     objects: models.manager.Manager
+
+    @cached_property
+    def to_jsonable(self) -> dict:
+        return {
+            "id": self.id,
+            "name": self.real_name,
+            "time": self.time,
+            "user": self.user_bind.username,
+            "size": self.size,
+            "tag": "admin" if get_profile_from_user(self.user_bind).is_admin() else "user",
+        }

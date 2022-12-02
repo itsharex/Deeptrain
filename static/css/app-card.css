@@ -115,9 +115,7 @@ body{
     font-weight: 600;
     border-radius: 5px;
 }
-.app-container .box .content a.start{
-    background-color: #fff;
-}
+
 .app-container .box .content a.repo{
     font-size: 27px;
     color: #fff;
