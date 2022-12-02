@@ -44,6 +44,7 @@ function createFileCard(tag, filename, datetime, size) {
     card.classList.add("file-card");
     card.innerHTML = html;
     container.appendChild(card);
+    $(card).fadeIn(1000);
 }
 
 function clearFileCard() {
@@ -79,6 +80,7 @@ function ajax(content, page=1, initial=false) {
 }
 
 const availablePage = i => (1 <= i && i <= total_pages);
+const getAvailablePage = i => (availablePage(i) ? i: undefined);
 
 function changePageEvent () {
     let input, page = this.getAttribute("page");
@@ -123,9 +125,14 @@ function initializePages(_total) {
     // }
     total_pages = _total;
     pagination.innerHTML = "";
-    if (total_pages <= 4) {for (let i = 0; i < total_pages; i++) {createPage(i + 1)}}
+    if (total_pages <= 5) {for (let i = 0; i < total_pages; i++) {createPage(i + 1)}}
     else {
-        let list = ["<",1,2,3,"...",total_pages,">"];
+        let list = [
+            active_page !== 1 ? "<": undefined,
+            getAvailablePage(active_page - 1), active_page, getAvailablePage(active_page + 1),
+            ...(active_page !== total_pages ?
+                [ ...(active_page + 1 !== total_pages ?["...", total_pages]:[undefined, ]), ">"]: [undefined, ]),
+        ].filter(Boolean);
         for (let i = 0; i < list.length; i++){createPage(list[i])}
     }
 }
