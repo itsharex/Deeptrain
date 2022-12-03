@@ -27,8 +27,8 @@ searchInput.onkeyup = _ => {
 }
 searchInput.onchange = event;
 
-
-function createFileCard(tag, filename, datetime, size) {
+const asyncRedirect = (url, timeout) => (setTimeout(() => (window.location.href = url), timeout || 200));
+function createFileCard(tag, filename, datetime, size, url, username) {
     let date = new Date(datetime).toDateString();
     let date_string = date.slice(date.split(" ")[0].length + 1);
     let html = `<div class='file__tags'><span class='task__tag task__tag--${tag}'>${tag}</span><button class='task__options'><i class="fas fa-ellipsis-h"></i></button></div>
@@ -36,8 +36,10 @@ function createFileCard(tag, filename, datetime, size) {
         <div class='file__stats'>
             <span><time datetime="${datetime}"><i class="fas fa-flag">${date_string}</i></time></span>
             <span><i class="fas fa-comment"></i>${toFileSize(size)}</span>
-            <span><i class="fas fa-paperclip"></i>5</span>
-            <span class='task__owner'><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"></path></svg></span>
+            <span><i class="fas fa-paperclip"></i>${username}</span>
+            <a href="${url}">
+                <span class='task__owner'><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"></path></svg></span>
+            </a>
         </div>`
 
     let card = document.createElement("div");
@@ -71,7 +73,7 @@ function ajax(content, page=1, initial=false) {
             let objs = data.data;
             for (let i = 0; i < objs.length; i++) {
                 let obj = objs[i];
-                createFileCard(obj.tag, obj.name, obj.time, obj.size);
+                createFileCard(obj.tag, obj.name, obj.time, obj.size, obj.url, obj.user);
             }
             initializePages(data.total);
         }

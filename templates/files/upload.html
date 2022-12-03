@@ -4,20 +4,16 @@
     <meta charset="UTF-8">
     <title>Upload File</title>
     <link href="{% static 'css/files/upload.css' %}" rel="stylesheet">
+    <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>
 <!-- from codepen - https://codepen.io/jkantner/pen/OJEoRwK -->
 <form id="upload" class="modal" data-state="0" data-ready="false">
     {% csrf_token %}
     <div class="modal__header">
-        <button class="modal__close-button" type="button">
-            <svg class="modal__close-icon" viewBox="0 0 16 16" width="16px" height="16px" aria-hidden="true">
-                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <polyline points="1,1 15,15"></polyline>
-                    <polyline points="15,1 1,15"></polyline>
-                </g>
-            </svg>
-            <span class="modal__sr">Close</span>
+        <button class="modal__close-button" type="button" onclick="window.location.href='{% url 'files:index' %}'">
+            <i class='bx bx-home-alt-2'></i>
+            <span class="modal__sr">Home</span>
         </button>
     </div>
     <div class="modal__body">

@@ -79,6 +79,9 @@ body {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 }
+.modal__close-button i {
+    font-size: 22px;
+}
 .modal__button {
     background-color: hsla(var(--hue),10%,50%,0.2);
     border-radius: 0.25rem;
