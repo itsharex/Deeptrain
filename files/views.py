@@ -19,7 +19,6 @@ def upload(request: WSGIRequest, user) -> HttpResponse:
         if form.is_valid():
             return JsonResponse({
                 "success": True,
-                "name": str(form.get_file()),  # throw Object of type InMemoryUploadedFile is not JSON serializable
                 "link": form.get_link(),
             })
 

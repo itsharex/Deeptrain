@@ -5,8 +5,8 @@ from .models import *
 
 
 class FileForm(forms.Form):
-    files = forms.FileField(
-        label="files",
+    file = forms.FileField(
+        label="file",
         allow_empty_file=False,
         widget=forms.FileInput(
             attrs={
@@ -26,7 +26,7 @@ class FileForm(forms.Form):
         return self.cleaned_data
 
     def get_file(self):
-        return self.cleaned_data.get("files")
+        return self.cleaned_data.get("file")
 
     def get_link(self):
         return self.url

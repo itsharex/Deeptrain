@@ -125,15 +125,16 @@ body{
 .app-container .box h2.index{
     position: absolute;
     right: 30px;
-    font-size: 4em;
     font-weight: 800;
     color: orange;
     z-index: 1;
-    opacity: 0.05;
+    opacity: 0;
+    font-size: 0;
     transition: 0.5s ease-in-out;
     transform: translate(10px, 280%);
 }
 .app-container .box:hover h2.index{
-    opacity: 0.95;
+    opacity: 0.85;
+    font-size: 4em;
     transform: translate(10px, -40%);
 }

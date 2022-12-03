@@ -67,10 +67,11 @@ class UserFile(models.Model):
     @cached_property
     def to_jsonable(self) -> dict:
         return {
-            "id": self.id,
+            "id": self.user_bind.id,
             "name": self.real_name,
             "time": self.time,
             "user": self.user_bind.username,
             "size": self.size,
             "tag": "admin" if get_profile_from_user(self.user_bind).is_admin() else "user",
+            "url": get_file_url(self.user_bind, self.uuid_name),
         }

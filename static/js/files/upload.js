@@ -1,143 +1,174 @@
-let input;
-let area = document.querySelector("#area");
-let description = document.querySelector("#desc");
-let msg = document.querySelector(".message-line");
-let max_size;
-let max_name;
-let ajax_url;
-let commit_button = document.getElementById("commit");
-let commit_button_width = `${commit_button.offsetWidth} px`;
+let upload;
+window.addEventListener("DOMContentLoaded",() => {
+    upload = new UploadModal("#upload");
+});
 
-let loading = false;
-let commit_span = $(document.getElementById("commit-span"));
-let loading_animation = $(document.getElementById("loading"));
+let ajax_url = "";
+let max_filename_length_limit = -1;
+let max_filesize_limit = -1;
 
-let timeout;
+class UploadModal {
+    filename = "";
+    isCopying = false;
+    isUploading = false;
+    progress = 0;
+    state = 0;
 
-const canSubmit = () => {
-    return updateInput() && !loading;
+    constructor(el) {
+        this.el = document.querySelector(el);
+        this.fileField = this.el?.querySelector("#id_file");
+
+        this.el?.addEventListener("click",this.action.bind(this));
+        this.fileField?.addEventListener("change",this.fileHandle.bind(this));
+    }
+    action(e) {
+        this[e.target?.getAttribute("data-action")]?.();
+        this.stateDisplay();
+    }
+    cancel() {
+        this.isUploading = false;
+        this.progress = 0;
+        this.state = 0;
+        this.stateDisplay();
+        this.progressDisplay();
+        this.object.abort();
+        this.fileReset();
+    }
+    async copy() {
+        const copyButton = this.el?.querySelector("[data-action='copy']");
+        if (!this.isCopying && copyButton) {
+            // disable
+            this.isCopying = true;
+            copyButton.style.width = `${copyButton.offsetWidth}px`;
+            copyButton.disabled = true;
+            copyButton.textContent = "Copied!";
+            await navigator.clipboard.writeText(this._copy?this._copy:this.filename);
+            await new Promise(res => setTimeout(res, 1000));
+            // re-enable
+            this.isCopying = false;
+            copyButton.removeAttribute("style");
+            copyButton.disabled = false;
+            copyButton.textContent = "Copy Link";
+        }
+    }
+    fail(message="Your file could not be uploaded due to an error. Try uploading it again?") {
+        this.isUploading = false;
+        this.progress = 0;
+        this.state = 2;
+        this.stateDisplay();
+        this.el.querySelector("#error-message").innerText = message;
+    }
+    file() {
+        this.fileField.click();
+    }
+    fileDisplay(name = "") {
+        // update the name
+        this.filename = name;
+
+        const fileValue = this.el?.querySelector("[data-file]");
+        if (fileValue) fileValue.textContent = this.filename;
+
+        // show the file
+        this.el?.setAttribute("data-ready", this.filename ? "true" : "false");
+    }
+    fileHandle(e) {
+        return new Promise(() => {
+            const { target } = e;
+            if (target?.files.length) {
+                let reader = new FileReader();
+                reader.onload = e2 => {
+                    this.fileDisplay(target.files[0].name);
+                };
+                reader.readAsDataURL(target.files[0]);
+            }
+        });
+    }
+    fileReset() {
+        if (this.fileField) this.fileField.value = null;
+
+        this.fileDisplay();
+    }
+    progressDisplay() {
+        const progressValue = this.el?.querySelector("[data-progress-value]");
+        const progressFill = this.el?.querySelector("[data-progress-fill]");
+        const progressTimes100 = Math.floor(this.progress * 100);
+
+        if (progressValue) progressValue.textContent = `${progressTimes100}%`;
+        if (progressFill) progressFill.style.transform = `translateX(${progressTimes100}%)`;
+    }
+    progressUpdate(n) {
+        this.progress = n;
+        this.progressDisplay();
+    }
+    stateDisplay() {
+        this.el?.setAttribute("data-state", `${this.state}`);
+    }
+    getRootPath = () => (window.document.location.href.substring(0, window.document.location.href.indexOf(window.document.location.pathname)));
+
+    success(_copy="") {
+        this.isUploading = false;
+        this.state = 3;
+        this._copy = _copy.trim()?this.getRootPath()+_copy:"";
+        this.stateDisplay();
+    }
+    upload() {
+        if (!this.isUploading) {
+            this.isUploading = true;
+            this.progress = 0;
+            this.state = 1;
+            this.object = new FileUploadObject();
+        }
+    }
 }
 
-function init(selector, _max_size, max_name_length, url) {
-    input = document.querySelector(selector);
-    max_size = _max_size || 1024;
-    max_name = max_name_length;
-    ajax_url = url;
+class FileUploadObject {
+    constructor() {
+        this.form = new FormData(upload.el);
+        if (this.verify()) {
+            this.ajax = $.ajax({
+                url: ajax_url,
+                data: this.form,
+                processData: false,
+                contentType: false,
+                method: "POST",
+                xhr: function () {
+                    const xhr = $.ajaxSettings.xhr();
+                    if (xhr.upload) {
+                        xhr.upload.addEventListener('progress', e => {
+                                const {loaded, total} = e;
+                                upload.progressUpdate(loaded / total);
+                            }, false,
+                        );
+                        return xhr;
+                    }
+                },
+                success: e => {
+                    e.success ? upload.success(e.link) : upload.fail(e.error);
+                },
+                error: upload.fail,
+            });
+        }
+    }
 
-    setLoadingState(false);
-    commit_button.style.width = `${commit_button.offsetWidth} px`;
-}
-
-document.getElementById("cancel-file").onclick = () => {
-    $(input).val("");
-    area.innerText = "Drag a file here to upload.";
-    description.innerHTML = "Alternatively, you can select a file by <br><strong>clicking here</strong>";
-    add_messages([]);
-};
-
-function updateInput() {
-    {
-        let errs = [];
+    verify() {
+        let input = upload.fileField;
         if (!input.files[0]) {
-            errs.push(["error", `File is required`]);
-            add_messages(errs);
+            upload.fail("File is required");
             return false;
         }
-        if (input.files[0].name.length > max_name) {
-            errs.push(["error", `File name is too long > ${max_name} (${input.files[0].name.length})`]);
+        if (input.files[0].name.length > max_filename_length_limit) {
+            upload.fail(`File name is too long > ${max_filename_length_limit} (${input.files[0].name.length})`);
+            return false;
         }
+
         let size = getFileSize(input);
-        if (size > max_size) {
-            errs.push(["error", `The file is too large > ${toFileSize(max_size, 0, 0)}`]);
+        if (size > max_filesize_limit) {
+            upload.fail(`The file is too large > ${toFileSize(max_filesize_limit, 0, 0)}`);
+            return false;
         }
-        area.innerText = input.files[0].name;
-        description.innerHTML = `<strong>${toFileSize(size)}</strong>`;
-        add_messages(errs);
-        return $.isEmptyObject(errs);
+        return true;
     }
-}
-
-function _add_message(type, content) {
-    let dom;
-    switch (type) {
-        case "error":
-            dom = document.createElement("div");
-            dom.classList.add("error");
-            dom.innerHTML = `<i class="fa fa-solid fa-circle-xmark"></i>&nbsp;${content}`;
-            break;
-        case "success":
-            dom = document.createElement("div");
-            dom.classList.add("success");
-            dom.innerHTML = `<i class="fa fa-solid fa-circle-check"></i>&nbsp;Successfully upload file ${content}`
-            break;
-        case "link":
-            dom = document.createElement("a");
-            dom.href = content;
-            dom.classList.add("link");
-            dom.innerHTML = '<i class="fa fa-solid fa-circle-chevron-right"></i>&nbsp; Download the submitted file';
-            break;
+    abort() {
+        return this.ajax?this.ajax.abort():undefined;
     }
-    msg.appendChild(dom);
-}
-
-function add_messages(arguments) {
-    msg.innerHTML = "";
-    for (let i = 0; i < arguments.length; i++) {
-        _add_message(...arguments[i]);
-    }
-}
-
-function setLoadingState(state){
-    loading = state;
-    // switch (state) {
-    //     case true:
-    //         commit_span.hide();
-    //         loading_animation.show();
-    //         break;
-    //     case false:
-    //         commit_span.show();
-    //         loading_animation.hide();
-    //         break;
-    // }
-    clearTimeout(timeout);
-    timeout = setTimeout(function() {
-            [commit_span, loading_animation][Number(state)].show();
-            [commit_span, loading_animation][Number(!state)].hide();
-            commit_button.style.width = `${commit_button.offsetWidth} px`;
-    }, 100);  // 延迟响应, 设置延迟的等待最小限制 (<100ms 不显示等待动画)
-}
-
-commit_button.onclick = () => {
-    let form = new FormData(document.querySelector("#fileform"));
-    if (!canSubmit()){
-        return;
-    }
-    setLoadingState(true);
-    $.ajax({
-        url: ajax_url,
-        method: "POST",
-        processData: false,
-        contentType: false,
-        data: form,
-        success: data => {
-            switch (data.success){
-                case true:
-                    add_messages([
-                        ["success", data.name],
-                        ["link", data.link],
-                    ]);
-                    break;
-                case false:
-                    add_messages([
-                        ["error", data.error],
-                    ]);
-                    break;
-            }
-            setLoadingState(false);
-        },
-        error: err => {
-            add_messages([["error", "Connection Error"], ]);
-            setLoadingState(false);
-        }
-    })
 }
