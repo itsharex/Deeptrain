@@ -1,7 +1,9 @@
 import sys
 from django.core.paginator import Paginator, EmptyPage, Page
+from django.db.models import QuerySet
 from DjangoWebsite.settings import FILE_CACHE_CAPABILITY, FILE_PAGINATION
 from typing import *
+from functools import reduce
 
 from files.models import UserFile
 
@@ -42,9 +44,15 @@ class FilePaginationCache(object):
         except (KeyError, EmptyPage):
             return default
 
+    @staticmethod
+    def search_keyword(keyword: str) -> QuerySet:
+        return reduce(
+            lambda _object, _keyword: _object.filter(real_name__icontains=_keyword),
+            [UserFile.objects, *keyword.split(" ")],
+        )
+
     def create(self, key, page) -> Tuple[int, Page]:
-        file_objects = UserFile.objects.filter(real_name__icontains=key).order_by("id") if key \
-            else UserFile.objects.order_by("id")
+        file_objects = (self.search_keyword(key) if key else UserFile.objects).order_by("id")
         pagination = Paginator(file_objects, FILE_PAGINATION)
         self.push(key, pagination)
         return pagination.num_pages, pagination.get_page(page)

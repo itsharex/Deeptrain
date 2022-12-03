@@ -73,7 +73,7 @@ function ajax(content, page=1, initial=false) {
             let objs = data.data;
             for (let i = 0; i < objs.length; i++) {
                 let obj = objs[i];
-                createFileCard(obj.tag, obj.name, obj.time, obj.size, obj.url, obj.user);
+                createFileCard(obj.tag, highlight(obj.name, content), obj.time, obj.size, obj.url, obj.user);
             }
             initializePages(data.total);
         }
@@ -137,4 +137,9 @@ function initializePages(_total) {
         ].filter(Boolean);
         for (let i = 0; i < list.length; i++){createPage(list[i])}
     }
+}
+
+function highlight(text, keyword) {
+    let keywords = keyword.split(" ").sort((a, b) => b.length - a.length);
+    return text.replace(new RegExp(`(${keywords.join('|')})`, 'gi'), "<span class='red'>$1</span>")
 }
