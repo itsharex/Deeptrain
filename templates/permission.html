@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Permission Denied</title>
+    <link href="{% static 'css/permission.css' %}" rel="stylesheet">
+    <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- from codepen - https://codepen.io/jkantner/pen/OJEoRwK -->
+<div id="upload" class="modal" data-state="0" data-ready="false">
+    <div class="modal__header">
+        <button class="modal__close-button" type="button" onclick="history.back()">
+            <i class='bx bx-home-alt-2'></i>
+            <span class="modal__sr">Back</span>
+        </button>
+    </div>
+    <div class="modal__body">
+        <div class="modal__col">
+            <svg class="modal__icon modal__icon--red" viewBox="0 0 24 24" width="24px" height="24px"
+                 aria-hidden="true" display="none">
+                <g fill="none" stroke="hsl(3,90%,50%)" stroke-width="2" stroke-linecap="round">
+                    <circle class="modal__icon-sdo69" cx="12" cy="12" r="11" stroke-dasharray="69.12 69.12"></circle>
+                    <line class="modal__icon-sdo14" x1="7" y1="7" x2="17" y2="17" stroke-dasharray="14.2 14.2"></line>
+                    <line class="modal__icon-sdo14" x1="17" y1="7" x2="7" y2="17" stroke-dasharray="14.2 14.2"></line>
+                </g>
+            </svg>
+        </div>
+        <div class="modal__col">
+            <div class="modal__content">
+                <h2 class="modal__title">Oops!</h2>
+                <p class="modal__message">It looks like you can't access this page. Contact the administrator to upgrade the permission and try again.</p>
+                <div class="modal__actions modal__actions--center">
+                    <button class="modal__button" type="button" onclick="history.back()">Back</button>
+                    <button class="modal__button" type="button" onclick="window.location.href='{% url 'files:index' %}'">Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

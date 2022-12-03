@@ -2,7 +2,8 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, FileResponse, JsonResponse, Http404
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from views import login_required, ajax_required
+from DjangoWebsite.settings import FILE_PERMISSION_LEVEL
+from views import login_required, identity_required, ajax_required
 from .forms import FileForm
 from .models import *
 from .cache import fileCache
@@ -13,7 +14,8 @@ def index(request: WSGIRequest, _) -> HttpResponse:
     return render(request, "files/index.html")
 
 
-@login_required
+# @admin_required
+@identity_required(FILE_PERMISSION_LEVEL)
 def upload(request: WSGIRequest, user) -> HttpResponse:
     if request.POST or request.is_ajax():
         form = FileForm(user, request.POST, request.FILES)

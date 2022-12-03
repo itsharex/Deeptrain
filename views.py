@@ -42,7 +42,7 @@ def identity_required(level: int):
                     *args, **kwargs
                 )
             else:
-                return redirect("/home/")
+                return render(request, 'permission.html')
         return _exec_
     return _decorate_
 
