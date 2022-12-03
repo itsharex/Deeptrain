@@ -35,42 +35,33 @@
 > create DATABASE `django-database`
 > ```
 > ```commandline
+> cd Zh-Website
+> pip install -r requirements.txt
+> 
 > python manage.py makemigrations
 > python manage.py migrate
 > python manage.py collectstatic
 > ```
 
-
 - 模块 | Module Requirements
 
   ```
-    asgiref==3.5.2
-    async-timeout==4.0.2
-    cffi==1.15.1
-    cryptography==38.0.1
-    Deprecated==1.2.13
-    Django==3.2.16
-    django-redis==5.2.0
-    django-simpleui==2022.7.29
-    importlib-metadata==5.0.0
-    jwt==1.3.1
-    packaging==21.3
-    pycparser==2.21
-    PyJWT==2.6.0
-    PyMySQL==1.0.2
-    pyparsing==3.0.9
-    pytz==2022.5
-    redis==4.3.4
-    six==1.16.0
-    sqlparse==0.4.3
-    typing_extensions==4.4.0
-    wincertstore==0.2
-    wrapt==1.14.1
-    zipp==3.10.0
-    rich==12.5.1
+  Django==3.2.16
+  django-redis==5.2.0
+  django-simpleui==2022.11.30
+  PyJWT==2.6.0
+  PyMySQL==1.0.2
+  rich==12.6.0
+  django-simple-captcha==0.5.17
+  six==1.16.0
+  geoip2==4.6.0
   ```
-- 环境问题 | Environment
-  -`linux system`
+- 环境 | Environment (Settings: DjangoWebsite/settings.py)
+  - `linux kernel` (dwebsocket, gunicorn)
+  - `python 3.7+`
+  - `redis`
+  - `mysql`
+
 
 ## 网站功能 | Website Features
 

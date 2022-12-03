@@ -7,5 +7,6 @@ class CodecMiddleware(MiddlewareMixin):
     def __init__(self, *args, **kwargs):
         super(CodecMiddleware, self).__init__(*args, **kwargs)
 
-    def process_request(self, request: WSGIRequest):
+    @staticmethod
+    def process_request(request: WSGIRequest):
         request.encoding = CODING

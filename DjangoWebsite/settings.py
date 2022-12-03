@@ -46,7 +46,7 @@ CAPTCHA_NOISE_FUNCTIONS = (
    'captcha.helpers.noise_arcs',
    'captcha.helpers.noise_dots',
 )
-# 随机字符验证码
+
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 
 INSTALLED_APPS = [
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'model',
     'im',
     'files',
+    'geoip',
 ] + APPLICATIONS_DIR
 
 #  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
@@ -74,7 +75,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middleware.CodecMiddleware.CodecMiddleware'
+    'middleware.CodecMiddleware.CodecMiddleware',
+    'middleware.GeoipMiddleware.GeoipMiddleware',
     # 'dwebsocket.middleware.WebSocketMiddleware',
 ]
 
@@ -180,6 +182,8 @@ FILE_PERMISSION_LEVEL = 2
 SIZE_UNIT = 1024
 MAX_FILE_SIZE = (1024 ** 2) * 10  # 10 MiB
 
+
+GEOIP_DATABASE_FILE = os.path.join(BASE_DIR, "geoip", "database", "geolite.mmdb")
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
