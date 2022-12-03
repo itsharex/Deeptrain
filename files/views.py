@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from views import login_required, ajax_required
 from .forms import FileForm
 from .models import *
+from .cache import fileCache
 
 
 @login_required
@@ -54,15 +55,12 @@ def download(request: WSGIRequest, _, uid: int, ufile: str) -> FileResponse:
 def search(request: WSGIRequest, _):
     try:
         name = str(request.GET.get("name", "")).strip()
-        objs = UserFile.objects.filter(real_name__icontains=name).order_by("id") if name \
-            else UserFile.objects.order_by("id")
         page_query = int(request.GET.get("page", 0))
-        page = Paginator(objs, 10)
-        resp = page.get_page(page_query)
+        num_pages, page = fileCache(name, page_query, (),)
 
         return JsonResponse({
-            "data": [obj.to_jsonable for obj in resp],
-            "total": page.num_pages,
+            "data": [obj.json for obj in page],
+            "total": num_pages,
         })
     except ValueError as err:
         raise Http404("Value Error") from err

@@ -65,7 +65,7 @@ class UserFile(models.Model):
     objects: models.manager.Manager
 
     @cached_property
-    def to_jsonable(self) -> dict:
+    def json(self) -> dict:
         return {
             "id": self.user_bind.id,
             "name": self.real_name,
