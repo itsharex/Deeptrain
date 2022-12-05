@@ -174,6 +174,7 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
 
+#  File Settings
 FILE_DATABASE_DIR = os.path.join(BASE_DIR, "files", "database")
 MAX_FILE_NAME_LENGTH = 30
 FILE_CACHE_CAPABILITY = 50
@@ -182,7 +183,8 @@ FILE_PERMISSION_LEVEL = 2
 SIZE_UNIT = 1024
 MAX_FILE_SIZE = (1024 ** 2) * 10  # 10 MiB
 
-
+# GeoIP Settings
+GEOIP_RELEASE_INTERVAL = 60 * 60  # 1 hour
 GEOIP_DATABASE_FILE = os.path.join(BASE_DIR, "geoip", "database", "geolite.mmdb")
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

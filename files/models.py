@@ -50,7 +50,7 @@ def save_file(user: User, file: File):
         for chunk in file.chunks():
             f.write(chunk)
 
-    UserFile.objects.create(real_name=real_filename, uuid_name=uuid_filename, user_bind=user, size=file.size)
+    UserFile.objects.create(real_name=real_filename, uuid_name=uuid_filename, user=user, size=file.size)
     return get_file_url(user, uuid_filename)
 
 
@@ -60,18 +60,18 @@ class UserFile(models.Model):
     uuid_name = models.UUIDField(default=uuid.uuid4())
     size = models.PositiveIntegerField(default=0)
     time = models.DateTimeField(auto_now_add=True)
-    user_bind = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     objects: models.manager.Manager
 
     @cached_property
     def json(self) -> dict:
         return {
-            "id": self.user_bind.id,
+            "id": self.user.id,
             "name": self.real_name,
             "time": self.time,
-            "user": self.user_bind.username,
+            "user": self.user.username,
             "size": self.size,
-            "tag": "admin" if get_profile_from_user(self.user_bind).is_admin() else "user",
-            "url": get_file_url(self.user_bind, self.uuid_name),
+            "tag": "admin" if get_profile_from_user(self.user).is_admin() else "user",
+            "url": get_file_url(self.user, self.uuid_name),
         }

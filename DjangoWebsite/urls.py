@@ -37,4 +37,5 @@ urlpatterns = [
     path("chat/<str:token>/", chat),
     path("applications/", include(("applications.urls", "applications")), name="applications"),
     path("files/", include(("files.urls", "files")), name="files"),
+    path("geoip/", include(("geoip.urls", "geoip")), name="geoip"),
 ]

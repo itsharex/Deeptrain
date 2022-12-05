@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import django
+import redis
 from django.core.cache import cache
 
 ip = "127.0.0.1"
@@ -32,7 +33,10 @@ if __name__ == '__main__':
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoWebsite.settings')
     exec_line = sys.argv if sys.argv[1:] else sys.argv + ["runserver", f"{ip}:{port}"]
-    initialize_applications(exec_line[1] == "runserver")
+    try:
+        initialize_applications(exec_line[1] == "runserver")
+    except redis.exceptions.ConnectionError as e:
+        raise ConnectionError("Redis was un-connectable.") from e
 
     try:
         from django.core.management import execute_from_command_line

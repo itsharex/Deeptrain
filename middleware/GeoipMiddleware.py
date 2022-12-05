@@ -1,6 +1,6 @@
+from geoip.cache import countryCache
 from django.core.handlers.wsgi import WSGIRequest
 from django.utils.deprecation import MiddlewareMixin
-from geoip.geoip import *
 
 
 class GeoipMiddleware(MiddlewareMixin):
@@ -9,4 +9,5 @@ class GeoipMiddleware(MiddlewareMixin):
 
     @staticmethod
     def process_request(request: WSGIRequest):
-        print(get_city(request))
+        countryCache(request)
+
