@@ -1,5 +1,5 @@
 from django import forms
-from captcha.fields import CaptchaField
+from hcaptcha.fields import hCaptchaField as CaptchaField
 from django.core.exceptions import ValidationError
 from .models import *
 

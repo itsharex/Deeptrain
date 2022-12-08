@@ -27,7 +27,6 @@ urlpatterns = [
     path("favicon.ico", RedirectView.as_view(url="/static/images/favicon.ico")),
     url(r'^static/(?P<path>.*)$', static.serve,
         {'document_root': settings.STATIC_ROOT}, name='static'),
-    path('captcha/', include("captcha.urls"), name="captcha"),
     path("admin/", admin.site.urls, name="admin"),
     path("register/", views.register, name="register"),
     path("login/", views.login, name="login"),

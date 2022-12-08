@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dwebsocket',
-    'captcha',
+    'hcaptcha',
     'model',
     'im',
     'files',

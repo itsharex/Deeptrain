@@ -1,5 +1,5 @@
 from django import forms
-from captcha.fields import CaptchaField
+from hcaptcha.fields import hCaptchaField as CaptchaField
 from django.core.exceptions import ValidationError
 import controller
 
@@ -44,7 +44,6 @@ class UserLoginForm(forms.Form):
             "invalid": "验证码输入错误"
         },
     )
-    captcha.widget.widgets[1].attrs.update({"placeholder": "验证码"})  # 似乎不管用
 
     def clean(self):
         super().clean()
@@ -119,7 +118,6 @@ class UserRegisterForm(forms.Form):
             "invalid": "验证码输入错误"
         },
     )
-    captcha.widget.widgets[1].attrs.update({"placeholder": "验证码"})
 
     def clean(self):
         super().clean()
