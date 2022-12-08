@@ -85,7 +85,7 @@ body {
 
 .container .left input {
     float: left;
-    width: 188px;
+    width: 60%;
     height: 42px;
     padding: 0 15px;
     border: 1px solid var(--light);
@@ -93,6 +93,7 @@ body {
     border-radius: 21px;
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 400;
+    box-shadow: none !important;
 }
 
 .container .left input:focus {

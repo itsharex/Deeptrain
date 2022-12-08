@@ -14,53 +14,40 @@
         <link href="{% static 'css/profile-style.css' %}" rel="stylesheet">
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
         <link href="{% static 'css/media-flip.css' %}" rel="stylesheet">
+        <link href="{% static 'css/home.css' %}" rel="stylesheet">
         <link href="{% static 'css/font-family.css' %}" rel="stylesheet">
-        <style>html,body,main{height:100%;width:100%}main{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden}.dropdown-toggle{outline:0}</style>
         <link rel="shortcut icon" href="/favicon.ico">
-        <style>
-            *{margin:0;padding:0;}
-            .card{margin:3px;background-color:black;}
-            .icon{height:22px;width:22px;}
-            .full{height:100%;width:100%;}
-            .username{font-size: 16pt;}
-            .card{flex-direction: row !important;gap: 3px}  /** from BootStrap: flex-direction: column **/
-
-            .bx {
-                font-size: 25px;
-            }
-        </style>
     </head>
     <body style="background-image: linear-gradient(180deg, #2af598 0%, #009efd 100%);">
     <div id="message-window" class="message-window"></div>
     <main>
-        <div id="menu" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width:160px;height:100%;float:left;z-index: 3;">
-          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-              <i class='bx bxl-python'></i>
-              <span class="poppins webname">Zh-Website</span>
-          </a>
-          <hr>
-          <ul class="nav nav-pills flex-column mb-auto menu">
-            <li><a id="0" class="poppins nav-link card text-white active" onclick="clicked(0)"><i class='bx bxs-home' ></i>Home<span>主页</span></a></li>
-            <li><a id="1" class="poppins nav-link card text-white" onclick="clicked(1)"><i class='bx bxs-message-dots'></i>Chat<span>聊天室</span></a></li>
-            <li><a id="2" class="poppins nav-link card text-white" onclick="clicked(2)"><i class='bx bx-grid-alt'></i>Apps<span>网站应用</span></a></li>
-            <li><a id="3" class="poppins nav-link card text-white" onclick="clicked(3)"><i class='bx bx-transfer-alt' ></i>Files<span>文件</span></a></li>
-              <li><a id="4" class="poppins nav-link card text-white" onclick="clicked(4)"><i class='bx bxl-github'></i>Page<span>GitHub Pages</span></a></li>
-          </ul>
-          <hr>
-          <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class='bx bxs-user-rectangle'></i>{{ name|default:"user" }}
+        <div id="menu" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <i class='bx bxl-python'></i><span class="poppins webname">Zh-Website</span>
             </a>
-            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
-              <li><a class="dropdown-item" href="#" style="color: black;">更改密码</a></li>
-              <li><a class="dropdown-item" href="/logout/" style="color: black;">登出</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" style="color: black;">{{ name|default:"user" }}</a></li>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto menu" id="menubar">
+                <li><a class="poppins nav-link card text-white active"><i class='bx bxs-home' ></i>Home<span>主页</span></a></li>
+                <li><a class="poppins nav-link card text-white"><i class='bx bxs-message-dots'></i>Chat<span>聊天室</span></a></li>
+                <li><a class="poppins nav-link card text-white"><i class='bx bx-grid-alt'></i>Apps<span>网站应用</span></a></li>
+                <li><a class="poppins nav-link card text-white"><i class='bx bx-transfer-alt' ></i>Files<span>文件</span></a></li>
+                <li><a class="poppins nav-link card text-white"><i class='bx bxl-github'></i>Page<span>GitHub Pages</span></a></li>
             </ul>
-          </div>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class='bx bxs-user-rectangle'></i>{{ name|default:"user" }}
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="#" style="color: black;">更改密码</a></li>
+                    <li><a class="dropdown-item" href="/logout/" style="color: black;">登出</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" style="color: black;">{{ name|default:"user" }}</a></li>
+                </ul>
+            </div>
         </div>
-        <div id="main" style="float:right;width:calc(100% - 160px);margin:0 auto;height:100%;display: inline-block;overflow: hidden;">
-            <div id="page0" class="full box">
+        <div id="main">
+            <div class="full box">
                 <div class="circle" style="--x:0"></div>
                 <div class="circle" style="--x:1"></div>
                 <div class="circle" style="--x:2"></div>
@@ -81,10 +68,10 @@
                         </form>
                     </div>
             </div>
-            <iframe id="page1" class="full" src="{% url 'im:index' %}" hidden></iframe>
-            <iframe id="page2" class="full" src="{% url 'applications:index' %}" hidden></iframe>
-            <iframe id="page3" class="full" src="{% url 'files:index' %}" hidden></iframe>
-            <iframe id="page4" class="full" src="https://zmh-program.github.io/" hidden></iframe>
+            <iframe class="full" src="{% url 'im:index' %}" hidden></iframe>
+            <iframe class="full" src="{% url 'applications:index' %}" hidden></iframe>
+            <iframe class="full" src="{% url 'files:index' %}" hidden></iframe>
+            <iframe class="full" src="https://zmh-program.github.io/" hidden></iframe>
         </div>
     </main>
 
@@ -95,14 +82,25 @@
         const chat_message = document.getElementById("message-box");
         const message_window = document.getElementById("message-window");
         const send_message = $('#send_message');
-        function clicked(id){
-            id = String(id)
-            if (id !== cardId){
-              document.getElementById(cardId).classList.remove("active");document.getElementById("page"+cardId).hidden=true;
-              document.getElementById(id).classList.add("active");document.getElementById("page"+id).hidden=false;
-              cardId = id;
+
+        let action_id = 0;
+        const actions = new Array(...document.querySelector("#menubar").children);
+        const pages = new Array(... document.querySelector("#main").children);
+        actions.forEach(action => (
+            action.onclick = event => {
+                let val = actions.indexOf(action);
+                if (val === action_id) {
+                    return;
+                }
+
+                actions[action_id].querySelector(".card").classList.remove("active");
+                action.querySelector(".card").classList.add("active");
+                pages  [action_id].hidden = true;
+                pages[val].hidden = false;
+                action_id = val;
             }
-        }
+        ));
+
         function edit_profile(){
             document.getElementById("textEdit").innerText = document.getElementById("profileContent").innerText;
             document.getElementById("textForm").hidden=false;document.getElementById("profileContent").hidden=true;
