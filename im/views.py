@@ -1,8 +1,12 @@
 import time
 from typing import List
-from controller import get_user_from_name
+from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpResponse
+from django.shortcuts import render
+import controller
 from dwebsocket import require_websocket
 import websocket
+from views import login_required
 
 user_image = "/static/images/chat_user.png"
 host_image = "https://cdn-icons-png.flaticon.com/128/6908/6908194.png"
@@ -24,10 +28,10 @@ class IMClient(websocket.WebClient):
         super(IMClient, self).send({
             'username': username,
             'id': uid,
-            'image_path': image,
+            'image': image,
             'content': message,
             'self': uid == self.id,
-            'is_html': is_html,
+            'html': is_html,
             'identity': identity,
             'time': int(time.time()),
         })
@@ -62,4 +66,9 @@ group = IMServerClientGroup()
 
 @require_websocket
 def chat(request, token) -> None:
-    ws = group.add_client(request, token)
+    group.add_client(request, token)
+
+
+@login_required
+def index(request: WSGIRequest, user) -> HttpResponse:
+    return render(request, "im.html", {"token": controller.webtoken_encode_from_user(user)})

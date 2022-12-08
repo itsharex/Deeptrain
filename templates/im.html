@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="{% static 'css/im.css' %}" rel="stylesheet">
+    <link href="{% static 'css/profile-style.css' %}" rel="stylesheet">
+</head>
+<body>
+<div id="message-window" class="message-window"></div>
+<div class="wrapper poppins">
+    <div class="container">
+        <div class="left">
+            <div class="top">
+                <label>
+                    <input type="text" placeholder="Search" />
+                </label>
+                <a href="javascript:" class="search"></a>
+            </div>
+            <ul class="people">
+                <li class="person" data-chat="person1">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4564/4564089.png " alt>
+                    <span class="name">Chat Room</span>
+                    <span class="time"></span>
+                    <span class="preview"></span>
+                </li>
+            </ul>
+        </div>
+        <div class="right">
+            <div class="top"><span>To: <span class="name">Chat Room</span></span></div>
+            <div class="chat" id="chat-container" data-chat="person1"></div>
+
+            <div class="write">
+                <a href="javascript:" class="input-button"><i class='bx bx-paperclip'></i></a>
+                <label for="input"></label><input type="text" name="text" id="input" maxlength="500">
+                <a href="javascript:" class="input-button send" id="send"><i class='bx bx-send'></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+<script src="{% static 'js/message.js' %}"></script>
+<script src="{% static 'js/websocket_url.js' %}"></script>
+<script src="{% static 'js/im.js' %}"></script>
+<script>
+    const token = "{{ token }}";
+    initialize(token);
+</script>
+</body>
+</html>

@@ -128,6 +128,10 @@ def get_data_from_uid(uid: int) -> [(User, [Profile.detail, Profile.identity]), 
 webtoken_encode = webtoken.encode
 
 
+def webtoken_encode_from_user(user: User) -> str:
+    return webtoken_encode(user.username, user.password)
+
+
 def webtoken_validate(token: str) -> Tuple[bool, str]:
     username, password = webtoken.decode(token)
     return login_with_cookie_or_token(username, password), username

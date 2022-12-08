@@ -94,7 +94,7 @@
           </div>
           <iframe id="page2" class="full" src="{% url 'applications:index' %}" hidden></iframe>
           <iframe id="page3" class="full" src="{% url 'files:index' %}" hidden></iframe>
-          <div id="page4" class="full" hidden>...</div>
+          <iframe id="page4" class="full" src="{% url 'im:index' %}" hidden></iframe>
       </div>
     </main>
 
@@ -157,7 +157,7 @@
             const clearfix = document.createElement("div");clearfix.className="clearfix";obj.appendChild(clearfix); const clearfix_main = document.createElement("div");clearfix_main.className="clearfix";
             if (self){link.classList.add("right"); content_div.classList.add("left"); content_span.classList.add("right-chat");obj.classList.add("right")}
             else {link.classList.add("left"); content_div.classList.add("right"); content_span.classList.add("left-chat");obj.classList.add("left")}
-            main_div.appendChild(obj);main_div.appendChild(clearfix_main);chat_message.append(main_div);if (id_div.offsetWidth > content_span.offsetWidth){content_span.style.width=id_div.offsetWidth+2+"px"}; chat_message.scrollTop = chat_message.scrollHeight;
+            main_div.appendChild(obj);main_div.appendChild(clearfix_main);chat_message.append(main_div);if (id_div.offsetWidth > content_span.offsetWidth){content_span.style.width=id_div.offsetWidth+2+"px"} chat_message.scrollTop = chat_message.scrollHeight;
         }
         function send() {
             let content = $.trim(send_message.val());

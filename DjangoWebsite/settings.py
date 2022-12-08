@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'im',
     'files',
     'geoip',
+    'monitor',
 ] + APPLICATIONS_DIR
 
 #  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.

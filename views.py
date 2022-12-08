@@ -110,7 +110,7 @@ def home(request: WSGIRequest, user) -> HttpResponse:
     if request.POST:
         detail = controller.update_data_from_user(user, detail=request.POST.get("text").strip()[:100])
     return render(request, "home.html", {"name": username, "profile": detail, "id": identity,
-                                         "token": controller.webtoken_encode(username, password)})
+                                         "token": controller.webtoken_encode_from_user(user)})
 
 
 def profile(request: WSGIRequest, uid) -> HttpResponse:
