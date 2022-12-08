@@ -15,6 +15,8 @@ class FileForm(forms.Form):
         ),
     )
 
+    captcha = CaptchaField()
+
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.url = ""
@@ -35,4 +37,4 @@ class FileForm(forms.Form):
         try:
             return self.errors.get("__all__")[0]
         except TypeError:
-            return "File is required."
+            return "File / Captcha is required."

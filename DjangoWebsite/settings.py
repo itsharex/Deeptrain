@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import json
 import os
 import sys
 from pathlib import Path
@@ -22,6 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-#l#3ps7+(*+7f#0cz=aj-sp!6$-waaf6h=*+=5h*(5njj_^)@8'
+with open(os.path.join(BASE_DIR, "hcaptcha.json"), "r") as f:
+    _hcaptcha_settings = json.load(f)
+if all(_hcaptcha_settings.values()):
+    HCAPTCHA_SITEKEY = _hcaptcha_settings["HCAPTCHA_SITEKEY"]
+    HCAPTCHA_SECRET = _hcaptcha_settings["HCAPTCHA_SECRET"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

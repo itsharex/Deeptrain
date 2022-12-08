@@ -30,6 +30,9 @@ body {
             background-color var(--trans-dur),
             color var(--trans-dur);
 }
+#id_captcha {
+    margin: 30px auto 0;
+}
 .modal {
     background-color: hsl(var(--hue),10%,95%);
     border-radius: 1em;
