@@ -417,9 +417,10 @@ ul {
 }
 
 .identity-image {
-    height: 14px;
-    width: 14px;
+    transform: translateX(-1px) !important;
+    margin: 2px;
 }
+
 @keyframes slideFromLeft {
     0% {
         margin-left: -200px;

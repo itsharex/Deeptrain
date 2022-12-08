@@ -85,7 +85,7 @@ function createMessage(username, id, picture_url, message, is_self=true, is_html
     dom.classList.add(is_self?"me":"you");
     dom.innerHTML = `<a href="/profile/id=${id}" target="_blank"><img src="${picture_url}" alt></a>
                      <div class="chat-content">
-                        <div class="user"><img class="identity-image ${identity}" src alt><span class="username"></span></span>
+                        <div class="user"><img class="identity-image ${identity}" src alt><span class="username"></span></span></div>
                         <span class="bubble"></span>
                      </div>`;
     dom.querySelector(".username").innerText = username.toString();  // 防止XSS攻击, 因此不采用dom.innerHTML内填写, 单独存放.
