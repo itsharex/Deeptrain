@@ -31,7 +31,7 @@ if all(_hcaptcha_settings.values()):
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+AUTH_USER_MODEL = 'user.User'
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -41,19 +41,6 @@ APPLICATIONS_DIR = [f"applications.{app_path}" for app_path in os.listdir(BASE_A
                     if os.path.isdir(os.path.join(BASE_APPLICATION_DIR, app_path)) and app_path != "__pycache__"
                     and os.path.isfile(os.path.join(BASE_APPLICATION_DIR, app_path, APPLICATIONS_CONFIG_FILE))]
 
-# Captcha  /captcha/conf/settings
-CAPTCHA_IMAGE_SIZE = (80, 30)
-CAPTCHA_LENGTH = 4
-CAPTCHA_TIMEOUT = 1  # minutes
-CAPTCHA_FONT_SIZE = 20
-CAPTCHA_OUTPUT_FORMAT = '%(text_field)s %(image)s %(hidden_field)s'
-CAPTCHA_NOISE_FUNCTIONS = (
-   'captcha.helpers.noise_null',
-   'captcha.helpers.noise_arcs',
-   'captcha.helpers.noise_dots',
-)
-
-CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 
 INSTALLED_APPS = [
     'simpleui',
@@ -65,7 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dwebsocket',
     'hcaptcha',
-    'model',
+    'user',
     'im',
     'files',
     'geoip',
@@ -162,7 +149,7 @@ WS_INTERVAL = 0.04
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'UTC'
 
@@ -174,7 +161,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
+LOGIN_URL = '/login/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),

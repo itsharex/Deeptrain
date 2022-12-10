@@ -5,7 +5,7 @@ from django.core.files import File
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
-from model.models import User
+from user.models import User
 from DjangoWebsite.settings import FILE_DATABASE_DIR, MAX_FILE_NAME_LENGTH, MAX_FILE_SIZE
 from controller import get_profile_from_user
 

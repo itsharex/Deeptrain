@@ -1,7 +1,26 @@
 from django import forms
+from django.contrib import auth
 from hcaptcha.fields import hCaptchaField as CaptchaField
 from django.core.exceptions import ValidationError
 import controller
+from typing import *
+
+from user.models import User, Profile
+
+spec_string = "\'\"<>~`?/\\*&^%$#@!:"  # 抵御大部分SQL注入, emoji导致长度识别错位
+default_detail = "nothing..."
+
+
+def regular_string(string: str) -> bool:
+    return not any(map(lambda s: s in spec_string, string))
+
+
+def is_available_username(username: str) -> bool:
+    return 3 <= len(username) <= 12 and regular_string(username)
+
+
+def is_available_password(password: str) -> bool:
+    return 6 <= len(password) <= 14 and regular_string(password)
 
 
 class UserLoginForm(forms.Form):
@@ -45,17 +64,22 @@ class UserLoginForm(forms.Form):
         },
     )
 
+    user: User
+
     def clean(self):
-        super().clean()
         captcha_error = self.errors.get("captcha")
         if captcha_error:
             raise ValidationError(captcha_error)
         username, password = self.cleaned_data.get("username"), self.cleaned_data.get("password")
-        success, response = controller.login(username, password)
-        if success:
-            return self.cleaned_data
-        else:
-            raise ValidationError(response)
+        if not is_available_username(username):
+            raise ValidationError("账户名格式错误, 请勿输入非法字符!")
+        if not is_available_password(password):
+            raise ValidationError("密码格式错误, 请勿输入非法字符!")
+        self.user = auth.authenticate(username=username, password=password)
+        if not self.user:
+            raise ValidationError("登录错误!")
+
+        return super().clean()
 
     def get_error(self):
         return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
@@ -119,6 +143,8 @@ class UserRegisterForm(forms.Form):
         },
     )
 
+    user: User
+
     def clean(self):
         super().clean()
         captcha_error = self.errors.get("captcha")
@@ -126,11 +152,18 @@ class UserRegisterForm(forms.Form):
             raise ValidationError(captcha_error)
         username, password, re_password = \
             self.cleaned_data.get("username"), self.cleaned_data.get("password"), self.cleaned_data.get("re_password")
-        success, response = controller.register(username, password, re_password)
-        if success:
-            return self.cleaned_data
-        else:
-            raise ValidationError(response)
+        if not is_available_username(username):
+            raise ValidationError("账户名格式错误, 请勿输入非法字符!")
+        if not is_available_password(password):
+            raise ValidationError("密码格式错误, 请勿输入非法字符!")
+        if not password == re_password:
+            raise ValidationError("两次输入密码不一致!")
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("用户已存在!")
+
+        self.user = User.objects.create_user(username=username, password=password, identity=0)
+        Profile.objects.create(user=self.user, detail="")
+        return self.cleaned_data
 
     def get_error(self):
         return (self.errors.get("__all__") or self.errors.get("captcha"))[0]

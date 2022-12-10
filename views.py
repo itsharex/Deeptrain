@@ -1,8 +1,12 @@
+from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required as _auth_login_required
 import controller
-from model.forms import UserRegisterForm, UserLoginForm
+from user.models import User, Profile
+from user.forms import UserRegisterForm, UserLoginForm
+from DjangoWebsite.settings import LOGIN_URL
 
 
 def ajax_required(_decorate_exec: callable) -> callable:
@@ -14,19 +18,18 @@ def ajax_required(_decorate_exec: callable) -> callable:
             )
         else:
             raise Http404("404")
+
     return _exec_function
 
 
 def login_required(_decorate_exec: callable) -> callable:
+    @_auth_login_required
     def _exec_function(request: WSGIRequest, *args, **kwargs) -> HttpResponse:
-        if controller.could_login_by_cookies(request):
-            return _decorate_exec(
-                request,
-                controller.get_user_from_name(controller.get_userinfo_from_cookies(request)[0]),
-                *args, **kwargs
-            )
-        else:
-            return redirect("/login/")
+        return _decorate_exec(
+            request,
+            request.user,
+            *args, **kwargs
+        )
 
     return _exec_function
 
@@ -62,11 +65,8 @@ def login(request: WSGIRequest) -> HttpResponse:
     if request.POST:
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            return controller.set_cookies(
-                redirect("/home/"),
-                username=form.cleaned_data.get("username"),
-                password=controller.encode_md5(form.cleaned_data.get("password")),
-            )
+            auth.login(request, form.user)
+            return redirect("/home/")
         else:
             error = form.get_error()
             return render(request, 'login.html', {
@@ -81,11 +81,8 @@ def register(request: WSGIRequest) -> HttpResponse:
     if request.POST:
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            return controller.set_cookies(
-                redirect("/home/"),
-                username=form.cleaned_data.get("username"),
-                password=controller.encode_md5(form.cleaned_data.get("password")),
-            )
+            auth.login(request, form.user)
+            return redirect("/home/")
         else:
             error = form.get_error()
             return render(request, 'register.html', {
@@ -97,20 +94,31 @@ def register(request: WSGIRequest) -> HttpResponse:
 
 
 def logout(request: WSGIRequest) -> HttpResponse:
-    if controller.could_login_by_cookies(request):
-        return controller.delete_cookies(render(request, 'login.html'), "username", "password")
-    else:
-        return redirect("/login/")
+    auth.logout(request)
+    return redirect(LOGIN_URL)
 
 
 @login_required
 def home(request: WSGIRequest, user) -> HttpResponse:
-    username, password = user.username, user.password
-    detail, identity = controller.get_profile_from_user(user).get_data(default_detail=controller.default_detail)
     if request.POST:
-        detail = controller.update_data_from_user(user, detail=request.POST.get("text").strip()[:100])
-    return render(request, "home.html", {"name": username, "profile": detail, "id": identity,
-                                         "token": controller.webtoken_encode_from_user(user)})
+        detail = request.POST.get("text")[:200].strip()
+        Profile.objects.filter(user=user).update(detail=detail)
+        return render(request, "home.html",
+                      {"name": user.username, "profile": detail, "id": user.real_identity})
+    else:
+        return render(request, "home.html",
+                      {"name": user.username, "profile": user.profile.detail, "id": user.real_identity})
+
+
+@login_required
+def change(request: WSGIRequest, user):
+    if request.POST:
+        old, new = request.POST.get("old"), request.POST.get("new")
+        user.check_password(old)
+        user.set_password(new)
+        user.save()
+        logout(request)
+    return redirect(LOGIN_URL)
 
 
 def profile(request: WSGIRequest, uid) -> HttpResponse:
@@ -119,4 +127,4 @@ def profile(request: WSGIRequest, uid) -> HttpResponse:
         user, (detail, identity) = result
         return render(request, "profile.html", {"name": user.username, "profile": detail, "id": identity})
     else:
-        return HttpResponse("The user was not found on this server.")
+        raise Http404("The user was not found on this server.")

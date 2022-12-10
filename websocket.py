@@ -6,7 +6,7 @@ from django.db.models import AutoField
 from dwebsocket.backends.default import websocket
 from DjangoWebsite.settings import CODING
 from controller import webtoken_validate, get_user_from_name, get_profile_from_user
-from model.models import User, Profile, identities
+from user.models import User, Profile, identities
 
 
 class AbstractSocket(object):

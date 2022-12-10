@@ -1,5 +1,5 @@
 from django.db import models
-from model.models import User
+from user.models import User
 
 
 class AdminIPHistory(models.Model):

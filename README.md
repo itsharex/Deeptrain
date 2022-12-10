@@ -4,6 +4,9 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/zmh-program/Zh-Website)
 ![GitHub repo file count](https://img.shields.io/github/directory-file-count/zmh-program/Zh-Website)
 ![GitHub](https://img.shields.io/github/license/zmh-program/Zh-Website)
+
+[![star](https://gitee.com/zmh-program/Zh-Website/badge/star.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/stargazers)
+[![fork](https://gitee.com/zmh-program/Zh-Website/badge/fork.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/members)
 > 🧡Django Website, and you can extend applications in the website.
 
 <br></br>
@@ -31,15 +34,19 @@
 
 - 初始化 | Initialize
   *run in the parent directory*
+> mysql
 > ```sql
-> create DATABASE `django-database`
+> create DATABASE `django-database`;
 > ```
+
+>command line
 > ```commandline
 > cd Zh-Website
 > pip install -r requirements.txt
 > 
 > python manage.py makemigrations
 > python manage.py migrate
+> 
 > python manage.py collectstatic
 > ```
 
@@ -52,9 +59,13 @@
   PyJWT==2.6.0
   PyMySQL==1.0.2
   rich==12.6.0
-  django-simple-captcha==0.5.17
   six==1.16.0
   geoip2==4.6.0
+  psutil==5.9.4
+  timeloop==1.0.2
+  redis==4.4.0
+  django-hcaptcha==0.2.0
+
   ```
 - 环境 | Environment (Settings: DjangoWebsite/settings.py)
   - `linux kernel` (dwebsocket, gunicorn)

@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import AdminIPHistory, IPRequestAnalysis
 
-# Register your models here.
+admin.site.register(AdminIPHistory)
+admin.site.register(IPRequestAnalysis)
