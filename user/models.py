@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.functional import cached_property
 
+import webtoken
+from webtoken import encode as webtoken_encode
 identities = {
     0: "User",
     1: "VIP",  # Very Important Person
@@ -13,7 +15,6 @@ identity_choices = list(identities.items())
 
 
 class User(AbstractUser):
-    id: models.AutoField
     identity = models.SmallIntegerField(choices=identity_choices, default=0)
 
     def __int__(self):
@@ -34,10 +35,16 @@ class User(AbstractUser):
     def as_string(self):
         return f"{self.username} (identity: {self.real_identity}, id: {self.id})"
 
+    @cached_property
+    def token(self):
+        return webtoken_encode(self.username, self.password)
+
+    @cached_property
+    def simple_tag(self):
+        return "admin" if self.is_admin else "user"
+
 
 class Profile(models.Model):
-    id: models.AutoField
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     detail = models.TextField(default="", max_length=200)
     identity = models.SmallIntegerField(choices=identity_choices, default=0)

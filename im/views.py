@@ -3,7 +3,6 @@ from typing import List
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import render
-import controller
 from dwebsocket import require_websocket
 import websocket
 from views import login_required
@@ -41,8 +40,10 @@ class IMClient(websocket.WebClient):
 
 
 class IMServerClientGroup(websocket.WebClientGroup):
-    _socks: List[IMClient]
     client_type = IMClient
+
+    def __init__(self):
+        super().__init__()
 
     def host_send(self, message=""):
         for client in self.get_available_clients():
@@ -71,4 +72,4 @@ def chat(request, token) -> None:
 
 @login_required
 def index(request: WSGIRequest, user) -> HttpResponse:
-    return render(request, "im.html", {"token": controller.webtoken_encode_from_user(user)})
+    return render(request, "im.html", {"token": user.token})

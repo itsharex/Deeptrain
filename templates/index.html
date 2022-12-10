@@ -26,13 +26,6 @@
                     <div class="button-list">
                         <a href="/register/" class="glass-button btn btn-default">Sign up</a>
                         <a href="/login/" class="glass-button btn btn-default">Sign in</a>
-                        {% if username|default:'' %}
-                            <br>
-                            <a href="/home/" class="goto-user glass-button btn btn-default btn-success">
-                                {{ username }}
-                                <i class="fa">&#xf0a9</i>
-                            </a>
-                        {% endif %}
                     </div>
     			</div>
     		</div>
@@ -291,12 +284,6 @@
    for (let elements = document.getElementsByClassName("glass-box"),i = 0,length=elements.length; i < length; i++) {
        VanillaTilt.init(elements[i], {reverse:true});
    }
-   {% if username|default:'' %}
-       let message_window = document.getElementById('message-window');
-       alerts(["alert-success", "message-data"],
-           "您已登录账户<strong>{{ username|default:'' }}</strong>    → <a class='alert-link'>跳转至个人页面<a>",
-           message_window, "/home/");
-   {% endif %}
    </script>
   </body>
 </html>

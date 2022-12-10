@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from user.models import User
 from DjangoWebsite.settings import FILE_DATABASE_DIR, MAX_FILE_NAME_LENGTH, MAX_FILE_SIZE
-from controller import get_profile_from_user
+
 
 registered_files = []
 
@@ -72,6 +72,6 @@ class UserFile(models.Model):
             "time": self.time,
             "user": self.user.username,
             "size": self.size,
-            "tag": "admin" if get_profile_from_user(self.user).is_admin() else "user",
+            "tag": self.user.simple_tag,
             "url": get_file_url(self.user, self.uuid_name),
         }

@@ -3,7 +3,6 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required as _auth_login_required
-import controller
 from user.models import User, Profile
 from user.forms import UserRegisterForm, UserLoginForm
 from DjangoWebsite.settings import LOGIN_URL
@@ -38,8 +37,7 @@ def identity_required(level: int):
     def _decorate_(_decorate_exec: callable) -> callable:
         @login_required
         def _exec_(request: WSGIRequest, user, *args, **kwargs):
-            _u_prof = controller.get_profile_from_user(user)
-            if _u_prof.identity >= level:
+            if user.identity >= level:
                 return _decorate_exec(
                     request, user,
                     *args, **kwargs
@@ -56,9 +54,7 @@ owner_required = identity_required(3)
 
 
 def index(request: WSGIRequest) -> HttpResponse:
-    return render(request, "index.html",
-                  {"username": controller.get_userinfo_from_cookies(request)[0]}
-                  if controller.could_login_by_cookies(request) else {})
+    return render(request, "index.html")
 
 
 def login(request: WSGIRequest) -> HttpResponse:
@@ -122,9 +118,10 @@ def change(request: WSGIRequest, user):
 
 
 def profile(request: WSGIRequest, uid) -> HttpResponse:
-    result = controller.get_data_from_uid(uid)
-    if result:
-        user, (detail, identity) = result
-        return render(request, "profile.html", {"name": user.username, "profile": detail, "id": identity})
+    query = User.objects.filter(id=uid)
+    if query.exists():
+        user = query.first()
+        return render(request, "profile.html",
+                      {"name": user.username, "profile": user.profile.detail, "id": user.real_identity})
     else:
         raise Http404("The user was not found on this server.")
