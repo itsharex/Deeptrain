@@ -180,6 +180,10 @@ MAX_FILE_SIZE = (1024 ** 2) * 10  # 10 MiB
 # GeoIP Settings
 GEOIP_RELEASE_INTERVAL = 60 * 60  # 1 hour
 GEOIP_DATABASE_FILE = os.path.join(BASE_DIR, "geoip", "database", "geolite.mmdb")
+
+# JWT Settings
+TOKEN_VALID_TIME = 60 * 3  # unit: seconds
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

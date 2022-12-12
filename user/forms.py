@@ -2,7 +2,6 @@ from django import forms
 from django.contrib import auth
 from hcaptcha.fields import hCaptchaField as CaptchaField
 from django.core.exceptions import ValidationError
-import controller
 from typing import *
 
 from user.models import User, Profile

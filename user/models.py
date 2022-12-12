@@ -1,9 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.functional import cached_property
+from webtoken import generate_token
 
-import webtoken
-from webtoken import encode as webtoken_encode
 identities = {
     0: "User",
     1: "VIP",  # Very Important Person
@@ -37,7 +36,7 @@ class User(AbstractUser):
 
     @cached_property
     def token(self):
-        return webtoken_encode(self.username, self.password)
+        return generate_token(self.username, self.password)
 
     @cached_property
     def simple_tag(self):

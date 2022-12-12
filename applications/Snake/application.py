@@ -1,6 +1,6 @@
 from applications.application import *
 
 
-@appHandler.register
+@appManager.register
 class Application(AsyncApplication):
     pass

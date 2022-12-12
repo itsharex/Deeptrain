@@ -3,7 +3,7 @@ from typing import List, Any, Union
 import jwt.exceptions
 from dwebsocket.backends.default import websocket
 from DjangoWebsite.settings import CODING
-from controller import webtoken_validate
+from webtoken import validate_token
 from user.models import User, Profile, identities
 
 
@@ -55,8 +55,32 @@ class AbstractSocket(object):
     __del__ = close
 
 
+# class BaseValidation(object):
+#     def __init__(self):
+#         pass
+#
+#     def validate(self, request, obj: "BaseValidation" = None) -> bool:
+#         return True
+#
+#
+# class LoginRequiredValidation(BaseValidation):
+#     def __init__(self):
+#         super().__init__()
+#
+#     def validate(self, request, obj=None) -> bool:
+#         cls = obj or self
+#         token = request.GET.get("token") or request.POST.get("token")
+#         result = validate_token(token)
+#         if result:
+#             setattr(cls, "username", result)
+#             return True
+#         else:
+#             return False
+
+
 class AbstractGroup(object):
     client_type = AbstractSocket
+
     #  sockets: List[client_type]
 
     def __init__(self):
@@ -130,23 +154,27 @@ class WebClient(JSONSocket):
 
 
 class WebClientGroup(JSONGroup):
+    """
+    Login required. (JWT validate)
+    """
+
     client_type = WebClient
+    level_required: int = 0
 
     def __init__(self):
         super().__init__()
 
-    def add_client(self, request, token: str = "") -> Union[WebClient, bool]:
+    def add_client(self, request, token: str = "") -> Union[WebClient, None]:
         try:
-            _validate, username = webtoken_validate(token)
-            if _validate:
-                user = User.objects.get(username=username)
-                sock = self.client_type(request.websocket, user, self, _start=False)
+            response = validate_token(token)
+            if response and response.identity >= self.level_required:
+                response: User
+                sock = self.client_type(request.websocket, response, self, _start=False)
                 self.sockets.append(sock)
                 self.joinEvent(sock)
                 return sock.listen()
-            return False
         except jwt.exceptions.DecodeError:
-            return False
+            return
 
     def remove_client(self, sock: WebClient) -> bool:
         if super(WebClientGroup, self).remove_client(sock):

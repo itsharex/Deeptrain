@@ -19,11 +19,11 @@ logging.basicConfig(
 def initialize_applications(run=False):
     django.setup()
     from applications import application
-    application.appHandler.setup_app()
+    application.appManager.setup_app()
     logging.debug(f"Initialize applications successfully.")
     if run:
         if cache.get("start-application") is True:
-            application.appHandler.run_app()
+            application.appManager.run_app()
             logging.info(f"start server at process {os.getpid()}.")
         else:
             cache.set("start-application", True, timeout=10)

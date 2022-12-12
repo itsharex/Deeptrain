@@ -5,6 +5,7 @@ from threading import Thread
 import logging
 from typing import *
 from inspect import currentframe, getmodule
+from django.utils.functional import cached_property
 from applications.config import json_parser, JSONConfig
 from django import urls
 from DjangoWebsite.settings import APPLICATIONS_DIR
@@ -27,9 +28,18 @@ def _get_called_module_dir():
     return os.path.dirname(_get_called_module_file())
 
 
-class ApplicationHandler(object):
+class ApplicationManager(object):
+    """
+    register application:
+    >>> @appManager.register
+    >>> class MyApp(AbstractApplication):
+    >>>     # TODO
+    >>>
+    """
+
     def __init__(self):
-        self.ApplicationsList: List[AbstractApplication] = []
+        self.applications: List[AbstractApplication] = []
+        self._applications_calls: Dict[str, AbstractApplication] = {}
         self.__is_stp = False
         # gunicorn 中 worker不存在 event loop (django 在当前线程 Dummy-n 报错)
         # 默认情况下, 在主线程中时, 若没有event loop, 则 asyncio 会自动创建一个新的
@@ -42,58 +52,70 @@ class ApplicationHandler(object):
         self._sync_app: List[SyncApplication] = []
         self._async_app: List[AsyncApplication] = []
 
+    @cached_property
+    def length(self):
+        """
+        Get the number of applications
+        """
+
+        return len(self.applications)
+
     def add_app(self, app: "AbstractApplication"):
         if isinstance(app, AbstractApplication):
-            self.ApplicationsList.append(app)
+            _call = _get_called_module_file()
+
+            self.applications.append(app)
+            assert _call not in self._applications_calls, "Multiple apps are registered in the same app directory!"
+            self._applications_calls[_call] = app
             if isinstance(app, AsyncApplication):
                 self._async_app.append(app)
             elif isinstance(app, SyncApplication):
                 self._sync_app.append(app)
-        return len(self.ApplicationsList)
+        return len(self.applications)
 
-    def get_app(self) -> List["AbstractApplication"]:
-        return self.ApplicationsList
+    @cached_property
+    def templates(self) -> List[dict]:
+        """
+        Get the templates of all the applications.
+        """
 
-    def get_templates(self) -> List[dict]:
-        return [app.get_template() for app in self.ApplicationsList]
+        return [app.template for app in self.applications]
 
     def register(self, app: Union[Type["AbstractApplication"], "AbstractApplication"]):
         """
-        @decorator
-
-        register -> application
-
-        e.g.
-        >>> @appHandler.register
-        >>> class MyApp(AbstractApplication):
-        >>>     # TODO
-        >>>
-
+        Register applications (decorator)
         """
-
-        if isinstance(app, AbstractApplication) and app not in self.ApplicationsList:
+        if isinstance(app, AbstractApplication) and app not in self.applications:
             app.index = self.add_app(app)
-        elif issubclass(app, AbstractApplication) and app not in map(type, self.ApplicationsList):
+        elif issubclass(app, AbstractApplication) and app not in map(type, self.applications):
             _app = app()  # instantiate application
             _app.index = self.add_app(_app)
         else:
             raise ValueError
         return app
 
-    def as_wsgi_urlpatterns(self):
-        return [urls.path(app.get_include_url(), urls.include(("applications.{}.urls".format(app.name), app.name)),
+    @cached_property
+    def urlpatterns(self):
+        """
+        Get the urlpatterns include all the applications.
+        """
+
+        return [urls.path(app.include_url, urls.include(("applications.{}.urls".format(app.name), app.name)),
                           name=app.name)
-                for app in self.ApplicationsList if app.config.UrlRoute]
+                for app in self.applications if app.config.UrlRoute]
 
     def setup_app(self):
-        if self.__is_stp is True:
-            return
+        """
+        Initialize ApplicationManager.
+        """
+        assert not self.__is_stp, "ApplicationManager was already initialized!"
+
         for path in APPLICATIONS_DIR:
             _file = f"{path}.application"
             try:
                 __import__(_file)
             except ModuleNotFoundError:
-                raise ModuleNotFoundError(f"\n\tApplication {path}:\n\t\tNo application file <{_file}> !")
+                raise ModuleNotFoundError(f"\n\tApplication {path}:\n\t\tCannot import application from file {_file} !")
         self.__is_stp = True
 
     def run_app(self):
@@ -104,12 +126,20 @@ class ApplicationHandler(object):
             __async.start(self.loop)
         self.loop_thread.start()
 
-    @staticmethod
-    def app_settings():
-        return [f"applications.{app_path}" for app_path in APPLICATIONS_DIR]
+        if self.length == 1:
+            logger.info(f"{self.length} application has been started.")
+        elif self.length > 1:
+            logger.info(f"{self.length} applications have been started.")
+
+    def _get_application(self, _call_from: str) -> "AbstractApplication":
+        return self._applications_calls.get(_call_from)
+
+    def get_application(self) -> "AbstractApplication":
+        _call = _get_called_module_file()
+        return self._get_application(_call_from=_call)
 
 
-appHandler = ApplicationHandler()
+appManager = ApplicationManager()
 
 
 class AbstractApplication(object):
@@ -138,13 +168,14 @@ class AbstractApplication(object):
     def __init__(self, *_, **__):
         self.config = json_parser(_get_called_module_dir())
         assert self.config
-        # get <called application>
 
-    def get_include_url(self) -> str:
+    @cached_property
+    def include_url(self) -> str:
         return f"{self.name}/" if self.config.UrlRoute else ""
 
-    def get_wsgi_url(self) -> str:
-        return f"applications/{self.name}/" if self.config.UrlRoute else ""
+    @cached_property
+    def wsgi_url(self) -> str:
+        return f"/applications/{self.name}/" if self.config.UrlRoute else ""
 
     def start(self, *_) -> None:
         pass
@@ -152,10 +183,11 @@ class AbstractApplication(object):
     def run(self):
         pass
 
-    def get_template(self) -> dict:
+    @cached_property
+    def template(self) -> dict:
         return {
             **self.config.get_dict(),
-            "path": "/" + self.get_wsgi_url(),
+            "path": self.wsgi_url,
             "index": '%02d' % self.index,
         }
 
@@ -168,8 +200,7 @@ class AbstractApplication(object):
     def _get_name(self) -> str:
         return self.config.name
 
-    name = property(_get_name, _set_name,
-                    doc="Application Name")
+    name = property(_get_name, _set_name, doc="Application Name")
 
     def __str__(self) -> str:
         return f"Application {self.name} <{self.index}>"
@@ -189,7 +220,6 @@ class SyncApplication(AbstractApplication):
 
     def start(self, *_) -> None:
         self._thread.start()
-        logger.info(f"{str(self)} started at <Thread {self._thread.ident}>")
 
     def get_thread(self) -> Thread:
         return self._thread
@@ -205,7 +235,7 @@ class IntervalSyncApplication(SyncApplication):
         pass
 
     def run(self):
-        while 1:  # speed [while 1] > [while True]
+        while 1:
             self.run_once()
             time.sleep(self.interval)
 
@@ -225,7 +255,6 @@ class AsyncApplication(AbstractApplication):
             self.run(),
             loop,
         )
-        logger.info(f"{str(self)} started")
 
 
 class IntervalAsyncApplication(AsyncApplication):
