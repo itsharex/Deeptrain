@@ -9,4 +9,3 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write("ZMH API by python!".encode())
         return
-    
