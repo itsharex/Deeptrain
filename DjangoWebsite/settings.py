@@ -41,7 +41,6 @@ APPLICATIONS_DIR = [f"applications.{app_path}" for app_path in os.listdir(BASE_A
                     if os.path.isdir(os.path.join(BASE_APPLICATION_DIR, app_path)) and app_path != "__pycache__"
                     and os.path.isfile(os.path.join(BASE_APPLICATION_DIR, app_path, APPLICATIONS_CONFIG_FILE))]
 
-
 INSTALLED_APPS = [
     'simpleui',
     'django.contrib.admin',
@@ -57,7 +56,8 @@ INSTALLED_APPS = [
     'files',
     'geoip',
     'monitor',
-] + APPLICATIONS_DIR
+]
+INSTALLED_APPS += APPLICATIONS_DIR[:]
 
 #  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
 
@@ -124,6 +124,24 @@ CACHES = {
         }
     }
 }
+
+IS_REPLIT_PRODUCTION = False
+# Go to Zh-Website Replit Page: https://Zh-Website.zmh-program.repl.co/
+if IS_REPLIT_PRODUCTION:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
+    # Cache
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'website-cache',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
