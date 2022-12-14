@@ -11,14 +11,12 @@ function initialize(map_url, data_url) {
             url: data_url,
             contentType: "json",
             success: function(data_json) {
-                // let name_map = {};
-                // for (let i = 0, object=Object(data_json.data); i < object.length; i++) {
-                //     let obj = object[i];
-                //     console.log(obj)
-                //     name_map[obj.name] = obj.value;
-                // }
-                // console.log(name_map)
                 mapChart.hideLoading();
+
+                let country_values = [];
+                data_json.data.forEach(n => (country_values.push(n.value)));
+                let min = Math.min(country_values), max = Math.max(country_values);
+
                 echarts.registerMap('World', map_json);
                 mapChart.setOption(
                     (option = {
@@ -32,8 +30,8 @@ function initialize(map_url, data_url) {
                             },
                         },
                         visualMap: {
-                            min: 800,
-                            max: 50000,
+                            min: 0,
+                            max: max,
                             text: ['High', 'Low'],
                             realtime: false,
                             calculable: true,

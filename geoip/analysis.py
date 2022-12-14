@@ -20,7 +20,7 @@ def as_echarts_map(map_dict: Dict[str, int]) -> List[dict]:
     return [{"name": key, "value": value} for key, value in zip(map_dict.keys(), map_dict.values())]
 
 
-def analysis() -> Tuple[int, List[dict]]:
+def analysis_geoip() -> Tuple[int, List[dict]]:
     countryCache.detect_cache()
     begin_time = timezone.now() - timezone.timedelta(days=7)
     total_arrays, datas = tuple(zip(
@@ -32,4 +32,4 @@ def analysis() -> Tuple[int, List[dict]]:
 
 
 if __name__ == "__main__":
-    print(analysis())
+    print(analysis_geoip())

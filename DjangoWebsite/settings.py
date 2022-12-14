@@ -161,6 +161,39 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SIMPLEUI_CONFIG = {
+    'system_keep': False,
+    'menus': [
+        {
+            'name': '仪表盘',
+            'icon': 'fa-solid fa-gauge-high',
+            'url': '/monitor/',
+            'codename': 'monitor',
+        },
+
+        {
+            'name': '用户数据',
+            'icon': 'fa-solid fa-globe',
+            'url': '/geoip/',
+            'codename': 'geoip',
+        },
+
+        {
+            'name': '文件管理',
+            'icon': 'fa-regular fa-copy',
+            'url': '/files/',
+            'codename': 'fileManager',
+        },
+
+        {
+            'name': 'Github 主页',
+            'icon': 'fab fa-github',
+            'url': 'https://zmh-program.github.io/',
+            'codename': 'GithubPage'
+        }
+    ],
+}
+
 # Encode / Decode
 CODING = "utf-8"
 WS_INTERVAL = 0.04
@@ -196,7 +229,7 @@ SIZE_UNIT = 1024
 MAX_FILE_SIZE = (1024 ** 2) * 10  # 10 MiB
 
 # GeoIP Settings
-GEOIP_RELEASE_INTERVAL = 60 * 60  # 1 hour
+GEOIP_RELEASE_INTERVAL = 60 * 60 * 6  # 6 hours
 GEOIP_DATABASE_FILE = os.path.join(BASE_DIR, "geoip", "database", "geolite.mmdb")
 
 # JWT Settings

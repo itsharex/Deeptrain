@@ -1,6 +1,6 @@
 Django==3.2.16
 django-redis==5.2.0
-django-simpleui==2022.11.30
+django-simpleui==2022.12.12
 PyJWT==2.6.0
 PyMySQL==1.0.2
 rich==12.6.0
