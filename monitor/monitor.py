@@ -8,8 +8,11 @@ from websocket import WebClientGroup, WebClient
 loop = Timeloop()
 
 
-class BaseMonitor:
+class Monitor(WebClientGroup):
+    level_required = 2  # Admin Level Required
+
     def __init__(self):
+        super().__init__()
         self.requests = 0
         self.disk_percent = 0
 
@@ -20,7 +23,7 @@ class BaseMonitor:
         self._hooks = []
         self._update = 0
 
-        # self.add_hook(print)
+        loop.job(interval=timedelta(seconds=MONITOR_INTERVAL))(self.update)
 
     def reset(self):
         self.requests = 0
@@ -91,19 +94,6 @@ class BaseMonitor:
     def update(self) -> Set[None]:
         response = self.update_data
         return set(map(lambda _hook: _hook(response), self._hooks))
-
-
-# monitor = BaseMonitor()
-# loop.job(interval=timedelta(seconds=MONITOR_INTERVAL))(monitor.update)
-# loop.start()
-
-
-class Monitor(BaseMonitor, WebClientGroup):
-    level_required = 2  # Admin Level Required
-
-    def __init__(self):
-        super().__init__()
-        loop.job(interval=timedelta(seconds=MONITOR_INTERVAL))(self.update)
 
     def joinEvent(self, sock: WebClient) -> None:
         self.add_hook(sock.send)
