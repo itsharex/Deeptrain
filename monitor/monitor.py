@@ -70,6 +70,7 @@ class Monitor(WebClientGroup):
             "recv": self.recv,
             "send": self.send,
             "disk": self.disk_percent,
+            "request": 0,
         }
 
     @property
