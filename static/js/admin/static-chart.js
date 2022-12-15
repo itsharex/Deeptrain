@@ -70,12 +70,25 @@ if (site_req_option && typeof site_req_option === 'object') {
     site_req_chart.setOption(site_req_option);
 }
 
+let site_req_data;
 function updateSiteRequestChart(data) {
+    site_req_data = data;
     site_req_option.series.data = data;
     site_req_chart.setOption({
         series: [{
-            data: data,
+            data: site_req_data,
         }],
     });
 }
+
+function addTodayRequest(n) {
+    site_req_data[6] += n;
+    site_req_option.series.data = data;
+    site_req_chart.setOption({
+        series: [{
+            data: site_req_data,
+        }],
+    });
+}
+
 window.addEventListener('resize', site_req_chart.resize);

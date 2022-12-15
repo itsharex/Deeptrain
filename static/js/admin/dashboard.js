@@ -25,5 +25,6 @@ function initializeWebsocket(url) {
         recv.update(data.recv);
         send.update(data.send);
         updateDynamicRequestChart(data.request);
+        addTodayRequest(data.request);
     }
 }
