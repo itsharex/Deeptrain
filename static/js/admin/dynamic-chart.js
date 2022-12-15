@@ -8,9 +8,9 @@ const reqChart = echarts.init(req_dom, null, {
     useDirtyRect: false
 });
 let data = [], stamps = [];
-for (let i = 0; i < 20; i++) {
-    data.push(Math.round(Math.random() * 100))
-    stamps.push(toLocalTime())
+for (let i = 0; i < max_dynamic_req-1; i++) {
+    data.push(0);
+    stamps.push(toLocalTime());
 }
 let reqOption;
 
