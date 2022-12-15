@@ -75,7 +75,7 @@ function initializeRequestCharts(map_url, data_url) {
             url: data_url,
             contentType: "json",
             success: function(data_json) {
-                console.log(data_json)
+                // console.log(data_json);
                 mapChart.hideLoading();
                 document.querySelector("#registered").innerText = data_json.registered;
                 document.querySelector("#actives").innerText = data_json.actives;
