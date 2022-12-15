@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>DashBoard</title>
     <meta name="viewport" content="width=device-width, initial-scale=0.8" />
     <link href="{% static 'css/admin/index.css' %}" rel="stylesheet">
-    <link href="{% static 'css/admin/github-card.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap-alert.css' %}" rel="stylesheet">
+    <link href="{% static 'css/admin/github-card.css' %}" rel="stylesheet">
     <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link crossorigin="anonymous" href="https://lib.baomitu.com/font-awesome/6.2.1/css/all.css" rel="stylesheet">
 </head>
 <body>
+<div id="message-window" class="message-window"></div>
 <div class="app-container">
     <div class="app-header">
         <div class="app-header-left">
@@ -326,20 +328,6 @@
                     </div>
                 </div>
                 <div class="message-box">
-                    <i class="fa-solid fa-user-group"></i>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="name">Users</div>
-                        </div>
-                        <p class="message-line">
-                            I am really impressed! Can't wait to see the final result.
-                        </p>
-                        <p class="message-line right">
-                            Registered Users
-                        </p>
-                    </div>
-                </div>
-                <div class="message-box">
                     <i class='bx bx-git-repo-forked'></i>
                     <div class="message-content">
                         <div class="message-header">
@@ -368,21 +356,12 @@
 <script src="{% static 'js/admin/progressbar.js' %}"></script>
 <script src="{% static 'js/admin/static-chart.js' %}"></script>
 <script src="{% static 'js/admin/network.js' %}"></script>
+<script src="{% static 'js/message.js' %}"></script>
+<script src="{% static 'js/websocket_url.js' %}"></script>
+<script src="{% static 'js/admin/dashboard.js' %}"></script>
 <script>
-    updateSiteRequestChart([12000, 13200, 10100, 13400, 9000, 23000, 21000]);
-    setInterval(
-        function (){
-            updateDynamicRequestChart(Math.round(Math.random() * 100) + 100);
-        },
-        500,
-    );
-    setInterval(function (){roundProgressUpdate(cpu_progress_dom, (Math.random() * 100).toFixed(1));}, 1000);
-    setInterval(function (){roundProgressUpdate(ram_progress_dom, (Math.random() * 100).toFixed(1));}, 1000);
-    setInterval(function (){roundProgressUpdate(rom_progress_dom, (Math.random() * 100).toFixed(1));}, 1000);
-    setInterval(function (){wsProgressUpdate((Math.random() * 2000).toFixed(1));}, 1000);
-    initGithubRepositoryData("django", "django");
-    setInterval(function (){recv.update(Math.random() * 2000000);}, 1000);
-    setInterval(function (){send.update(Math.random() * 2000000);}, 1000);
+    initializeSiteRequest("{% url 'monitor:ajax' %}");
+    initializeWebsocket("{% url 'monitor:websocket' token %}");
 </script>
 </body>
 </html>

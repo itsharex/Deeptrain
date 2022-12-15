@@ -3,5 +3,5 @@ from .views import *
 
 urlpatterns = [
     path("", index, name="index"),
-    path("<str:token>/", chat, name="websocket"),
+    path("websocket/<str:token>/", im_websocket, name="websocket"),
 ]

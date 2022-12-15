@@ -6,6 +6,7 @@
     <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="{% static 'css/im.css' %}" rel="stylesheet">
     <link href="{% static 'css/profile-style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-alert.css' %}" rel="stylesheet">
 </head>
 <body>
 <div id="message-window" class="message-window"></div>
@@ -44,8 +45,7 @@
 <script src="{% static 'js/websocket_url.js' %}"></script>
 <script src="{% static 'js/im.js' %}"></script>
 <script>
-    const token = "{{ token }}";
-    initialize(token);
+    initialize("{% url 'im:websocket' token %}");
 </script>
 </body>
 </html>

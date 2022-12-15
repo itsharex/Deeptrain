@@ -3,7 +3,7 @@ from .geoip import *
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, JsonResponse
 from views import ajax_required, admin_required
-from .analysis import analysis_geoip
+from .analysis import analysis
 
 
 @ajax_required
@@ -23,11 +23,7 @@ def city(request: WSGIRequest, _):
 @ajax_required
 @admin_required
 def analysis_request(request: WSGIRequest, _):
-    total, countries_data = analysis_geoip()
-    return JsonResponse({
-        "total": total,
-        "data": countries_data,
-    })
+    return JsonResponse(analysis())
 
 
 @admin_required

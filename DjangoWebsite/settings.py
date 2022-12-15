@@ -162,7 +162,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 SIMPLEUI_CONFIG = {
-    'system_keep': False,
+    'system_keep': True,
     'menus': [
         {
             'name': '仪表盘',
@@ -201,13 +201,9 @@ WS_INTERVAL = 0.04
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'zh-hans'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -234,6 +230,9 @@ GEOIP_DATABASE_FILE = os.path.join(BASE_DIR, "geoip", "database", "geolite.mmdb"
 
 # JWT Settings
 TOKEN_VALID_TIME = 60 * 3  # unit: seconds
+
+# Monitor Settings
+MONITOR_INTERVAL = 1  # 1 second
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

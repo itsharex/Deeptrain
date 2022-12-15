@@ -15,6 +15,7 @@ identity_choices = list(identities.items())
 
 class User(AbstractUser):
     identity = models.SmallIntegerField(choices=identity_choices, default=0)
+    country = models.TextField(max_length=50, default="Unknown")
 
     def __int__(self):
         return self.id
@@ -45,21 +46,10 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    detail = models.TextField(default="", max_length=200)
-    identity = models.SmallIntegerField(choices=identity_choices, default=0)
-    objects: models.manager.Manager
+    profile = models.TextField(default="", max_length=200)
 
     def __str__(self):
         return f"Profile object ({self.user})"
 
     def __int__(self):
         return self.id
-
-    def __get_identity(self):
-        return identities.get(self.identity)
-
-    def get_data(self, default_detail="") -> ("detail", "identity"):
-        return (self.detail or default_detail), self.__get_identity()
-
-    def is_admin(self) -> bool:
-        return self.identity >= 2

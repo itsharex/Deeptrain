@@ -10,3 +10,4 @@ psutil==5.9.4
 timeloop==1.0.2
 redis==4.4.0
 django-hcaptcha==0.2.0
+numpy==1.21.6

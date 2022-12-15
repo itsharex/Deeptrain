@@ -1,9 +1,9 @@
 class websocket {
-    constructor(url, token, message_window) {
+    constructor(url, message_window) {
         this.socket = undefined;
         this.message_window = message_window;
-        this.url = `ws://${window.location.host}/${ url }/${ token }/`;
-        this.wss_url = `wss://${window.location.host}/${ url }/${ token }/`;
+        this.url = `ws://${window.location.host}${url}`;
+        this.wss_url = `wss://${window.location.host}${url}`;
         this.create();
     }
     create() {

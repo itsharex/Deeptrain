@@ -76,6 +76,7 @@ def login(request: WSGIRequest) -> HttpResponse:
 def register(request: WSGIRequest) -> HttpResponse:
     if request.POST:
         form = UserRegisterForm(request.POST)
+        form.country = getattr(request, "country")
         if form.is_valid():
             auth.login(request, form.user)
             return redirect("/home/")
@@ -97,13 +98,14 @@ def logout(request: WSGIRequest) -> HttpResponse:
 @login_required
 def home(request: WSGIRequest, user) -> HttpResponse:
     if request.POST:
-        detail = request.POST.get("text")[:200].strip()
-        Profile.objects.filter(user=user).update(detail=detail)
+        _profile = request.POST.get("text")[:200].strip()
+        user.profile.profile = _profile
+        user.profile.save()
         return render(request, "home.html",
-                      {"name": user.username, "profile": detail, "id": user.real_identity})
+                      {"name": user.username, "profile": _profile, "id": user.real_identity})
     else:
         return render(request, "home.html",
-                      {"name": user.username, "profile": user.profile.detail, "id": user.real_identity})
+                      {"name": user.username, "profile": user.profile.profile, "id": user.real_identity})
 
 
 @login_required
@@ -122,6 +124,6 @@ def profile(request: WSGIRequest, uid) -> HttpResponse:
     if query.exists():
         user = query.first()
         return render(request, "profile.html",
-                      {"name": user.username, "profile": user.profile.detail, "id": user.real_identity})
+                      {"name": user.username, "profile": user.profile.profile, "id": user.real_identity})
     else:
         raise Http404("The user was not found on this server.")

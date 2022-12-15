@@ -57,7 +57,7 @@ def save_file(user: User, file: File):
 class UserFile(models.Model):
     id: models.AutoField
     real_name = models.CharField(max_length=MAX_FILE_NAME_LENGTH, default="")
-    uuid_name = models.UUIDField(default=uuid.uuid4())
+    uuid_name = models.UUIDField(default=uuid.UUID('e306d9a1-1ba6-4a91-9005-7bd9296607fb'))
     size = models.PositiveIntegerField(default=0)
     time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

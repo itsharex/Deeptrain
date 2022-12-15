@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.views.generic.base import RedirectView
 import views
 from django.conf import settings
-from im.views import chat
+
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -33,8 +33,7 @@ urlpatterns = [
     path("logout/", views.logout, name="logout"),
     path("home/", views.home, name="home"),
     path("profile/id=<int:uid>", views.profile, name="profile"),
-    path("chat/<str:token>/", chat),
-    path("chat/", include(("im.urls", "im")), name="im"),
+    path("im/", include(("im.urls", "im")), name="im"),
     path("applications/", include(("applications.urls", "applications")), name="applications"),
     path("files/", include(("files.urls", "files")), name="files"),
     path("geoip/", include(("geoip.urls", "geoip")), name="geoip"),

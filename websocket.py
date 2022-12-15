@@ -4,7 +4,7 @@ import jwt.exceptions
 from dwebsocket.backends.default import websocket
 from DjangoWebsite.settings import CODING
 from webtoken import validate_token
-from user.models import User, Profile, identities
+from user.models import User
 
 
 class AbstractSocket(object):
@@ -143,14 +143,14 @@ class JSONGroup(AbstractGroup):
 class WebClient(JSONSocket):
     group: "WebClientGroup"
 
-    def __init__(self, sock: websocket.DefaultWebSocket, user_obj: User, group: "AbstractGroup", _start: bool = False):
+    def __init__(self, sock: websocket.DefaultWebSocket, user: User, group: "AbstractGroup", _start: bool = False):
         super().__init__(sock, group, _start)
-        self.user: User = user_obj
-        self.profile: Profile = self.user.profile
-        self.id: int = user_obj.id
-        self.username = user_obj.username
-        self.admin: bool = self.profile.is_admin()
-        self.identity: str = identities.get(self.profile.identity)
+        self.user: User = user
+        # self.profile: Profile = self.user.profile
+        self.id: int = user.id
+        self.username = user.username
+        self.admin: bool = self.user.is_admin
+        self.identity: str = self.user.real_identity
 
 
 class WebClientGroup(JSONGroup):

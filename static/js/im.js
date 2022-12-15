@@ -27,8 +27,8 @@ let previewMessage = document.querySelector(".preview");
 let timePreview = document.querySelector(".time");
 let messageWindow = document.querySelector("#message-window");
 let ChatSocket;
-function initialize(token) {
-    ChatSocket = new websocket("chat", token, messageWindow);
+function initialize(url) {
+    ChatSocket = new websocket(url, messageWindow);
     ChatSocket.get_websocket().onmessage = function(e) {
         const data = JSON.parse(e.data);
         createMessage(

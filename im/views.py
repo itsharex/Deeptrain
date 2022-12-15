@@ -1,5 +1,4 @@
 import time
-from typing import List
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -53,7 +52,13 @@ class IMServerClientGroup(websocket.WebClientGroup):
     def group_send(self, sender: IMClient, message="", image=user_image):
         for client in self.get_available_clients():
             client: IMClient
-            client.send(sender.username, message, client.id, image, client.admin, client.identity)
+            client.send(
+                sender.username,
+                message,
+                client.id,
+                image, client.admin,
+                client.identity
+            )
 
     def leaveEvent(self, client: IMClient):
         self.host_send(f"{client.username} 离开了, 当前人数 {self.get_available_clients_length()}.")
@@ -66,7 +71,7 @@ group = IMServerClientGroup()
 
 
 @require_websocket
-def chat(request, token) -> None:
+def im_websocket(request, token) -> None:
     group.add_client(request, token)
 
 

@@ -143,6 +143,7 @@ class UserRegisterForm(forms.Form):
     )
 
     user: User
+    country: str
 
     def clean(self):
         super().clean()
@@ -160,8 +161,8 @@ class UserRegisterForm(forms.Form):
         if User.objects.filter(username=username).exists():
             raise ValidationError("用户已存在!")
 
-        self.user = User.objects.create_user(username=username, password=password, identity=0)
-        Profile.objects.create(user=self.user, detail="")
+        self.user = User.objects.create_user(username=username, password=password, identity=0, country=self.country)
+        Profile.objects.create(user=self.user, profile="")
         return self.cleaned_data
 
     def get_error(self):

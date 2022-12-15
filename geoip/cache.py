@@ -44,11 +44,19 @@ class CountryCache(object):
         else:
             self._caches[country] = 1
 
-    def request(self, request: WSGIRequest) -> None:
+    def request(self, request: WSGIRequest) -> str:
         response = get_country_name_from_request(request)
         if response:
             self.detect_cache()
             self.add(response)
+        return response or "Unknown"
+
+    def ip(self, ip: str) -> str:
+        response = get_country_name_from_ip(ip)
+        if response:
+            self.detect_cache()
+            self.add(response)
+        return response or "Unknown"
 
     def refresh(self) -> None:
         IPRequestAnalysis.objects.create(total=self.total_requests, json_countries=self.data)
