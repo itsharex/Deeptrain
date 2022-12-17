@@ -2,7 +2,8 @@
     --normal: #414856;
     --success: green;
     --error: red;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
     width: 100%;
     height: max-content;
     border-radius: 10px;
@@ -12,6 +13,7 @@
     display: grid;
     grid-template-columns: 30px auto;
     align-items: center;
+    gap: 3px;
 }
 
 @keyframes move {
