@@ -1,15 +1,12 @@
 #checklist {
-    --background: #ffffff;
-
     --normal: #414856;
     --success: green;
     --error: red;
-    --width: 100px;
-    --height: 140px;
+
     --border-radius: 10px;
-    background: var(--background);
-    width: var(--width);
-    height: var(--height);
+    background: #ffffff;
+    width: max-content;
+    height: max-content;
     border-radius: var(--border-radius);
     position: relative;
     box-shadow: 0 10px 30px rgba(65, 72, 86, 0.05);

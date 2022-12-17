@@ -1,4 +1,5 @@
-checkbox = (selector, label) => (
+const checkList = document.getElementById("checklist");
+const checkbox = (selector, label) => (
     {
         target: selector,
         label: label,
@@ -21,7 +22,17 @@ checkbox = (selector, label) => (
         isError: () => (selector.indeterminate),
     }
 )
-
-function createCheckbox(id) {
-    document.createElement("input");
+function createCheckbox(id, text, parent) {
+    let input = document.createElement("input");
+    input.id = id;
+    input.type = "checkbox";
+    input.disabled = true;
+    
+    let label = document.createElement("label");
+    label.for = id;
+    label.innerText = text;
+    let node = parent || checkList;
+    node.appendChild(input);
+    node.appendChild(label);
+    return checkbox(input, label);
 }
