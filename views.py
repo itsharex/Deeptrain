@@ -1,6 +1,6 @@
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required as _auth_login_required
 from user.models import User, Profile
@@ -62,14 +62,12 @@ def login(request: WSGIRequest) -> HttpResponse:
         form = UserLoginForm(request.POST)
         if form.is_valid():
             auth.login(request, form.user)
-            return redirect("/home/")
+            return JsonResponse({"success": True})
         else:
-            error = form.get_error()
-            return render(request, 'login.html', {
-                "form": form,
-                "err_code": error,
-            })
+            return JsonResponse({"success": False, "reason": form.get_error()})
     else:
+        if request.user.is_authenticated:
+            return redirect("/home/")
         return render(request, 'login.html', {"form": UserLoginForm()})
 
 
@@ -79,13 +77,9 @@ def register(request: WSGIRequest) -> HttpResponse:
         form.country = getattr(request, "country")
         if form.is_valid():
             auth.login(request, form.user)
-            return redirect("/home/")
+            return JsonResponse({"success": True})
         else:
-            error = form.get_error()
-            return render(request, 'register.html', {
-                "form": form,
-                "err_code": error,
-            })
+            return JsonResponse({"success": False, "reason": form.get_error()})
     else:
         return render(request, 'register.html', {"form": UserRegisterForm()})
 

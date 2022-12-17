@@ -195,7 +195,7 @@ section .color:nth-child(3) {
 }
 
 
-.form .input-box input {
+.form .input-box input, #submit-box {
     width: 100%;
     padding: 10px 20px;
     background: rgba(255, 255, 255, 0.2);
@@ -205,14 +205,14 @@ section .color:nth-child(3) {
     border-right: 1px solid rgba(255, 255, 255, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 16px;
-    letter-spacing: 1px;
+    letter-spacing: 0.01cm;
     color: #666;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: 0.4s;
 }
 
-.form .input-box input:hover,
-.form .input-box input:active{
+.form .input-box input:hover, #submit-box:hover,
+.form .input-box input:active, #submit-box:active{
     color: #000;
 }
 
@@ -233,7 +233,7 @@ section .color:nth-child(3) {
 
 .form .input-box input::placeholder {
     color: #666;
-    /*transition: 0.5s; placeholder非元素, 不可用 */
+    /*transition: 0.5s; placeholder为伪元素, 不可用 */
 }
 
 .form .input-box input:hover::placeholder,
@@ -241,30 +241,35 @@ section .color:nth-child(3) {
     color: #112;
 }
 
-.form .input-box input[type="submit"] {
+#submit-box {
     background: #fff;
     color: #666;
     width: min-content;
     margin-bottom: 20px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.4s;
+    transition: 0.2s !important;
+    letter-spacing: 0.02cm !important;
+    text-transform: capitalize;
+    text-decoration: none;
+    user-select: none;
 }
 
-.form .input-box input[type="submit"]:hover {
+#submit-box:hover {
     color: #000;
 }
 
 .forget {
     margin-top: 6px;
     color: #236;
-    letter-spacing: 1px;
+    letter-spacing: -1px;
 }
 
 .forget a {
     color: #236;
     font-weight: 600;
     text-decoration: none;
+    margin-left: 6px;
 }
 
 .error{
@@ -274,6 +279,10 @@ section .color:nth-child(3) {
     color:red;
     height: min-content;
     text-align: center;
+    display: none;
+}
+.valid-error i {
+    font-size: 20px;
 }
 .valid-error span{
     width: max-content;

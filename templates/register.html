@@ -6,51 +6,11 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="{% static 'css/font-family.css' %}" rel="stylesheet">
 	<link rel="shortcut icon" href="{% static 'images/register.png' %}" type="image/x-icon" />
-    <title>注册账户</title>
+    <title>Register</title>
     <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
     <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
     <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
-    <script type="text/javascript">
-        $().ready(function() {
-            $("#loginform").validate({
-                rules: {
-                  username: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 12
-                  },
-                  password: {
-                    required: true,
-                    minlength:6,
-                    maxlength:14
-                  },
-                  //验证密码
-                  re_password: {
-                    required: true,
-                    equalTo: "#id_password"
-                  },
-                },
-                messages: {
-                  username: {
-                      required: "请输入您的账户名",
-                      minlength: "账户名不能小于3位, 请输入3~12位账户名",
-                      maxlength: "账户名不能大于12位, 请输入3~12位账户名"
-                  },
-                  password: {
-                    required: "请输入密码",
-                    minlength: "密码不能小于6位, 请输入6~14位密码",
-                    maxlength: "密码不能大于14位, 请输入6~14位密码"
-                  },
-                  re_password: {
-                    required: "请再次输入密码",
-                    equalTo: "两次密码输入不一致"
-                  }
-                }
-            })
-        });
-
-    </script>
 </head>
 
 <body>
@@ -61,23 +21,64 @@
             <div class="container">
                 <div class="form">
                     <div class="title-div"><h2>Register</h2></div>
-                    <form id = "loginform" action="/register/" method="post">
+                    <form id="user-form" ajax="/register/">
                         {% csrf_token %}
                         <div class="input-box">{{ form.username }}</div>
                         <div class="input-box">{{ form.password }}</div>
                         <div class="input-box">{{ form.re_password }}</div>
                         <div class="input-box captcha-form">{{ form.captcha }}</div><br>
-                        {% if err_code %}
-                            <div class="valid-error"><i style="font-size:20px" class="fa">&#xf057</i><span>{{ err_code }}</span></div>
-                        {% endif %}
-                        <div class="input-box"><input type="submit" value="register" id="submit-box"></div>
+                        <div class="valid-error" id="error-frame">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <span id="error"></span>
+                        </div>
+                        <div class="input-box"><div id="submit-box" class="nunito">register</div></div>
                     </form>
-                    <p class="forget">已有账户?<a href="/login/">点击登录</a></p>
-                    <br>
-                    <div><img src="{% static 'images/info.png' %}" alt="[i]:" height="12px" width="12px">本网站需使用Cookies.</div>
+                    <p class="forget">Already have an account?<a href="/login/">Login</a></p>
                 </div>
             </div>
         </div>
     </section>
+    <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+    <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+    <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+    <script src="{% static 'js/user.js' %}"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+            $("#loginform").validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 3,
+                        maxlength: 12
+                    },
+                    password: {
+                        required: true,
+                        minlength:6,
+                        maxlength:14
+                    },
+                    re_password: {
+                        required: true,
+                        equalTo: "#id_password"
+                    }
+                },
+                messages: {
+                    username: {
+                        required: "请输入您的账户名",
+                        minlength: "账户名不能小于3位, 请输入3~12位账户名",
+                        maxlength: "账户名不能大于12位, 请输入3~12位账户名"
+                    },
+                    password: {
+                        required: "请输入密码",
+                        minlength: "密码不能小于6位, 请输入6~14位密码",
+                        maxlength: "密码不能大于14位, 请输入6~14位密码"
+                    },
+                    re_password: {
+                        required: "请再次输入密码",
+                        equalTo: "两次密码输入不一致"
+                    }
+                }
+            })
+        });
+    </script>
 </body>
 </html>

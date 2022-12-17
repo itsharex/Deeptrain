@@ -17,7 +17,7 @@ def index(request: WSGIRequest, _) -> HttpResponse:
 # @admin_required
 @identity_required(FILE_PERMISSION_LEVEL)
 def upload(request: WSGIRequest, user) -> HttpResponse:
-    if request.POST or request.is_ajax():
+    if request.POST:
         form = FileForm(user, request.POST, request.FILES)
         if form.is_valid():
             return JsonResponse({
