@@ -2,15 +2,13 @@
     --normal: #414856;
     --success: green;
     --error: red;
-
-    --border-radius: 10px;
     background: #ffffff;
-    width: max-content;
+    width: 100%;
     height: max-content;
-    border-radius: var(--border-radius);
+    border-radius: 10px;
     position: relative;
     box-shadow: 0 10px 30px rgba(65, 72, 86, 0.05);
-    padding: 30px 45px;
+    padding: 10px 15px;
     display: grid;
     grid-template-columns: 30px auto;
     align-items: center;
@@ -244,13 +242,3 @@
 #checklist input[type="checkbox"]:indeterminate + label::before {background: var(--error);animation: none;opacity: 0;}
 #checklist input[type="checkbox"]:indeterminate + label::after {animation: error-firework .5s ease forwards .1s;}
 #checklist input[type="checkbox"]:indeterminate::before, #checklist input[type="checkbox"]:indeterminate::after {background: var(--error);}
-
-body {
-    background: #E8EBF3;
-    height: 100vh;
-    font: 400 16px 'Varela Round', monospace;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}

@@ -3,7 +3,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required as _auth_login_required
-from user.models import User, Profile
+from user.models import User
 from user.forms import UserRegisterForm, UserLoginForm
 from DjangoWebsite.settings import LOGIN_URL
 

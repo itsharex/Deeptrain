@@ -27,6 +27,7 @@
                             <i class="fa-solid fa-circle-exclamation"></i>
                             <span id="error"></span>
                         </div>
+                        <div id="checklist"></div>
                         <div class="input-box"><div id="submit-box" class="nunito">login</div></div>
                     </form>
                     <p class="forget">Do not have account?<a href="/register/">Create one</a></p>
@@ -39,6 +40,7 @@
     <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
     <script src="{% static 'js/user.js' %}"></script>
+    <script src="{% static 'js/checkbox.js' %}"></script>
     <script type="text/javascript">
         $().ready(function() {
             $("#loginform").validate({

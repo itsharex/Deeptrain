@@ -33,7 +33,7 @@ class UserLoginForm(forms.Form):
         },
         widget=forms.TextInput(
             attrs={
-                "placeholder": "账户",
+                "placeholder": "User name",
                 "value": ""
             }
         )
@@ -49,7 +49,7 @@ class UserLoginForm(forms.Form):
         },
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "密码",
+                "placeholder": "Password",
                 "value": ""
             }
         )
@@ -95,7 +95,7 @@ class UserRegisterForm(forms.Form):
         },
         widget=forms.TextInput(
             attrs={
-                "placeholder": "账户",
+                "placeholder": "User name",
                 "value": ""
             }
         )
@@ -111,7 +111,7 @@ class UserRegisterForm(forms.Form):
         },
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "密码",
+                "placeholder": "Password",
                 "value": ""
             }
         )
