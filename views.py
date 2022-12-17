@@ -4,7 +4,7 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required as _auth_login_required
 from user.models import User
-from user.forms import UserRegisterForm, UserLoginForm
+from user.forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm
 from DjangoWebsite.settings import LOGIN_URL
 
 
@@ -90,6 +90,20 @@ def logout(request: WSGIRequest) -> HttpResponse:
 
 
 @login_required
+def change(request: WSGIRequest, user) -> HttpResponse:
+    if request.POST:
+        form = UserChangePasswordForm(request.POST)
+        form.user = user
+        if form.is_valid():
+            auth.login(request, form.user)
+            return JsonResponse({"success": True})
+        else:
+            return JsonResponse({"success": False, "reason": form.get_error()})
+    else:
+        return render(request, 'change.html', {"form": UserChangePasswordForm()})
+
+
+@login_required
 def home(request: WSGIRequest, user) -> HttpResponse:
     if request.POST:
         _profile = request.POST.get("text")[:200].strip()
@@ -100,17 +114,6 @@ def home(request: WSGIRequest, user) -> HttpResponse:
     else:
         return render(request, "home.html",
                       {"name": user.username, "profile": user.profile.profile, "id": user.real_identity})
-
-
-@login_required
-def change(request: WSGIRequest, user):
-    if request.POST:
-        old, new = request.POST.get("old"), request.POST.get("new")
-        user.check_password(old)
-        user.set_password(new)
-        user.save()
-        logout(request)
-    return redirect(LOGIN_URL)
 
 
 def profile(request: WSGIRequest, uid) -> HttpResponse:

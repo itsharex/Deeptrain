@@ -272,24 +272,6 @@ section .color:nth-child(3) {
     margin-left: 6px;
 }
 
-.error{
-    color:red;
-}
-.valid-error{
-    color:red;
-    height: min-content;
-    text-align: center;
-    display: none;
-}
-.valid-error i {
-    font-size: 20px;
-}
-.valid-error span{
-    width: max-content;
-}
-.login-section {
-    background-image: url("/static/images/background/login.jpg");
-}
 .captcha-form {
     display: flex;
     flex-direction: row;
@@ -310,25 +292,13 @@ section .color:nth-child(3) {
     transform: translateY(15%);
 }
 
-.register-section {
-    background-image: url("/static/images/background/register.jpg");
-}
-
 @media screen and (orientation: portrait) {
-    .login-section {
-        background-image: url("/static/images/background/login-flip.jpg");
-    }
-
-    .register-section {
-        background-image: url("/static/images/background/register-flip.jpg");
-    }
-  }
+    .login-section {background-image: url("/static/images/background/login-flip.jpg");}
+    .register-section {background-image: url("/static/images/background/register-flip.jpg");}
+    .change-section {background-image: url("/static/images/background/change-flip.jpg");}
+}
 @media screen and (orientation: landscape) {
-    .login-section {
-        background-image: url("/static/images/background/login.jpg");
-    }
-
-    .register-section {
-        background-image: url("/static/images/background/register.jpg");
-    }
+    .login-section {background-image: url("/static/images/background/login.jpg");}
+    .register-section {background-image: url("/static/images/background/register.jpg");}
+    .change-section {background-image: url("/static/images/background/change.jpg");}
 }

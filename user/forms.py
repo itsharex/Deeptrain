@@ -6,7 +6,7 @@ from typing import *
 
 from user.models import User, Profile
 
-spec_string = "\'\"<>~`?/\\*&^%$#@!:"  # 抵御大部分SQL注入, emoji导致长度识别错位
+spec_string = "\'\"<>~`?/\\*&^%$#@!:"  # 抵御大部分SQL注入, emoji导致长度识别错位, XSS攻击
 default_detail = "nothing..."
 
 
@@ -27,9 +27,9 @@ class UserLoginForm(forms.Form):
         min_length=3, max_length=12,
         label="username",
         error_messages={
-            "min_length": "账户名不能小于3位, 请输入3~12位账户名",
-            "max_length": "账户名不能大于12位, 请输入3~12位账户名",
-            "required": "请输入您的账户名"
+            "min_length": "The user name cannot be smaller than 3 characters. Please enter 3 to 12 characters",
+            "max_length": "The user name cannot be larger than 12 characters. Please enter 3 to 12 characters",
+            "required": "Please enter your user name"
         },
         widget=forms.TextInput(
             attrs={
@@ -43,9 +43,9 @@ class UserLoginForm(forms.Form):
         min_length=6, max_length=14,
         label="password",
         error_messages={
-            "required": "请输入密码",
-            "min_length": "密码不能小于6位, 请输入6~14位密码",
-            "max_length": "密码不能大于14位, 请输入6~14位密码"
+            "required": "Please enter your password",
+            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
+            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
         },
         widget=forms.PasswordInput(
             attrs={
@@ -58,8 +58,8 @@ class UserLoginForm(forms.Form):
     captcha = CaptchaField(
         label="captcha",
         error_messages={
-            "required": "请输入验证码",
-            "invalid": "验证码输入错误"
+            "required": "Please enter the captcha field",
+            "invalid": "The captcha is incorrect"
         },
     )
 
@@ -71,12 +71,12 @@ class UserLoginForm(forms.Form):
             raise ValidationError(captcha_error)
         username, password = self.cleaned_data.get("username"), self.cleaned_data.get("password")
         if not is_available_username(username):
-            raise ValidationError("账户名格式错误, 请勿输入非法字符!")
+            raise ValidationError("Username format entered wrong! Do not enter illegal characters")
         if not is_available_password(password):
-            raise ValidationError("密码格式错误, 请勿输入非法字符!")
+            raise ValidationError("Password format entered wrong! Do not enter illegal characters")
         self.user = auth.authenticate(username=username, password=password)
         if not self.user:
-            raise ValidationError("登录错误!")
+            raise ValidationError("Login error!")
 
         return super().clean()
 
@@ -89,9 +89,9 @@ class UserRegisterForm(forms.Form):
         min_length=3, max_length=12,
         label="username",
         error_messages={
-            "min_length": "账户名不能小于3位, 请输入3~12位账户名",
-            "max_length": "账户名不能大于12位, 请输入3~12位账户名",
-            "required": "请输入您的账户名"
+            "min_length": "The user name cannot be smaller than 3 characters. Please enter 3 to 12 characters",
+            "max_length": "The user name cannot be larger than 12 characters. Please enter 3 to 12 characters",
+            "required": "Please enter your user name"
         },
         widget=forms.TextInput(
             attrs={
@@ -105,9 +105,9 @@ class UserRegisterForm(forms.Form):
         min_length=6, max_length=14,
         label="password",
         error_messages={
-            "required": "请输入密码",
-            "min_length": "密码不能小于6位, 请输入6~14位密码",
-            "max_length": "密码不能大于14位, 请输入6~14位密码"
+            "required": "Please enter your password",
+            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
+            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
         },
         widget=forms.PasswordInput(
             attrs={
@@ -122,12 +122,12 @@ class UserRegisterForm(forms.Form):
         label="re-password",
         error_messages={
             "required": "请再次输入密码",
-            "min_length": "密码不能小于6位, 请输入6~14位密码",
-            "max_length": "密码不能大于14位, 请输入6~14位密码"
+            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
+            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
         },
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "再次输入密码",
+                "placeholder": "Enter the password again",
                 "value": ""
             }
         )
@@ -137,8 +137,8 @@ class UserRegisterForm(forms.Form):
         label="captcha",
         required=True,
         error_messages={
-            "required": "请输入验证码",
-            "invalid": "验证码输入错误"
+            "required": "Please enter the captcha field",
+            "invalid": "The captcha is incorrect"
         },
     )
 
@@ -153,16 +153,100 @@ class UserRegisterForm(forms.Form):
         username, password, re_password = \
             self.cleaned_data.get("username"), self.cleaned_data.get("password"), self.cleaned_data.get("re_password")
         if not is_available_username(username):
-            raise ValidationError("账户名格式错误, 请勿输入非法字符!")
+            raise ValidationError("Username format entered wrong! Do not enter illegal characters")
         if not is_available_password(password):
-            raise ValidationError("密码格式错误, 请勿输入非法字符!")
+            raise ValidationError("Password format entered wrong! Do not enter illegal characters")
         if not password == re_password:
-            raise ValidationError("两次输入密码不一致!")
+            raise ValidationError("The two passwords are inconsistent!")
         if User.objects.filter(username=username).exists():
-            raise ValidationError("用户已存在!")
+            raise ValidationError("The user already exists!")
 
         self.user = User.objects.create_user(username=username, password=password, identity=0, country=self.country)
         Profile.objects.create(user=self.user, profile="")
+        return self.cleaned_data
+
+    def get_error(self):
+        return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
+
+
+class UserChangePasswordForm(forms.Form):
+    old_password = forms.CharField(
+        min_length=6, max_length=14,
+        label="old_password",
+        error_messages={
+            "required": "Please enter your password",
+            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
+            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
+        },
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Old password",
+                "value": ""
+            }
+        )
+    )
+
+    password = forms.CharField(
+        min_length=6, max_length=14,
+        label="password",
+        error_messages={
+            "required": "Please enter your password",
+            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
+            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
+        },
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "New password",
+                "value": ""
+            }
+        )
+    )
+
+    re_password = forms.CharField(
+        min_length=6, max_length=14,
+        label="re-password",
+        error_messages={
+            "required": "请再次输入密码",
+            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
+            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
+        },
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Enter the new password again",
+                "value": ""
+            }
+        )
+    )
+
+    captcha = CaptchaField(
+        label="captcha",
+        required=True,
+        error_messages={
+            "required": "Please enter the captcha field",
+            "invalid": "The captcha is incorrect"
+        },
+    )
+
+    user: User
+
+    def clean(self):
+        super().clean()
+        captcha_error = self.errors.get("captcha")
+        if captcha_error:
+            raise ValidationError(captcha_error)
+        old_password, password, re_password = \
+            self.cleaned_data.get("old_password"), self.cleaned_data.get("password"), self.cleaned_data.get("re_password")
+        if (not is_available_password(old_password)) or (not self.user.check_password(old_password)):
+            # check raw password
+            raise ValidationError("Old password is incorrect!")
+        if not is_available_password(password):
+            raise ValidationError("Password format entered wrong! Do not enter illegal characters")
+        if not password == re_password:
+            raise ValidationError("The two new passwords are inconsistent!")
+        if password == old_password:
+            raise ValidationError("The old and new passwords are the same!")
+        self.user.set_password(password)
+        self.user.save()
         return self.cleaned_data
 
     def get_error(self):

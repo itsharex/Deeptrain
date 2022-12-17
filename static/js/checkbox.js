@@ -73,6 +73,7 @@ function passwordValidator() {
         let length = $(textInput).val().trim().length;
         return (6 > length || length > 14)? checkbox.error(): checkbox.success();
     }
+    textInput.validator = validator;
     textInput.onkeyup = textInput.onkeydown = textInput.onchange = textInput.onfocusout = ()=>{validator()};
     return validator;
 }
@@ -83,6 +84,18 @@ function repasswordValidator() {
     let checkbox = createCheckbox("re_password", "Enter the password again");
     let validator = () => {
         return ($(textInput).val().trim() !== $(targetInput).val().trim())? checkbox.error(): checkbox.success();
+    }
+    textInput.onkeyup = textInput.onkeydown = textInput.onchange = textInput.onfocusout = ()=>{validator()};
+    targetInput.onkeyup = targetInput.onkeydown = targetInput.onchange = targetInput.onfocusout = () => {textInput.value.trim()?validator():0;targetInput.validator();}
+    return validator;
+}
+
+function oldPasswordValidator() {
+    let textInput = document.getElementById("id_old_password");
+    let checkbox = createCheckbox("old_password", "Please enter the old password");
+    let validator = () => {
+        let length = $(textInput).val().trim().length;
+        return (6 > length || length > 14)? checkbox.error(): checkbox.success();
     }
     textInput.onkeyup = textInput.onkeydown = textInput.onchange = textInput.onfocusout = ()=>{validator()};
     return validator;
