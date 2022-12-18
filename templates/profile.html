@@ -11,7 +11,7 @@
 <body>
 <div class="wrapper">
     <div class="profile-card js-profile-card">
-        <div class="profile-card__img"><img src="{{ image|default:'/static/images/chat_user.png' }}" alt="profile card"></div>
+        <div class="profile-card__img"><img src="{{ user.avatar_url }}" alt="{{ user.username }}"></div>
         <div class="profile-card__cnt js-profile-cnt">
             <div class="profile-card__name"><img class="{{ user.real_identity }}" alt="" src> {{ user.username }}</div>
             <div class="profile-card__txt"></div>

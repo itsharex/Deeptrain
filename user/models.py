@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.functional import cached_property
 from webtoken import generate_token
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 identities = {
     0: "User",
@@ -47,10 +49,23 @@ class User(AbstractUser):
     def text_profile(self):
         return self.profile.profile
 
+    @cached_property
+    def avatar_url(self) -> str:
+        return self.profile.avatar.url
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile = models.TextField(default="", max_length=200)
+    avatar = ProcessedImageField(
+        upload_to='avatars',
+        default='avatars/default.png',
+        processors=[ResizeToFill(100, 100)]
+    )
+
+    github = models.CharField(max_length=25, default="")
+    gitee = models.CharField(max_length=25, default="")
+    codepen = models.CharField(max_length=25, default="")
 
     def __str__(self):
         return f"Profile object ({self.user})"

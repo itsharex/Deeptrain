@@ -11,3 +11,4 @@ timeloop==1.0.2
 redis==4.4.0
 django-hcaptcha==0.2.0
 numpy==1.21.6
+django-imagekit==4.1.0
