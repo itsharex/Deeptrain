@@ -33,6 +33,19 @@ def login_required(_decorate_exec: callable) -> callable:
     return _exec_function
 
 
+def authenticated_redirect(_decorate_exec: callable) -> callable:
+    def _exec_function(request: WSGIRequest, *args, **kwargs) -> HttpResponse:
+        if request.user.is_authenticated:
+            return redirect("/home/")
+        else:
+            return _decorate_exec(
+                request,
+                request.user,
+                *args, **kwargs
+            )
+    return _exec_function
+
+
 def identity_required(level: int):
     def _decorate_(_decorate_exec: callable) -> callable:
         @login_required
@@ -44,7 +57,9 @@ def identity_required(level: int):
                 )
             else:
                 return render(request, 'permission.html')
+
         return _exec_
+
     return _decorate_
 
 
@@ -57,20 +72,18 @@ def index(request: WSGIRequest) -> HttpResponse:
     return render(request, "index.html")
 
 
+@authenticated_redirect
 def login(request: WSGIRequest) -> HttpResponse:
     if request.POST:
-        form = UserLoginForm(request)
-        return JsonResponse(form.get_response())
+        return JsonResponse(UserLoginForm(request).get_response())
     else:
-        if request.user.is_authenticated:
-            return redirect("/home/")
         return render(request, 'login.html', {"form": UserLoginForm(request)})
 
 
+@authenticated_redirect
 def register(request: WSGIRequest) -> HttpResponse:
     if request.POST:
-        form = UserRegisterForm(request)
-        return JsonResponse(form.get_response())
+        return JsonResponse(UserRegisterForm(request).get_response())
     else:
         return render(request, 'register.html', {"form": UserRegisterForm(request)})
 
@@ -83,8 +96,7 @@ def logout(request: WSGIRequest) -> HttpResponse:
 @login_required
 def change(request: WSGIRequest, _) -> HttpResponse:
     if request.POST:
-        form = UserChangePasswordForm(request)
-        return JsonResponse(form.get_response())
+        return JsonResponse(UserChangePasswordForm(request).get_response())
     else:
         return render(request, 'change.html', {"form": UserChangePasswordForm(request)})
 
@@ -97,8 +109,7 @@ def home(request: WSGIRequest, user) -> HttpResponse:
 @login_required
 def profile(request: WSGIRequest, visitor) -> HttpResponse:
     if request.POST:
-        form = UserProfileForm(request)
-        return JsonResponse(form.get_response())
+        return JsonResponse(UserProfileForm(request).get_response())
     else:
         uid = request.GET.get("id")
         if uid and uid.isdigit():

@@ -56,13 +56,15 @@
 <script src="https://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
 <script src="{% static 'js/checkbox.js' %}"></script>
 <script src="{% static 'js/profile.js' %}"></script>
-<script>
-    $(document).ready(function() {
-        $validate([
-            textAreaValidator(),
-            hCaptchaValidator(),
-        ]);
-    });
-</script>
+{% if is_self %}
+    <script>
+        $(document).ready(function() {
+            $validate([
+                textAreaValidator(),
+                hCaptchaValidator(),
+            ]);
+        });
+    </script>
+{% endif %}
 </body>
 </html>
