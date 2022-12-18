@@ -83,7 +83,7 @@ function createMessage(username, id, picture_url, message, is_self=true, is_html
     let dom = document.createElement('div');
     dom.classList.add("chat-element");
     dom.classList.add(is_self?"me":"you");
-    dom.innerHTML = `<a href="/profile/id=${id}" target="_blank"><img src="${picture_url}" alt></a>
+    dom.innerHTML = `<a href="/profile/?id=${id}" target="_blank"><img src="${picture_url}" alt></a>
                      <div class="chat-content">
                         <div class="user"><img class="identity-image ${identity}" src alt><span class="username"></span></span></div>
                         <span class="bubble"></span>

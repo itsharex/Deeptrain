@@ -23,7 +23,9 @@ class FileForm(forms.Form):
         self.user = user
 
     def clean(self):
-        super().clean()
+        captcha_error = self.errors.get("captcha")
+        if captcha_error:
+            raise ValidationError(captcha_error)
         self.url = save_file(self.user, self.get_file())
         return self.cleaned_data
 

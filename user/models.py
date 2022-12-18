@@ -43,6 +43,10 @@ class User(AbstractUser):
     def simple_tag(self):
         return "admin" if self.is_admin else "user"
 
+    @cached_property
+    def text_profile(self):
+        return self.profile.profile
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

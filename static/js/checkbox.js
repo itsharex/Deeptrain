@@ -1,5 +1,5 @@
 const checkList = document.getElementById("checklist");
-const redirectHome = ()=>(document.location.href = "/home/");
+let redirect = () => (document.location.href="/home/");
 const checkbox = (selector, label) => (
     {
         target: selector,
@@ -61,6 +61,17 @@ function usernameValidator() {
     let validator = () => {
         let length = $(textInput).val().trim().length;
         return (3 > length || length > 12)? checkbox.error(): checkbox.success();
+    }
+    textInput.onkeyup = textInput.onkeydown = textInput.onchange = textInput.onfocusout = ()=>{validator()}; //  使validator不返回值, 造成校验错误时输入框输入不动
+    return validator;
+}
+
+function textAreaValidator() {
+    let textInput = document.getElementById("id_textarea");
+    let checkbox = createCheckbox("username", "Please enter 1 to 200 profile");
+    let validator = () => {
+        let length = $(textInput).val().trim().length;
+        return (1 > length || length > 200)? checkbox.error(): checkbox.success();
     }
     textInput.onkeyup = textInput.onkeydown = textInput.onchange = textInput.onfocusout = ()=>{validator()}; //  使validator不返回值, 造成校验错误时输入框输入不动
     return validator;
@@ -131,7 +142,7 @@ let userForm = {
     success: function() {
         this.checkbox.success();
         this.checkbox.hidden();
-        redirectHome();
+        setTimeout(redirect, 500);
     },
     error: function(msg="") {
         this.checkbox.error();

@@ -4,7 +4,7 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required as _auth_login_required
 from user.models import User
-from user.forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm
+from user.forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm, UserProfileForm
 from DjangoWebsite.settings import LOGIN_URL
 
 
@@ -116,11 +116,23 @@ def home(request: WSGIRequest, user) -> HttpResponse:
                       {"name": user.username, "profile": user.profile.profile, "id": user.real_identity})
 
 
-def profile(request: WSGIRequest, uid) -> HttpResponse:
-    query = User.objects.filter(id=uid)
-    if query.exists():
-        user = query.first()
-        return render(request, "profile.html",
-                      {"name": user.username, "profile": user.profile.profile, "id": user.real_identity})
+@login_required
+def profile(request: WSGIRequest, visitor) -> HttpResponse:
+    if request.POST:
+        form = UserProfileForm(request.POST)
+        form.user = visitor
+        if form.is_valid():
+            return JsonResponse({"success": True})
+        else:
+            return JsonResponse({"success": False, "reason": form.get_error()})
     else:
-        raise Http404("The user was not found on this server.")
+        uid = request.GET.get("id")
+        if uid and uid.isdigit():
+            query = User.objects.filter(id=int(uid))
+            if query.exists():
+                user = query.first()
+            else:
+                raise Http404("The user was not found on this server.")
+        else:
+            user = visitor
+        return render(request, "profile.html", {"user": user, "is_self": user == visitor, "form": UserProfileForm()})

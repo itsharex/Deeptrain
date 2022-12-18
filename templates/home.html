@@ -1,114 +1,61 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
-        <title>Home</title>
-        <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://lib.baomitu.com/font-awesome/6.2.0/css/all.css" rel="stylesheet">
-        <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
-        <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Emoji-Parser/version/1.0.0/dist/emoji_parser.min.js"></script>
-        <link href="{% static 'css/profile-style.css' %}" rel="stylesheet">
-        <link href="{% static 'css/style.css' %}" rel="stylesheet">
-        <link href="{% static 'css/media-flip.css' %}" rel="stylesheet">
-        <link href="{% static 'css/home.css' %}" rel="stylesheet">
-        <link href="{% static 'css/font-family.css' %}" rel="stylesheet">
-        <link rel="shortcut icon" href="/favicon.ico">
-    </head>
-    <body style="background-image: linear-gradient(180deg, #2af598 0%, #009efd 100%);">
-    <div id="message-window" class="message-window"></div>
-    <main>
-        <div id="menu" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <i class='bx bxl-python'></i><span class="poppins webname">Zh-Website</span>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <title>Home</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://lib.baomitu.com/font-awesome/6.2.0/css/all.css" rel="stylesheet">
+    <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Emoji-Parser/version/1.0.0/dist/emoji_parser.min.js"></script>
+    <link href="{% static 'css/profile-style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/media-flip.css' %}" rel="stylesheet">
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-family.css' %}" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon.ico">
+</head>
+<body style="background-image: linear-gradient(180deg, #2af598 0%, #009efd 100%);">
+<div id="message-window" class="message-window"></div>
+<main>
+    <div id="menu" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <i class='bx bxl-python'></i><span class="poppins webname">Zh-Website</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto menu" id="menubar">
+            <li><a class="poppins nav-link card text-white active"><i class='bx bxs-home' ></i>Home<span>主页</span></a></li>
+            <li><a class="poppins nav-link card text-white"><i class='bx bxs-message-dots'></i>Chat<span>聊天室</span></a></li>
+            <li><a class="poppins nav-link card text-white"><i class='bx bx-grid-alt'></i>Apps<span>网站应用</span></a></li>
+            <li><a class="poppins nav-link card text-white"><i class='bx bx-transfer-alt' ></i>Files<span>文件</span></a></li>
+            <li><a class="poppins nav-link card text-white"><i class='bx bxl-github'></i>Page<span>GitHub Pages</span></a></li>
+        </ul>
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class='bx bxs-user-rectangle'></i>{{ name|default:"user" }}
             </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto menu" id="menubar">
-                <li><a class="poppins nav-link card text-white active"><i class='bx bxs-home' ></i>Home<span>主页</span></a></li>
-                <li><a class="poppins nav-link card text-white"><i class='bx bxs-message-dots'></i>Chat<span>聊天室</span></a></li>
-                <li><a class="poppins nav-link card text-white"><i class='bx bx-grid-alt'></i>Apps<span>网站应用</span></a></li>
-                <li><a class="poppins nav-link card text-white"><i class='bx bx-transfer-alt' ></i>Files<span>文件</span></a></li>
-                <li><a class="poppins nav-link card text-white"><i class='bx bxl-github'></i>Page<span>GitHub Pages</span></a></li>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" href="/change/" style="color: black;">更改密码</a></li>
+                <li><a class="dropdown-item" href="/logout/" style="color: black;">登出</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" style="color: black;">{{ name|default:"user" }}</a></li>
             </ul>
-            <hr>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class='bx bxs-user-rectangle'></i>{{ name|default:"user" }}
-                </a>
-                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="/change/" style="color: black;">更改密码</a></li>
-                    <li><a class="dropdown-item" href="/logout/" style="color: black;">登出</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" style="color: black;">{{ name|default:"user" }}</a></li>
-                </ul>
-            </div>
         </div>
-        <div id="main">
-            <div class="full box">
-                <div class="circle" style="--x:0"></div>
-                <div class="circle" style="--x:1"></div>
-                <div class="circle" style="--x:2"></div>
-                <div class="circle" style="--x:3"></div>
-                <div class="circle" style="--x:4"></div>
-                    <div class="message-card">
-                        <img class="img-prof" src="{{ image|default:'/static/images/chat_user.png' }}" alt>
-                        <strong class="username">{{ name|default:"user" }}</strong>
-                        <br>
-                        <div><img class="{{id|default:'User' }}" alt src="">&nbsp;<span class="{{id|default:'User' }}">{{ id|default:"User" }}</span></div>
-                        <span id="profileContent" class="profile-content">{{ profile|default:"" }}&nbsp;<img src="https://cdn-icons-png.flaticon.com/128/1250/1250221.png" class="icon" alt onclick="edit_profile()"></span>
-                        <form id="textForm" action="/home/" method="post" style="width: 100%;" hidden>
-                            <label for="textEdit">{% csrf_token %}</label><textarea id="textEdit" name="text"></textarea>
-                            <div style="width: 60%;margin: 0 auto;">
-                                <input style="float: left" class="img-button ok" type="submit" value="" id="submit-content" src="https://cdn-icons-png.flaticon.com/128/3814/3814305.png">
-                                <input style="float: right" class="img-button cancel" type="button" onclick="cancel()">
-                            </div>
-                        </form>
-                    </div>
-            </div>
-            <iframe class="full" src="{% url 'im:index' %}" hidden></iframe>
-            <iframe class="full" src="{% url 'applications:index' %}" hidden></iframe>
-            <iframe class="full" src="{% url 'files:index' %}" hidden></iframe>
-            <iframe class="full" src="https://zmh-program.github.io/" hidden></iframe>
-        </div>
-    </main>
+    </div>
+    <div id="main">
+        <iframe class="full" src="{% url 'profile' %}"></iframe>
+        <iframe class="full" src="{% url 'im:index' %}" hidden></iframe>
+        <iframe class="full" src="{% url 'applications:index' %}" hidden></iframe>
+        <iframe class="full" src="{% url 'files:index' %}" hidden></iframe>
+        <iframe class="full" src="https://zmh-program.github.io/" hidden></iframe>
+    </div>
+</main>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
-    <script src="{% static 'js/message.js' %}"></script>
-    <script>
-        let cardId = "0";
-        const chat_message = document.getElementById("message-box");
-        const message_window = document.getElementById("message-window");
-        const send_message = $('#send_message');
-
-        let action_id = 0;
-        const actions = new Array(...document.querySelector("#menubar").children);
-        const pages = new Array(... document.querySelector("#main").children);
-        actions.forEach(action => (
-            action.onclick = event => {
-                let val = actions.indexOf(action);
-                if (val === action_id) {
-                    return;
-                }
-
-                actions[action_id].querySelector(".card").classList.remove("active");
-                action.querySelector(".card").classList.add("active");
-                pages  [action_id].hidden = true;
-                pages[val].hidden = false;
-                action_id = val;
-            }
-        ));
-
-        function edit_profile(){
-            document.getElementById("textEdit").innerText = document.getElementById("profileContent").innerText;
-            document.getElementById("textForm").hidden=false;document.getElementById("profileContent").hidden=true;
-            alerts(["alert-info", "message-data"], "请输入0~100字符的介绍内容\n超出部分自动删去.", message_window);
-        }
-        function cancel() {
-            document.getElementById("textForm").hidden=true;document.getElementById("profileContent").hidden=false;
-        }
-    </script>
-    </body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+<script src="{% static 'js/message.js' %}"></script>
+<script src="{% static 'js/home-sidebar.js' %}"></script>
+</body>
 </html>

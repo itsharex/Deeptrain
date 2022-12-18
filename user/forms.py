@@ -22,6 +22,10 @@ def is_available_password(password: str) -> bool:
     return 6 <= len(password) <= 14 and regular_string(password)
 
 
+def is_available_profile(profile: str) -> bool:
+    return 1 <= len(profile) <= 200
+
+
 class UserLoginForm(forms.Form):
     username = forms.CharField(
         min_length=3, max_length=12,
@@ -121,7 +125,7 @@ class UserRegisterForm(forms.Form):
         min_length=6, max_length=14,
         label="re-password",
         error_messages={
-            "required": "请再次输入密码",
+            "required": "Please enter your password again",
             "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
             "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
         },
@@ -206,7 +210,7 @@ class UserChangePasswordForm(forms.Form):
         min_length=6, max_length=14,
         label="re-password",
         error_messages={
-            "required": "请再次输入密码",
+            "required": "Please enter your password again",
             "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
             "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
         },
@@ -235,7 +239,8 @@ class UserChangePasswordForm(forms.Form):
         if captcha_error:
             raise ValidationError(captcha_error)
         old_password, password, re_password = \
-            self.cleaned_data.get("old_password"), self.cleaned_data.get("password"), self.cleaned_data.get("re_password")
+            self.cleaned_data.get("old_password"), self.cleaned_data.get("password"), self.cleaned_data.get(
+                "re_password")
         if (not is_available_password(old_password)) or (not self.user.check_password(old_password)):
             # check raw password
             raise ValidationError("Old password is incorrect!")
@@ -251,3 +256,47 @@ class UserChangePasswordForm(forms.Form):
 
     def get_error(self):
         return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
+
+
+class UserProfileForm(forms.Form):
+    textarea = forms.CharField(
+        min_length=1, max_length=200,
+        label="textarea",
+        error_messages={
+            "required": "Please enter the profile",
+            "min_length": "The profile cannot be smaller than 1 characters. Please enter 1 to 200 characters",
+            "max_length": "The profile cannot be larger than 200 characters. Please enter 6 to 200 characters"
+        },
+        widget=forms.Textarea(
+            attrs={
+                "placeholder": "Say something...",
+                "value": ""
+            }
+        )
+    )
+    captcha = CaptchaField(
+        label="captcha",
+        required=True,
+        error_messages={
+            "required": "Please enter the captcha field",
+            "invalid": "The captcha is incorrect"
+        },
+    )
+
+    user: User
+
+    def get_error(self):
+        return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
+
+    def clean(self):
+        super().clean()
+        captcha_error = self.errors.get("captcha")
+        if captcha_error:
+            raise ValidationError(captcha_error)
+        profile = self.cleaned_data.get("textarea").strip()
+        if not is_available_profile(profile):
+            raise ValidationError("Profile format entered wrong! Do not enter illegal characters")
+        self.user.profile.profile = profile
+        self.user.profile.save()
+        print(self.user.profile.profile)
+        return self.cleaned_data
