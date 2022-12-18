@@ -34,14 +34,14 @@
         </ul>
         <hr>
         <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class='bx bxs-user-rectangle'></i>{{ name|default:"user" }}
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class='bx bx-cog'></i> <span class="poppins nav-link text-white">Settings<span>
             </a>
-            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="/change/" style="color: black;">更改密码</a></li>
-                <li><a class="dropdown-item" href="/logout/" style="color: black;">登出</a></li>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="user-dropdown">
+                <li><a class="dropdown-item" href="/change/">更改密码</a></li>
+                <li><a class="dropdown-item" href="/logout/">登出</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" style="color: black;">{{ name|default:"user" }}</a></li>
+                <li><a class="dropdown-item">{{ name }}</a></li>
             </ul>
         </div>
     </div>

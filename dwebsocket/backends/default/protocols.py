@@ -8,8 +8,11 @@ import hashlib
 import base64
 import six
 
-READ_MASK = select.POLLIN | select.POLLPRI
-ERROR_MASK = select.POLLERR | select.POLLHUP
+try:
+    READ_MASK = select.POLLIN | select.POLLPRI
+    ERROR_MASK = select.POLLERR | select.POLLHUP
+except AttributeError as e:
+    raise SystemError("Do not run dwebsocket in Windows System!")
 
 
 class WebSocketProtocol13(object):
@@ -119,7 +122,6 @@ class WebSocketProtocol13(object):
                 )
         raise EOFError("EOF when reading a line, websocket has been closed")
 
-
     def read_frame(self):
         """
         recieve data as frame from server.
@@ -172,20 +174,20 @@ class WebSocketProtocol13(object):
             if selected:
                 assert selected in subprotocols
                 subprotocol_header = (
-                    "Sec-WebSocket-Protocol: %s\r\n" % selected
+                        "Sec-WebSocket-Protocol: %s\r\n" % selected
                 )
         accept_header = (
-            "HTTP/1.1 101 Switching Protocols\r\n"
-            "Upgrade: websocket\r\n"
-            "Connection: Upgrade\r\n"
-            "Sec-WebSocket-Accept: %s\r\n"
-            "%s"
-            "\r\n" % (
-                self.compute_accept_value(
-                    self.headers.get("HTTP_SEC_WEBSOCKET_KEY").encode("utf8")
-                ).decode("utf8"),
-                subprotocol_header
-            )
+                "HTTP/1.1 101 Switching Protocols\r\n"
+                "Upgrade: websocket\r\n"
+                "Connection: Upgrade\r\n"
+                "Sec-WebSocket-Accept: %s\r\n"
+                "%s"
+                "\r\n" % (
+                    self.compute_accept_value(
+                        self.headers.get("HTTP_SEC_WEBSOCKET_KEY").encode("utf8")
+                    ).decode("utf8"),
+                    subprotocol_header
+                )
         )
         try:
             self.sock.sendall(accept_header.encode("utf8"))
