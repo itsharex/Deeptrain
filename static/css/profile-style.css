@@ -123,7 +123,7 @@ img.Server-Owner{content: url("https://cdn-icons-png.flaticon.com/128/3165/31656
     transform: translate(-50%, -50%);
 }
 
-.menu{
+.menu {
     background-color: black;
     padding: 0 !important;
     flex-direction: column;
@@ -132,59 +132,29 @@ img.Server-Owner{content: url("https://cdn-icons-png.flaticon.com/128/3165/31656
     box-shadow: 0 10px 50px rgba(6,55,9,0.25);
     display: flex;
 }
-
+.menu li {
+    user-select: none;
+    cursor: pointer;
+}
 .menu li a {
     margin-top: 12px;
-    color: #fff;
     text-decoration: none;
+    color: #dcdcdc;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
     position: relative;
     width: auto;
+    transition: .3s;
 }
-
+.menu li a:active,
+.menu li a:hover,
+.menu li a:focus {
+    color: #fff;
+}
 .menu li a img {
     width: 25px;
     height: 25px;
     padding: 2px;
-}
-
-/* hidden span */
-.menu li a span{
-    position: absolute;
-    left: calc(100% + 24px);
-    background-color: #fa5c51;
-    font-size: 15px;
-    white-space: nowrap;
-    padding: 8px 16px;
-    border-radius: 6px;
-    transform: scale(0);
-    opacity: 0;
-    transform-origin: center left;
-    transition: 0.15s ease;
-    z-index: 10;
-}
-
-.menu li a span::before{
-    content: "";
-    width: 12px;
-    height: 12px;
-    background-color: #fa5c51;
-    position: absolute;
-    left: -5px;
-    top: 50%;
-    border-radius: 3px;
-    transform: translateY(-50%) rotate(45deg);
-}
-
-.menu li a:hover, .menu li a:focus, .menu li a:active{
-    background-color: #fa5c51;
-    outline: none;
-}
-
-.menu li a:active span, .menu li a:hover span, .menu li a:focus span{
-    transform: scale(1);
-    opacity: 1;
 }

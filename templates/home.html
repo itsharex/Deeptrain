@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <title>Home</title>
+    <link rel="shortcut icon" href="/favicon.ico">
     <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://lib.baomitu.com/font-awesome/6.2.0/css/all.css" rel="stylesheet">
     <link href="https://lib.baomitu.com/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Emoji-Parser/version/1.0.0/dist/emoji_parser.min.js"></script>
     <link href="{% static 'css/profile-style.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     <link href="{% static 'css/media-flip.css' %}" rel="stylesheet">
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
     <link href="{% static 'css/font-family.css' %}" rel="stylesheet">
-    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="https://lib.baomitu.com/font-awesome/6.2.1/css/all.css" rel="stylesheet">
 </head>
 <body style="background-image: linear-gradient(180deg, #2af598 0%, #009efd 100%);">
 <div id="message-window" class="message-window"></div>
@@ -26,22 +25,20 @@
         </a>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto menu" id="menubar">
-            <li><a class="poppins nav-link card text-white active"><i class='bx bxs-home' ></i>Home<span>主页</span></a></li>
-            <li><a class="poppins nav-link card text-white"><i class='bx bxs-message-dots'></i>Chat<span>聊天室</span></a></li>
-            <li><a class="poppins nav-link card text-white"><i class='bx bx-grid-alt'></i>Apps<span>网站应用</span></a></li>
-            <li><a class="poppins nav-link card text-white"><i class='bx bx-transfer-alt' ></i>Files<span>文件</span></a></li>
-            <li><a class="poppins nav-link card text-white"><i class='bx bxl-github'></i>Page<span>GitHub Pages</span></a></li>
+            <li><a class="poppins nav-link card active"><i class='bx bxs-home' ></i>Home</a></li>
+            <li><a class="poppins nav-link card"><i class='bx bxs-message-dots'></i>Chat</a></li>
+            <li><a class="poppins nav-link card"><i class='bx bx-grid-alt'></i>Apps</a></li>
+            <li><a class="poppins nav-link card"><i class='bx bx-transfer-alt' ></i>Files</a></li>
+            <li><a class="poppins nav-link card"><i class='bx bxl-github'></i>Page</a></li>
         </ul>
         <hr>
         <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class='bx bx-cog'></i> <span class="poppins nav-link text-white">Settings<span>
-            </a>
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class='bx bx-cog'></i> <span class="poppins nav-link">Settings</span></a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="user-dropdown">
-                <li><a class="dropdown-item" href="/change/">更改密码</a></li>
-                <li><a class="dropdown-item" href="/logout/">登出</a></li>
+                <li><a class="dropdown-item poppins" href="/change/"><i class="fa fa-solid fa-user-pen"></i> Change password</a></li>
+                <li><a class="dropdown-item poppins" href="/logout/"><i class="fa fa-solid fa-arrow-right-from-bracket"></i> Log out</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item">{{ name }}</a></li>
+                <li><a class="dropdown-item nunito">{{ name }}</a></li>
             </ul>
         </div>
     </div>
@@ -57,5 +54,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
 <script src="{% static 'js/message.js' %}"></script>
 <script src="{% static 'js/home-sidebar.js' %}"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Emoji-Parser/version/1.0.0/dist/emoji_parser.min.js"></script>
 </body>
 </html>
