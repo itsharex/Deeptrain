@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib import auth
+from django.core.handlers.wsgi import WSGIRequest
+from django.utils.functional import cached_property
 from hcaptcha.fields import hCaptchaField as CaptchaField
 from django.core.exceptions import ValidationError
-from typing import *
-
 from user.models import User, Profile
 
 spec_string = "\'\"<>~`?/\\*&^%$#@!:"  # 抵御大部分SQL注入, emoji导致长度识别错位, XSS攻击
@@ -26,7 +26,31 @@ def is_available_profile(profile: str) -> bool:
     return 1 <= len(profile) <= 200
 
 
-class UserLoginForm(forms.Form):
+class BaseUserForm(forms.Form):
+    def __init__(self, request: WSGIRequest):
+        super().__init__(data=request.POST or None)
+        self.request = request
+
+    def clean(self):
+        captcha_error = self.errors.get("captcha")
+        if captcha_error:
+            raise ValidationError(captcha_error)
+
+    @cached_property
+    def user(self) -> User:
+        return self.request.user
+
+    def get_error(self):
+        return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
+
+    def get_response(self) -> dict:
+        if self.is_valid():
+            return {"success": True}
+        else:
+            return {"success": False, "reason": self.get_error()}
+
+
+class UserLoginForm(BaseUserForm):
     username = forms.CharField(
         min_length=3, max_length=12,
         label="username",
@@ -67,28 +91,21 @@ class UserLoginForm(forms.Form):
         },
     )
 
-    user: User
-
     def clean(self):
-        captcha_error = self.errors.get("captcha")
-        if captcha_error:
-            raise ValidationError(captcha_error)
+        super().clean()
         username, password = self.cleaned_data.get("username"), self.cleaned_data.get("password")
         if not is_available_username(username):
             raise ValidationError("Username format entered wrong! Do not enter illegal characters")
         if not is_available_password(password):
             raise ValidationError("Password format entered wrong! Do not enter illegal characters")
-        self.user = auth.authenticate(username=username, password=password)
-        if not self.user:
+        user = auth.authenticate(username=username, password=password)
+        if not user:
             raise ValidationError("Login error!")
-
-        return super().clean()
-
-    def get_error(self):
-        return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
+        auth.login(self.request, user)
+        return self.cleaned_data
 
 
-class UserRegisterForm(forms.Form):
+class UserRegisterForm(BaseUserForm):
     username = forms.CharField(
         min_length=3, max_length=12,
         label="username",
@@ -146,14 +163,8 @@ class UserRegisterForm(forms.Form):
         },
     )
 
-    user: User
-    country: str
-
     def clean(self):
         super().clean()
-        captcha_error = self.errors.get("captcha")
-        if captcha_error:
-            raise ValidationError(captcha_error)
         username, password, re_password = \
             self.cleaned_data.get("username"), self.cleaned_data.get("password"), self.cleaned_data.get("re_password")
         if not is_available_username(username):
@@ -165,15 +176,14 @@ class UserRegisterForm(forms.Form):
         if User.objects.filter(username=username).exists():
             raise ValidationError("The user already exists!")
 
-        self.user = User.objects.create_user(username=username, password=password, identity=0, country=self.country)
-        Profile.objects.create(user=self.user, profile="")
+        user = User.objects.create_user(username=username, password=password, identity=0,
+                                        country=getattr(self.request, "country"))
+        Profile.objects.create(user=user, profile="")
+        auth.login(self.request, user)
         return self.cleaned_data
 
-    def get_error(self):
-        return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
 
-
-class UserChangePasswordForm(forms.Form):
+class UserChangePasswordForm(BaseUserForm):
     old_password = forms.CharField(
         min_length=6, max_length=14,
         label="old_password",
@@ -231,13 +241,8 @@ class UserChangePasswordForm(forms.Form):
         },
     )
 
-    user: User
-
     def clean(self):
         super().clean()
-        captcha_error = self.errors.get("captcha")
-        if captcha_error:
-            raise ValidationError(captcha_error)
         old_password, password, re_password = \
             self.cleaned_data.get("old_password"), self.cleaned_data.get("password"), self.cleaned_data.get(
                 "re_password")
@@ -252,13 +257,11 @@ class UserChangePasswordForm(forms.Form):
             raise ValidationError("The old and new passwords are the same!")
         self.user.set_password(password)
         self.user.save()
+        auth.login(self.request, self.user)
         return self.cleaned_data
 
-    def get_error(self):
-        return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
 
-
-class UserProfileForm(forms.Form):
+class UserProfileForm(BaseUserForm):
     textarea = forms.CharField(
         min_length=1, max_length=200,
         label="textarea",
@@ -283,20 +286,11 @@ class UserProfileForm(forms.Form):
         },
     )
 
-    user: User
-
-    def get_error(self):
-        return (self.errors.get("__all__") or self.errors.get("captcha"))[0]
-
     def clean(self):
         super().clean()
-        captcha_error = self.errors.get("captcha")
-        if captcha_error:
-            raise ValidationError(captcha_error)
         profile = self.cleaned_data.get("textarea").strip()
         if not is_available_profile(profile):
             raise ValidationError("Profile format entered wrong! Do not enter illegal characters")
         self.user.profile.profile = profile
         self.user.profile.save()
-        print(self.user.profile.profile)
         return self.cleaned_data

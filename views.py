@@ -59,29 +59,20 @@ def index(request: WSGIRequest) -> HttpResponse:
 
 def login(request: WSGIRequest) -> HttpResponse:
     if request.POST:
-        form = UserLoginForm(request.POST)
-        if form.is_valid():
-            auth.login(request, form.user)
-            return JsonResponse({"success": True})
-        else:
-            return JsonResponse({"success": False, "reason": form.get_error()})
+        form = UserLoginForm(request)
+        return JsonResponse(form.get_response())
     else:
         if request.user.is_authenticated:
             return redirect("/home/")
-        return render(request, 'login.html', {"form": UserLoginForm()})
+        return render(request, 'login.html', {"form": UserLoginForm(request)})
 
 
 def register(request: WSGIRequest) -> HttpResponse:
     if request.POST:
-        form = UserRegisterForm(request.POST)
-        form.country = getattr(request, "country")
-        if form.is_valid():
-            auth.login(request, form.user)
-            return JsonResponse({"success": True})
-        else:
-            return JsonResponse({"success": False, "reason": form.get_error()})
+        form = UserRegisterForm(request)
+        return JsonResponse(form.get_response())
     else:
-        return render(request, 'register.html', {"form": UserRegisterForm()})
+        return render(request, 'register.html', {"form": UserRegisterForm(request)})
 
 
 def logout(request: WSGIRequest) -> HttpResponse:
@@ -90,41 +81,24 @@ def logout(request: WSGIRequest) -> HttpResponse:
 
 
 @login_required
-def change(request: WSGIRequest, user) -> HttpResponse:
+def change(request: WSGIRequest, _) -> HttpResponse:
     if request.POST:
-        form = UserChangePasswordForm(request.POST)
-        form.user = user
-        if form.is_valid():
-            auth.login(request, form.user)
-            return JsonResponse({"success": True})
-        else:
-            return JsonResponse({"success": False, "reason": form.get_error()})
+        form = UserChangePasswordForm(request)
+        return JsonResponse(form.get_response())
     else:
-        return render(request, 'change.html', {"form": UserChangePasswordForm()})
+        return render(request, 'change.html', {"form": UserChangePasswordForm(request)})
 
 
 @login_required
 def home(request: WSGIRequest, user) -> HttpResponse:
-    if request.POST:
-        _profile = request.POST.get("text")[:200].strip()
-        user.profile.profile = _profile
-        user.profile.save()
-        return render(request, "home.html",
-                      {"name": user.username, "profile": _profile, "id": user.real_identity})
-    else:
-        return render(request, "home.html",
-                      {"name": user.username, "profile": user.profile.profile, "id": user.real_identity})
+    return render(request, "home.html", {"name": user.username})
 
 
 @login_required
 def profile(request: WSGIRequest, visitor) -> HttpResponse:
     if request.POST:
-        form = UserProfileForm(request.POST)
-        form.user = visitor
-        if form.is_valid():
-            return JsonResponse({"success": True})
-        else:
-            return JsonResponse({"success": False, "reason": form.get_error()})
+        form = UserProfileForm(request)
+        return JsonResponse(form.get_response())
     else:
         uid = request.GET.get("id")
         if uid and uid.isdigit():
@@ -135,4 +109,5 @@ def profile(request: WSGIRequest, visitor) -> HttpResponse:
                 raise Http404("The user was not found on this server.")
         else:
             user = visitor
-        return render(request, "profile.html", {"user": user, "is_self": user == visitor, "form": UserProfileForm()})
+        return render(request, "profile.html", {"user": user, "is_self": user == visitor,
+                                                "form": UserProfileForm(request)})
