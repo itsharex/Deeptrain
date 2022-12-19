@@ -40,7 +40,6 @@ def authenticated_redirect(_decorate_exec: callable) -> callable:
         else:
             return _decorate_exec(
                 request,
-                request.user,
                 *args, **kwargs
             )
     return _exec_function
