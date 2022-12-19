@@ -219,7 +219,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
-MEDIA_ROOT = os.path.join(BASE_DIR, '/media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #  File Settings
 FILE_DATABASE_DIR = os.path.join(BASE_DIR, "files", "database")
