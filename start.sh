@@ -1,3 +1,2 @@
 #!/bin/bash
-export PYTHONOPTIMIZE=1
-gunicorn DjangoWebsite.wsgi:application -c gunicorn.conf.py
+python manage.py 0.0.0.0:8000

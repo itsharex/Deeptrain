@@ -1,45 +1,10 @@
 version: "2.8"
 services:
-    redis:
-        image: redis
-        container_name: "redis"
-        command: redis-server --requirepass 11111
-        ports:
-            - "6379:6379"
-        restart: always
-    mysql:
-        image: mysql
-        container_name: "mysql"
-        environment:
-            - MYSQL_DATABASE=django-database
-            - MYSQL_ROOT_PASSWORD=zmh200904
-        ports:
-            - "3306:3306"
-        restart: always
     website:
         build: .
         network_mode: bridge
         container_name: "website"
         expose:
-            - "9000"
+            - "8000"
         command: bash start.sh
-        links:
-            - mysql
-            - redis
-        depends_on:
-            - mysql
-            - redis
-        restart: always
-
-    nginx:
-        image: nginx
-        container_name: "nginx"
-        ports:
-            - "80:80"
-        expose:
-            - "80"
-        links:
-            - website
-        depends_on:
-            - website
         restart: always

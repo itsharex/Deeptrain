@@ -127,7 +127,7 @@ CACHES = {
     }
 }
 
-IS_CONTAINER = False
+IS_CONTAINER = bool(os.getenv("CONTAINER", 0))
 # Container: Do not have MySQL & Redis, Production environment
 # Go to Zh-Website Replit Page: https://Zh-Website.zmh-program.repl.co/
 if IS_CONTAINER:
