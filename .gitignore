@@ -2,4 +2,3 @@
 *.pyc
 superuser.ini
 .vs
-hcaptcha.json

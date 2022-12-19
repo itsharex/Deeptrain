@@ -5,10 +5,7 @@ import sys
 import logging
 import django
 import redis
-from django.core.cache import cache
 
-ip = "127.0.0.1"
-port = 8000
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,25 +13,19 @@ logging.basicConfig(
 )
 
 
-def initialize_applications(run=False):
-    django.setup()
-    from applications import application
-    application.appManager.setup_app()
-    logging.debug(f"Initialize applications successfully.")
-    if run:
-        if cache.get("start-application") is True:
-            application.appManager.run_app()
-            logging.info(f"start server at process {os.getpid()}.")
-        else:
-            cache.set("start-application", True, timeout=10)
-
-
 if __name__ == '__main__':
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoWebsite.settings')
-    exec_line = sys.argv if sys.argv[1:] else sys.argv + ["runserver", f"{ip}:{port}"]
+    from DjangoWebsite import settings
+    settings.IS_DEPLOYED = False
+
+    exec_line = sys.argv if sys.argv[1:] \
+        else sys.argv + ["runserver", f"{settings.DEFAULT_HOST}:{settings.DEFAULT_PORT}"]
+
     try:
-        initialize_applications(exec_line[1] == "runserver")
+        django.setup()
+        from applications.application import appManager
+        appManager.setup_app()
     except redis.exceptions.ConnectionError as e:
         raise ConnectionError("Redis was un-connectable.") from e
 

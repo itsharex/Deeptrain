@@ -1,0 +1,6 @@
+{
+    "HCAPTCHA_SITEKEY": "",
+    "HCAPTCHA_SECRET": "",
+    "SECRET_KEY": "django-insecure-#l#3ps7+(*+7f#0cz=aj-sp!6$-waaf6h=*+=5h*(5njj_^)@8",
+    "ALLOWED_HOSTS": ["*"]
+}

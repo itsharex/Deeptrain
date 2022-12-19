@@ -6,9 +6,11 @@ import logging
 from typing import *
 from inspect import currentframe, getmodule
 from django.utils.functional import cached_property
+from django.core.cache import cache
 from applications.config import json_parser, JSONConfig
 from django import urls
 from DjangoWebsite.settings import APPLICATIONS_DIR
+
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +119,7 @@ class ApplicationManager(object):
             except ModuleNotFoundError:
                 raise ModuleNotFoundError(f"\n\tApplication {path}:\n\t\tCannot import application from file {_file} !")
         self.__is_stp = True
+        logger.debug(f"Initialize applications successfully.")
 
     def run_app(self):
         for __sync in self._sync_app:
@@ -130,6 +133,17 @@ class ApplicationManager(object):
             logger.info(f"{self.length} application has been started.")
         elif self.length > 1:
             logger.info(f"{self.length} applications have been started.")
+
+    def deploy_app(self):
+        self.setup_app()
+        self.run_app()
+
+    def product_app(self):
+        if cache.get("start-application") is True:
+            self.run_app()
+            logger.info(f"start server at process {os.getpid()}.")
+        else:
+            cache.set("start-application", True, timeout=10)
 
     def _get_application(self, _call_from: str) -> "AbstractApplication":
         return self._applications_calls.get(_call_from)

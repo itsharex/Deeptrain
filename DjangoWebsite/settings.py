@@ -22,17 +22,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#l#3ps7+(*+7f#0cz=aj-sp!6$-waaf6h=*+=5h*(5njj_^)@8'
-with open(os.path.join(BASE_DIR, "hcaptcha.json"), "r") as f:
-    _hcaptcha_settings = json.load(f)
-if all(_hcaptcha_settings.values()):
-    HCAPTCHA_SITEKEY = _hcaptcha_settings["HCAPTCHA_SITEKEY"]
-    HCAPTCHA_SECRET = _hcaptcha_settings["HCAPTCHA_SECRET"]
+
+with open(os.path.join(BASE_DIR, "config.json"), "r") as f:
+    _config = json.load(f)
+if all(_config.values()):
+    HCAPTCHA_SITEKEY = _config["HCAPTCHA_SITEKEY"]
+    HCAPTCHA_SECRET = _config["HCAPTCHA_SECRET"]
+SECRET_KEY = _config["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 AUTH_USER_MODEL = 'user.User'
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = _config["ALLOWED_HOSTS"]
 
 # Application definition
 APPLICATIONS_CONFIG_FILE = "config.json"
@@ -126,9 +127,10 @@ CACHES = {
     }
 }
 
-IS_REPLIT_PRODUCTION = False
+IS_CONTAINER = False
+# Container: Do not have MySQL & Redis, Production environment
 # Go to Zh-Website Replit Page: https://Zh-Website.zmh-program.repl.co/
-if IS_REPLIT_PRODUCTION:
+if IS_CONTAINER:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -242,3 +244,11 @@ MONITOR_INTERVAL = 1  # 1 second
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#  run manage.py -> False
+#  gunicorn wsgi.py -> True
+IS_DEPLOYED = True
+
+DEFAULT_HOST = "127.0.0.1"
+DEFAULT_PORT = 8000

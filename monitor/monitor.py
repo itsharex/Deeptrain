@@ -1,11 +1,9 @@
 from datetime import timedelta
 import psutil
-from timeloop import Timeloop
 from typing import *
 from DjangoWebsite.settings import MONITOR_INTERVAL
 from websocket import WebClientGroup, WebClient
-
-loop = Timeloop()
+from loop import loop
 
 
 class Monitor(WebClientGroup):
@@ -104,4 +102,3 @@ class Monitor(WebClientGroup):
 
 
 monitor = Monitor()
-loop.start()
