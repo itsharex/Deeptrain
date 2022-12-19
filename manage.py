@@ -6,22 +6,13 @@ import logging
 import django
 import redis
 
-
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s - %(levelname)s]: %(message)s",
 )
 
 
-if __name__ == '__main__':
-    """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoWebsite.settings')
-    from DjangoWebsite import settings
-    settings.IS_DEPLOYED = False
-
-    exec_line = sys.argv if sys.argv[1:] \
-        else sys.argv + ["runserver", f"{settings.DEFAULT_HOST}:{settings.DEFAULT_PORT}"]
-
+def _init_website():
     try:
         django.setup()
         from applications.application import appManager
@@ -29,6 +20,12 @@ if __name__ == '__main__':
     except redis.exceptions.ConnectionError as e:
         raise ConnectionError("Redis was un-connectable.") from e
 
+
+def exec_website() -> 0:
+    _init_website()
+
+    exec_line = sys.argv if sys.argv[1:] \
+        else sys.argv + ["runserver", f"{settings.DEFAULT_HOST}:{settings.DEFAULT_PORT}"]
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -38,4 +35,13 @@ if __name__ == '__main__':
             "forget to activate a virtual environment?"
         ) from exc
 
-    execute_from_command_line(exec_line)
+    return int(not not execute_from_command_line(exec_line))
+
+
+if __name__ == '__main__':
+    """Run administrative tasks."""
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoWebsite.settings')
+    from DjangoWebsite import settings
+    settings.IS_DEPLOYED = False
+
+    sys.exit(exec_website())
