@@ -204,6 +204,11 @@ class ApplicationManager(object):
         _call = _get_called_module_file()
         return self._get_application(_call_from=_call)
 
+    def get_application_config(self, name):
+        for app in self.applications:
+            if app.name == name:
+                return app
+
     def __str__(self):
         return f"ApplicationManager({self._including_app_types})"
 
@@ -366,36 +371,22 @@ class ProcessApplication(AbstractApplication):
 
 class SiteServer(protocol.AsyncServer):
     def __init__(self, port):
-        super(SiteServer, self).__init__(port, )
+        super().__init__(port, )
         self.thread = Thread(target=self.listen, daemon=True)
 
-    def start(self) -> None:
-        return self.thread.start()
-
-    async def group_send(self, message):
-        _clean_clients = []
-        for client in self.clients:
-            if not await client.send_pickle(message):
-                _clean_clients.append(client)
-        return tuple(map(self.clients.remove, _clean_clients))
-
-    async def receive_from_websocket(self, client, message):
-        self.receiveEvent(protocol.recv_pickle(message))
-
-    def receiveEvent(self, obj: Any):
+    async def run(self):
         pass
+
+    def start(self) -> None:
+        self.thread.start()
+        run_loop = asyncio.new_event_loop()
+        run_loop.run_until_complete(self.run())
 
 
 class SiteClient(protocol.AsyncClient):
     def __init__(self, port, loop):
         super(SiteClient, self).__init__(port, loop)
         self.listen()
-
-    async def _receiveEvent(self, message):
-        await self.receiveEvent(protocol.recv_pickle(message))
-
-    async def receiveEvent(self, obj: Any):
-        pass
 
 
 class SiteApplication(AbstractApplication):
@@ -416,7 +407,7 @@ class SiteApplication(AbstractApplication):
        |<--                    B/S arch.              -->|<--      C/S arch.           -->|
 
 
-    · Why use websocket protocol instead of native tcp?
+    · Why use websocket protocol instead of native tcp socket?
         - Solve subcontracting, sticky package.
 
     """
@@ -481,7 +472,6 @@ class SiteApplication(AbstractApplication):
         self._process.start()
         self.client = self.client_type(self.port, loop=loop)
         self.client.listen()
-        logger.info(f"Initialize Site Server {self.name} and listen at the port {self.port}")
 
     def run(self):
         """

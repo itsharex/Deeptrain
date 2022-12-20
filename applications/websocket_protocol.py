@@ -143,6 +143,7 @@ class AsyncServer(object):
     def add_client(self, websocket: server.WebSocketServerProtocol):
         #  host validate
         host = websocket.remote_address[0]
+        print(websocket.remote_address)
         if host in self.allow_hosts:
             client = self.client_type(websocket, self)
             self.clients.append(client)
@@ -162,12 +163,14 @@ class AsyncServer(object):
     async def group_send(self, message):
         _clean_clients = []
         for client in self.clients:
-            if not await client.send(message):
+            if not await client.send_pickle(message):
                 _clean_clients.append(client)
         return tuple(map(self.clients.remove, _clean_clients))
 
-    async def receive_from_websocket(self, client: AsyncServerClient, message):
-        # await self.group_send(message)
+    async def receive_from_websocket(self, client, message):
+        self.receiveEvent(recv_pickle(message))
+
+    def receiveEvent(self, obj: Any):
         pass
 
 
@@ -181,7 +184,7 @@ class AsyncClient(object):
     async def _listen(self):
         async with websockets.connect(self.url, loop=self.loop) as self.websocket:
             async for message in self.websocket:
-                await self._receiveEvent(message)
+                await self.receiveEvent(recv_pickle(message))
 
     def listen(self):
         return asyncio.run_coroutine_threadsafe(self._listen(), self.loop)
@@ -190,8 +193,7 @@ class AsyncClient(object):
     def url(self) -> str:
         return f"ws://{SITE_HOST}:{self.port}/"
 
-    async def _receiveEvent(self, message):
-        # 未经处理的 recv
+    async def receiveEvent(self, obj: Any):
         pass
 
     async def send(self, message: Union[str, bytes]):
