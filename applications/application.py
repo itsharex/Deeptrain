@@ -1,6 +1,7 @@
 import asyncio
 import os
 import time
+import warnings
 from threading import Thread
 from multiprocessing import Process
 import logging
@@ -106,12 +107,12 @@ class ApplicationManager(object):
             raise ValueError
         return app
 
-    def register_server(
+    def register_site_application(
             self,
             port: int,
-            server: Union[Type["SiteServer"], "SiteServer", None] = None,
-            client: Union[Type["SiteClient"], "SiteClient", None] = None,
-            application: Union[Type["SiteApplication"], "SiteApplication", None] = None
+            server: Optional[Type["SiteServer"]] = None,
+            client: Optional[Type["SiteClient"]] = None,
+            application: Optional[Type["SiteApplication"]] = None
     ):
         """
         lazily initialize site application.
@@ -120,17 +121,14 @@ class ApplicationManager(object):
             static app port
 
         :param server: subclass of SiteServer:
-            `instance`
             `type`
             `default(SiteServer)`
 
         :param client: subclass of SiteClient
-            `instance`
             `type`
             `default(SiteServer)`
 
         :param application: subclass of SiteApplication
-            `instance`
             `type`
             `default(SiteServer)`
 
@@ -140,31 +138,35 @@ class ApplicationManager(object):
         :return:
             the instance of Application (depend on variable application)
         """
+        if isinstance(application, SiteApplication):
+            warnings.warn("\n\tThe application has already been initialized. "
+                          "It can be registered using appManager.register(<app>).\n")
+            return self.register(application)
 
-        if server is None:
-            server = SiteServer(port)
-        elif issubclass(server, SiteServer):
-            server = server(port)
-
-        if client is None:
-            client = SiteClient(port, self.loop)
-        elif issubclass(client, SiteClient):
-            client = client(port, self.loop)
-
+        assert isinstance(port, int)
         if application is None:
-            application = SiteApplication()
+            application = SiteApplication(port)
         elif issubclass(application, SiteApplication):
-            application = application()
+            application = application(port)
 
-        application.server_type = server
-        application.client_type = client
+        application.server_type = server or SiteServer
+        application.client_type = client or SiteClient
+        _ = _get_called_module_file()
         self.register(application)
 
         return application
 
-    def wrap_register_server(self, port: int, server=None, client=None):
+    def lazy_setup(self,
+                   server: Optional[Union[Type["SiteServer"], Type["SiteApplication"]]] = None,
+                   client: Optional[Type["SiteClient"]] = None,
+                   ):
+        """ Lazy setup site application. """
+        if server and issubclass(server, SiteApplication):
+            # application 当做 server
+            return self.register_site_application(getattr(server, "port", None), application=server)
+
         def _wrap_(application: Type[SiteApplication]):
-            return self.register_server(port, server, client, application)
+            return self.register_site_application(getattr(application, "port", None), server, client, application)
         return _wrap_
 
     @cached_property
@@ -208,8 +210,9 @@ class ApplicationManager(object):
 
         self.loop_thread.start()
 
-        logger.info(f"{self.length} {['application has been started', 'applications have been started'][self.length>1]}"
-                    f" (including {self._including_app_types}).")
+        logger.info(
+            f"{self.length} {['application has been started', 'applications have been started'][self.length > 1]}"
+            f" (including {self._including_app_types}).")
 
     def deploy_app(self):
         self.setup_app()
@@ -453,7 +456,9 @@ class SiteApplication(AbstractApplication):
     _process: Process
     _thread: Thread
 
-    def __init__(self):
+    def __init__(self, port: int = None):
+        if port is not None:
+            self.port = port
         assert isinstance(self.port, int)
         super().__init__()
 
@@ -533,8 +538,8 @@ class SiteApplication(AbstractApplication):
     def open(self):
         return protocol.is_open_port(port=self.port)[1]
 
-    def start(self, loop, detect_open=None, *_) -> None:
-        if detect_open is None:
+    def start(self, loop, detect_open: bool = False, *_) -> None:
+        if not detect_open:
             #  等价于 [self.run_without_called_server, self.run_within_called_server][self.open](loop)
             if self.open:
                 self.run_within_called_server(loop)

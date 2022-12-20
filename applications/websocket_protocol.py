@@ -6,13 +6,37 @@ from typing import *
 import websockets
 import asyncio
 
-
 SITE_HOST = "127.0.0.1"
 
 
 def is_open_port(host: str = SITE_HOST, port: int = 0) -> Tuple[int, bool]:
     """tcp detection function"""
     return port, not not socket.socket().connect_ex((host, port))
+
+
+def get_open_ports(host: str, ports: List[int]) -> List[int]:
+    """
+    Get the ports that are open
+    :param host: IP host (str)
+    :param ports: ports (list)
+    :return: the ports that are open (list)
+    """
+
+    pool = threadpool.ThreadPool(len(ports))
+    responses = []
+    tuple(map(
+        pool.putRequest,
+        threadpool.makeRequests(
+            is_open_port,
+            [((host, port), ()) for port in ports],
+            callback=lambda request, response: responses.append(response[0]) if response[1] else None,
+        ),
+    ))
+
+    pool.wait()
+    responses.sort()
+
+    return responses
 
 
 def get_not_open_ports(host: str, ports: List[int]) -> List[int]:
