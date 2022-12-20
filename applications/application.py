@@ -417,22 +417,24 @@ class SiteApplication(AbstractApplication):
          实例中的 AsyncServer(中 _weakrefset.WeakSet的_remove方法)
          不能被pickle和反pickle, 因此抛出异常.
 
-         那知道原因了就好办了,解决方案: 直接在子进程中运行的函数中 创建套接字的实例
+         那知道原因了就好办了,解决方案:
+            1. 直接在子进程中运行的函数中 创建套接字的实例
+            2. 异步loop不共享, 在父进程中创建
         """
-        self._process = Process(target=self.run, args=(loop,))
+        self._process = Process(target=self.run, daemon=True, )
         self._process.start()
-        logger.info(f"Initialize Site Server {self.name} and Listen at the port {self.port}")
+        self.client = self.client_type(self.port, loop=loop)
+        self.client.listen()
+        logger.info(f"Initialize Site Server {self.name} and listen at the port {self.port}")
 
-    def run(self, loop=None):
+    def run(self):
         """
         Initialize server and Run as a server in the subprocess.
             -> call: %.run_application()
         """
 
-        self.client = self.client_type(self.port, loop=loop)
         self.server = self.server_type(self.port)
 
-        self.client.listen()
         self.server.start()
         self.run_application()
 
@@ -440,7 +442,7 @@ class SiteApplication(AbstractApplication):
         """
         Run the application (Server) in the subprocess.
 
-         ##   inherit  ##
+        override in subclass
         """
         pass
 
