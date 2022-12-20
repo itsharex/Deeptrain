@@ -381,12 +381,37 @@ class SiteApplication(AbstractApplication):
 
     def run_within_called_server(self, loop):
         r"""
-        不从__init__ (在父进程) 初始化self.server的原因:
-          File "\lib\multiprocessing\popen_spawn_win32.py", line 93, in __init__
-            reduction.dump(process_obj, to_child)
-          File "\lib\multiprocessing\reduction.py", line 60, in dump
-            ForkingPickler(file, protocol).dump(obj)
-        AttributeError: Can't pickle local object 'WeakSet.__init__.<locals>._remove'
+        不从在父进程 初始化self.server的原因:
+        
+        Windows系统:
+              File "#:\ProgramData\Anaconda3\envs\...\lib\multiprocessing\context.py", line 322, in _Popen
+                return Popen(process_obj)
+              File "#:\ProgramData\Anaconda3\envs\...\lib\multiprocessing\popen_spawn_win32.py", line 89, in __init__
+                reduction.dump(process_obj, to_child)
+              File "#:\ProgramData\Anaconda3\envs\...\lib\multiprocessing\reduction.py", line 60, in dump
+                ForkingPickler(file, protocol).dump(obj)
+            AttributeError: Can't pickle local object 'WeakSet.__init__.<locals>._remove'
+            
+            Traceback (most recent call last):
+              File "<string>", line 1, in <module>
+              File "#:\ProgramData\Anaconda3\envs\...\lib\multiprocessing\spawn.py", line 105, in spawn_main
+                exitcode = _main(fd)
+              File "#:\ProgramData\Anaconda3\envs\...\lib\multiprocessing\spawn.py", line 115, in _main
+                self = reduction.pickle.load(from_parent)
+            EOFError: Ran out of input
+            
+        Linux/Unix 系统:
+                OSError: [Errno 98] error while attempting to bind on address ('127.0.0.1', ~): address already in use
+                server = await self._create_server()
+              File "/root/.pyenv/versions/3.7/lib/python3.7/asyncio/base_events.py", line 1505, in create_server
+                raise OSError(err.errno, 'error while attempting '
+                raise OSError(err.errno, 'error while attempting '
+            AttributeError: '_UnixSelectorEventLoop' object has no attribute '_signal_handlers'
+                raise OSError(err.errno, 'error while attempting '
+            OSError: [Errno 98] error while attempting to bind on address ('127.0.0.1', ~): address already in use
+                raise OSError(err.errno, 'error while attempting '
+            OSError: [Errno 98] error while attempting to bind on address ('127.0.0.1', ~): address already in use
+
 
          我猜原因应该是 process之间不共享内存, 因而需要再启动一个python子进程, 但是再次过程中,
          实例中的 AsyncServer(中 _weakrefset.WeakSet的_remove方法)
@@ -409,7 +434,7 @@ class SiteApplication(AbstractApplication):
 
         self.client.listen()
         self.server.start()
-        self.run()
+        self.run_application()
 
     def run_application(self):
         """
