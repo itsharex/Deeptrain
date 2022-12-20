@@ -2,15 +2,15 @@ import asyncio
 import os
 import time
 from threading import Thread
+from multiprocessing import Process
 import logging
 from typing import *
 from inspect import currentframe, getmodule
 from django.utils.functional import cached_property
-from django.core.cache import cache
 from applications.config import json_parser, JSONConfig
 from django import urls
 from DjangoWebsite.settings import APPLICATIONS_DIR
-
+from . import websocket_protocol as protocol
 
 logger = logging.getLogger(__name__)
 
@@ -51,8 +51,11 @@ class ApplicationManager(object):
         self.loop_thread = Thread(target=self.loop.run_forever)
         self.loop_thread.setDaemon(True)
 
+        self._native_app: List[AbstractApplication] = []
         self._sync_app: List[SyncApplication] = []
         self._async_app: List[AsyncApplication] = []
+        self._proc_app: List[ProcessApplication] = []
+        self._site_app: List[SiteApplication] = []
 
     @cached_property
     def length(self):
@@ -73,6 +76,13 @@ class ApplicationManager(object):
                 self._async_app.append(app)
             elif isinstance(app, SyncApplication):
                 self._sync_app.append(app)
+            elif isinstance(app, ProcessApplication):
+                self._proc_app.append(app)
+            elif isinstance(app, SiteApplication):
+                self._site_app.append(app)
+            else:
+                self._native_app.append(app)
+
         return len(self.applications)
 
     @cached_property
@@ -121,6 +131,14 @@ class ApplicationManager(object):
         self.__is_stp = True
         logger.debug(f"Initialize applications successfully.")
 
+    @cached_property
+    def _including_app_types(self):
+        return f"including {len(self._sync_app)} sync apps, " \
+               f"{len(self._async_app)} async apps, " \
+               f"{len(self._proc_app)} process apps, " \
+               f"{len(self._site_app)} site apps, " \
+               f"{len(self._native_app)} native apps"
+
     def run_app(self):
         for __sync in self._sync_app:
             __sync.start()
@@ -129,21 +147,27 @@ class ApplicationManager(object):
             __async.start(self.loop)
         self.loop_thread.start()
 
+        for __process in self._proc_app:
+            __process.start()
+
+        for __site in self._site_app:
+            __site.start(self.loop)
+
+        for __native in self._native_app:
+            __native.start()
+
         if self.length == 1:
-            logger.info(f"{self.length} application has been started.")
+            logger.info(f"{self.length} application has been started ({self._including_app_types}).")
         elif self.length > 1:
-            logger.info(f"{self.length} applications have been started.")
+            logger.info(f"{self.length} applications have been started ({self._including_app_types}).")
 
     def deploy_app(self):
         self.setup_app()
         self.run_app()
 
     def product_app(self):
-        if cache.get("start-application") is True:
-            self.run_app()
-            logger.info(f"start server at process {os.getpid()}.")
-        else:
-            cache.set("start-application", True, timeout=10)
+        self.run_app()
+        logger.info(f"start server at process {os.getpid()}.")
 
     def _get_application(self, _call_from: str) -> "AbstractApplication":
         return self._applications_calls.get(_call_from)
@@ -232,6 +256,9 @@ class SyncApplication(AbstractApplication):
     def __str__(self) -> str:
         return f"Sync Application {self.name} <{self.index}>"
 
+    def run(self):
+        pass
+
     def start(self, *_) -> None:
         self._thread.start()
 
@@ -281,3 +308,130 @@ class IntervalAsyncApplication(AsyncApplication):
         while 1:
             await self.run_once()
             await asyncio.sleep(self.interval)
+
+
+class ProcessApplication(AbstractApplication):
+    _process: Process
+
+    def __init__(self, *_, **__):
+        super().__init__()
+        self._process = Process(target=self.run, daemon=True, name=str(self))
+
+    def __str__(self) -> str:
+        return f"Process Application {self.name} <{self.index}>"
+
+    def run(self):
+        pass
+
+    def start(self, *_) -> None:
+        self._process.start()
+
+    def get_process(self) -> Process:
+        return self._process
+
+    def join(self):
+        self._process.join()
+
+
+class SiteServer(protocol.AsyncServer):
+    def __init__(self, port):
+        super(SiteServer, self).__init__(port, )
+        self.thread = Thread(target=self.listen, daemon=True)
+
+    def start(self) -> None:
+        return self.thread.start()
+
+
+class SiteApplication(AbstractApplication):
+    """
+    C/S architecture.
+
+    Client ≈ Async Application
+    Server ≈ Process Application
+
+
+    · structure of SiteApplication:
+
+       |     -- public --         |  middleware  |           -- localhost --              |
+       |    *.*.*.*    wss://xxx.site | ... |  127.0.0.1       ws://.:80      127.0.0.1   |
+       | Website Client <-----------> | ... | Client App <-----------------> Server App   |
+       |                              | ... |                                             |
+       |          Browser             | ... |   Async Application    Process Application  |
+       |<--                    B/S arch.              -->|<--      C/S arch.           -->|
+
+
+    · Why use websocket protocol instead of native tcp?
+        - Solve subcontracting, sticky package.
+
+    """
+    port: int
+
+    client: protocol.AsyncClient
+    server: SiteServer
+
+    client_type = protocol.AsyncClient
+    server_type = SiteServer
+
+    _process: Process
+    _thread: Thread
+
+    def __init__(self):
+        assert isinstance(self.port, int)
+        super().__init__()
+
+    def run_within_called_server(self, loop):
+        r"""
+        不从__init__ (在父进程) 初始化self.server的原因:
+          File "\lib\multiprocessing\popen_spawn_win32.py", line 93, in __init__
+            reduction.dump(process_obj, to_child)
+          File "\lib\multiprocessing\reduction.py", line 60, in dump
+            ForkingPickler(file, protocol).dump(obj)
+        AttributeError: Can't pickle local object 'WeakSet.__init__.<locals>._remove'
+
+         我猜原因应该是 process之间不共享内存, 因而需要再启动一个python子进程, 但是再次过程中,
+         实例中的 AsyncServer(中 _weakrefset.WeakSet的_remove方法)
+         不能被pickle和反pickle, 因此抛出异常.
+
+         那知道原因了就好办了,解决方案: 直接在子进程中运行的函数中 创建套接字的实例
+        """
+        self._process = Process(target=self.run, args=(loop,))
+        self._process.start()
+        logger.info(f"Initialize Site Server {self.name} and Listen at the port {self.port}")
+
+    def run(self, loop=None):
+        """
+        Initialize server and Run as a server in the subprocess.
+            -> call: %.run_application()
+        """
+
+        self.client = self.client_type(self.port, loop=loop)
+        self.server = self.server_type(self.port)
+
+        self.client.listen()
+        self.server.start()
+        self.run()
+
+    def run_application(self):
+        """
+        Run the application (Server) in the subprocess.
+
+         ##   inherit  ##
+        """
+        pass
+
+    def run_without_called_server(self, loop):
+        self.client = self.client_type(self.port, loop=loop)
+        return self.client.listen()
+
+    #  不能有 cached_property
+    @property
+    def open(self):
+        return protocol.is_open_port(port=self.port)[1]
+
+    def start(self, loop, detect_open=None, *_) -> None:
+        if detect_open is None:
+            #  等价于 [self.run_without_called_server, self.run_within_called_server][self.open](loop)
+            if self.open:
+                self.run_within_called_server(loop)
+            else:
+                self.run_without_called_server(loop)

@@ -2,5 +2,5 @@ from applications.application import *
 
 
 @appManager.register
-class Application(AsyncApplication):
-    pass
+class Application(SiteApplication):
+    port = 11
