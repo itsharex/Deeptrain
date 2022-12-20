@@ -69,6 +69,10 @@ def get_sample_open_ports(host: str, num: int, min_limit: int = 0, max_limit: in
     return responses
 
 
+def recv_pickle(_pickle):
+    return pickle.loads(_pickle)
+
+
 class AsyncServerClient(object):
     def __init__(self, websocket: server.WebSocketServerProtocol, parent):
         self.websocket = websocket
@@ -80,10 +84,6 @@ class AsyncServerClient(object):
         async for message in self.websocket:
             await self.parent.receive_from_websocket(self, message)
         self.is_alive = False
-
-    @staticmethod
-    def recv_pickle(_pickle):
-        return pickle.loads(_pickle)
 
     async def send(self, message) -> bool:
         if self.is_alive:
@@ -157,7 +157,7 @@ class AsyncClient(object):
     async def _listen(self):
         async with websockets.connect(self.url, loop=self.loop) as self.websocket:
             async for message in self.websocket:
-                await self.receiveEvent(message)
+                await self._receiveEvent(message)
 
     def listen(self):
         return asyncio.run_coroutine_threadsafe(self._listen(), self.loop)
@@ -166,8 +166,12 @@ class AsyncClient(object):
     def url(self) -> str:
         return f"ws://{SITE_HOST}:{self.port}/"
 
-    async def receiveEvent(self, message):
+    async def _receiveEvent(self, message):
+        # 未经处理的 recv
         pass
 
     async def send(self, message: Union[str, bytes]):
         return await self.websocket.send(message)
+
+    async def send_pickle(self, obj):
+        return await self.send(pickle.dumps(obj))

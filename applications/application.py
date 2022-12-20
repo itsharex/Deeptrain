@@ -106,20 +106,77 @@ class ApplicationManager(object):
             raise ValueError
         return app
 
+    def register_server(
+            self,
+            port: int,
+            server: Union[Type["SiteServer"], "SiteServer", None] = None,
+            client: Union[Type["SiteClient"], "SiteClient", None] = None,
+            application: Union[Type["SiteApplication"], "SiteApplication", None] = None
+    ):
+        """
+        lazily initialize site application.
+
+        :param port:
+            static app port
+
+        :param server: subclass of SiteServer:
+            `instance`
+            `type`
+            `default(SiteServer)`
+
+        :param client: subclass of SiteClient
+            `instance`
+            `type`
+            `default(SiteServer)`
+
+        :param application: subclass of SiteApplication
+            `instance`
+            `type`
+            `default(SiteServer)`
+
+        :call:
+            appManager.register
+
+        :return:
+            the instance of Application (depend on variable application)
+        """
+
+        if server is None:
+            server = SiteServer(port)
+        elif issubclass(server, SiteServer):
+            server = server(port)
+
+        if client is None:
+            client = SiteClient(port, self.loop)
+        elif issubclass(client, SiteClient):
+            client = client(port, self.loop)
+
+        if application is None:
+            application = SiteApplication()
+        elif issubclass(application, SiteApplication):
+            application = application()
+
+        application.server_type = server
+        application.client_type = client
+        self.register(application)
+
+        return application
+
+    def wrap_register_server(self, port: int, server=None, client=None):
+        def _wrap_(application: Type[SiteApplication]):
+            return self.register_server(port, server, client, application)
+        return _wrap_
+
     @cached_property
     def urlpatterns(self):
-        """
-        Get the urlpatterns include all the applications.
-        """
+        """ Get the urlpatterns include all the applications. """
 
         return [urls.path(app.include_url, urls.include(("applications.{}.urls".format(app.name), app.name)),
                           name=app.name)
                 for app in self.applications if app.config.UrlRoute]
 
     def setup_app(self):
-        """
-        Initialize ApplicationManager.
-        """
+        """ Initialize ApplicationManager. """
         assert not self.__is_stp, "ApplicationManager was already initialized!"
 
         for path in APPLICATIONS_DIR:
@@ -133,33 +190,26 @@ class ApplicationManager(object):
 
     @cached_property
     def _including_app_types(self):
-        return f"including {len(self._sync_app)} sync apps, " \
+        return f"{len(self._sync_app)} sync apps, " \
                f"{len(self._async_app)} async apps, " \
                f"{len(self._proc_app)} process apps, " \
                f"{len(self._site_app)} site apps, " \
                f"{len(self._native_app)} native apps"
 
     def run_app(self):
-        for __sync in self._sync_app:
+        for __sync in [*self._sync_app, *self._native_app, *self._proc_app]:
             __sync.start()
 
         for __async in self._async_app:
             __async.start(self.loop)
-        self.loop_thread.start()
-
-        for __process in self._proc_app:
-            __process.start()
 
         for __site in self._site_app:
             __site.start(self.loop)
 
-        for __native in self._native_app:
-            __native.start()
+        self.loop_thread.start()
 
-        if self.length == 1:
-            logger.info(f"{self.length} application has been started ({self._including_app_types}).")
-        elif self.length > 1:
-            logger.info(f"{self.length} applications have been started ({self._including_app_types}).")
+        logger.info(f"{self.length} {['application has been started', 'applications have been started'][self.length>1]}"
+                    f" (including {self._including_app_types}).")
 
     def deploy_app(self):
         self.setup_app()
@@ -175,6 +225,9 @@ class ApplicationManager(object):
     def get_application(self) -> "AbstractApplication":
         _call = _get_called_module_file()
         return self._get_application(_call_from=_call)
+
+    def __str__(self):
+        return f"ApplicationManager({self._including_app_types})"
 
 
 appManager = ApplicationManager()
@@ -341,6 +394,31 @@ class SiteServer(protocol.AsyncServer):
     def start(self) -> None:
         return self.thread.start()
 
+    async def group_send(self, message):
+        _clean_clients = []
+        for client in self.clients:
+            if not await client.send_pickle(message):
+                _clean_clients.append(client)
+        return tuple(map(self.clients.remove, _clean_clients))
+
+    async def receive_from_websocket(self, client, message):
+        self.receiveEvent(protocol.recv_pickle(message))
+
+    def receiveEvent(self, obj: Any):
+        pass
+
+
+class SiteClient(protocol.AsyncClient):
+    def __init__(self, port, loop):
+        super(SiteClient, self).__init__(port, loop)
+        self.listen()
+
+    async def _receiveEvent(self, message):
+        await self.receiveEvent(protocol.recv_pickle(message))
+
+    async def receiveEvent(self, obj: Any):
+        pass
+
 
 class SiteApplication(AbstractApplication):
     """
@@ -366,10 +444,10 @@ class SiteApplication(AbstractApplication):
     """
     port: int
 
-    client: protocol.AsyncClient
+    client: SiteClient
     server: SiteServer
 
-    client_type = protocol.AsyncClient
+    client_type = SiteClient
     server_type = SiteServer
 
     _process: Process
@@ -442,7 +520,7 @@ class SiteApplication(AbstractApplication):
         """
         Run the application (Server) in the subprocess.
 
-        override in subclass
+                override in subclass
         """
         pass
 
