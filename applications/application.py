@@ -107,18 +107,14 @@ class ApplicationManager(object):
             raise ValueError
         return app
 
-    def register_site_application(
+    def lazy_register(
             self,
-            port: int,
+            application: Type["SiteApplication"],
             server: Optional[Type["SiteServer"]] = None,
             client: Optional[Type["SiteClient"]] = None,
-            application: Optional[Type["SiteApplication"]] = None
     ):
         """
         lazily initialize site application.
-
-        :param port:
-            static app port
 
         :param server: subclass of SiteServer:
             `type`
@@ -130,7 +126,6 @@ class ApplicationManager(object):
 
         :param application: subclass of SiteApplication
             `type`
-            `default(SiteServer)`
 
         :call:
             appManager.register
@@ -142,32 +137,12 @@ class ApplicationManager(object):
             warnings.warn("\n\tThe application has already been initialized. "
                           "It can be registered using appManager.register(<app>).\n")
             return self.register(application)
-
-        assert isinstance(port, int)
-        if application is None:
-            application = SiteApplication(port)
-        elif issubclass(application, SiteApplication):
-            application = application(port)
-
+        application = application()
         application.server_type = server or SiteServer
         application.client_type = client or SiteClient
-        _ = _get_called_module_file()
         self.register(application)
 
         return application
-
-    def lazy_setup(self,
-                   server: Optional[Union[Type["SiteServer"], Type["SiteApplication"]]] = None,
-                   client: Optional[Type["SiteClient"]] = None,
-                   ):
-        """ Lazy setup site application. """
-        if server and issubclass(server, SiteApplication):
-            # application 当做 server
-            return self.register_site_application(getattr(server, "port", None), application=server)
-
-        def _wrap_(application: Type[SiteApplication]):
-            return self.register_site_application(getattr(application, "port", None), server, client, application)
-        return _wrap_
 
     @cached_property
     def urlpatterns(self):
@@ -456,9 +431,7 @@ class SiteApplication(AbstractApplication):
     _process: Process
     _thread: Thread
 
-    def __init__(self, port: int = None):
-        if port is not None:
-            self.port = port
+    def __init__(self):
         assert isinstance(self.port, int)
         super().__init__()
 
