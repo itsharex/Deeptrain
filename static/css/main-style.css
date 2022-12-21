@@ -153,8 +153,8 @@ h2.heading-title {
 #section-banner {
     background-size: cover !important;
 }
-@media screen and (orientation: landscape) {#section-banner{background: url("/static/images/background/index.jpg");}}
-@media screen and (orientation: portrait) {#section-banner{background: url("/static/images/background/index-flip.jpg");}}
+@media screen and (orientation: landscape) {#section-banner{background: url("/static/images/background/index.webp");}}
+@media screen and (orientation: portrait) {#section-banner{background: url("/static/images/background/index-flip.webp");}}
 .banner-content {
     padding: 250px 0 300px 0;
 }

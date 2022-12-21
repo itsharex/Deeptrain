@@ -293,12 +293,12 @@ section .color:nth-child(3) {
 }
 
 @media screen and (orientation: portrait) {
-    .login-section {background-image: url("/static/images/background/login-flip.jpg");}
-    .register-section {background-image: url("/static/images/background/register-flip.jpg");}
-    .change-section {background-image: url("/static/images/background/change-flip.jpg");}
+    .login-section {background-image: url("/static/images/background/login-flip.webp");}
+    .register-section {background-image: url("/static/images/background/register-flip.webp");}
+    .change-section {background-image: url("/static/images/background/change-flip.webp");}
 }
 @media screen and (orientation: landscape) {
-    .login-section {background-image: url("/static/images/background/login.jpg");}
-    .register-section {background-image: url("/static/images/background/register.jpg");}
-    .change-section {background-image: url("/static/images/background/change.jpg");}
+    .login-section {background-image: url("/static/images/background/login.webp");}
+    .register-section {background-image: url("/static/images/background/register.webp");}
+    .change-section {background-image: url("/static/images/background/change.webp");}
 }
