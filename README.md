@@ -10,7 +10,8 @@
 > 🧡Django Website, and you can extend applications in the website.
 
 <br></br>
-
+## Application Analysis Map
+![map](/preview/application.jpg)
 ## 🚀️预览 | ScreenShot
 
 ![banner](/preview/main-banner.PNG)
