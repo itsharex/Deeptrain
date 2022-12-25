@@ -25,9 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 with open(os.path.join(BASE_DIR, "config.json"), "r") as f:
     _config = json.load(f)
+
+TURNSTILE_DEFAULT_CONFIG = {
+    'theme': 'light',
+}
+
 if all(_config.values()):
-    HCAPTCHA_SITEKEY = _config["HCAPTCHA_SITEKEY"]
-    HCAPTCHA_SECRET = _config["HCAPTCHA_SECRET"]
+    TURNSTILE_SITEKEY = _config["HCAPTCHA_SITEKEY"]
+    TURNSTILE_SECRET = _config["HCAPTCHA_SECRET"]
 SECRET_KEY = _config["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -51,7 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dwebsocket',
-    'hcaptcha',
+    'turnstile',
     'imagekit',
     'user',
     'im',

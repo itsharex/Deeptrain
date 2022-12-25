@@ -1,5 +1,5 @@
 from django import forms
-from hcaptcha.fields import hCaptchaField as CaptchaField
+from turnstile.fields import TurnstileField as CaptchaField
 from django.core.exceptions import ValidationError
 from .models import *
 
@@ -15,7 +15,7 @@ class FileForm(forms.Form):
         ),
     )
 
-    captcha = CaptchaField()
+    captcha = CaptchaField(theme="dark")
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)

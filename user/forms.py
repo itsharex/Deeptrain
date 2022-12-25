@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.utils.functional import cached_property
-from hcaptcha.fields import hCaptchaField as CaptchaField
+from turnstile.fields import TurnstileField as CaptchaField
 from django.core.exceptions import ValidationError
 from user.models import User, Profile
 
@@ -85,6 +85,7 @@ class UserLoginForm(BaseUserForm):
 
     captcha = CaptchaField(
         label="captcha",
+
         error_messages={
             "required": "Please enter the captcha field",
             "invalid": "The captcha is incorrect"
