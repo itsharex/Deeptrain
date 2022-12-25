@@ -31,8 +31,8 @@ TURNSTILE_DEFAULT_CONFIG = {
 }
 
 if all(_config.values()):
-    TURNSTILE_SITEKEY = _config["HCAPTCHA_SITEKEY"]
-    TURNSTILE_SECRET = _config["HCAPTCHA_SECRET"]
+    TURNSTILE_SITEKEY = _config["TURNSTILE_SITEKEY"]
+    TURNSTILE_SECRET = _config["TURNSTILE_SECRET"]
 SECRET_KEY = _config["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
