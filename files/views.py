@@ -2,6 +2,8 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, FileResponse, JsonResponse, Http404
 from django.shortcuts import render
 from django.core.paginator import Paginator
+
+import files.models
 from DjangoWebsite.settings import FILE_PERMISSION_LEVEL
 from views import login_required, identity_required, ajax_required
 from .forms import FileForm
@@ -42,7 +44,10 @@ def upload(request: WSGIRequest, user) -> HttpResponse:
 def download(request: WSGIRequest, _, uid: int, ufile: str) -> FileResponse:
     directory = get_directory(uid, ufile)
     if os.path.exists(directory):
-        file = UserFile.objects.get(user_bind=uid, uuid_name=ufile).real_name
+        try:
+            file = UserFile.objects.get(user=uid, uuid_name=ufile).real_name
+        except files.models.UserFile.MultipleObjectsReturned:  # get() returned more than one UserFile -- it returned 2!
+            file = UserFile.objects.filter(user=uid, uuid_name=ufile).first().real_name
         return FileResponse(
             open(directory, "rb"),
             as_attachment=True,
