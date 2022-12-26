@@ -230,5 +230,5 @@ IS_CONTAINER = False
 [<img height="32px" src="https://wallhaven.cc/images/layout/logo.png" alt="wallhaven">](https://wallhaven.cc/)&nbsp;
 <br>
 
-[Jetbrains OSS (Open Source Development - Community Support)](https://www.jetbrains.com/community/opensource/#support)
+[`Jetbrains OSS` <br>`(Open Source Development Community Support)`](https://www.jetbrains.com/community/opensource/#support)
 </div>
