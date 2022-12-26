@@ -1,4 +1,5 @@
 # Zh Website
+
 ![GitHub forks](https://img.shields.io/github/forks/zmh-program/Zh-Website)
 ![GitHub Repo stars](https://img.shields.io/github/stars/zmh-program/Zh-Website)
 ![GitHub repo size](https://img.shields.io/github/repo-size/zmh-program/Zh-Website)
@@ -7,107 +8,127 @@
 
 [![star](https://gitee.com/zmh-program/Zh-Website/badge/star.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/stargazers)
 [![fork](https://gitee.com/zmh-program/Zh-Website/badge/fork.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/members)
-> 🧡Django Website, and you can extend applications in the website.
 
-<br></br>
-## Application Analysis Map
-![map](/preview/application.jpg)
-## 🚀️预览 | ScreenShot
+> 🔥 Django WSGI Website, embedding applications in the website.
 
-![banner](/preview/main-banner.PNG)
-![app](/preview/emapp.PNG)
-![features](/preview/main-features.PNG)
-![website info](/preview/main-info.PNG)
-![profile](/preview/profile.PNG)
-![profile page](/preview/profile-page.PNG)
-![register](/preview/register.PNG)
- See the full preview at the *Website Features* below
-## 🍉用前须知 | Before Using
+## 🚀️ ScreenShot
+
+![main](/screenshot/main.png)
+![pc](/screenshot/pc.png)
+![pe](/screenshot/mobile.png)
+![features](/screenshot/features.png)
+![upload](/screenshot/upload.png)
+![admin](/screenshot/admin.png)
+
+## 🍉 QuickStart
 
 - `MySQL` `localhost:3306`
+
   > DjangoWebsite / settings.py / line:94
-
+  >
 - `Redis` `127.0.0.1:6379`
-  > DjangoWebsite / settings.py / line:107 & line:83
 
+  > DjangoWebsite / settings.py / line:107 & line:83
+  >
 - `Unix/Linux system`
 - `python 3.7+`
 
-## ✈快速开始 | QuickStart
   *(run in the parent directory)*
+
 > mysql
+>
 > ```sql
 > create DATABASE `django-database`;
 > ```
 
->command line
+> command line
+>
 > ```commandline
 > cd Zh-Website
 > pip install -r requirements.txt
-> 
+>
 > python manage.py makemigrations
 > python manage.py migrate
-> 
+>
 > python manage.py collectstatic
 > ```
 
+## 🌊 Website Features
 
-## 网站功能 | Website Features
 1. **User**
-  - login
-    ![login](/preview/login.PNG)
-    ![login-mobile](/preview/login-mobile.PNG)
-  - register
-    ![register](/preview/register.PNG)
-    ![register-mobile](/preview/register-mobile.PNG)
-  - change password
-    ![change](/preview/change.PNG)
-    ![change-mobile](/preview/change-mobile.PNG)
-  - profile
-    ![profile](/preview/profile.PNG)
-    ![profile-page](/preview/profile-page.PNG)
 2. **Files**
-    ![upload](/preview/upload.PNG)
-    ![uploading](/preview/uploading.PNG)
-    ![fileupload](/preview/uploadfile.PNG)
-    ![file](/preview/file.PNG)
+3. **Websocket protocol & Instant Message**
+4. **Website Management**
+5. **Database & Cache**
+6. **Embedding Applications**
 
-3. **Admin** (django-SimpleUi)
-![simpleui](/preview/simpleui.PNG)
-![monitor](/preview/monitor.PNG)
-![geoip](/preview/geoip.PNG)
-![github-pages](/preview/github-page.PNG)
+## 🏠 Embedding Applications Structure
 
-4. Chat room
-![chat](/preview/chat.png)
-![chat-2](/preview/chat-2.PNG)
+![application](/screenshot/application.jpg)
 
-5. Database
-  - MySQL (or sqlite3) database
+## 📜 Change Log
 
-6. Cache
-  - Redis
+### version `1.x.x`
 
-8. **内嵌式应用程序 | Embedded Applications**
+- 🥎 `Release 1.0`
+ 1. Basic User Features (login, logout, register, cookies validate)
+- 🌿 `Pre 1.1`
+  1. Prepare to migrate `channels` to `dwebsocket` (websocket protocol)
+- 🎍 `Pre 1.2`
+  1. Update Static Files
 
-![applications](/preview/emapp.PNG)
-
-> Easy to use applications - No need to change other files(outside this application directory), and <`application.appHandler`> automatically calls
->
-> 快速使用app - 不需要更改此app程序父目录外的任何文件, `appHandler`会自动调用
-
-- `startapp.py` 快速创建与搭建应用程序 | easy to create applications
-
-> `startapp.py` 使用`rich`控制台美化 | use `rich.console`
-
-- `applications/application.py`
-- `appHandler` 应用程序管理 | Application Manager
-- `UserApplication` 应用程序类 | Application Class
-  > `AbstractApplication` -> `UserApplication`
-  >
-- `JSONApplicationConsumer` 应用程序用户类 | Application User Class
-  > `channels.generic.websocket.WebsocketConsumer` -> `AbstractApplicationConsumer` -> `JSONApplicationConsumer`
-  >
-- 应用程序信息 | Application Information
-  > `app-name 名称`，`author 作者`， `profile 简介`, `github-address 地址`，`ASGISupport`，`WSGISupport`
-  >
+### version `2.x.x`
+- 🍒 `Release 2.0.0`
+  1. 🎉 Emoji Support 🎉
+  2. 📕 iframe Support ( home page)📘
+  3. ✈ beautify login / register page ✈
+  4. 🔥 Websocket: Channels -> dwebsocket 🔥
+  5. 🚀 Application Config 🚀
+- 🍎 `Release 2.1.3`
+  1. **putting on `ICP record`, deploy website**
+  2. Use Django-form
+  3. Add `django-simple-captcha` validation
+  4. Add Embedding Application Repository Information(`shields.io`)
+  5. Add `Gunicorn` Support
+  6. Add `Websocket Security`(wss) Support
+- 🍋 `Release(s) 2.2.4.1`
+  - File Features
+    1. validation, limits (including `permission`, `file size`, `file name length`)
+    2. download
+    3. upload (client `ajax` upload, server `uuid` file handle)
+    4. cache
+    5. pagination
+- `Pre 2.3.0 to 2.3.1`
+  - GeoIP Monitor (User country, request region analysis) v2.3.0-2.3.1
+- `Pre 2.3.2-alpha to 2.3.2-beta.2`
+  - Instant Message (Websocket Protocol)
+- 🌍 `Pre 2.4.0 to 2.4.1`
+  - `django-simple-captcha` -> `hCaptcha` verify
+- ✈ `Pre 2.5.0 to 2.5.0.2`
+   - Improve the performance of code & database
+   - User Django-auth
+- 🌲 `Pre 2.6.0 to 2.6.0.3`
+  - Replit and Vercel deployment 
+- 🔥 `Pre 2.7.0-2.7.2.3`
+  - Admin Analysis Pages 
+    - Users & Requests Region Distribution
+    - Server & Website Monitor
+- 🌱 `Pre 2.7.3 to 2.7.12`
+  - Change Password Page 
+  - **Intelligent verification**
+    - change password page
+    - login page
+    - register page
+  - User Avatars
+  - update Profile Page (`gitee`, `github`, `codepen` info)
+- 🎇 `Release 2.7`
+- 🍀 `Pre 2.8.0 to 2.8.4.2`
+  - dockerfile
+  - update `Embedding Applications` structure
+  - `SiteApplication` construction
+- 📕 `Pre 2.9.0 to 2.9.1`
+  - Reduce Photo size (per < 0.6MiB)
+- 🚀 `Release 2.10.0 to 2.10.3`
+  - `hCaptcha` -> `Cloudflare Turnstile` verify
+  - Network attack and defense TEST (php) **Thanks to @APGPerson**
+    - fixed file download bug
