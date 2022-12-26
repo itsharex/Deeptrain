@@ -11,6 +11,11 @@
 
 > 🔥 Django WSGI Website, embedding applications in the website.
 
+> **Website (`LightHouse`)**
+> 1. **[zmh-program.site](https://zmh-program.site) - tencent cloud**
+> 2. *[zh-website.zmh-program.repl.co](https://zh-website.zmh-program.repl.co) - replit*
+> 3. *[zh-website.vercel.app](https://zh-website.vercel.app) - vercel (redirect)*
+
 ## 🚀️ ScreenShot
 
 ![screenshot](/screenshot/screenshot.png)
