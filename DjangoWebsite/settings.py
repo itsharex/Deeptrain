@@ -109,30 +109,7 @@ WSGI_APPLICATION = 'DjangoWebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default':
-        {
-            'ENGINE': 'django.db.backends.mysql',  # module
-            'NAME': 'django-database',  # database name
-            'HOST': 'localhost',  # ip
-            'PORT': 3306,
-            'USER': 'root',
-            'PASSWORD': 'zmh200904',
-        }
-}
-
-# Cache
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
-
-IS_CONTAINER = bool(os.getenv("CONTAINER", 0))
+IS_CONTAINER = True
 # Container: Do not have MySQL & Redis, Production environment
 # Go to Zh-Website Replit Page: https://Zh-Website.zmh-program.repl.co/
 if IS_CONTAINER:
@@ -150,7 +127,29 @@ if IS_CONTAINER:
             'LOCATION': 'website-cache',
         }
     }
+else:
+    DATABASES = {
+        'default':
+            {
+                'ENGINE': 'django.db.backends.mysql',  # module
+                'NAME': 'django-database',  # database name
+                'HOST': 'localhost',  # ip
+                'PORT': 3306,
+                'USER': 'root',
+                'PASSWORD': 'zmh200904',
+            }
+    }
 
+    # Cache
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": "redis://127.0.0.1:6379/",
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            }
+        }
+    }
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

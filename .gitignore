@@ -3,3 +3,4 @@
 superuser.ini
 .vs
 files/database/*/*
+db.sqlite3

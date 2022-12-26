@@ -8,11 +8,23 @@
 [![star](https://gitee.com/zmh-program/Zh-Website/badge/star.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/stargazers)
 [![fork](https://gitee.com/zmh-program/Zh-Website/badge/fork.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/members)
 
+![Lines of code](https://img.shields.io/tokei/lines/github/zmh-program/Zh-Website)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/zmh-program/Zh-Website)
+&nbsp;
+![GitHub language count](https://img.shields.io/github/languages/count/zmh-program/Zh-Website)
+![GitHub top language](https://img.shields.io/github/languages/top/zmh-program/Zh-Website)
 > 🔥 Django WSGI Website, embedding applications in the website.
+<div align="center">
 
+![system: linux/unix](https://img.shields.io/badge/system-Linux%2FUnix-important)
+&nbsp;
+![python: 3.7+](https://img.shields.io/badge/python-3.7%2B-blue)
+
+</div>
 <hr>
 
-> **Website Online**
+> **🌎 Website Online 🌏** 
+> <br>&nbsp;&nbsp;![Website](https://img.shields.io/website?url=https%3A%2F%2Fzmh-program.site)
 > 1. **[zmh-program.site](https://zmh-program.site) - tencent cloud**
 > 2. *[zh-website.zmh-program.repl.co](https://zh-website.zmh-program.repl.co) - replit (container)*
 > 3. *[zh-website.vercel.app](https://zh-website.vercel.app) - vercel (redirect)*
@@ -21,51 +33,114 @@
 
 ![screenshot](/screenshot/screenshot.png)
 
-## 🍉 QuickStart
-
-- `MySQL` `localhost:3306`
-
-  > DjangoWebsite / settings.py / line:94
-  >
-- `Redis` `127.0.0.1:6379`
-
-  > DjangoWebsite / settings.py / line:107 & line:83
-  >
-- `Unix/Linux system`
-- `python 3.7+`
-
-  *(run in the parent directory)*
-
-> mysql
->
-> ```sql
-> create DATABASE `django-database`;
-> ```
-
-> command line
->
-> ```commandline
-> cd Zh-Website
-> pip install -r requirements.txt
->
-> python manage.py makemigrations
-> python manage.py migrate
->
-> python manage.py collectstatic
-> ```
-
 ## 🌊 Website Features
-
-1. **User**
-2. **Files**
-3. **Websocket protocol & Instant Message**
-4. **Website Management**
-5. **Database & Cache**
-6. **Embedding Applications**
+1. 🍹  **User**
+2. 🥁  **Files**
+3. 🧃  **Websocket protocol & Instant Message**
+4. 🍵  **Website Management**
+5. ☕  **Database & Cache**
+6. 🍷  **Embedding Applications**
 
 ## 🏠 Embedding Applications Structure
 
 ![application](/screenshot/application.jpg)
+
+## 🍉 QuickStart Production
+
+1. initialize
+   *(there is no need to make migrations)*
+   ```commandline
+   cd Zh-Website
+   pip install -r requirements.txt
+   python manage.py migrate
+   ```
+
+2. run
+    ```commandline
+      python manage.py
+    ```
+
+## 🌏 Deploy
+ 1. initialize
+    ```commandline
+     cd Zh-Website
+     pip install -r requirements.txt
+    
+     python manage.py migrate
+     python manage.py collectstatic
+    ```
+ 2. run
+    ```commandline
+    gunicorn -c gunicorn.conf.py DjangoWebsite:wsgi:application
+    ```
+ 3. Nginx Example Configuration
+    ```nginx configuration
+    server
+    {
+        listen 80;
+        server_name localhost;
+    
+        location ~ ^/(\.user.ini|\.htaccess|\.git|\.svn|\.project|LICENSE|README.md)
+        {
+            return 404;
+        }
+    
+        location / {
+         proxy_pass http://127.0.0.1:8000;
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection "upgrade";
+        }
+    
+          location /static {
+            alias /static/;
+        }
+        location /media {
+            alias /media/;
+        }
+    
+        location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
+        {
+            expires      10h;
+            error_log /dev/null;
+            access_log /dev/null;
+        }
+    
+        location ~ .*\.(js|css)?$
+        {
+            expires      1h;
+            error_log /dev/null;
+            access_log /dev/null;
+        }
+    }
+    ```
+## 📕 Settings
+**[DjangoWebsite / `settings`.py](/DjangoWebsite/settings.py)**
+
+from 
+```python
+IS_CONTAINER = True
+```
+rewrite to
+*(settings.py - line 112)*
+```python
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+IS_CONTAINER = False
+```
+- `MySQL - localhost:3306` *(line 131)*
+  > mysql
+  >
+  > ```sql
+  > create DATABASE `django-database`;
+  > ```
+  <hr>
+- `Redis - 127.0.0.1:6379` *(line 144)*
+
 
 ## 📜 Change Log
 
