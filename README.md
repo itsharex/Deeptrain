@@ -13,12 +13,7 @@
 
 ## 🚀️ ScreenShot
 
-![main](/screenshot/main.png)
-![pc](/screenshot/pc.png)
-![pe](/screenshot/mobile.png)
-![features](/screenshot/features.png)
-![upload](/screenshot/upload.png)
-![admin](/screenshot/admin.png)
+![screenshot](/screenshot/screenshot.png)
 
 ## 🍉 QuickStart
 
