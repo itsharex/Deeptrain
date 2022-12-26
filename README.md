@@ -118,6 +118,8 @@
     }
     ```
 ## 📕 Settings
+*⚠ initialize then!*
+
 **[DjangoWebsite / `settings`.py](/DjangoWebsite/settings.py)**
 
 from 
@@ -138,9 +140,8 @@ IS_CONTAINER = False
   > ```sql
   > create DATABASE `django-database`;
   > ```
-  <hr>
 - `Redis - 127.0.0.1:6379` *(line 144)*
-
+<hr>
 
 ## 📜 Change Log
 
@@ -208,3 +209,26 @@ IS_CONTAINER = False
   - `hCaptcha` -> `Cloudflare Turnstile` verify
   - Network attack and defense TEST (php) **Thanks to @APGPerson**
     - fixed file download bug
+
+
+## Thanks
+<div align="center">
+
+[<img height="32px" src="https://www.tencentcloud.com/favicon.ico" alt="tencent cloud">](https://www.tencentcloud.com/)&nbsp;
+[<img height="32px" src="https://www.kaggle.com/static/images/favicon.ico" alt="kaggle">](https://kaggle.com/)&nbsp;
+[<img height="32px" src="https://docs.replit.com/image/logo.svg" alt="replit">](https://replit.com/)&nbsp;
+<br>
+[<img height="32px" src="https://cdn-icons-png.flaticon.com/128/5968/5968866.png" alt="github">](https://github.com/)&nbsp;
+[<img height="32px" src="https://gitee.com/favicon.ico" alt="gitee">](https://gitee.com/)&nbsp;
+[<img height="32px" src="https://cdn-icons-png.flaticon.com/128/1377/1377243.png" alt="codepen">](https://codepen.io/)&nbsp;
+[<img height="32px" src="https://cdn-icons-png.flaticon.com/128/5969/5969044.png" alt="cloudflare">](https://cloudflare.com/)&nbsp;
+<br>
+[<img height="32px" src="https://code.visualstudio.com/favicon.ico" alt="vscode">](https://code.visualstudio.com/)&nbsp;
+[<img height="32px" src="https://account.jetbrains.com/static/favicon.ico" alt="jetbrains">](https://www.jetbrains.com/)&nbsp;
+<br>
+[<img height="32px" src="https://media.flaticon.com/dist/min/img/logo/flaticon_negative.svg" alt="favicon">](https://www.flaticon.com/)&nbsp;
+[<img height="32px" src="https://wallhaven.cc/images/layout/logo.png" alt="wallhaven">](https://wallhaven.cc/)&nbsp;
+<br>
+
+[Jetbrains OSS (Open Source Development - Community Support)](https://www.jetbrains.com/community/opensource/#support)
+</div>
