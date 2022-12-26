@@ -135,8 +135,6 @@ rewrite to
 IS_CONTAINER = False
 ```
 - `MySQL - localhost:3306` *(line 131)*
-  > mysql
-  >
   > ```sql
   > create DATABASE `django-database`;
   > ```
