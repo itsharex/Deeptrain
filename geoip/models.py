@@ -5,6 +5,7 @@ class IPRequestAnalysis(models.Model):
     class Meta:
         db_table = "geoip"
         verbose_name = "IP Analysis"
+        verbose_name_plural = "IP Analysis"
 
     total = models.PositiveIntegerField(default=0)
     json_countries = models.TextField()

@@ -56,7 +56,7 @@ def save_file(user: User, file: File):
 
 class UserFile(models.Model):
     class Meta:
-        verbose_name = "Files"
+        verbose_name = "File"
         db_table = "file"
 
     id: models.AutoField
