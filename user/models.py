@@ -16,6 +16,10 @@ identity_choices = list(identities.items())
 
 
 class User(AbstractUser):
+    class Meta:
+        db_table = "auth"
+        verbose_name = "User"
+
     identity = models.SmallIntegerField(choices=identity_choices, default=0)
     country = models.TextField(max_length=50, default="Unknown")
 
@@ -55,6 +59,10 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
+    class Meta:
+        db_table = "user_profile"
+        verbose_name = "User Profile"
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile = models.TextField(default="", max_length=200)
     avatar = ProcessedImageField(
