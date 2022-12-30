@@ -7,7 +7,7 @@ import websocket
 from views import login_required
 
 user_image = "/static/images/chat_user.png"
-host_image = "https://cdn-icons-png.flaticon.com/128/6908/6908194.png"
+ROBOT_IMAGE = "https://cdn-icons-png.flaticon.com/128/8811/8811373.png"
 
 
 class IMClient(websocket.WebClient):
@@ -44,16 +44,16 @@ class IMServerClientGroup(websocket.WebClientGroup):
     def host_send(self, message=""):
         for client in self.get_available_clients():
             client: IMClient
-            client.send("host", message, -1, host_image, False, "Server-Owner")
+            client.send("Chat Robot", message, -1, ROBOT_IMAGE, False, "Server-Owner")
 
-    def group_send(self, sender: IMClient, message="", image=user_image):
+    def group_send(self, sender: IMClient, message=""):
         for client in self.get_available_clients():
             client: IMClient
             client.send(
                 sender.username,
                 message,
                 client.id,
-                image, client.admin,
+                sender.profile.avatar, client.admin,
                 client.identity
             )
 
