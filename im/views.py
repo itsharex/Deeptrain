@@ -67,7 +67,7 @@ class IMServerClientGroup(websocket.WebClientGroup):
         self.host_send(f"{client.username} 加入服务器, 当前人数 {self.get_available_clients_length()}.")
 
     def existEvent(self, sock: IMClient) -> None:
-        self.host_send(f"您已在另一端建立链接,  如若想重新登录, 请刷新页面.")
+        self.host_send("您已在另一端建立链接,  如若想重新登录, 请刷新页面.")
         self.remove_client(sock, silence=True)
 
 

@@ -178,6 +178,7 @@ class WebClientGroup(JSONGroup):
             if user and user.identity >= self.level_required:
                 user: User
                 sock = self.client_type(request.websocket, user, self, _start=False)
+                self.detect_client(sock)
                 self.sockets.append(sock)
                 self.joinEvent(sock)
                 return sock.listen()
