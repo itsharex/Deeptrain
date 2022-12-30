@@ -6,7 +6,6 @@ from dwebsocket import require_websocket
 import websocket
 from views import login_required
 
-user_image = "/static/images/chat_user.png"
 ROBOT_IMAGE = "https://cdn-icons-png.flaticon.com/128/8811/8811373.png"
 
 
