@@ -52,7 +52,7 @@ class IMServerClientGroup(websocket.WebClientGroup):
                 sender.username,
                 message,
                 client.id,
-                sender.profile.avatar, client.admin,
+                sender.profile.avatar.url, client.admin,
                 client.identity
             )
 
