@@ -45,7 +45,7 @@ class AbstractSocket(object):
         pass
 
     def disconnectEvent(self) -> None:
-        self.group.remove_client(self)
+        pass
 
     def connectEvent(self) -> None:
         pass
@@ -188,7 +188,7 @@ class WebClientGroup(JSONGroup):
     def detect_client(self, target: WebClient):
         for sock in self.sockets:
             if target.is_same(sock):
-                return sock.existEvent()
+                return self.existEvent(sock)
 
     def remove_client(self, sock: WebClient, silence=False) -> bool:
         if super(WebClientGroup, self).remove_client(sock):

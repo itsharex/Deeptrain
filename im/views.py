@@ -34,9 +34,6 @@ class IMClient(websocket.WebClient):
             'time': int(time.time()),
         })
 
-    def disconnectEvent(self) -> None:
-        super(IMClient, self).disconnectEvent()
-
 
 class IMServerClientGroup(websocket.WebClientGroup):
     client_type = IMClient
