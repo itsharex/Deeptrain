@@ -1,5 +1,3 @@
-import time
-
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, Http404, JsonResponse

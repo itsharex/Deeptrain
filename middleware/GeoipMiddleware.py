@@ -1,6 +1,7 @@
 from geoip.cache import countryCache
 from geoip.geoip import get_ip
 from monitor.monitor import monitor
+from monitor.cache import requestCache
 from django.core.handlers.wsgi import WSGIRequest
 from django.utils.deprecation import MiddlewareMixin
 
@@ -16,4 +17,5 @@ class GeoipMiddleware(MiddlewareMixin):
         request.ip = ip
         request.country = countryCache.ip(ip)
         monitor.requests += 1
+        requestCache.add()
         return

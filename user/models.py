@@ -26,9 +26,6 @@ class User(AbstractUser):
     def __int__(self):
         return self.id
 
-    def __str__(self):
-        return self.as_string
-
     @cached_property
     def is_admin(self) -> bool:
         return self.identity >= 2
@@ -37,8 +34,7 @@ class User(AbstractUser):
     def real_identity(self) -> str:
         return identities[self.identity]
 
-    @cached_property
-    def as_string(self):
+    def __str__(self):
         return f"{self.username} (identity: {self.real_identity}, id: {self.id})"
 
     @cached_property

@@ -1,6 +1,5 @@
 import json
 from typing import *
-import numpy
 from django.utils import timezone
 from .models import IPRequestAnalysis
 from .cache import countryCache
@@ -57,17 +56,6 @@ def analysis() -> Dict[str, any]:
         "userData": as_echarts_map(countryVal),
         "registeredData": list(reversed(registers)),
     }
-
-
-def analysis_site_request() -> Tuple[int]:
-    cursor = timezone.datetime.date(timezone.now()) - timezone.timedelta(days=6)
-    arrays = []
-    for _ in range(7):
-        arrays.append(numpy.sum(IPRequestAnalysis.objects.filter(time__date=cursor).values_list("total"),
-                                dtype=numpy.int8))
-        cursor += timezone.timedelta(days=1)
-    arrays[-1] += countryCache.total_requests
-    return tuple(map(int, arrays))
 
 
 if __name__ == "__main__":

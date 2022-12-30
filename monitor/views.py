@@ -4,7 +4,7 @@ from django.shortcuts import render
 from dwebsocket import require_websocket
 from views import admin_required, ajax_required
 from .monitor import monitor
-from geoip.analysis import analysis_site_request
+from .analysis import analysis_request
 
 
 @admin_required
@@ -20,4 +20,4 @@ def monitor_websocket(request, token) -> None:
 @ajax_required
 @admin_required
 def site_request(request: WSGIRequest, _):
-    return JsonResponse(analysis_site_request(), safe=False)
+    return JsonResponse(analysis_request(), safe=False)
