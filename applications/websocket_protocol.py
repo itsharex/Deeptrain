@@ -143,7 +143,6 @@ class AsyncServer(object):
     def add_client(self, websocket: server.WebSocketServerProtocol):
         #  host validate
         host = websocket.remote_address[0]
-        print(websocket.remote_address)
         if host in self.allow_hosts:
             client = self.client_type(websocket, self)
             self.clients.append(client)

@@ -1,6 +1,4 @@
 from typing import *
-from typing import Union, Any
-
 from django.utils import timezone
 from .models import RequestAnalysis as model
 from .cache import requestCache
