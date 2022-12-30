@@ -15,7 +15,6 @@ btn.addEventListener('click',function (e) {
   });
 
 closeBtn.forEach(function (element, index) {
-   console.log(element);
     element.addEventListener('click',function (e) {
         e.preventDefault();
         closeEditInterface();

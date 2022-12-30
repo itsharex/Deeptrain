@@ -1,8 +1,11 @@
+import time
+
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required as _auth_login_required
+from django.views.decorators.cache import cache_page
 from user.models import User
 from user.forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm, UserProfileForm
 from DjangoWebsite.settings import LOGIN_URL
@@ -67,6 +70,7 @@ admin_required = identity_required(2)
 owner_required = identity_required(3)
 
 
+@cache_page(60)
 def index(request: WSGIRequest) -> HttpResponse:
     return render(request, "index.html")
 

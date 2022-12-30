@@ -1,10 +1,12 @@
 import json
 from typing import List, Any, Union
 import jwt.exceptions
+from django.utils.functional import cached_property
+
 from dwebsocket.backends.default import websocket
 from DjangoWebsite.settings import CODING
 from webtoken import validate_token
-from user.models import User
+from user.models import User, Profile
 
 
 class AbstractSocket(object):
@@ -146,11 +148,17 @@ class WebClient(JSONSocket):
     def __init__(self, sock: websocket.DefaultWebSocket, user: User, group: "AbstractGroup", _start: bool = False):
         super().__init__(sock, group, _start)
         self.user: User = user
-        # self.profile: Profile = self.user.profile
         self.id: int = user.id
         self.username = user.username
         self.admin: bool = self.user.is_admin
         self.identity: str = self.user.real_identity
+
+    @cached_property
+    def profile(self) -> Profile:
+        return self.user.profile
+
+    def is_same(self, sock: "WebClient") -> bool:
+        return sock.id == self.id
 
 
 class WebClientGroup(JSONGroup):
@@ -166,19 +174,25 @@ class WebClientGroup(JSONGroup):
 
     def add_client(self, request, token: str = "") -> Union[WebClient, None]:
         try:
-            response = validate_token(token)
-            if response and response.identity >= self.level_required:
-                response: User
-                sock = self.client_type(request.websocket, response, self, _start=False)
+            user = validate_token(token)
+            if user and user.identity >= self.level_required:
+                user: User
+                sock = self.client_type(request.websocket, user, self, _start=False)
                 self.sockets.append(sock)
                 self.joinEvent(sock)
                 return sock.listen()
         except jwt.exceptions.DecodeError:
             return
 
-    def remove_client(self, sock: WebClient) -> bool:
+    def detect_client(self, target: WebClient):
+        for sock in self.sockets:
+            if target.is_same(sock):
+                return sock.existEvent()
+
+    def remove_client(self, sock: WebClient, silence=False) -> bool:
         if super(WebClientGroup, self).remove_client(sock):
-            self.leaveEvent(sock)
+            if silence:
+                self.leaveEvent(sock)
             return True
         return False
 
@@ -186,4 +200,7 @@ class WebClientGroup(JSONGroup):
         pass
 
     def leaveEvent(self, sock: WebClient) -> None:
+        pass
+
+    def existEvent(self, sock: WebClient) -> None:
         pass
