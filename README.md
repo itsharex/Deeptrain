@@ -134,30 +134,22 @@
 
 *⚠ initialize then!*
 
-**[DjangoWebsite / `settings`.py](/DjangoWebsite/settings.py)**
-
-from
-
-```python
-IS_CONTAINER = True
-```
+https://github.com/zmh-program/Zh-Website/blob/main/DjangoWebsite/settings.py#L114
 
 rewrite to
-*(settings.py - line 112)*
-
 ```python
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 IS_CONTAINER = False
 ```
 
-- `MySQL - localhost:3306` *(line 131)*
+- `MySQL` 
+  
+  https://github.com/zmh-program/Zh-Website/blob/main/DjangoWebsite/settings.py#L133-L143
   > ```sql
   > create DATABASE `django-database`;
   > ```
   >
-- `Redis - 127.0.0.1:6379` *(line 144)*
+- `Redis`
+  https://github.com/zmh-program/Zh-Website/blob/main/DjangoWebsite/settings.py#L145-L154
 
 <hr>
 
@@ -232,7 +224,7 @@ IS_CONTAINER = False
     - fixed file download bug
 - 📚 `Pre 2.11.0 to 2.11.6`
   - Update README style
-- 🙌 `Pre 2.12.0 to 2.12.6`
+- 🙌 `Pre 2.12.0 to 2.12.6.1`
   - update models
   - update im
   - Use Verify using `Turnstile` and `hCaptcha` dual components
