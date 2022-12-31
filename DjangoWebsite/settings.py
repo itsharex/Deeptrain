@@ -33,7 +33,9 @@ TURNSTILE_DEFAULT_CONFIG = {
 if all(_config.values()):
     TURNSTILE_SITEKEY = _config["TURNSTILE_SITEKEY"]
     TURNSTILE_SECRET = _config["TURNSTILE_SECRET"]
-SECRET_KEY = _config["SECRET_KEY"]
+    HCAPTCHA_SITEKEY = _config["HCAPTCHA_SITEKEY"]
+    HCAPTCHA_SECRET = _config["HCAPTCHA_SECRET"]
+SECRET_KEY = _config["SECRET_KEY"] or "django-insecure-#l#3ps7+(*+7f#0cz=aj-sp!6$-waaf6h=*+=5h*(5njj_^)@8"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -57,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dwebsocket',
     'turnstile',
+    'hcaptcha',
     'imagekit',
     'user',
     'im',
@@ -78,7 +81,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middleware.CodecMiddleware.CodecMiddleware',
     'middleware.GeoipMiddleware.GeoipMiddleware',
-    # 'dwebsocket.middleware.WebSocketMiddleware',
 ]
 
 ROOT_URLCONF = 'DjangoWebsite.urls'
@@ -250,8 +252,7 @@ MONITOR_INTERVAL = 1  # 1 second
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-#  run manage.py -> False
-#  gunicorn wsgi.py -> True
+# AUTO DETECTION! DO NOT CHANGED! (run manage.py -> False, gunicorn wsgi.py -> True)
 IS_DEPLOYED = True
 
 DEFAULT_HOST = "127.0.0.1"

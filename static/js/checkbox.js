@@ -112,6 +112,30 @@ function oldPasswordValidator() {
     return validator;
 }
 
+function hCaptchaValidator() {
+    // hCaptcha.com 引入稍慢, 因此等iframe引入后运行
+    // 异步, 不阻塞线程
+    let captchaInput;
+    let checkbox = createCheckbox("captcha", "Please enter the Captcha");
+    let isSuccess = false;
+    let validator = () => {
+        return !isSuccess? checkbox.error(): checkbox.success();
+    }
+    let interval = setInterval(function() {
+        if (!!document.getElementById("id_captcha").children[0]) {
+            clearTimeout(interval);
+            captchaInput = document.getElementById("id_captcha").children[0];
+            // captchaInput.onclick = captchaInput.onfocusout = ()=>{validator()};
+            let captchaInterval = setInterval(function() {
+                isSuccess = !!captchaInput.getAttribute("data-hcaptcha-response");
+                if (isSuccess) {clearTimeout(captchaInterval);validator()}
+            }, 200);
+        }
+    }, 500);
+
+    return validator;
+}
+
 function TurnstileValidator() {
     // turnstile 引入稍慢, 因此等iframe引入后运行
     // 异步, 不阻塞线程
@@ -125,7 +149,6 @@ function TurnstileValidator() {
         if (!!document.getElementById("id_captcha").children[0]) {
             clearTimeout(interval);
             captchaInput = document.getElementById("id_captcha").children[1];
-            // captchaInput.onclick = captchaInput.onfocusout = ()=>{validator()};
             let captchaInterval = setInterval(function() {
                 isSuccess = !!captchaInput.getAttribute("value");
                 if (isSuccess) {clearTimeout(captchaInterval);validator()}

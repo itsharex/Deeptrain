@@ -3,6 +3,7 @@ from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.utils.functional import cached_property
 from turnstile.fields import TurnstileField as CaptchaField
+from hcaptcha.fields import hCaptchaField
 from django.core.exceptions import ValidationError
 from user.models import User, Profile
 
@@ -155,7 +156,7 @@ class UserRegisterForm(BaseUserForm):
         )
     )
 
-    captcha = CaptchaField(
+    captcha = hCaptchaField(
         label="captcha",
         required=True,
         error_messages={
