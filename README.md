@@ -232,6 +232,14 @@ IS_CONTAINER = False
     - fixed file download bug
 - 📚 `Pre 2.11.0 to 2.11.6`
   - Update README style
+- 🙌 `Pre 2.12.0 to 2.12.6`
+  - update models
+  - update im
+  - Use Verify using `Turnstile` and `hCaptcha` dual components
+    - `Turnstile`: file-upload, login, change-password pages
+    - `hCaptcha`: register page
+  - Fixed the failure of multiple verification codes submitted by the deployment environment
+    - call `(hcaptcha or turnstile).refresh()`
 
 ## Thanks
 
