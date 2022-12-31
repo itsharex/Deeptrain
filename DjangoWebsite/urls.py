@@ -34,6 +34,7 @@ urlpatterns = [
     path("change/", views.change, name="change"),
     path("home/", views.home, name="home"),
     path("profile/", views.profile, name="profile"),
+    path("oauth/", include(("oauth.urls", "oauth")), name="oauth"),
     path("im/", include(("im.urls", "im")), name="im"),
     path("applications/", include(("applications.urls", "applications")), name="applications"),
     path("files/", include(("files.urls", "files")), name="files"),

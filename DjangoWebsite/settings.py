@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'hcaptcha',
     'imagekit',
     'user',
+    'oauth',
     'im',
     'files',
     'geoip',
@@ -79,8 +80,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middleware.CodecMiddleware.CodecMiddleware',
-    'middleware.GeoipMiddleware.GeoipMiddleware',
+    'monitor.middleware.MonitorMiddleware.MonitorMiddleware',
 ]
 
 ROOT_URLCONF = 'DjangoWebsite.urls'

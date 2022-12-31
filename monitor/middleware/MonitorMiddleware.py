@@ -1,18 +1,19 @@
+from DjangoWebsite.settings import CODING
 from geoip.cache import countryCache
 from geoip.geoip import get_ip
-from monitor.monitor import monitor
-from monitor.cache import requestCache
+from ..monitor import monitor
+from ..cache import requestCache
 from django.core.handlers.wsgi import WSGIRequest
 from django.utils.deprecation import MiddlewareMixin
 
 
-class GeoipMiddleware(MiddlewareMixin):
+class MonitorMiddleware(MiddlewareMixin):
     def __init__(self, *args, **kwargs):
-        super(GeoipMiddleware, self).__init__(*args, **kwargs)
+        super(MonitorMiddleware, self).__init__(*args, **kwargs)
+        self.coding = CODING
 
-    @staticmethod
-    def process_request(request: WSGIRequest):
-        # request.country = countryCache(request)
+    def process_request(self, request: WSGIRequest):
+        request.encoding = self.coding
         ip = get_ip(request)
         request.ip = ip
         request.country = countryCache.ip(ip)
