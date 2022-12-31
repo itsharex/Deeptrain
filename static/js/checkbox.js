@@ -160,6 +160,8 @@ function TurnstileValidator() {
 }
 
 function refresh() {
+    // In the deployment environment, when the user submits with the same response, the server prompts the unverified problem
+    // Use reset to refresh the Turnstile or hCaptcha widget
     try {
         turnstile.reset();
     } catch  {
