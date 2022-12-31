@@ -159,6 +159,14 @@ function TurnstileValidator() {
     return validator;
 }
 
+function refresh() {
+    try {
+        turnstile.reset();
+    } catch  {
+        hcaptcha.reset();
+    }
+}
+
 let userForm = {
     defaultText: "Waiting for the reply...",
     checkbox: createCheckbox("error", this.defaultText, false),
@@ -171,6 +179,7 @@ let userForm = {
         this.checkbox.error();
         this.checkbox.display();
         this.checkbox.setText(msg);
+        refresh();
     },
     form: document.getElementById("user-form"),
     submit: function () {
