@@ -152,7 +152,7 @@ section .color:nth-child(3) {
 }
 
 .form .title-div {
-    width: min-content;
+    width: max-content;
 }
 .form .title-div h2 {
     position: relative;
@@ -166,6 +166,11 @@ section .color:nth-child(3) {
     -webkit-text-fill-color: transparent;
 }
 
+.compare-h2 {
+    background: -webkit-linear-gradient(-70deg, red 0%, #6944ff 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
 /* 登录标题的下划线样式 */
 
 .form .title-div h2::before {
@@ -188,6 +193,29 @@ section .color:nth-child(3) {
     margin-top: 20px;
 }
 
+.form .input-box.oauth-box {
+    font-size: large;
+    display: flex;
+}
+
+.form .input-box.oauth-box a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 20%;
+    transition: .3s;
+}
+
+.form .input-box.oauth-box span {
+    margin: 5px;
+    transform: translate(4px, -5px);
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    padding: 3px 6px;
+    border-radius: 5px;
+}
+
 .checkip .inputText {
     width: 100%;
 	height:100%;
@@ -195,7 +223,7 @@ section .color:nth-child(3) {
 }
 
 
-.form .input-box input, #submit-box {
+.form .input-box input, #submit-box, .oauth-button {
     width: 100%;
     padding: 10px 20px;
     background: rgba(255, 255, 255, 0.2);
@@ -211,8 +239,8 @@ section .color:nth-child(3) {
     transition: 0.4s;
 }
 
-.form .input-box input:hover, #submit-box:hover,
-.form .input-box input:active, #submit-box:active{
+.form .input-box input:hover, #submit-box:hover, .oauth-button:hover,
+.form .input-box input:active, #submit-box:active, .oauth-button:active {
     color: #000;
 }
 
@@ -241,7 +269,7 @@ section .color:nth-child(3) {
     color: #112;
 }
 
-#submit-box {
+#submit-box, .oauth-button {
     background: #fff;
     color: #666;
     width: min-content;
@@ -255,8 +283,20 @@ section .color:nth-child(3) {
     user-select: none;
 }
 
-#submit-box:hover {
+.oauth-button {
+    width: max-content !important;
+    margin: -8px -5% 10px auto;
+}
+
+#submit-box:hover, .oauth-button:hover {
     color: #000;
+}
+.success-icon:hover {
+    color: forestgreen !important;
+}
+.success-icon {
+    color: green;
+    text-transform: none !important;
 }
 
 .forget {
@@ -292,13 +332,56 @@ section .color:nth-child(3) {
     transform: translateY(15%);
 }
 
+.gradient-hr {
+    margin: -18px 9px 40px;
+    width: 100%;
+    height: 1px;
+    color: purple;
+}
+
+.oauth-hr {
+    margin: 8px 5px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.oauth-hr::before, .oauth-hr::after {
+    content: "";
+    position: relative;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.8);
+    width: 50px;
+    height: 1px;
+    display: inline-block;
+    margin: 9px 5px;
+}
+
+.oauth-container {
+    display: flex;
+    flex-direction: row;
+    height: max-content;
+    width: 100%;
+    gap: 10px;
+    justify-content: center;
+}
+
+.oauth {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+}
+
 @media screen and (orientation: portrait) {
     .login-section {background-image: url("/static/images/background/login-flip.webp");}
     .register-section {background-image: url("/static/images/background/register-flip.webp");}
     .change-section {background-image: url("/static/images/background/change-flip.webp");}
+    .bind-section {background-image: url("/static/images/background/bind-flip.webp");}
 }
 @media screen and (orientation: landscape) {
     .login-section {background-image: url("/static/images/background/login.webp");}
     .register-section {background-image: url("/static/images/background/register.webp");}
     .change-section {background-image: url("/static/images/background/change.webp");}
+    .bind-section {background-image: url("/static/images/background/bind.webp");}
 }

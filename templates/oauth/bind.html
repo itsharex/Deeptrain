@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bind OAuth Applications</title>
+    <link rel="shortcut icon" href="{% static 'images/oauth.png' %}" type="image/x-icon">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-family.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+</head>
+<body>
+    <section class="bind-section">
+        <div class="color"></div><div class="color"></div><div class="color"></div>
+        <div class="box">
+            <div class="circle" style="--x:0"></div><div class="circle" style="--x:1"></div><div class="circle" style="--x:2"></div><div class="circle" style="--x:3"></div><div class="circle" style="--x:4"></div>
+            <div class="container">
+                <div class="form">
+                    <div class="title-div"><h2 class="compare-h2">Bind OAuth Apps</h2></div>
+                    <hr class="gradient-hr">
+                    <form id="bind-form">
+                        {% for app in oauth %}
+                            <div class="input-box oauth-box">
+                                <a href="javascript:void(0)"><img class="oauth" src="{{ app.icon }}" alt><span>{{ app.name }}</span></a>
+                                {% if app.authorize %}
+                                    <div class="oauth-button success-icon"><i class="fa fa-solid fa-check"></i> {{ app.username }}</div>
+                                {% else %}
+                                    <div class="oauth-button" onclick="window.location.href='{{ app.url }}'"><i class="fa fa-solid fa-link"></i>&nbsp;Bind</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

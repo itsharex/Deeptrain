@@ -17,7 +17,7 @@
             <div class="circle" style="--x:0"></div><div class="circle" style="--x:1"></div><div class="circle" style="--x:2"></div><div class="circle" style="--x:3"></div><div class="circle" style="--x:4"></div>
             <div class="container">
                 <div class="form">
-                    <div class="title-div"><h2>Change Password</h2></div>
+                    <div class="title-div"><h2 class="compare-h2">Change Password</h2></div>
                     <form id="user-form" ajax="/change/">
                         {% csrf_token %}
                         <div class="input-box">{{ form.old_password }}</div>

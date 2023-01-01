@@ -5,9 +5,10 @@ from typing import *
 from json import loads
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import JsonResponse
+from django.shortcuts import redirect, render
 from django.utils.functional import cached_property
 from django.urls import path
+from user.models import User
 from .models import OAuthModel
 
 
@@ -25,8 +26,15 @@ class OAuthApplicationManager(object):
         return [app.app_path for app in self.apps]
 
     @cached_property
-    def template(self) -> List[Dict[str, str]]:
-        return [{"name": app.APPNAME, "icon": app.ICON, "url": app.authorize_url} for app in self.apps]
+    def login_template(self) -> List[Dict[str, str]]:
+        return [app.get_login_template() for app in self.apps]
+
+    def bind_template(self, user: User):
+        return [app.get_bind_template(user) for app in self.apps]
+
+
+def throw_bad_request(request, reason):
+    return render(request, "oauth/error.html", {"reason": reason})
 
 
 class OAuthApplication(object):
@@ -45,8 +53,6 @@ class OAuthApplication(object):
         )
         self.client = oauth2.Client(self.consumer)
 
-        print(self.authorize_url)
-
     @cached_property
     def authorize_url(self):
         return f"{self.SITE_URL}/authorize?client_id={self.SITEKEY}"
@@ -56,29 +62,53 @@ class OAuthApplication(object):
 
     @property
     def app_path(self):
-        return path(f"callback/{self.APPNAME.lower()}/", self.callback_view, name=self.APPNAME)
+        return path(f"callback/{self.APPNAME.lower()}/", self.callback, name=self.APPNAME)
+
+    def get_oauth_username(self, user: User) -> Union[bool, str]:
+        query = OAuthModel.objects.filter(oauth_app=self.APPNAME, user=user)
+        if not query.exists():
+            return False
+        return query.first().oauth_name
+
+    def get_login_template(self):
+        return {
+            "name": self.APPNAME,
+            "icon": self.ICON,
+            "url": self.authorize_url,
+        }
+
+    def get_bind_template(self, user: User):
+        resp = self.get_oauth_username(user)
+        authorized = resp is not False
+
+        return {
+            "name": self.APPNAME,
+            "icon": self.ICON,
+            "url": self.authorize_url,
+            "authorize": authorized,
+            "username": resp,
+        }
 
     def handle_api(self, api: dict, request: WSGIRequest):
         oauth_id = api.get("id")
         oauth_name = api.get("login")
         user = request.user
-        if oauth_name and oauth_id:
-            if not user.is_authenticated:  # 作为第三方登录, 在cookies/sessions未储存用户模型实例, 即未登录状态, 查询已注册的oauth数据库
-                query = OAuthModel.objects.filter(oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.APPNAME)
-                if query.exists():
-                    auth.login(request, query.first().user)
-                    return {"success": True}
-                else:
-                    return {"success": False, "reason": "OAuth authentication failed"}
-            else:  # 状态已登录, 设置绑定 OAuth App
-                OAuthModel.objects.create(user=user, oauth_id=oauth_id, oauth_name=oauth_name)
-                return {"success": True}
+        if not (oauth_name and oauth_id):
+            return
+        print(user.is_authenticated)
+        if not user.is_authenticated:  # 作为第三方登录, 在cookies/sessions未储存用户模型实例, 即未登录状态, 查询已注册的oauth数据库
+            query = OAuthModel.objects.filter(oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.APPNAME)
+            if query.exists():
+                auth.login(request, query.first().user)
+                return redirect("/home/")
+            else:
+                return throw_bad_request(request, "OAuth authentication failed")
+        else:  # 状态已登录, 设置绑定 OAuth App
+            OAuthModel.objects.create(user=user, oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.APPNAME)
+            return redirect("/oauth/bind/")
 
     def callback(self, request: WSGIRequest):
         pass
-
-    def callback_view(self, request: WSGIRequest):
-        return JsonResponse(self.callback(request))
 
     def parse_content(self, content) -> bool:
         pass
@@ -115,7 +145,7 @@ class GithubOAuthApplication(OAuthApplication):
     SITE_URL = "https://github.com/login/oauth"
     TOKEN_URL = "https://api.github.com/user"
 
-    ICON = "https://www.flaticon.com/free-icon/github_5968866"
+    ICON = "https://cdn-icons-png.flaticon.com/128/5968/5968810.png"
 
     def __init__(self):
         super().__init__()
@@ -145,8 +175,8 @@ class GithubOAuthApplication(OAuthApplication):
                         return self.handle_api(loads(token_content), request)
             except (TimeoutError, SSLError):
                 pass
-            return {"success": False, "reason": "Timed out"}
-        return {"success": False, "reason": "Code is empty"}
+            return throw_bad_request(request, "Timed out")
+        return throw_bad_request(request, "Code is empty")
 
 
 class GiteeOAuthApplication(OAuthApplication):
@@ -164,7 +194,7 @@ class GiteeOAuthApplication(OAuthApplication):
 
     REDIRECT_URI = "http://zmh.site:8000/oauth/callback/gitee/"  # 设置gitee回调地址(必须) 可以设置本机hosts文件 将域名dns至本机
 
-    ICON = "https://gitee.com/static/images/logo.svg"
+    ICON = "https://gitee.com/favicon.ico"
 
     def __init__(self):
         super().__init__()
@@ -201,8 +231,8 @@ class GiteeOAuthApplication(OAuthApplication):
                         return self.handle_api(loads(token_content), request)
             except (TimeoutError, SSLError):
                 pass
-            return {"success": False, "reason": "Timed out"}
-        return {"success": False, "reason": "Code is empty"}
+            return throw_bad_request(request, "Timed out")
+        return throw_bad_request(request, "Code is empty")
 
 
 oauthManager = OAuthApplicationManager(

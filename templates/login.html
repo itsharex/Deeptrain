@@ -27,6 +27,12 @@
                         <div class="input-box"><div id="submit-box" class="nunito">login</div></div>
                     </form>
                     <p class="forget">Do not have account?<a href="/register/">Create one</a></p>
+                    <div><span class="oauth-hr nunito">OAuth Login</span><div>
+                    <div class="oauth-container">
+                        {% for app in oauth %}
+                            <a href="{{ app.url }}"><img class="oauth" src="{{ app.icon }}" alt="{{ app.name }}"></a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ from django.views.decorators.cache import cache_page
 from user.models import User
 from user.forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm, UserProfileForm
 from DjangoWebsite.settings import LOGIN_URL
+from oauth.oauth import oauthManager
 
 
 def ajax_required(_decorate_exec: callable) -> callable:
@@ -78,7 +79,7 @@ def login(request: WSGIRequest) -> HttpResponse:
     if request.POST:
         return JsonResponse(UserLoginForm(request).get_response())
     else:
-        return render(request, 'login.html', {"form": UserLoginForm(request)})
+        return render(request, 'login.html', {"form": UserLoginForm(request), "oauth": oauthManager.login_template})
 
 
 @authenticated_redirect

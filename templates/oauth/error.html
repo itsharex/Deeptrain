@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link href="{% static 'css/oauth/oauth.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="mars"></div>
+<img src="https://assets.codepen.io/1538474/404.svg" class="logo-404" alt>
+<img src="https://assets.codepen.io/1538474/meteor.svg" class="meteor" alt>
+<p class="title">Oh no !</p>
+<p class="subtitle">
+	{{ reason | safe }}
+</p>
+<div align="center">
+	<a class="btn-back" href="" onclick="window.history.go(-1);window.location.reload()">Back to OAuth Page</a>
+</div>
+<img src="https://assets.codepen.io/1538474/astronaut.svg" class="astronaut" alt>
+<img src="https://assets.codepen.io/1538474/spaceship.svg" class="spaceship"  alt>
+</body>
+</html>
