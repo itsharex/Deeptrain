@@ -34,9 +34,11 @@
 4. [x]  🍵  **Website Management**
 5. [x]  ☕  **Database & Cache**
 6. [x]  🍷  **Embedding Applications**
-7. [ ]  🌏  **i18n** *(Internationalization)*
-8. [ ]  👋  **OAuth** *(Open Authorization)*
-9. [ ]  📚  **Blog**
+7. [x]  👋  **OAuth** *(Open Authorization)*
+     - `Github`
+     - `Gitee`
+8. [ ]  📚  **Blog**
+9. [ ]  🌏  **i18n** *(Internationalization)*
 
 <br>
 
@@ -131,7 +133,7 @@
    ```
 
 ## Deploy Config
-https://github.com/zmh-program/Zh-Website/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/config.json#L1-L8
+https://github.com/zmh-program/Zh-Website/blob/7a44e9597a40d7407e1fe8c9c995663c266eecc8/config.json#L1-L18
 
 ## 📕 Settings
 
@@ -152,9 +154,9 @@ IS_CONTAINER = False
   > ```
   >
 - `Redis`
+  
   https://github.com/zmh-program/Zh-Website/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/DjangoWebsite/settings.py#L145-L154
 
-<hr>
 
 ## 📜 Change Log
 
@@ -235,6 +237,11 @@ IS_CONTAINER = False
     - `hCaptcha`: register page
   - Fixed the failure of multiple verification codes submitted by the deployment environment
     - call `(hcaptcha or turnstile).refresh()`
+- 🧃 `Release 2.13.0 to 2.13.3`
+  - **OAuth** *(Open Authorization)*
+    - OAuth Login
+    - OAuth Bind *(Support `Github`, `Gitee`)*
+    - OAuth Config
 
 ## Thanks
 
