@@ -10,6 +10,7 @@ from django.utils.functional import cached_property
 from django.urls import path
 from user.models import User
 from .models import OAuthModel
+from DjangoWebsite.settings import OAUTH_CONFIG
 
 
 class OAuthApplicationManager(object):
@@ -17,9 +18,15 @@ class OAuthApplicationManager(object):
     like:
         /oauth/callback/github/
     """
+    apps: List["OAuthApplication"]
 
-    def __init__(self, *apps):
-        self.apps: List["OAuthApplication"] = [app() for app in apps]
+    def __init__(self, config):
+        self.apps = []
+
+        for app_type, conf in config.items():
+            app = OAuthTypeSupport.get(app_type)
+            if app:
+                self.apps.append(app(**conf))
 
     @property
     def urlpatterns(self):
@@ -46,7 +53,10 @@ class OAuthApplication(object):
 
     ICON = ""
 
-    def __init__(self):
+    def __init__(self, SITEKEY, SECRET):
+        self.SITEKEY = SITEKEY
+        self.SECRET = SECRET
+
         self.consumer = oauth2.Consumer(
             key=self.SITEKEY,
             secret=self.SECRET,
@@ -95,7 +105,6 @@ class OAuthApplication(object):
         user = request.user
         if not (oauth_name and oauth_id):
             return
-        print(user.is_authenticated)
         if not user.is_authenticated:  # 作为第三方登录, 在cookies/sessions未储存用户模型实例, 即未登录状态, 查询已注册的oauth数据库
             query = OAuthModel.objects.filter(oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.APPNAME)
             if query.exists():
@@ -140,15 +149,13 @@ class GithubOAuthApplication(OAuthApplication):
 
     APPNAME = "GitHub"
 
-    SITEKEY = "05b353c81e2c15bf148d"  # Client ID
-    SECRET = "69e7f754938df94ae9ba9743a48c76a831e9e7cd"  # Client Secrets
+    SITEKEY: str  # Client ID
+    SECRET: str   # Client Secrets
+
     SITE_URL = "https://github.com/login/oauth"
     TOKEN_URL = "https://api.github.com/user"
 
     ICON = "https://cdn-icons-png.flaticon.com/128/5968/5968810.png"
-
-    def __init__(self):
-        super().__init__()
 
     def verify_url(self, code):
         params = urlencode({
@@ -187,17 +194,14 @@ class GiteeOAuthApplication(OAuthApplication):
 
     APPNAME = "Gitee"
 
-    SITEKEY = "a0fa985b1e26127f188285d69de2b66b3de8ed03a50e11866acb1a1d595c92fd"  # Client ID
-    SECRET = "3786a2b1f9d6b77e6ba3079613ac4e76ff388b32d98f2d110fa845f1d0eaedc6"  # Client Secret
+    SITEKEY: str  # Client ID
+    SECRET: str   # Client Secret
     SITE_URL = "https://gitee.com/oauth"
     TOKEN_URL = "https://gitee.com/api/v5/user"
 
     REDIRECT_URI = "http://zmh.site:8000/oauth/callback/gitee/"  # 设置gitee回调地址(必须) 可以设置本机hosts文件 将域名dns至本机
 
     ICON = "https://gitee.com/favicon.ico"
-
-    def __init__(self):
-        super().__init__()
 
     @cached_property
     def authorize_url(self):
@@ -235,7 +239,11 @@ class GiteeOAuthApplication(OAuthApplication):
         return throw_bad_request(request, "Code is empty")
 
 
+OAuthTypeSupport = {
+    "GitHub": GithubOAuthApplication,
+    "Gitee": GiteeOAuthApplication,
+}
+
 oauthManager = OAuthApplicationManager(
-    GithubOAuthApplication,
-    GiteeOAuthApplication,
+    OAUTH_CONFIG,
 )

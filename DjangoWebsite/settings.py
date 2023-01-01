@@ -246,6 +246,9 @@ TOKEN_VALID_TIME = 60 * 3  # unit: seconds
 # Monitor Settings
 MONITOR_INTERVAL = 1  # 1 second
 
+# OAuth:
+OAUTH_CONFIG = _config["OAUTH"]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
