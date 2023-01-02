@@ -8,3 +8,6 @@ class RequestAnalysis(models.Model):
 
     date = models.DateField(auto_now_add=True, )
     request = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Request Analysis Object (date: {self.date}, request: {self.request}"

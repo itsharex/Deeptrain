@@ -38,6 +38,19 @@ def exec_website() -> 0:
     return int(not not execute_from_command_line(exec_line))
 
 
+def create_superuser(name, pwd, email):
+    """
+    > python manage.py shell
+    >>> import manage; manage.create_superuser("<your name>", "<your password>", "<your email>")
+    """
+
+    django.setup()
+
+    from user.models import User, Profile
+    superuser = User.objects.create_superuser(username=name, password=pwd, email=email, identity=3, country="China")
+    Profile.objects.create(user=superuser, profile="")
+
+
 if __name__ == '__main__':
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoWebsite.settings')

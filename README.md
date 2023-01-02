@@ -26,6 +26,18 @@
 </div>
 <hr>
 
+> **🌎 Website Online 🌏**
+> <br>&nbsp;&nbsp;![Website](https://img.shields.io/website?url=https%3A%2F%2Fzmh-program.site)
+>
+> 1. **[zmh-program.site](https://zmh-program.site) - tencent cloud**
+> 2. *[zh-website.zmh-program.repl.co](https://zh-website.zmh-program.repl.co) - replit (container)*
+> 3. *[zh-website.vercel.app](https://zh-website.vercel.app) - vercel (redirect)*
+
+## 🚀️ ScreenShot
+
+![screenshot](/screenshot/screenshot.png)
+
+
 ## 🌊 Website Features
 
 1. [x]  🍹  **User**
@@ -38,20 +50,10 @@
      - `Github`
      - `Gitee`
 8. [ ]  📚  **Blog**
-9. [ ]  🌏  **i18n** *(Internationalization)*
+9. [ ]  📫  **Email Verify**
+10. [ ]  🌏  **i18n** *(Internationalization)*
 
 <br>
-
-> **🌎 Website Online 🌏**
-> <br>&nbsp;&nbsp;![Website](https://img.shields.io/website?url=https%3A%2F%2Fzmh-program.site)
->
-> 1. **[zmh-program.site](https://zmh-program.site) - tencent cloud**
-> 2. *[zh-website.zmh-program.repl.co](https://zh-website.zmh-program.repl.co) - replit (container)*
-> 3. *[zh-website.vercel.app](https://zh-website.vercel.app) - vercel (redirect)*
-
-## 🚀️ ScreenShot
-
-![screenshot](/screenshot/screenshot.png)
 
 ## 🏠 Embedding Applications Structure
 

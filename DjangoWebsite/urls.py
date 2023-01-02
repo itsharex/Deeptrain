@@ -37,6 +37,7 @@ urlpatterns = [
     path("oauth/", include(("oauth.urls", "oauth")), name="oauth"),
     path("im/", include(("im.urls", "im")), name="im"),
     path("applications/", include(("applications.urls", "applications")), name="applications"),
+    path("blog/", include(("blog.urls", "blog")), name="blog"),
     path("files/", include(("files.urls", "files")), name="files"),
     path("geoip/", include(("geoip.urls", "geoip")), name="geoip"),
     path("monitor/", include(("monitor.urls", "monitor")), name="monitor"),

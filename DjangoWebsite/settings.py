@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'haystack',
+    'mdeditor',
     'dwebsocket',
     'turnstile',
     'hcaptcha',
@@ -67,8 +69,10 @@ INSTALLED_APPS = [
     'files',
     'geoip',
     'monitor',
+    'blog',
+
+    *APPLICATIONS_DIR[:],
 ]
-INSTALLED_APPS += APPLICATIONS_DIR[:]
 
 #  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
 
@@ -202,6 +206,16 @@ SIMPLEUI_CONFIG = {
         }
     ],
 }
+
+# Haystack
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'blog.backend.jieba_whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 8
 
 # Encode / Decode
 CODING = "utf-8"
