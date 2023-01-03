@@ -69,6 +69,10 @@ admin_required = identity_required(2)
 owner_required = identity_required(3)
 
 
+def throw_bad_request(request, reason):
+    return render(request, "error.html", {"reason": reason})
+
+
 @cache_page(60)
 def index(request: WSGIRequest) -> HttpResponse:
     return render(request, "index.html")

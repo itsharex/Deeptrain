@@ -1,6 +1,9 @@
 from django.db import models
+from django.urls import reverse
+from django.utils.functional import cached_property
 from user.models import User
 from mdeditor.fields import MDTextField
+from .parser import parse_markdown
 
 
 class Tag(models.Model):
@@ -23,3 +26,18 @@ class Article(models.Model):
 
     def __str__(self):
         return f"{self.author.username}'s Article - {self.title}"
+
+    @property
+    def likes_number(self) -> int:
+        return self.likes.count()
+
+    @cached_property
+    def url(self):
+        return reverse("blog:article", args=(self.id, ))
+
+    def content_html(self):
+        return parse_markdown(self.content)
+
+    @cached_property
+    def datetime(self):
+        return self.published_at.strftime("%Y-%m-%d %H:%M:%S")

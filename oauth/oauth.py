@@ -11,6 +11,7 @@ from django.urls import path
 from user.models import User
 from .models import OAuthModel
 from DjangoWebsite.settings import OAUTH_CONFIG
+#  from views import throw_bad_request   未初始化导入问题
 
 
 class OAuthApplicationManager(object):
@@ -38,10 +39,6 @@ class OAuthApplicationManager(object):
 
     def bind_template(self, user: User):
         return [app.get_bind_template(user) for app in self.apps]
-
-
-def throw_bad_request(request, reason):
-    return render(request, "oauth/error.html", {"reason": reason})
 
 
 class OAuthApplication(object):
