@@ -1,18 +1,25 @@
 # Zh Website
+<div align="center">
 
-![GitHub forks](https://img.shields.io/github/forks/zmh-program/Zh-Website)
-![GitHub Repo stars](https://img.shields.io/github/stars/zmh-program/Zh-Website)
-![GitHub repo size](https://img.shields.io/github/repo-size/zmh-program/Zh-Website)
-![GitHub repo file count](https://img.shields.io/github/directory-file-count/zmh-program/Zh-Website)
-![GitHub](https://img.shields.io/github/license/zmh-program/Zh-Website)
-[![star](https://gitee.com/zmh-program/Zh-Website/badge/star.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/stargazers)
-[![fork](https://gitee.com/zmh-program/Zh-Website/badge/fork.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/members)
+  ![GitHub forks](https://img.shields.io/github/forks/zmh-program/Zh-Website)
+  ![GitHub Repo stars](https://img.shields.io/github/stars/zmh-program/Zh-Website)
+  ![GitHub repo size](https://img.shields.io/github/repo-size/zmh-program/Zh-Website)
+  ![GitHub repo file count](https://img.shields.io/github/directory-file-count/zmh-program/Zh-Website)
+  ![GitHub](https://img.shields.io/github/license/zmh-program/Zh-Website)
+  [![star](https://gitee.com/zmh-program/Zh-Website/badge/star.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/stargazers)
+  [![fork](https://gitee.com/zmh-program/Zh-Website/badge/fork.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/members)
 
-![Lines of code](https://img.shields.io/tokei/lines/github/zmh-program/Zh-Website)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/zmh-program/Zh-Website)
-&nbsp;
-![GitHub language count](https://img.shields.io/github/languages/count/zmh-program/Zh-Website)
-![GitHub top language](https://img.shields.io/github/languages/top/zmh-program/Zh-Website)
+</div>
+
+<div align="center">
+
+  ![Lines of code](https://img.shields.io/tokei/lines/github/zmh-program/Zh-Website)
+  ![GitHub release (latest by date)](https://img.shields.io/github/v/release/zmh-program/Zh-Website)
+  &nbsp;
+  ![GitHub language count](https://img.shields.io/github/languages/count/zmh-program/Zh-Website)
+  ![GitHub top language](https://img.shields.io/github/languages/top/zmh-program/Zh-Website)
+
+</div>
 
 > 🔥 Zh-Website, An Open Source Deep Reinforcement Learning training platform
 
