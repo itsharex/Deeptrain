@@ -22,6 +22,8 @@
             文章标签:
             {% for tag in article.tags.all %}
                 <span class="tag layui-badge-rim">{{ tag.tag }}</span>
+            {% empty %}
+                无
             {% endfor %}
         </div>
     </div>

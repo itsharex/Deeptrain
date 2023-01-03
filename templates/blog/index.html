@@ -9,23 +9,60 @@
 <body>
 <form class="layui-card layui-form layui-col-md6  layui-col-sm9 layui-col-xs11 search-container" action="">
     <button class="layui-btn" lay-submit lay-filter="formDemo"><i class="layui-icon layui-icon-search"></i></button>
-    <input type="text" name="q" required lay-verify="required" placeholder="请输入搜索内容" autocomplete="off" class="layui-input">
+    <input type="text" name="q" placeholder="请输入搜索内容" autocomplete="off" class="layui-input" value="{{ query }}">
 </form>
+{% if query %}
 <div class="blog-container">
-{% for article in paginator %}
-    <div class="layui-panel panel">
-        <a href="{{ article.url }}"><h2>{{ article.title }}</h2></a>
-        <hr>
-        <a href="{{ article.url }}"><p>{{ article.preview }}</p></a>
-        <br>
-        <div class="blog-info">
-            <a href="/profile?id={{ article.author.id }}/" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.author.username }}</div></span></a>
-            <span><div class="time"><i class="layui-icon layui-icon-time"></i> {{ article.date }}</div></span>
-            <span><i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;{{ article.likes_number }}</span>
+    {% load highlight %}
+    {% for article in page.object_list %}
+        <div class="layui-panel panel">
+            <a href="{{ article.object.url }}"><h2>{% highlight article.object.title with query %}</h2></a>
+            <hr>
+            <a href="{{ article.object.url }}"><p>{% highlight article.object.preview with query %}</p></a>
+            <hr>
+            <div>
+                文章标签:
+                {% for tag in article.object.tags.all %}
+                    <span class="tag layui-badge-rim">{% highlight tag.tag with query %}</span>
+                {% empty %}
+                    无
+                {% endfor %}
+            </div>
+            <br>
+            <div class="blog-info">
+                <a href="/profile?id={{ article.object.author.id }}/" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.object.author.username }}</div></span></a>
+                <span><div class="time"><i class="layui-icon layui-icon-time"></i> {{ article.object.date }}</div></span>
+                <span><i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;{{ article.object.likes_number }}</span>
+            </div>
         </div>
-    </div>
-{% endfor %}
+    {% endfor %}
 </div>
+{% else %}
+<div class="blog-container">
+    {% for article in page %}
+        <div class="layui-panel panel">
+            <a href="{{ article.url }}"><h2>{{ article.title }}</h2></a>
+            <hr>
+            <a href="{{ article.url }}"><p>{{ article.preview }}</p></a>
+            <hr>
+            <div>
+                文章标签:
+                {% for tag in article.tags.all %}
+                    <span class="tag layui-badge-rim">{{ tag.tag }}</span>
+                {% empty %}
+                    无
+                {% endfor %}
+            </div>
+            <br>
+            <div class="blog-info">
+                <a href="/profile?id={{ article.author.id }}/" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.author.username }}</div></span></a>
+                <span><div class="time"><i class="layui-icon layui-icon-time"></i> {{ article.date }}</div></span>
+                <span><i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;{{ article.likes_number }}</span>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
 <div id="pagination"></div>
 <script src="https://lib.baomitu.com/layui/2.7.6/layui.min.js"></script>
 <script>
@@ -33,11 +70,11 @@
         function() {
             layui.laypage.render({
             elem: 'pagination',
-            count: {{ total }},
+            count: {{ page.paginator.num_pages }},
             jump: (page, first) => {
-                if (!first){window.location.href = `/blog/?page=${page.curr}`}
+                if (!first){window.location.href = `/blog/?page=${page.curr}&q={{ query }}`}
             },
-            curr: {{ paginator.number }},
+            curr: {{ page.number }},
         });
     });
 </script>

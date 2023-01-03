@@ -16,8 +16,8 @@ body {
     padding: 15px;
 }
 .blog-container .panel {
-    width: 400px;
-    max-height: 300px;
+    width: 350px;
+    min-height: 180px;
     height: max-content;
     padding: 15px;
 }
@@ -40,6 +40,10 @@ body {
 #pagination {
     align-self: center;
 }
+.tag {
+    color: #277ccc;
+    cursor: pointer;
+}
 .search-container {
     display: flex !important;
     flex-direction: row;
@@ -47,6 +51,9 @@ body {
     height: max-content;
     align-self: center;
     padding: 5px !important;
+}
+span.highlighted {
+    color: red;
 }
 
 @media screen and (max-width: 768px) {

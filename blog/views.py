@@ -1,9 +1,10 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.core.paginator import Paginator
+from haystack.views import SearchView
 from .models import Article
 from DjangoWebsite.settings import BLOG_PAGINATION
-from django.core.paginator import Paginator
 from views import throw_bad_request
 
 
@@ -11,10 +12,27 @@ def boolean_to_javascript(val):
     return "true" if val else "false"
 
 
-def index(request: WSGIRequest):
-    pagination = Paginator(Article.objects.all(), BLOG_PAGINATION)
-    page = pagination.page(request.GET.get("page", 1))
-    return render(request, "blog/index.html", {"paginator": page, "total": pagination.num_pages})
+class BlogSearchView(SearchView):
+    template = "blog/index.html"
+
+    @property
+    def drf_context(self):
+        return JsonResponse(super().get_context(), safe=True)
+
+    def __call__(self, request: WSGIRequest):
+        """
+        Generates the actual response to the search.
+
+        Relies on internal, overridable methods to construct the response.
+        """
+
+        query = request.GET.get("q")
+        if not query:
+            pagination = Paginator(Article.objects.all(), BLOG_PAGINATION)
+            page = pagination.page(request.GET.get("page", 1))
+            return render(request, self.template, {"page": page, "query": ""})
+        else:
+            return super().__call__(request)
 
 
 def article(request: WSGIRequest, idx):
@@ -33,7 +51,8 @@ def article(request: WSGIRequest, idx):
 def like(request: WSGIRequest, idx):
     user = request.user
     if not user.is_authenticated:
-        return JsonResponse({"success": False, "reason": "您还未登录, 请先 <a href='/login/' class='layui-font-blue'>登录</a>"})
+        return JsonResponse(
+            {"success": False, "reason": "您还未登录, 请先 <a href='/login/' class='layui-font-blue'>登录</a>"})
     query = Article.objects.filter(id=idx)
     if query.exists():
         article_instance = query.first()
