@@ -10,14 +10,13 @@
 <body>
 <div class="layui-col-xs11 layui-col-md9 layui-col-sm10 blog-content layui-anim-fadein">
     {% csrf_token %}
+    <a href="javascript:window.history.back();" class="back"><i class="layui-icon layui-icon-left"></i> 返回</a>
     <h1 class="blog-title">{{ article.title }}</h1>
     <br>
     <div class="blog-info">
         <div class="column">
-            <a href="/profile?id={{ article.author.id }}/" target="_blank">
-                <img src="{{ article.author.avatar_url }}" alt>&nbsp;{{ article.author.username }}
-            </a>
-            <div class="time"><i class="layui-icon layui-icon-time"></i> 发布于{{ article.datetime }}</div>
+            <a href="/profile?id={{ article.author.id }}/" target="_blank"><img src="{{ article.author.avatar_url }}" alt>&nbsp;{{ article.author.username }}</a>
+            <div class="time"><i class="layui-icon layui-icon-time"></i> 发布于 {{ article.datetime }}</div>
         </div>
         <div class="column tags">
             文章标签:
@@ -30,108 +29,27 @@
     <div id="content" class="layui-card-body">
         {{ article.content_html | safe }}
     </div>
-    <button id="like" type="button" class="layui-btn layui-btn-primary">
-        <i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;<span id="like-number"></span>
-    </button>
+    <br><hr>
+    <div class="blog-footer">
+        <button type="button" class="layui-btn layui-btn-primary">
+            <div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.author.username }}</div>
+        </button>
+        <button type="button" class="layui-btn layui-btn-primary">
+            <div class="time"><i class="layui-icon layui-icon-time"></i> 发布于 {{ article.datetime }}</div>
+        </button>
+        <button id="like" type="button" class="layui-btn layui-btn-primary">
+            <i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;<span id="like-number"></span>
+        </button>
+    </div>
+</div>
+<div class="layui-col-xs11 layui-col-md9 layui-col-sm10 blog-content layui-anim-fadein">
+
 </div>
 <script src="https://lib.baomitu.com/jquery/1.12.4/jquery.js"></script>
 <script src="https://lib.baomitu.com/layui/2.7.6/layui.min.js"></script>
 <script src="{% static 'js/notify.js' %}"></script>
+<script src="{% static 'js/blog/article.js' %}"></script>
 <script>
-    let is_star = false;
-
-    class Like {
-        constructor(number=0, state=false, article_idx=0) {
-            this.button = document.getElementById("like");
-            this.icon = document.getElementById("like-icon");
-            this.nlike = document.getElementById("like-number");
-            this.state = state;
-            this.number = number;
-            this.article_idx = article_idx;
-
-            let _this = this;
-            this.button.onclick = () => (_this.submit());
-            this.render();
-        }
-        clear() {
-            notify.destroyAll();
-            clearTimeout(this.timeout);
-        }
-        success(reason) {
-            this.clear();
-            notify.success(reason, "topRight");
-        }
-        error(reason) {
-            this.clear();
-            notify.error(reason, "topRight");
-        }
-        warning(reason) {
-            this.clear();
-            notify.warning(reason, "topRight");
-        }
-        info(reason) {
-            this.clear();
-            notify.info(reason, "topRight");
-        }
-        add(...classes) {
-            for (let i = 0; i < classes.length; i++) {
-                this.icon.classList.add(classes[i]);
-            }
-        }
-        remove(...classes) {
-            for (let i = 0; i < classes.length; i++) {
-                this.icon.classList.remove(classes[i]);
-            }
-        }
-        like() {
-            this.add("layui-icon-heart-fill");
-            this.remove("layui-icon-heart");
-            this.remove("layui-icon-loading-1", "layui-anim", "layui-anim-rotate", "layui-anim-loop");
-        }
-        dislike() {
-            this.add("layui-icon-heart");
-            this.remove("layui-icon-heart-fill");
-            this.remove("layui-icon-loading-1", "layui-anim", "layui-anim-rotate", "layui-anim-loop");
-        }
-        loading() {
-            let _this = this;
-            this.timeout = setTimeout(function() {
-                _this.add("layui-icon-loading-1", "layui-anim", "layui-anim-rotate", "layui-anim-loop");
-                _this.remove("layui-icon-heart");
-                _this.remove("layui-icon-heart-fill");
-                notify.loading("正在提交中...", "topRight");
-            }, 500)
-        }
-        render() {
-            this.state?this.like():this.dislike();
-            this.nlike.innerHTML = this.number.toString();
-        }
-        submit() {
-            this.loading();
-
-            let _this = this;
-            console.log(this.state)
-            $.ajax({
-                url: `/blog/submit/like/${this.article_idx}/`,
-                method: "POST",
-                dataType: "json",
-                data : {
-                    "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
-                },
-                success: data => {
-                    if (data.success) {
-                        _this.success(data.reason);
-                        _this.state = data.state;
-                        _this.number = data.number;
-                    } else {
-                        _this.warning(data.reason);
-                    }
-                    _this.render();
-                },
-                error: () => (_this.error("服务器连接失败, 请稍后重试")),
-            })
-        }
-    }
     const like = new Like({{ article.likes_number }}, {{ state }}, {{ article.id }});
 </script>
 </body>

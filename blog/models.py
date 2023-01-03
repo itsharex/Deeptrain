@@ -41,3 +41,7 @@ class Article(models.Model):
     @cached_property
     def datetime(self):
         return self.published_at.strftime("%Y-%m-%d %H:%M:%S")
+
+    @cached_property
+    def date(self):
+        return self.published_at.strftime("%Y-%m-%d")

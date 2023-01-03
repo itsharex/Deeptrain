@@ -45,11 +45,26 @@ html, body {
 }
 .blog-content {
     justify-self: center;
-    position: absolute !important;
     box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.1);
     background: #fff;
     padding: 50px;
-    margin: 8px auto auto;
+    margin: 12px auto;
+}
+.blog-content .back {
+    color: orangered;
+    font-size: 13px;
+    position: relative;
+}
+.blog-content .back i {
+    font-size: 12px;
+}
+.blog-footer {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+}
+.blog-footer button {
+    width: max-content;
 }
 @media screen and (max-width: 768px) {
     .blog-content {
@@ -57,5 +72,9 @@ html, body {
     }
     .blog-info {
         padding: 5px;
+    }
+    .blog-footer {
+        flex-direction: column;
+        align-items: center;
     }
 }

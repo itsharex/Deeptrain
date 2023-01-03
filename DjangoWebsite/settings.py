@@ -207,16 +207,6 @@ SIMPLEUI_CONFIG = {
     ],
 }
 
-# Haystack
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'blog.backend.jieba_whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
-    }
-}
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-HAYSTACK_SEARCH_RESULTS_PER_PAGE = 8
-
 # Encode / Decode
 CODING = "utf-8"
 WS_INTERVAL = 0.04
@@ -240,6 +230,16 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "/static/")
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Haystack & Blog Settings
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'blog.backend.jieba_whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = BLOG_PAGINATION = 8
 
 #  File Settings
 FILE_DATABASE_DIR = os.path.join(BASE_DIR, "files", "database")

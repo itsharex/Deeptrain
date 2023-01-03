@@ -3,8 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Blogs</title>
+    <link href="{% static 'css/blog/index.css' %}" rel="stylesheet">
+    <link href="https://lib.baomitu.com/layui/2.7.6/css/layui.min.css" rel="stylesheet">
 </head>
 <body>
-
+<form class="layui-card layui-form layui-col-md6  layui-col-sm9 layui-col-xs11 search-container" action="">
+    <button class="layui-btn" lay-submit lay-filter="formDemo"><i class="layui-icon layui-icon-search"></i></button>
+    <input type="text" name="q" required lay-verify="required" placeholder="请输入搜索内容" autocomplete="off" class="layui-input">
+</form>
+<div class="blog-container">
+{% for article in paginator %}
+    <div class="layui-panel panel">
+        <a href="{{ article.url }}"><h2>{{ article.title }}</h2></a>
+        <hr>
+        <a href="{{ article.url }}"><p>{{ article.preview }}</p></a>
+        <br>
+        <div class="blog-info">
+            <a href="/profile?id={{ article.author.id }}/" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.author.username }}</div></span></a>
+            <span><div class="time"><i class="layui-icon layui-icon-time"></i> {{ article.date }}</div></span>
+            <span><i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;{{ article.likes_number }}</span>
+        </div>
+    </div>
+{% endfor %}
+</div>
+<div id="pagination"></div>
+<script src="https://lib.baomitu.com/layui/2.7.6/layui.min.js"></script>
+<script>
+    layui.use('laypage',
+        function() {
+            layui.laypage.render({
+            elem: 'pagination',
+            count: {{ total }},
+            jump: (page, first) => {
+                if (!first){window.location.href = `/blog/?page=${page.curr}`}
+            },
+            curr: {{ paginator.number }},
+        });
+    });
+</script>
 </body>
 </html>
