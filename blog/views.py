@@ -28,7 +28,7 @@ class BlogSearchView(SearchView):
 
         query = request.GET.get("q")
         if not query:
-            pagination = Paginator(Article.objects.all(), BLOG_PAGINATION)
+            pagination = Paginator(Article.objects.order_by("id"), BLOG_PAGINATION)
             page = pagination.page(request.GET.get("page", 1))
             return render(request, self.template, {"page": page, "query": ""})
         else:
