@@ -30,7 +30,7 @@
             </div>
             <br>
             <div class="blog-info">
-                <a href="/profile?id={{ article.object.author.id }}/" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.object.author.username }}</div></span></a>
+                <a href="{{ article.object.author.url }}" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.object.author.username }}</div></span></a>
                 <span><div class="time"><i class="layui-icon layui-icon-time"></i> {{ article.object.date }}</div></span>
                 <span><i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;{{ article.object.likes_number }}</span>
             </div>
@@ -55,7 +55,7 @@
             </div>
             <br>
             <div class="blog-info">
-                <a href="/profile?id={{ article.author.id }}/" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.author.username }}</div></span></a>
+                <a href="{{ article.author.url }}" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.author.username }}</div></span></a>
                 <span><div class="time"><i class="layui-icon layui-icon-time"></i> {{ article.date }}</div></span>
                 <span><i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;{{ article.likes_number }}</span>
             </div>

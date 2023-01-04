@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 from django.utils.functional import cached_property
 from webtoken import generate_token
 from imagekit.models import ProcessedImageField
@@ -33,6 +34,10 @@ class User(AbstractUser):
     @cached_property
     def real_identity(self) -> str:
         return identities[self.identity]
+
+    @cached_property
+    def url(self):
+        return f"/profile?id={self.id}/"
 
     def __str__(self):
         return f"{self.username} (identity: {self.real_identity}, id: {self.id})"

@@ -1,23 +1,16 @@
-class Like {
-    constructor(number=0, state=false, article_idx=0) {
-        this.button = document.getElementById("like");
-        this.icon = document.getElementById("like-icon");
-        this.nlike = document.getElementById("like-number");
-        this.state = state;
-        this.number = number;
-        this.article_idx = article_idx;
+const articleData = document.querySelector(".js-article-data");
 
-        let _this = this;
-        this.button.onclick = () => (_this.submit());
-        this.render();
+class SubmitNotify {
+    constructor() {
+        this.timeout = 0;
     }
     clear() {
         notify.destroyAll();
         clearTimeout(this.timeout);
     }
-    success(reason) {
+    success() {
         this.clear();
-        notify.success(reason, "topRight");
+        notify.success("提交成功", "topRight");
     }
     error(reason) {
         this.clear();
@@ -26,13 +19,28 @@ class Like {
     warning(reason) {
         this.clear();
         layer.open({
-            title: '操作失败',
+            title: '提交失败',
             content: reason,
         });
     }
     info(reason) {
         this.clear();
         notify.info(reason, "topRight");
+    }
+}
+class Like extends SubmitNotify {
+    constructor() {
+        super();
+        this.button = document.getElementById("like");
+        this.icon = document.getElementById("like-icon");
+        this.nlike = document.getElementById("like-number");
+        this.state = articleData.getAttribute("like-state");
+        this.number = articleData.getAttribute("likes");
+        this.article_id = articleData.getAttribute("article-id");
+
+        let _this = this;
+        this.button.onclick = () => (_this.submit());
+        this.render();
     }
     add(...classes) {
         for (let i = 0; i < classes.length; i++) {
@@ -72,7 +80,7 @@ class Like {
 
         let _this = this;
         $.ajax({
-            url: `/blog/submit/like/${this.article_idx}/`,
+            url: `/blog/submit/like/${this.article_id}/`,
             method: "POST",
             dataType: "json",
             data : {
@@ -80,7 +88,7 @@ class Like {
             },
             success: data => {
                 if (data.success) {
-                    _this.success(data.reason);
+                    _this.success();
                     _this.state = data.state;
                     _this.number = data.number;
                 } else {
@@ -92,3 +100,43 @@ class Like {
         })
     }
 }
+
+function prompt(title, callback) {
+    layer.prompt({title: title, formType: 2}, function(text, index){
+        layer.close(index);
+        callback(text);
+    });
+}
+
+class Comment extends SubmitNotify {
+    constructor() {
+        super();
+        this.comments = document.querySelectorAll(".js-comment-btn");
+
+        const _this = this;
+        for (let i = 0; i < this.comments.length; i++) {
+            this.comments[i].onclick = param => (_this.clicked(param));
+        }
+    }
+    clicked(target) {
+        let button = target.target.getAttribute("type")?target.target:target.target.parentNode;
+        let comment = button.parentNode;
+        let data = comment.querySelector(".js-comment-data");
+        switch (button.getAttribute("comment-type")) {
+            case "article":
+                break;
+            case "user":
+                break;
+        }
+    }
+    articlePrompt(title, callback) {
+        prompt(`评论文章 <span class="layui-font-blue"><i class="layui-icon layui-icon-read"></i> ${title}</span>`, callback)
+    }
+    userPrompt(user, callback) {
+        prompt(`评论用户 <span class="layui-font-blue"><i class="layui-icon layui-icon-friends"></i> ${user}</span>`, callback)
+    }
+    replyPrompt(user, callback) {
+        prompt(`回复用户 <span class="layui-font-blue"><i class="layui-icon layui-icon-username"></i> ${user}</span>`, callback)
+    }
+}
+const like = new Like(), comment = new Comment();

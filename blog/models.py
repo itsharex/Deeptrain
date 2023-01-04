@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from user.models import User
 from mdeditor.fields import MDTextField
+from mptt.models import MPTTModel, TreeForeignKey
 from .parser import parse_markdown
 
 
@@ -45,3 +46,31 @@ class Article(models.Model):
     @cached_property
     def date(self):
         return self.published_at.strftime("%Y-%m-%d")
+
+
+class Comment(MPTTModel):
+    class MPTTMeta:
+        order_insertion_by = ['created']
+
+    content = models.TextField(max_length=300, default="")
+    created = models.DateTimeField(auto_now_add=True)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    parent = TreeForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='children',
+    )
+
+    reply_to = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='replyer',
+    )
+
+    def __str__(self):
+        return f"Comment Object of {self.article} (by: {self.user.username})"

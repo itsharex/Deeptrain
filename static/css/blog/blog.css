@@ -66,6 +66,45 @@ html, body {
 .blog-footer button {
     width: max-content;
 }
+.submit-comment {
+    position: absolute;
+    right: 8%;
+    transform: translateY(-60px);
+}
+
+.comment {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    margin: 5px;
+    gap: 8px;
+    width: 100%;
+    background: #fafafa !important;
+}
+.comment .comment-btn {
+    float: right;
+    margin-right: 10px;
+    margin-bottom: 2px;
+}
+.comment .children {
+    width: calc(100% - 20px);
+}
+.comment .avatar {
+    width: 44px;
+    height: 44px;
+}
+.comment .arrow {
+    font-size: 12px;
+}
+.comment .comment-content {
+    width: calc(100% - 10px);
+}
+.comment .comment-content .content {
+    padding: 6px;
+}
+.comment .comment-content .children .comment {
+    background: #fff !important;
+}
 @media screen and (max-width: 768px) {
     .blog-content {
         padding: 15px;
@@ -76,5 +115,9 @@ html, body {
     .blog-footer {
         flex-direction: column;
         align-items: center;
+    }
+    .submit-comment {
+        transform: translateY(-50px);
+        right: 14px;
     }
 }

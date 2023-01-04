@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'haystack',
     'mdeditor',
+    'mptt',
     'dwebsocket',
     'turnstile',
     'hcaptcha',
