@@ -71,12 +71,14 @@ def comment(request: WSGIRequest, idx: int):
     """
 
     :param request: WSGIRequest
-    :param idx: article id
-    :POST:  content: comment content
+    :param idx: article id [int]
+    :method POST
+        - `content`: comment content [str]
+        - `parent` (Optional): parent comment id [int]
 
-    :return:
+    :return: JsonResponse
     """
-    content = request.POST.get("content", "").strip()
+    content = request.POST.get("content", "").strip()[:300]
     if not content:
         return JsonResponse({"success": False, "reason": "评论内容为空"})
 
@@ -101,5 +103,5 @@ def comment(request: WSGIRequest, idx: int):
                                             reply_to=parent_comment.user if parent_comment != root else None).id
         return JsonResponse({"success": True, "id": comment_id})
 
-    comment_id = Comment.objects.create(content=content, article=article_instance, user=user)
+    comment_id = Comment.objects.create(content=content, article=article_instance, user=user).id
     return JsonResponse({"success": True, "id": comment_id})

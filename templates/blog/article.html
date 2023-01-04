@@ -9,7 +9,8 @@
 </head>
 <body>
 {% csrf_token %}
-<div class="layui-col-xs11 layui-col-md9 layui-col-sm10 blog-content layui-anim-fadein">
+<div class="js-article-data" article-id="{{ article.id }}" title="{{ article.title }}" likes="{{ article.likes_number }}" like-state="{{ state }}" comments="{{ comments.count }}" hidden></div>
+<div class="layui-col-xs11 layui-col-md9 layui-col-sm10 blog-content layui-anim layui-anim-downbit">
     <a href="javascript:window.history.back();" class="back"><i class="layui-icon layui-icon-left"></i> 返回</a>
     <h1 class="blog-title">{{ article.title }}</h1>
     <br>
@@ -44,11 +45,11 @@
         </button>
     </div>
 </div>
-<div class="layui-col-xs11 layui-col-md9 layui-col-sm10 blog-content layui-anim-fadein">
+<div class="layui-col-xs11 layui-col-md9 layui-col-sm10 blog-content layui-anim layui-anim-upbit">
     <h2>评论</h2>
     <br>
     <button type="button" comment-type="article" content="{{ article.title }}" class="layui-btn layui-btn-primary submit-comment js-comment-btn"><i class="layui-icon layui-icon-reply-fill"></i>评论</button>
-    <span>&nbsp;&nbsp;共 <strong>{{ comments.count }}</strong> 条评论</span>
+    <span>&nbsp;&nbsp;共 <strong id="comment-number">{{ comments.count }}</strong> 条评论</span>
     <br>
     {% load mptt_tags %}
     {% recursetree comments %}
@@ -56,8 +57,8 @@
             <div class="layui-panel comment">
                 <img class="avatar" src="{{ comment.user.avatar_url }}" alt>
                 <div class="comment-content">
-                    <div class="js-comment-data" comment-id="{{ comment.id }}" root="{{ comment.is_root_node }}" comment-reply="{{ comment.reply_to.username }}" hidden></div>
-                    <a href="{{ comment.user.url }}" target="_blank">&nbsp;{{ comment.parent.user.username }}</a>
+                    <div class="js-comment-data" comment-id="{{ comment.id }}" root="{{ comment.is_root_node }}" comment-user="{{ comment.user.username }}" hidden></div>
+                    <a href="{{ comment.user.url }}" target="_blank">&nbsp;{{ comment.user.username }}</a>
                         {% if comment.reply_to %}
                             <i class="layui-icon layui-icon-right arrow"></i><a href="{{ comment.reply_to.url }}" target="_blank">&nbsp;{{ comment.reply_to.username }}</a>
                         {% endif %}
@@ -72,7 +73,6 @@
             </div>
         {% endwith %}
     {% endrecursetree %}
-<div class="js-article-data" article-id="{{ article.id }}" likes="{{ article.likes_number }}" like-state="{{ state }}" hidden></div>
 </div>
 <script src="https://lib.baomitu.com/jquery/1.12.4/jquery.js"></script>
 <script src="https://lib.baomitu.com/layui/2.7.6/layui.min.js"></script>

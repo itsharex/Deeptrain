@@ -102,6 +102,9 @@ html, body {
 .comment .comment-content .content {
     padding: 6px;
 }
+.highlight-span {
+    cursor: pointer;
+}
 .comment .comment-content .children .comment {
     background: #fff !important;
 }
