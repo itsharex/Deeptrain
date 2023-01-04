@@ -34,13 +34,12 @@ class Like extends SubmitNotify {
         this.button = document.getElementById("like");
         this.icon = document.getElementById("like-icon");
         this.nlike = document.getElementById("like-number");
-        this.state = articleData.getAttribute("like-state");
-        this.number = articleData.getAttribute("likes");
-        this.article_id = articleData.getAttribute("article-id");
-
+        this.state = eval(articleData.getAttribute("like-state"));
+        this.number = Number(articleData.getAttribute("likes"));
+        this.article_id = Number(articleData.getAttribute("article-id"));
+        this.render();
         let _this = this;
         this.button.onclick = () => (_this.submit());
-        this.render();
     }
     add(...classes) {
         for (let i = 0; i < classes.length; i++) {

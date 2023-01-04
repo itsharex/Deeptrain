@@ -78,9 +78,5 @@
 <script src="https://lib.baomitu.com/layui/2.7.6/layui.min.js"></script>
 <script src="{% static 'js/notify.js' %}"></script>
 <script src="{% static 'js/blog/article.js' %}"></script>
-<script>
-    const like = new Like({{ article.likes_number }}, {{ state }}, {{ article.id }}),
-          comment = new Comment();
-</script>
 </body>
 </html>
