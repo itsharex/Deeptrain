@@ -74,6 +74,17 @@
 ## 🏠 Embedding Applications Structure 🎫
 
 ![application](/docs/screenshot/application.jpg)
+## 🚘 Commands 🚜
+- Create Superuser [identity: `Server-Owner`]
+  - >(*same as command `createsuperuser`*)
+    >```commandline
+    >python manage.py buildsuperuser
+    >```
+- Create Admin (identity: `Admin`)
+  - >(*same as command `createsuperuser`*)
+    >```commandline
+    >python manage.py buildadmin
+    >```
 
 ## 🍉 QuickStart Production 🍎
 

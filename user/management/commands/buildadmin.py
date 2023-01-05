@@ -1,5 +1,5 @@
 """
-Management utility to create superusers.
+Management utility to create administrators.
 refer to django.contrib.auth.management - createsuperuser
 """
 import getpass
@@ -25,7 +25,7 @@ PASSWORD_FIELD = 'password'
 
 
 class Command(BaseCommand):
-    help = 'Used to create a superuser.'
+    help = 'Used to create a admin.'
     requires_migrations_checks = True
     stealth_options = ('stdin',)
 
@@ -37,16 +37,16 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             '--%s' % self.UserModel.USERNAME_FIELD,
-            help='Specifies the login for the superuser.',
+            help='Specifies the login for the admin.',
         )
         parser.add_argument(
             '--noinput', '--no-input', action='store_false', dest='interactive',
             help=(
-                'Tells Django to NOT prompt the user for input of any kind. '
-                'You must use --%s with --noinput, along with an option for '
-                'any other required field. Superusers created with --noinput will '
-                'not be able to log in until they\'re given a valid password.' %
-                self.UserModel.USERNAME_FIELD
+                    'Tells Django to NOT prompt the user for input of any kind. '
+                    'You must use --%s with --noinput, along with an option for '
+                    'any other required field. Administrators created with --noinput will '
+                    'not be able to log in until they\'re given a valid password.' %
+                    self.UserModel.USERNAME_FIELD
             ),
         )
         parser.add_argument(
@@ -67,14 +67,14 @@ class Command(BaseCommand):
                     parser.add_argument(
                         '--%s' % field_name, action='append',
                         help=(
-                            'Specifies the %s for the superuser. Can be used '
+                            'Specifies the %s for the admin. Can be used '
                             'multiple times.' % field_name,
                         ),
                     )
             else:
                 parser.add_argument(
                     '--%s' % field_name,
-                    help='Specifies the %s for the superuser.' % field_name,
+                    help='Specifies the %s for the admin.' % field_name,
                 )
 
     def execute(self, *args, **options):
@@ -189,10 +189,11 @@ class Command(BaseCommand):
                     field = self.UserModel._meta.get_field(field_name)
                     user_data[field_name] = field.clean(value, None)
 
-            superuser = self.UserModel._default_manager.db_manager(database).create_superuser(**user_data, identity=3)
-            Profile.objects.create(user=superuser)
+            admin = self.UserModel._default_manager.db_manager(database). \
+                create_user(**user_data, identity=2, is_staff=True, is_superuser=False)
+            Profile.objects.create(user=admin)
             if options['verbosity'] >= 1:
-                self.stdout.write("Superuser created successfully.")
+                self.stdout.write("Admin created successfully.")
         except KeyboardInterrupt:
             self.stderr.write('\nOperation cancelled.')
             sys.exit(1)
@@ -200,8 +201,8 @@ class Command(BaseCommand):
             raise CommandError('; '.join(e.messages))
         except NotRunningInTTYException:
             self.stdout.write(
-                'Superuser creation skipped due to not running in a TTY. '
-                'You can run `manage.py buildsuperuser` in your project '
+                'Administrator creation skipped due to not running in a TTY. '
+                'You can run `manage.py buildadmin` in your project '
                 'to create one manually.'
             )
 
