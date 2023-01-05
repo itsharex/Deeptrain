@@ -292,14 +292,9 @@ from django.urls import path\n\nfrom applications.{app_name} import views\n\nurl
 
 
 class Command(BaseCommand):
-    help = 'Delete all of the migration files and regenerate migration files'
+    help = 'Create embedding(built-in) application.'
 
     def handle(self, *args, **options):
         # 由于接口数量过多, 且涉及多行输出, 因此不提供命令行解析 (说实话就是懒)
         # 迁移于 startapp.py (Zh-Website V1.0 update)
         console_create_app()
-
-
-if __name__ == "__main__":
-    console_create_app()
-    os.system("pause")
