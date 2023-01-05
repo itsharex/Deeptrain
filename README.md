@@ -33,8 +33,6 @@
 ![django: 3.2](https://img.shields.io/badge/Django-3.2-informational)
 
 </div>
-<hr>
-
 
 ---
 
@@ -283,7 +281,7 @@ IS_CONTAINER = False
     - OAuth Config
 <br><br>
 
-- 📚 `Release 2.14.0-alpha to 2.14.7`
+- 📚 `Release 2.14.0-alpha to 2.14.7.1`
   - **Markdown Blog System** (`haystack` & `whoosh` & `jieba` & `mptt` & `layui`)
     - Articles
     - Comments (two-level)
