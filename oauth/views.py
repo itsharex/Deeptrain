@@ -1,6 +1,6 @@
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render
-from views import login_required
+from utils.wraps import login_required
 from .oauth import oauthManager
 
 

@@ -45,7 +45,7 @@
 
 ## 🚀️ ScreenShot 🎋
 
-![screenshot](/screenshot/screenshot.png)
+![screenshot](/docs/screenshot/screenshot.png)
 
 ## 🌊 Website Features  🔮
 
@@ -73,7 +73,7 @@
 
 ## 🏠 Embedding Applications Structure 🎫
 
-![application](/screenshot/application.jpg)
+![application](/docs/screenshot/application.jpg)
 
 ## 🍉 QuickStart Production 🍎
 

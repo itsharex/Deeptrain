@@ -5,13 +5,13 @@ from typing import *
 from json import loads
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.urls import path
 from user.models import User
 from .models import OAuthModel
 from DjangoWebsite.settings import OAUTH_CONFIG
-#  from views import throw_bad_request   未初始化导入问题
+from utils.error import throw_bad_request
 
 
 class OAuthApplicationManager(object):
@@ -42,7 +42,7 @@ class OAuthApplicationManager(object):
 
 
 class OAuthApplication(object):
-    APPNAME = ""
+    NAME = ""
     SITEKEY = ""
     SECRET = ""
     SITE_URL = ""
@@ -69,17 +69,17 @@ class OAuthApplication(object):
 
     @property
     def app_path(self):
-        return path(f"callback/{self.APPNAME.lower()}/", self.callback, name=self.APPNAME)
+        return path(f"callback/{self.NAME.lower()}/", self.callback, name=self.NAME)
 
     def get_oauth_username(self, user: User) -> Union[bool, str]:
-        query = OAuthModel.objects.filter(oauth_app=self.APPNAME, user=user)
+        query = OAuthModel.objects.filter(oauth_app=self.NAME, user=user)
         if not query.exists():
             return False
         return query.first().oauth_name
 
     def get_login_template(self):
         return {
-            "name": self.APPNAME,
+            "name": self.NAME,
             "icon": self.ICON,
             "url": self.authorize_url,
         }
@@ -89,7 +89,7 @@ class OAuthApplication(object):
         authorized = resp is not False
 
         return {
-            "name": self.APPNAME,
+            "name": self.NAME,
             "icon": self.ICON,
             "url": self.authorize_url,
             "authorize": authorized,
@@ -101,19 +101,30 @@ class OAuthApplication(object):
         oauth_name = api.get("login")
         user = request.user
         if not (oauth_name and oauth_id):
-            return
-        if not user.is_authenticated:  # 作为第三方登录, 在cookies/sessions未储存用户模型实例, 即未登录状态, 查询已注册的oauth数据库
-            query = OAuthModel.objects.filter(oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.APPNAME)
-            if query.exists():
+            return throw_bad_request(request, "OAuth authentication failed")
+
+        query = OAuthModel.objects.filter(oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.NAME)
+        if query.exists():
+            if user.is_authenticated:
+                return throw_bad_request(request, "OAuth ID has been bound")
+            else:
+                #  作为第三方登录, 在cookie/session未储存用户模型实例, 即未登录状态, 查询已注册的oauth数据库
                 auth.login(request, query.first().user)
                 return redirect("/home/")
+        else:
+            if user.is_authenticated:
+                #  状态已登录, 设置绑定 OAuth App
+                model = OAuthModel.objects.\
+                    create(user=user, oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.NAME)
+                self.createEvent(model)
+                return redirect("/oauth/bind/")
             else:
                 return throw_bad_request(request, "OAuth authentication failed")
-        else:  # 状态已登录, 设置绑定 OAuth App
-            OAuthModel.objects.create(user=user, oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.APPNAME)
-            return redirect("/oauth/bind/")
 
     def callback(self, request: WSGIRequest):
+        pass
+
+    def createEvent(self, model):
         pass
 
     def parse_content(self, content) -> bool:
@@ -144,7 +155,7 @@ class GithubOAuthApplication(OAuthApplication):
         "followers":0,"following":1,"created_at":"2022-09-03T17:01:31Z","updated_at":"2022-12-27T12:54:08Z"}
     """
 
-    APPNAME = "GitHub"
+    NAME = "GitHub"
 
     SITEKEY: str  # Client ID
     SECRET: str   # Client Secrets
@@ -189,7 +200,7 @@ class GiteeOAuthApplication(OAuthApplication):
         https://gitee.com/api/v5/oauth_doc#/
     """
 
-    APPNAME = "Gitee"
+    NAME = "Gitee"
 
     SITEKEY: str  # Client ID
     SECRET: str   # Client Secret

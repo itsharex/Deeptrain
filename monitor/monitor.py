@@ -2,8 +2,8 @@ from datetime import timedelta
 import psutil
 from typing import *
 from DjangoWebsite.settings import MONITOR_INTERVAL
-from websocket import WebClientGroup, WebClient
-from loop import loop
+from utils.websocket import WebClientGroup, WebClient
+from utils.loop import loop
 
 
 class Monitor(WebClientGroup):

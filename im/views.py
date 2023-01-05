@@ -3,8 +3,8 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import render
 from dwebsocket import require_websocket
-import websocket
-from views import login_required
+from utils import websocket
+from utils.wraps import login_required
 
 ROBOT_IMAGE = "https://cdn-icons-png.flaticon.com/128/8811/8811373.png"
 

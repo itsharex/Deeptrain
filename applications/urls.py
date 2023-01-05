@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import path
 from django.views.decorators.cache import cache_page
 from applications.application import appManager
-from views import login_required
+from utils.wraps import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 

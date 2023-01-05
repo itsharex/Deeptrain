@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .geoip import *
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, JsonResponse
-from views import ajax_required, admin_required
+from utils.wraps import ajax_required, admin_required
 from .analysis import analysis
 
 

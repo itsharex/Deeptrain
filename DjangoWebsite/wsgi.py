@@ -29,7 +29,7 @@ def get_wsgi_application():
     """
     django.setup(set_prefix=False)
 
-    from loop import loop
+    from utils.loop import loop
     from applications.application import appManager
     loop.start()
 

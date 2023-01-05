@@ -7,11 +7,7 @@ from django.core.paginator import Paginator
 from haystack.views import SearchView
 from .models import Article, Comment
 from DjangoWebsite.settings import BLOG_PAGINATION
-from views import throw_bad_request
-
-
-def boolean_to_javascript(val):
-    return "true" if val else "false"
+from utils.error import throw_bad_request
 
 
 class BlogSearchView(SearchView):

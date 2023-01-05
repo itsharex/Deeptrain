@@ -2,7 +2,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.shortcuts import render
 from dwebsocket import require_websocket
-from views import admin_required, ajax_required
+from utils.wraps import admin_required, ajax_required
 from .monitor import monitor
 from .analysis import analysis_request
 
