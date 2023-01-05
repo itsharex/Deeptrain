@@ -1,6 +1,14 @@
 const article_data = document.querySelector(".js-article-data");
 const article_id = Number(article_data.getAttribute("article-id"));
 const article_title = article_data.getAttribute("title");
+const csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+
+function cls_inner(dom, cls_) {
+    let cls = cls_.split(" ");
+    for (let i = 0; i < cls.length; i++) {
+        dom.classList.add(cls[i])
+    }
+}
 
 class SubmitNotify {
     constructor() {
@@ -102,7 +110,7 @@ class Like extends SubmitNotify {
             method: "POST",
             dataType: "json",
             data : {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+                "csrfmiddlewaretoken": csrf_token,
             },
             success: data => {
                 if (data.success) {
@@ -130,10 +138,58 @@ function prompt(title, callback) {
     });
 }
 
+class CommentObject {
+    constructor(opt) {
+        this.avatar = opt.avatar;
+        this.username = opt.username;
+        this.id = opt.id;
+        this.url = opt.url;
+        this.content = opt.content;
+        this.root = opt.root;
+        if (!this.root) {
+            this.reply_name = opt.replyName || "";
+            this.reply_url = opt.replyUrl || "";
+        }
+    }
+    toHtml() {
+        let reply_html = this.reply_name?`<i class="layui-icon layui-icon-right arrow"></i><a href="${this.reply_url}" target="_blank">&nbsp;${this.reply_name}</a>`:"";
+        return `<img class="avatar" src="${this.avatar}" alt>
+                <div class="comment-content">
+                    <div class="js-comment-data" comment-id="${this.id}" root="${this.root}" comment-user="${this.username}" hidden></div>
+                    <a href="${this.url}" target="_blank">${this.username}</a>
+                    ${reply_html}
+                    <div class="content js-inner-content"></div>
+                    <button type="button" comment-type="user" class="layui-btn layui-btn-primary layui-btn-sm comment-btn js-comment-btn"><i class="layui-icon layui-icon-reply-fill"></i></button>
+                        <div class="children"></div>
+                </div>`;
+    }
+    toNode() {
+        let dom = document.createElement("div");
+        cls_inner(dom, "layui-panel comment layui-anim layui-anim-upbit");
+        dom.innerHTML = this.toHtml();
+        dom.querySelector(".js-inner-content").innerText = this.content;
+        return dom;
+    }
+    innerNode(node) {
+        let dom = this.toNode();
+        if (this.root) {
+            document.querySelector("#comments").appendChild(dom);
+        } else {
+            if (this.reply_name) {
+                node.parentNode.parentNode.appendChild(dom);
+            } else {
+                node.querySelector(".children").appendChild(dom);
+            }
+        }
+        return dom.querySelector(".js-comment-btn");
+    }
+}
 class Comment extends SubmitNotify {
     constructor() {
         super();
         this.comments = document.querySelectorAll(".js-comment-btn");
+        this.number = Number(article_data.getAttribute("comments"));
+        this.number_dom = document.querySelector("#comment-number");
 
         const _this = this;
         for (let i = 0; i < this.comments.length; i++) {
@@ -142,21 +198,32 @@ class Comment extends SubmitNotify {
     }
     clicked(target) {
         let button = target.target.getAttribute("type")?target.target:target.target.parentNode;
+        let comment = button.parentNode;
+        let _this = this;
+
         switch (button.getAttribute("comment-type")) {
             case "article":
-                this.articlePrompt();
+                prompt(
+                    `评论文章 <span class="layui-font-blue highlight-span"><i class="layui-icon layui-icon-read"></i> ${article_title}</span>`,
+                    content => (_this.submit(content, comment)),
+                );
                 break;
             case "user":
-                let comment = button.parentNode;
-                let data = comment.querySelector(".js-comment-data");
-                let username = data.getAttribute("comment-user");
-                let comment_id = Number(data.getAttribute("comment-id"));
-                let root = eval(data.getAttribute("root").toLowerCase());
-                this.userPrompt(username, comment_id, root);
+                let data = comment.querySelector(".js-comment-data").attributes;
+                let username = data["comment-user"].value;
+                let comment_id = Number(data["comment-id"].value);
+                let root = eval(data.root.value.toLowerCase());
+
+                prompt(
+                    root?
+                    `评论用户 <span class="layui-font-blue"><i class="layui-icon layui-icon-friends"></i> ${username}</span>`:
+                    `回复用户 <span class="layui-font-blue"><i class="layui-icon layui-icon-username"></i> ${username}</span>`,
+                content => (_this.submit(content, comment, comment_id)),
+                );
                 break;
         }
     }
-    submit(content="", parent=undefined) {
+    submit(content, parentNode, parent_id=undefined) {
         let _this = this;
         this.loading();
         $.ajax({
@@ -164,30 +231,27 @@ class Comment extends SubmitNotify {
             method: "POST",
             dataType: "json",
             data: {
-                "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val(),
+                "csrfmiddlewaretoken": csrf_token,
                 "content": content,
-                "parent": parent,
+                "parent": parent_id,
             },
             success: function(data) {
                 if (data.success) {
                     _this.success();
+                    let el = new CommentObject(
+                        {
+                            ...data,
+                            "content": content,
+                        }
+                    );
+                    el.innerNode(parentNode).onclick = param => (_this.clicked(param));
+                    _this.number_dom.innerText = _this.number.toString();
                 } else {
                     _this.warning(data.reason);
                 }
             },
             error: () => (_this.error()),
         });
-    }
-    articlePrompt() {
-        let _this = this;
-        prompt(`评论文章 <span class="layui-font-blue highlight-span"><i class="layui-icon layui-icon-read"></i> ${article_title}</span>`, content => (_this.submit(content)));
-    }
-    userPrompt(user, comment_id, root=true) {
-        let _this = this;
-        prompt(root?
-            `评论用户 <span class="layui-font-blue"><i class="layui-icon layui-icon-friends"></i> ${user}</span>`:
-            `回复用户 <span class="layui-font-blue"><i class="layui-icon layui-icon-username"></i> ${user}</span>`,
-            content => (_this.submit(content, comment_id)));
     }
 }
 const like = new Like(), comment = new Comment();

@@ -15,15 +15,18 @@ class Tag(models.Model):
 
 
 class Article(models.Model):
+    class Meta:
+        ordering = ["-published_at"]
+
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     title = models.CharField(max_length=50, default="")
     content = MDTextField(default="")
     preview = models.TextField(max_length=120, default="")
     published_at = models.DateTimeField(auto_now_add=True)
 
-    likes = models.ManyToManyField(User, related_name="like_users")
+    likes = models.ManyToManyField(User, related_name="like_users", blank=True)
 
     def __str__(self):
         return f"{self.author.username}'s Article - {self.title}"
@@ -50,7 +53,7 @@ class Article(models.Model):
 
 class Comment(MPTTModel):
     class MPTTMeta:
-        order_insertion_by = ['created']
+        order_insertion_by = ['-created']
 
     content = models.TextField(max_length=300, default="")
     created = models.DateTimeField(auto_now_add=True)

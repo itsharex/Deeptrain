@@ -8,12 +8,21 @@ body {
     flex-direction: column;
     padding-top: 20px !important;
 }
+.preview {
+    word-wrap: anywhere;
+    max-height: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .blog-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 15px;
     padding: 15px;
+    width: max-content;
+    align-self: center;
+    max-width: calc(100% - 30px);
 }
 .blog-container .panel {
     width: 350px;
@@ -41,7 +50,7 @@ body {
     align-self: center;
 }
 .tag {
-    color: #277ccc;
+    color: #277ccc !important;
     cursor: pointer;
 }
 .search-container {

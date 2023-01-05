@@ -1,3 +1,5 @@
+from user.models import User
+from typing import *
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -49,7 +51,7 @@ def article(request: WSGIRequest, idx):
     return throw_bad_request(request, "请求的博客不存在")
 
 
-def like(request: WSGIRequest, idx: int):
+def submit_like(request: WSGIRequest, idx: int):
     user = request.user
     if not user.is_authenticated:
         return JsonResponse(
@@ -67,7 +69,7 @@ def like(request: WSGIRequest, idx: int):
     return JsonResponse({"success": True, "state": not state, "number": article_instance.likes_number})
 
 
-def comment(request: WSGIRequest, idx: int):
+def submit_comment(request: WSGIRequest, idx: int):
     """
 
     :param request: WSGIRequest
@@ -82,7 +84,7 @@ def comment(request: WSGIRequest, idx: int):
     if not content:
         return JsonResponse({"success": False, "reason": "评论内容为空"})
 
-    user = request.user
+    user: User = request.user
     if not user.is_authenticated:
         return JsonResponse(
             {"success": False, "reason": "您还未登录, 请先 <a href='/login/' class='layui-font-blue'>登录</a>"})
@@ -99,9 +101,22 @@ def comment(request: WSGIRequest, idx: int):
             return JsonResponse({"success": False, "reason": "回复的评论不存在"})
         parent_comment = parent_query.first()
         root = parent_comment.get_root()  # 将回复的二级评论转为此评论的根评论实例, 即最大支持二级目录
-        comment_id = Comment.objects.create(content=content, article=article_instance, user=user, parent=root,
-                                            reply_to=parent_comment.user if parent_comment != root else None).id
-        return JsonResponse({"success": True, "id": comment_id})
+        comment = Comment.objects.create(content=content, article=article_instance, user=user, parent=root,
+                                         reply_to=parent_comment.user if parent_comment != root else None)
+        root = False
+    else:
+        comment = Comment.objects.create(content=content, article=article_instance, user=user)
+        root = True
 
-    comment_id = Comment.objects.create(content=content, article=article_instance, user=user).id
-    return JsonResponse({"success": True, "id": comment_id})
+    reply: Optional[User] = comment.reply_to
+
+    return JsonResponse({
+        "success": True,
+        "id": comment.id,
+        "avatar": user.avatar_url,
+        "username": user.username,
+        "root": root,
+        "url": user.url,
+        "replyName": reply.username if reply else None,
+        "replyUrl": reply.url if reply else None,
+    })

@@ -71,7 +71,9 @@ html, body {
     right: 8%;
     transform: translateY(-60px);
 }
-
+.main-content {
+    word-wrap: anywhere;
+}
 .comment {
     display: flex;
     flex-direction: row;
@@ -86,7 +88,7 @@ html, body {
     margin-right: 10px;
     margin-bottom: 2px;
 }
-.comment .children {
+.comment .comment-content .children {
     width: calc(100% - 20px);
 }
 .comment .avatar {
@@ -107,6 +109,7 @@ html, body {
 }
 .comment .comment-content .children .comment {
     background: #fff !important;
+    /* children comment node */
 }
 @media screen and (max-width: 768px) {
     .blog-content {
@@ -122,5 +125,9 @@ html, body {
     .submit-comment {
         transform: translateY(-50px);
         right: 14px;
+    }
+    .comment .comment-content .children .comment {
+        transform: translateX(-35px) !important;
+        width: calc(100% + 25px) !important;
     }
 }

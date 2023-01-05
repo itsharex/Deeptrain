@@ -18,7 +18,7 @@
         <div class="layui-panel panel">
             <a href="{{ article.object.url }}"><h2>{% highlight article.object.title with query %}</h2></a>
             <hr>
-            <a href="{{ article.object.url }}"><p>{% highlight article.object.preview with query %}</p></a>
+            <a href="{{ article.object.url }}"><p class="preview">{% highlight article.object.preview with query %}</p></a>
             <hr>
             <div>
                 文章标签:
@@ -33,6 +33,7 @@
                 <a href="{{ article.object.author.url }}" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.object.author.username }}</div></span></a>
                 <span><div class="time"><i class="layui-icon layui-icon-time"></i> {{ article.object.date }}</div></span>
                 <span><i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;{{ article.object.likes_number }}</span>
+                <span><i class="layui-icon layui-icon-reply-fill"></i>&nbsp;{{ article.object.comment_set.count }}</span>
             </div>
         </div>
     {% endfor %}
@@ -43,7 +44,7 @@
         <div class="layui-panel panel">
             <a href="{{ article.url }}"><h2>{{ article.title }}</h2></a>
             <hr>
-            <a href="{{ article.url }}"><p>{{ article.preview }}</p></a>
+            <a href="{{ article.url }}"><p class="preview">{{ article.preview }}</p></a>
             <hr>
             <div>
                 文章标签:
@@ -58,6 +59,7 @@
                 <a href="{{ article.author.url }}" target="_blank"><span><div class="time"><i class="layui-icon layui-icon-username"></i> {{ article.author.username }}</div></span></a>
                 <span><div class="time"><i class="layui-icon layui-icon-time"></i> {{ article.date }}</div></span>
                 <span><i class="layui-icon layui-icon-heart layui-font-red" id="like-icon"></i>&nbsp;{{ article.likes_number }}</span>
+                <span><i class="layui-icon layui-icon-reply-fill"></i>&nbsp;{{ article.comment_set.count }}</span>
             </div>
         </div>
     {% endfor %}

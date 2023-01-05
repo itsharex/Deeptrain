@@ -29,7 +29,7 @@
         </div>
     </div>
     <hr>
-    <div id="content" class="layui-card-body">
+    <div id="content" class="layui-card-body main-content">
         {{ article.content_html | safe }}
     </div>
     <br><hr>
@@ -51,28 +51,28 @@
     <button type="button" comment-type="article" content="{{ article.title }}" class="layui-btn layui-btn-primary submit-comment js-comment-btn"><i class="layui-icon layui-icon-reply-fill"></i>评论</button>
     <span>&nbsp;&nbsp;共 <strong id="comment-number">{{ comments.count }}</strong> 条评论</span>
     <br>
+    <div id="comments">
     {% load mptt_tags %}
     {% recursetree comments %}
-        {% with comment=node %}  {# variable comment = node #}
-            <div class="layui-panel comment">
+        {% with comment=node %}
+            <div class="layui-panel comment layui-anim layui-anim-upbit">
                 <img class="avatar" src="{{ comment.user.avatar_url }}" alt>
                 <div class="comment-content">
                     <div class="js-comment-data" comment-id="{{ comment.id }}" root="{{ comment.is_root_node }}" comment-user="{{ comment.user.username }}" hidden></div>
-                    <a href="{{ comment.user.url }}" target="_blank">&nbsp;{{ comment.user.username }}</a>
+                    <a href="{{ comment.user.url }}" target="_blank">{{ comment.user.username }}</a>
                         {% if comment.reply_to %}
                             <i class="layui-icon layui-icon-right arrow"></i><a href="{{ comment.reply_to.url }}" target="_blank">&nbsp;{{ comment.reply_to.username }}</a>
                         {% endif %}
                     <div class="content">{{ comment.content }}</div>
                     <button type="button" comment-type="user" class="layui-btn layui-btn-primary layui-btn-sm comment-btn js-comment-btn"><i class="layui-icon layui-icon-reply-fill"></i></button>
-                    {% if not comment.is_leaf_node %}
-                        <div class="children">
-                            {{ children }}
-                        </div>
-                    {% endif %}
+                    <div class="children">
+                        {% if not comment.is_leaf_node %}{{ children }}{% endif %}
+                    </div>
                 </div>
             </div>
         {% endwith %}
     {% endrecursetree %}
+    </div>
 </div>
 <script src="https://lib.baomitu.com/jquery/1.12.4/jquery.js"></script>
 <script src="https://lib.baomitu.com/layui/2.7.6/layui.min.js"></script>
