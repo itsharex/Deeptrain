@@ -9,6 +9,9 @@ function cls_inner(dom, cls_) {
         dom.classList.add(cls[i])
     }
 }
+function to_top(dom, target) {
+    target.insertBefore(dom, target.children[0]);
+}
 
 class SubmitNotify {
     constructor() {
@@ -50,7 +53,7 @@ class Like extends SubmitNotify {
         this.button = document.getElementById("like");
         this.icon = document.getElementById("like-icon");
         this.nlike = document.getElementById("like-number");
-        this.state = eval(article_data.getAttribute("like-state"));
+        this.state = eval(article_data.getAttribute("like-state").toLowerCase());
         this.number = Number(article_data.getAttribute("likes"));
         this._await_loading = false;
         this.render();
@@ -165,7 +168,7 @@ class CommentObject {
     }
     toNode() {
         let dom = document.createElement("div");
-        cls_inner(dom, "layui-panel comment layui-anim layui-anim-upbit");
+        cls_inner(dom, "layui-panel comment layui-anim layui-anim-downbit");
         dom.innerHTML = this.toHtml();
         dom.querySelector(".js-inner-content").innerText = this.content;
         return dom;
@@ -173,12 +176,12 @@ class CommentObject {
     innerNode(node) {
         let dom = this.toNode();
         if (this.root) {
-            document.querySelector("#comments").appendChild(dom);
+            to_top(dom, document.querySelector("#comments"));
         } else {
             if (this.reply_name) {
-                node.parentNode.parentNode.appendChild(dom);
+                to_top(dom, node.parentNode.parentNode);
             } else {
-                node.querySelector(".children").appendChild(dom);
+                to_top(dom, node.querySelector(".children"));
             }
         }
         return dom.querySelector(".js-comment-btn");
@@ -245,6 +248,7 @@ class Comment extends SubmitNotify {
                         }
                     );
                     el.innerNode(parentNode).onclick = param => (_this.clicked(param));
+                    _this.number += 1;
                     _this.number_dom.innerText = _this.number.toString();
                 } else {
                     _this.warning(data.reason);

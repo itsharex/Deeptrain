@@ -9,7 +9,7 @@
 </head>
 <body>
 {% csrf_token %}
-<div class="js-article-data" article-id="{{ article.id }}" title="{{ article.title }}" likes="{{ article.likes_number }}" like-state="{{ state }}" comments="{{ comments.count }}" hidden></div>
+<div class="js-article-data" article-id="{{ article.id }}" title="{{ article.title }}" likes="{{ article.likes_number }}" like-state="{{ state }}" comments="{{ article.comments.count }}" hidden></div>
 <div class="layui-col-xs11 layui-col-md9 layui-col-sm10 blog-content layui-anim layui-anim-downbit">
     <a href="javascript:window.history.back();" class="back"><i class="layui-icon layui-icon-left"></i> 返回</a>
     <h1 class="blog-title">{{ article.title }}</h1>
@@ -49,11 +49,11 @@
     <h2>评论</h2>
     <br>
     <button type="button" comment-type="article" content="{{ article.title }}" class="layui-btn layui-btn-primary submit-comment js-comment-btn"><i class="layui-icon layui-icon-reply-fill"></i>评论</button>
-    <span>&nbsp;&nbsp;共 <strong id="comment-number">{{ comments.count }}</strong> 条评论</span>
+    <span>&nbsp;&nbsp;共 <strong id="comment-number">{{ article.comments.count }}</strong> 条评论</span>
     <br>
     <div id="comments">
     {% load mptt_tags %}
-    {% recursetree comments %}
+    {% recursetree article.comments.all %}
         {% with comment=node %}
             <div class="layui-panel comment layui-anim layui-anim-upbit">
                 <img class="avatar" src="{{ comment.user.avatar_url }}" alt>

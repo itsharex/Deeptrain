@@ -82,6 +82,7 @@ html, body {
     gap: 8px;
     width: 100%;
     background: #fafafa !important;
+    transition: .2s;
 }
 .comment .comment-btn {
     float: right;

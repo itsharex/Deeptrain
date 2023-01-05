@@ -45,8 +45,7 @@ def article(request: WSGIRequest, idx):
             state = request.user.is_authenticated and request.user in article_instance.likes.all()
             return render(request, "blog/article.html", {
                 "article": article_instance,
-                "state": boolean_to_javascript(state),
-                "comments": Comment.objects.filter(article=article_instance),
+                "state": state,
             })
     return throw_bad_request(request, "请求的博客不存在")
 

@@ -57,7 +57,7 @@ class Comment(MPTTModel):
 
     content = models.TextField(max_length=300, default="")
     created = models.DateTimeField(auto_now_add=True)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, default=None)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments", default=None)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     parent = TreeForeignKey(
         'self',
