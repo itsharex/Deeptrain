@@ -65,8 +65,8 @@
 
 <div align="center">
 
-[<img height="55px" style="border-radius:50%;background:white;" src="https://cdn-icons-png.flaticon.com/128/3291/3291695.png" alt="github">](https://github.com/)&nbsp;
-[<img height="55px" style="border-radius:50%;background:white;" src="https://gitee.com/favicon.ico" alt="gitee">](https://gitee.com/)&nbsp;
+[<img height="56px" src="https://cdn-icons-png.flaticon.com/128/919/919847.png" alt="github">](https://github.com/)&nbsp;
+[<img height="56px" src="https://gitee.com/favicon.ico" alt="gitee">](https://gitee.com/)&nbsp;
 
 </div>
 <br>
