@@ -73,7 +73,6 @@ class Profile(models.Model):
 
     github = models.CharField(max_length=25, default="")
     gitee = models.CharField(max_length=25, default="")
-    codepen = models.CharField(max_length=25, default="")
 
     def __str__(self):
         return f"Profile object ({self.user})"

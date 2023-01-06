@@ -116,7 +116,7 @@ class OAuthApplication(object):
                 #  状态已登录, 设置绑定 OAuth App
                 model = OAuthModel.objects.\
                     create(user=user, oauth_id=oauth_id, oauth_name=oauth_name, oauth_app=self.NAME)
-                self.createEvent(model)
+                self.createEvent(model, user)
                 return redirect("/oauth/bind/")
             else:
                 return throw_bad_request(request, "OAuth authentication failed")
@@ -124,7 +124,7 @@ class OAuthApplication(object):
     def callback(self, request: WSGIRequest):
         pass
 
-    def createEvent(self, model):
+    def createEvent(self, model, user):
         pass
 
     def parse_content(self, content) -> bool:
@@ -193,6 +193,10 @@ class GithubOAuthApplication(OAuthApplication):
             return throw_bad_request(request, "Timed out")
         return throw_bad_request(request, "Code is empty")
 
+    def createEvent(self, model, user):
+        user.profile.github = model.oauth_name
+        user.profile.save()
+
 
 class GiteeOAuthApplication(OAuthApplication):
     """
@@ -245,6 +249,10 @@ class GiteeOAuthApplication(OAuthApplication):
                 pass
             return throw_bad_request(request, "Timed out")
         return throw_bad_request(request, "Code is empty")
+
+    def createEvent(self, model, user):
+        user.profile.gitee = model.oauth_name
+        user.profile.save()
 
 
 OAuthTypeSupport = {
