@@ -36,7 +36,7 @@ class User(AbstractUser):
 
     @cached_property
     def url(self) -> str:
-        return f"/profile?id={self.id}/"
+        return f"/profile/?id={self.id}"
 
     def __str__(self):
         return f"{self.username} (identity: {self.real_identity}, id: {self.id})"

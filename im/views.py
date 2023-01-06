@@ -77,4 +77,4 @@ def im_websocket(request, token) -> None:
 
 @login_required
 def index(request: WSGIRequest, user) -> HttpResponse:
-    return render(request, "im.html", {"token": user.token})
+    return render(request, "im/index.html", {"token": user.token})

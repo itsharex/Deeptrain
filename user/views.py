@@ -20,7 +20,8 @@ def login(request: WSGIRequest) -> HttpResponse:
     if request.POST:
         return JsonResponse(UserLoginForm(request).get_response())
     else:
-        return render(request, 'login.html', {"form": UserLoginForm(request), "oauth": oauthManager.login_template})
+        return render(request, 'user/login.html',
+                      {"form": UserLoginForm(request), "oauth": oauthManager.login_template})
 
 
 @authenticated_redirect
@@ -28,7 +29,7 @@ def register(request: WSGIRequest) -> HttpResponse:
     if request.POST:
         return JsonResponse(UserRegisterForm(request).get_response())
     else:
-        return render(request, 'register.html', {"form": UserRegisterForm(request)})
+        return render(request, 'user/register.html', {"form": UserRegisterForm(request)})
 
 
 def logout(request: WSGIRequest) -> HttpResponse:
@@ -41,12 +42,12 @@ def change(request: WSGIRequest, _) -> HttpResponse:
     if request.POST:
         return JsonResponse(UserChangePasswordForm(request).get_response())
     else:
-        return render(request, 'change.html', {"form": UserChangePasswordForm(request)})
+        return render(request, 'user/change.html', {"form": UserChangePasswordForm(request)})
 
 
 @login_required
 def home(request: WSGIRequest, user) -> HttpResponse:
-    return render(request, "home.html", {"name": user.username})
+    return render(request, "user/home.html", {"name": user.username})
 
 
 @login_required
@@ -63,5 +64,5 @@ def profile(request: WSGIRequest, visitor) -> HttpResponse:
                 raise Http404("The user was not found on this server.")
         else:
             user = visitor
-        return render(request, "profile.html", {"user": user, "is_self": user == visitor,
-                                                "form": UserProfileForm(request)})
+        return render(request, "user/profile.html", {"user": user, "is_self": user == visitor,
+                                                     "form": UserProfileForm(request)})
