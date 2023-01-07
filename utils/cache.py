@@ -69,7 +69,6 @@ class hash_cached_property:
     def _cls_hash_cache(_exec_function: Callable, expiration=default_expiration, version=None):
         def _wrap_(cls, *args, **kwargs):
             _hash = hash(cls)
-            print(cls, hash(cls), cls.something_different)
             _cache = cache.get(_hash, version=version)
             if _cache is None:
                 response = _exec_function(cls, *args, **kwargs)
