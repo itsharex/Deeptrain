@@ -142,7 +142,3 @@ def integer_operation(key: Any, delta: int = 1, default=1, expiration=default_ex
     except (ValueError, TypeError):
         cache.set(key, default, expiration, version=version)
         return default
-
-
-def times_limit(key: Any, max_limit, version=None, expiration=default_expiration, touch=False):
-    return integer_operation(key, expiration=expiration, version=version, touch=touch) > max_limit
