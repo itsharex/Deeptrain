@@ -4,7 +4,7 @@ from django.utils.functional import cached_property
 from user.models import User
 from mdeditor.fields import MDTextField
 from mptt.models import MPTTModel, TreeForeignKey
-from utils.markdown_ import parse as parse_markdown
+from utils.parse_markdown import parse_markdown
 
 
 class Tag(models.Model):

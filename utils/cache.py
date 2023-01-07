@@ -7,7 +7,11 @@ pid = os.getpid()
 default_expiration = 60
 
 
-def _hash_cache(expiration=default_expiration, version=None, __v_hash=None):
+def clear():
+    return cache.clear()
+
+
+def _hash_cache(expiration=default_expiration, version=None):
     """
 
     :param version: cache version
@@ -22,7 +26,7 @@ def _hash_cache(expiration=default_expiration, version=None, __v_hash=None):
             :return: picklable value
         :return: decorated function
         """
-        _hash = __v_hash or hash(_exec_function)
+        _hash = hash(_exec_function)
 
         def _wrap_(*args, **kwargs):
             _cache = cache.get(_hash, version=version)
@@ -61,10 +65,23 @@ class hash_cached_property:
         self.__doc__ = getattr(func, '__doc__')
         self.expiration = expiration
 
+    @staticmethod
+    def _cls_hash_cache(_exec_function: Callable, expiration=default_expiration, version=None):
+        def _wrap_(cls, *args, **kwargs):
+            _hash = hash(cls)
+            print(cls, hash(cls), cls.something_different)
+            _cache = cache.get(_hash, version=version)
+            if _cache is None:
+                response = _exec_function(cls, *args, **kwargs)
+                cache.set(_hash, response, expiration, version=version)
+                return response
+            return _cache
+        return _wrap_
+
     def __set_name__(self, owner, name):
         if self.name is None:
             self.name = name
-            self.func = hash_cache_process_safe(self.expiration)(self.real_func)
+            self.func = self._cls_hash_cache(self.real_func, self.expiration, version=pid)
         elif name != self.name:
             raise TypeError(
                 "Cannot assign the same hash_cached_property to two different names "
@@ -73,8 +90,9 @@ class hash_cached_property:
 
     def __get__(self, instance, cls=None):
         """
-        Call the function and put the return value in instance.__dict__ so that
-        subsequent attribute access on the instance returns the cached value
+        Call the function and put the return value in cache so that
+        subsequent attribute during the period when the cache is not expire  (var: expiration)
+        access on the instance returns the cached value
         instead of calling cached_property.__get__().
         """
         return self if instance is None else self.func(instance)
@@ -102,4 +120,3 @@ def short_md5_encode(text: str) -> str:
     """
 
     return md5_encode(text)[8:-8]
-
