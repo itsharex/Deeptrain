@@ -1,7 +1,7 @@
 import markdown
 
 
-def parse_markdown(md):
+def parse(md):
     return markdown.markdown(
         md, extensions=
         [
