@@ -13,6 +13,7 @@ def clear():
 
 def _hash_cache(expiration=default_expiration, version=None):
     """
+    Key Format: `:[version]:[hash]`
 
     :param version: cache version
     :param expiration: expiration seconds
@@ -75,6 +76,7 @@ class hash_cached_property:
                 cache.set(_hash, response, expiration, version=version)
                 return response
             return _cache
+
         return _wrap_
 
     def __set_name__(self, owner, name):
@@ -119,3 +121,28 @@ def short_md5_encode(text: str) -> str:
     """
 
     return md5_encode(text)[8:-8]
+
+
+def execute_or_get(key: Any, exec_, expiration=default_expiration, version=None,  *args, **kwargs):
+    _cache = cache.get(key, version=version)
+    if _cache is None:
+        response = exec_(*args, **kwargs)
+        cache.set(key, response, expiration, version=version)
+        return response
+    return _cache
+
+
+def integer_operation(key: Any, delta: int = 1, default=1, expiration=default_expiration,
+                      version=None, touch=False) -> int:
+    try:
+        ret = cache.incr(key, delta, version=version)
+        if touch:
+            cache.touch(key, expiration, version=version)
+        return ret
+    except (ValueError, TypeError):
+        cache.set(key, default, expiration, version=version)
+        return default
+
+
+def times_limit(key: Any, max_limit, version=None, expiration=default_expiration, touch=False):
+    return integer_operation(key, expiration=expiration, version=version, touch=touch) > max_limit
