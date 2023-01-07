@@ -8,6 +8,8 @@ from haystack.views import SearchView
 from .models import Article, Comment
 from DjangoWebsite.settings import BLOG_PAGINATION
 from utils.error import throw_bad_request
+from utils.throttle import not_serious_throttle as like_throttle
+from utils.throttle import simple_throttle as comment_throttle
 
 
 class BlogSearchView(SearchView):
@@ -51,7 +53,8 @@ def submit_like(request: WSGIRequest, idx: int):
     if not user.is_authenticated:
         return JsonResponse(
             {"success": False, "reason": "您还未登录, 请先 <a href='/login/' class='layui-font-blue'>登录</a>"})
-
+    if like_throttle(user, "like-submit"):
+        return JsonResponse({"success": False, "reason": "您的操作过于频繁, 请稍后再试"})
     query = Article.objects.filter(id=idx)
     if not query.exists():
         return JsonResponse({"success": False, "reason": "请求的博客不存在"})
@@ -83,6 +86,8 @@ def submit_comment(request: WSGIRequest, idx: int):
     if not user.is_authenticated:
         return JsonResponse(
             {"success": False, "reason": "您还未登录, 请先 <a href='/login/' class='layui-font-blue'>登录</a>"})
+    if comment_throttle(user, "comment-submit"):
+        return JsonResponse({"success": False, "reason": "您的操作过于频繁, 请稍后再试"})
 
     query = Article.objects.filter(id=idx)
     if not query.exists():
