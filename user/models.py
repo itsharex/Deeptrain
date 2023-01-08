@@ -65,6 +65,7 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile = models.TextField(default="", max_length=200)
+    ip = models.GenericIPAddressField(default="127.0.0.1", blank=True, null=True)
     avatar = ProcessedImageField(
         upload_to='avatars',
         default='avatars/default.png',

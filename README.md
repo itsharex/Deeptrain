@@ -52,12 +52,12 @@
 1. [X]  🍹  **User**
 2. [X]  🥁  **Files**
 3. [X]  🧃  **Websocket protocol & Instant Message**
-4. [X]  🍵  **Website Management**
+4. [X]  🍵  **Website Management (GeoIP, Monitor)**
 5. [X]  ☕  **Database & Cache**
 6. [X]  🍷  **Embedding Applications**
 7. [X]  👋  **OAuth** *(Open Authorization)*
 8. [X]  📚  **Blog**
-9. [ ]  📫  **Email Verify**
+9. [ ]  📫  **IP & Email Validation**
 10. [ ]  🌏  **i18n** *(Internationalization)*
 11. [ ]  🌀  **Front-end and Back-end Separation**
 

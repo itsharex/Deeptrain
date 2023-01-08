@@ -7,7 +7,7 @@ from turnstile.fields import TurnstileField as CaptchaField
 from hcaptcha.fields import hCaptchaField
 from django.core.exceptions import ValidationError
 from user.models import User, Profile
-from utils.throttle import user_submit_detection
+from utils.throttle import user_submit_detection, user_ip_detection
 
 
 spec_string = "\'\"<>~`?/\\*&^%$#@!:"  # 抵御大部分SQL注入, emoji导致长度识别错位, XSS攻击
@@ -183,12 +183,13 @@ class UserRegisterForm(BaseUserForm):
         if not password == re_password:
             raise ValidationError("The two passwords are inconsistent!")
         user_submit_detection(self.request, "register")
+        user_ip_detection(self.request)
         if User.objects.filter(username=username).exists():
             raise ValidationError("The user already exists!")
 
         user = User.objects.create_user(username=username, password=password, identity=0,
                                         country=getattr(self.request, "country"))
-        Profile.objects.create(user=user, profile="")
+        Profile.objects.create(user=user, ip=getattr(self.request, "ip"))
         auth.login(self.request, user)
         return self.cleaned_data
 

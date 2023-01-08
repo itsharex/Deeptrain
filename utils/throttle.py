@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from utils.cache import integer_operation
 from django.core.cache import cache
 from typing import *
+from user.models import Profile
 
 
 def rate_throttle(key: Any, throttle: int, version=None, expiration=60, touch=False) -> bool:
@@ -46,3 +47,12 @@ def user_submit_detection(request, operate_type):
     ip = getattr(request, "ip", None)
     if ip and important_level_throttle(ip, operate_type):
         raise ValidationError("The operation is too frequent. Please try again later")
+
+
+def _ip_detection(ip, ) -> bool:
+    return ip and ip != "127.0.0.1" and Profile.objects.filter(ip=ip).count() > 6
+
+
+def user_ip_detection(request):
+    if _ip_detection(getattr(request, "ip")):
+        raise ValidationError("The current ip address cannot meet registration conditions")
