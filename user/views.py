@@ -1,6 +1,6 @@
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse, Http404, JsonResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
 from user.models import User
@@ -18,7 +18,7 @@ def index(request: WSGIRequest) -> HttpResponse:
 @authenticated_redirect
 def login(request: WSGIRequest) -> HttpResponse:
     if request.POST:
-        return JsonResponse(UserLoginForm(request).get_response())
+        return UserLoginForm(request).as_response()
     else:
         return render(request, 'user/login.html',
                       {"form": UserLoginForm(request), "oauth": oauthManager.login_template})
@@ -27,7 +27,7 @@ def login(request: WSGIRequest) -> HttpResponse:
 @authenticated_redirect
 def register(request: WSGIRequest) -> HttpResponse:
     if request.POST:
-        return JsonResponse(UserRegisterForm(request).get_response())
+        return UserRegisterForm(request).as_response()
     else:
         return render(request, 'user/register.html', {"form": UserRegisterForm(request)})
 
@@ -40,7 +40,7 @@ def logout(request: WSGIRequest) -> HttpResponse:
 @login_required
 def change(request: WSGIRequest, _) -> HttpResponse:
     if request.POST:
-        return JsonResponse(UserChangePasswordForm(request).get_response())
+        return UserChangePasswordForm(request).as_response()
     else:
         return render(request, 'user/change.html', {"form": UserChangePasswordForm(request)})
 
@@ -53,7 +53,7 @@ def home(request: WSGIRequest, user) -> HttpResponse:
 @login_required
 def profile(request: WSGIRequest, visitor) -> HttpResponse:
     if request.POST:
-        return JsonResponse(UserProfileForm(request).get_response())
+        return UserProfileForm(request).as_response()
     else:
         uid = request.GET.get("id")
         if uid and uid.isdigit():

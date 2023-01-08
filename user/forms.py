@@ -1,11 +1,14 @@
 from django import forms
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
+from django.http import JsonResponse
 from django.utils.functional import cached_property
 from turnstile.fields import TurnstileField as CaptchaField
 from hcaptcha.fields import hCaptchaField
 from django.core.exceptions import ValidationError
 from user.models import User, Profile
+from utils.throttle import user_submit_detection
+
 
 spec_string = "\'\"<>~`?/\\*&^%$#@!:"  # 抵御大部分SQL注入, emoji导致长度识别错位, XSS攻击
 default_detail = "nothing..."
@@ -49,6 +52,9 @@ class BaseUserForm(forms.Form):
             return {"success": True}
         else:
             return {"success": False, "reason": self.get_error()}
+
+    def as_response(self) -> JsonResponse:
+        return JsonResponse(self.get_response())
 
 
 class UserLoginForm(BaseUserForm):
@@ -100,6 +106,7 @@ class UserLoginForm(BaseUserForm):
             raise ValidationError("Username format entered wrong! Do not enter illegal characters")
         if not is_available_password(password):
             raise ValidationError("Password format entered wrong! Do not enter illegal characters")
+        user_submit_detection(self.request, "login")
         user = auth.authenticate(username=username, password=password)
         if not user:
             raise ValidationError("Login error!")
@@ -175,6 +182,7 @@ class UserRegisterForm(BaseUserForm):
             raise ValidationError("Password format entered wrong! Do not enter illegal characters")
         if not password == re_password:
             raise ValidationError("The two passwords are inconsistent!")
+        user_submit_detection(self.request, "register")
         if User.objects.filter(username=username).exists():
             raise ValidationError("The user already exists!")
 

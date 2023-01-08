@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from utils.cache import integer_operation
 from django.core.cache import cache
 from typing import *
@@ -27,16 +28,21 @@ def important_level_throttle(client, operate_type) -> int:
     :param client: any
     :param operate_type: str
     :return: level
-        - 0: means that the operation is permitted (query 8/m, );
-        - 1: operation denied, level not serious - (wait 30s, 6 up);
+        - 0: means that the operation is permitted (query 6/m, );
+        - 1: operation denied, level not serious - (wait 30s, 4 up);
         - 2: operation denied, serious level; (wait 240s, forever [, continuation]);
     """
     value = integer_operation(operate_type, expiration=60, version=client)
-    if value <= 8:  # level 0
+    if value <= 6:
         return 0
-    elif value <= 14:
-        cache.touch(operate_type, 30, version=client)
+    elif value <= 10:
         return 1
     else:
         cache.touch(operate_type, 240, version=client)
         return 2
+
+
+def user_submit_detection(request, operate_type):
+    ip = getattr(request, "ip", None)
+    if ip and important_level_throttle(ip, operate_type):
+        raise ValidationError("The operation is too frequent. Please try again later")
