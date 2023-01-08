@@ -60,16 +60,8 @@ section .color:nth-child(3) {
     border-right: 1px solid rgba(255, 255, 255, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    /* 使用filter(滤镜) 属性，改变颜色。
-    hue-rotate(deg)  给图像应用色相旋转
-    calc() 函数用于动态计算长度值
-    var() 函数调用自定义的CSS属性值x*/
     filter: hue-rotate(calc(var(--x) * 70deg));
-    /* 调用动画animate，需要10s完成动画，
-    linear表示动画从头到尾的速度是相同的，
-    infinite指定动画应该循环播放无限次*/
     animation: animate 10s linear infinite;
-    /* 动态计算动画延迟几秒播放 */
     animation-delay: calc(var(--x) * -1s);
 }
 

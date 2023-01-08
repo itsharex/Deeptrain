@@ -17,7 +17,7 @@ class DefaultWebSocket(WebSocket):
         Arguments:
 
         - ``socket``: An open socket that should be used for WebSocket
-          communciation.
+          communication.
         - ``protocol``: not used yet.
         - ``version``: The WebSocket spec version to follow (default is 76)
         - ``handshake_reply``: Handshake message that should be sent to the
@@ -34,10 +34,10 @@ class DefaultWebSocket(WebSocket):
         self.protocol.accept_connection()
 
     def send(self, message):
-        '''
+        """
         Send a message to the client. *message* should be convertable to a
         string; unicode objects should be encodable as utf-8.
-        '''
+        """
         if not self.closed:
             self.protocol.write(message)
 

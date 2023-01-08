@@ -1,7 +1,8 @@
-preview
 README.md
-REAMDES
+docs
 .gitignore
 .git
 LICENSE
 vercel.json
+utils/test/*
+db.sqlite3

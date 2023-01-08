@@ -57,9 +57,10 @@
 6. [X]  🍷  **Embedding Applications**
 7. [X]  👋  **OAuth** *(Open Authorization)*
 8. [X]  📚  **Blog**
-9. [ ]  📫  **IP & Email Validation**
-10. [ ]  🌏  **i18n** *(Internationalization)*
-11. [ ]  🌀  **Front-end and Back-end Separation**
+9. [X]  🔍  **IP Verify**
+10. [ ] 🌀  **Front-end and Back-end Separation**
+11. [ ] 🌏  **i18n** *(Internationalization)*
+12. [ ] 📫  **Email Validation**
 
 ## ✨ Open Authorization Support 🎈
 

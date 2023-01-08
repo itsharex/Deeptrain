@@ -96,7 +96,7 @@ class WebSocketProtocol13(object):
 
     def read_data(self):
         """
-        Recieve data with operation code.
+        Receive data with operation code.
 
         return  value: tuple of operation code and string(byte array) value.
         """
@@ -124,7 +124,7 @@ class WebSocketProtocol13(object):
 
     def read_frame(self):
         """
-        recieve data as frame from server.
+        receive data as frame from server.
         """
         header_bytes = self._read_strict(2)
         b1 = header_bytes[0] if six.PY3 else ord(header_bytes[0])
