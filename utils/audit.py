@@ -1,3 +1,4 @@
+from typing import List
 import numpy
 import paddlehub as paddle
 import jieba
@@ -10,41 +11,40 @@ class Audit:
         self.cnn = paddle.Module(name="porn_detection_cnn")
         self.use_gpu = use_gpu
 
-    @staticmethod
-    def handle(data: list) -> int:
-        return numpy.average([dt.get("porn_probs", 0) for dt in data])
-
-    @staticmethod
-    def detect(results) -> bool:
-        """ available: return True; return False"""
-        return numpy.max(results) < 0.89 and numpy.average(results) < 0.8
-
-    def _execute(self, text: list, batch_size: int):
-        return tuple(map(
-            self.handle,
-            (
-                self.lstm.detection(data={"text": text}, use_gpu=self.use_gpu, batch_size=batch_size),
-                self.gru.detection(data={"text": text}, use_gpu=self.use_gpu, batch_size=batch_size),
-                self.cnn.detection(texts=text, use_gpu=self.use_gpu, batch_size=batch_size),
-            )
-        ))
+    def _execute(self, text: List[str], batch_size: int) -> bool:
+        """
+        :return: Legal: return true
+                 With prohibited words: return false
+        """
+        responses = (
+            self.lstm.detection(data={"text": text}, use_gpu=self.use_gpu, batch_size=batch_size),
+            self.gru.detection(data={"text": text}, use_gpu=self.use_gpu, batch_size=batch_size),
+            self.cnn.detection(texts=text, use_gpu=self.use_gpu, batch_size=batch_size),
+        )
+        labels, probs = zip(*[(dt["porn_detection_label"], dt["porn_probs"]) for data in responses for dt in data])
+        return numpy.max(probs) < 0.95 or (numpy.sum(labels) / len(labels)) < 0.5
 
     def execute(self, content) -> bool:
         text = jieba.lcut(content, cut_all=True, HMM=True)
-        q = self._execute(text, len(text))
-        return self.detect(q)
+        return self._execute(text, len(text))
 
     def strict_execute(self, content) -> bool:
         for text in jieba.lcut(content, cut_all=False, HMM=True):
             text = text.strip()
-            if text:
-                if not self.detect(self._execute([text], 1)):
-                    return False
+            if text and not self._execute([text], 1):
+                return False
         return True
 
 
-audit = Audit()
+audit = Audit(use_gpu=False)
 
 if __name__ == "__main__":
+    from benchmark import fps_analysis
     while 1:
-        print(audit.strict_execute(input("> ")))
+        val = input("> ")
+        print(
+            fps_analysis(
+                lambda: print(audit.strict_execute(val)),
+                count=1,
+            ),
+        )

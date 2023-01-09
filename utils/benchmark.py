@@ -2,6 +2,10 @@ from time import time
 from typing import Callable
 
 
+def safe_div(a, b):
+    return a / b if b != 0 else 0
+
+
 def timeit_analysis(function: Callable[[any], any], count: int = 10 ** 6, *args, **kwargs):
     _current = time()
     for _ in range(count):
@@ -11,7 +15,7 @@ def timeit_analysis(function: Callable[[any], any], count: int = 10 ** 6, *args,
 
 
 def fps_analysis(function: Callable[[any], any], count: int = 10 ** 5, *args, **kwargs):
-    return 1 / timeit_analysis(function, count, *args, **kwargs) * count
+    return safe_div(1, timeit_analysis(function, count, *args, **kwargs) * count)
 
 
 def fps_compare(_function: callable, _comp_function: callable, count: int = 10 ** 5):
