@@ -43,7 +43,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
 <script src="{% static 'js/message.js' %}"></script>
 <script src="{% static 'js/websocket_url.js' %}"></script>
-<script src="{% static 'js/im.js' %}"></script>
+<script src="{% static 'js/im/index.js' %}"></script>
 <script>
     initialize("{% url 'im:websocket' token %}");
 </script>

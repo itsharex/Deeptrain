@@ -1,6 +1,7 @@
-#encoding:utf-8
+# encoding:utf-8
 from six.moves import queue
 from dwebsocket.websocket import WebSocket
+
 
 class DefaultWebSocket(WebSocket):
     """
@@ -13,7 +14,7 @@ class DefaultWebSocket(WebSocket):
     """
 
     def __init__(self, protocol):
-        '''
+        """
         Arguments:
 
         - ``socket``: An open socket that should be used for WebSocket
@@ -24,7 +25,7 @@ class DefaultWebSocket(WebSocket):
           client when ``send_handshake()`` is called.
         - ``handshake_sent``: Whether the handshake is already sent or not.
           Set to ``False`` to prevent ``send_handshake()`` to do anything.
-        '''
+        """
         self.protocol = protocol
         self.closed = False
         self.handle = None

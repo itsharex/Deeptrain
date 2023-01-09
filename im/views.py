@@ -1,10 +1,13 @@
 import time
+from typing import *
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
 from django.shortcuts import render
 from dwebsocket import require_websocket
 from utils import websocket
 from utils.wraps import login_required
+from utils.audit import audit
+
 
 ROBOT_IMAGE = "https://cdn-icons-png.flaticon.com/128/8811/8811373.png"
 
@@ -18,8 +21,10 @@ class IMClient(websocket.WebClient):
     def receiveEvent(self, obj: dict) -> None:
         if isinstance(obj, dict):
             message = str(obj.get("message", "")).strip()[:500]
-            if message:
+            if message and audit.strict_execute(message):
                 self.group.group_send(self, message)
+            else:
+                self.group.host_send("评论内容含有违禁词", [self, ])
 
     def send(self, username="", message="", uid=0, image="", is_html: bool = False, identity: str = "User") -> None:
         super(IMClient, self).send({
@@ -40,8 +45,8 @@ class IMServerClientGroup(websocket.WebClientGroup):
     def __init__(self):
         super().__init__()
 
-    def host_send(self, message=""):
-        for client in self.get_available_clients():
+    def host_send(self, message="", clients: Optional[List[IMClient]] = None):
+        for client in clients or self.get_available_clients():
             client: IMClient
             client.send("Chat Robot", message, -1, ROBOT_IMAGE, False, "Server-Owner")
 

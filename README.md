@@ -47,7 +47,7 @@
 
 ![screenshot](/docs/screenshot/screenshot.png)
 
-## 🌊 Website Features  🔮
+## 🌊 Website Features 🔮
 
 1. [X]  🍹  **User**
 2. [X]  🥁  **Files**
@@ -56,7 +56,7 @@
 5. [X]  ☕  **Database & Cache**
 6. [X]  🍷  **Embedding Applications**
 7. [X]  👋  **OAuth** *(Open Authorization)*
-8. [X]  📚  **Blog**
+8. [X]  📚  **Blog & Text Audit**
 9. [X]  🔍  **IP Verify**
 10. [ ] 🌀  **Front-end and Back-end Separation**
 11. [ ] 🌏  **i18n** *(Internationalization)*

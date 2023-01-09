@@ -10,6 +10,7 @@ from DjangoWebsite.settings import BLOG_PAGINATION
 from utils.error import throw_bad_request
 from utils.throttle import not_serious_throttle as like_throttle
 from utils.throttle import simple_throttle as comment_throttle
+from utils.audit import audit
 
 
 class BlogSearchView(SearchView):
@@ -88,7 +89,8 @@ def submit_comment(request: WSGIRequest, idx: int):
             {"success": False, "reason": "您还未登录, 请先 <a href='/login/' class='layui-font-blue'>登录</a>"})
     if comment_throttle(user, "comment-submit"):
         return JsonResponse({"success": False, "reason": "您的操作过于频繁, 请稍后再试"})
-
+    if not audit.strict_execute(content):
+        return JsonResponse({"success": False, "reason": "评论内容含有违禁词"})
     query = Article.objects.filter(id=idx)
     if not query.exists():
         return JsonResponse({"success": False, "reason": "请求的博客不存在"})
