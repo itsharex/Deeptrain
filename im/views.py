@@ -24,7 +24,7 @@ class IMClient(websocket.WebClient):
             if message and audit.strict_execute(message):
                 self.group.group_send(self, message)
             else:
-                self.group.host_send("评论内容含有违禁词", [self, ])
+                self.group.host_send("内容含有违禁词", [self, ])
 
     def send(self, username="", message="", uid=0, image="", is_html: bool = False, identity: str = "User") -> None:
         super(IMClient, self).send({
