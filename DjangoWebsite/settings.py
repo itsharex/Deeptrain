@@ -141,7 +141,7 @@ else:
             {
                 'ENGINE': 'django.db.backends.mysql',  # module
                 'NAME': 'django-database',  # database name
-                'HOST': 'localhost',  # ip
+                'HOST': '127.0.0.1',  # ip
                 'PORT': 3306,
                 'USER': 'root',
                 'PASSWORD': 'zmh200904',
