@@ -15,7 +15,7 @@ services:
     ports:
       - "6379:6379"
 
-  django:
+  app:
     build:
       context: .
       dockerfile: Dockerfile-deploy
@@ -39,4 +39,4 @@ services:
     volumes:
       - /compose/nginx/nginx.conf/:/etc/nginx/conf.d
     depends_on:
-      - django
+      - app
