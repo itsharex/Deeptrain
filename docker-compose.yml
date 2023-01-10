@@ -22,7 +22,7 @@ services:
       - db_network
 
   elasticsearch:
-    image: elasticsearch:latest
+    image: elasticsearch:8.5.3
     hostname: elasticsearch
     restart: always
     networks:
