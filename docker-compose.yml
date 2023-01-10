@@ -7,8 +7,6 @@ services:
     environment:
       - MYSQL_DATABASE=django-database
       - MYSQL_ROOT_PASSWORD=zmh200904
-    ports:
-      - "3306:3306"
     networks:
       - db_network
 
@@ -16,27 +14,13 @@ services:
     image: redis:latest
     hostname: redis
     restart: always
-    ports:
-      - "6379:6379"
     networks:
       - db_network
-
-  elasticsearch:
-    image: elasticsearch:8.5.3
-    hostname: elasticsearch
-    restart: always
-    networks:
-      - db_network
-    ports:
-      - '9300:9300'
-    privileged: true
 
   app:
     build:
       context: .
       dockerfile: Dockerfile-deploy
-    ports:
-      - "8000:8000"
     restart: always
     environment:
       - MYSQL=mysql

@@ -17,5 +17,3 @@ RUN  python3 -m pip install --upgrade pip \
   && pip3 install cryptography -i https://pypi.douban.com/simple/ \
   && pip3 install -r requirements.txt -i https://pypi.douban.com/simple/ \
   && python3 manage.py collectstatic --noinput
-
-EXPOSE 8000 8000
