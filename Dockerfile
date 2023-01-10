@@ -9,13 +9,13 @@ WORKDIR /opt/Zh-Website
 ADD . /opt/Zh-Website
 
 RUN apt-get update \
-  && apt-get install ffmpeg libsm6 libxext6  -y \
+  && apt-get install ffmpeg libsm6 libxext6  -y
 
-RUN /usr/local/bin/python -m pip install --upgrade pip \
-  && pip install opencv-python-headless \
-  && pip install -r requirements.txt -i https://pypi.douban.com/simple/
-RUN python manage.py collectstatic --noinput
-RUN python manage.py migrate
+RUN  python3 -m pip install --upgrade pip \
+  && pip3 install opencv-python-headless \
+  && pip3 install -r requirements.txt -i https://pypi.douban.com/simple/ \
+  && python3 manage.py collectstatic --noinput \
+  && python3 manage.py migrate
 
 EXPOSE 8000 8000
 

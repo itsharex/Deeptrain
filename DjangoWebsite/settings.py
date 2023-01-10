@@ -116,8 +116,9 @@ WSGI_APPLICATION = 'DjangoWebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-IS_CONTAINER = True
+IS_CONTAINER = not bool(os.getenv("COMPOSE", False))
 # Container: Do not have MySQL & Redis, Production environment
+# Compose: Have MySQL, Redis, Deploy environment
 # Go to Zh-Website Replit Page: https://Zh-Website.zmh-program.repl.co/
 if IS_CONTAINER:
     DATABASES = {
