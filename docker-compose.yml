@@ -1,0 +1,39 @@
+version: '2.16'
+services:
+  mysql:
+    image: mysql:latest
+    restart: on-failure
+    environment:
+      - MYSQL_DATABASE=django-database
+      - MYSQL_ROOT_PASSWORD=zmh200904
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+
+  django:
+    build:
+      dockerfile: Dockerfile-deploy
+    ports:
+      - "8000:8000"
+    restart: always
+    environment:
+      - IS_CONTAINER=1
+
+    command: gunicorn -c gunicorn.conf.py DjangoWebsite.wsgi:application
+    depends_on:
+      - mysql
+      - redis
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /compose/nginx/nginx.conf/:/etc/nginx/conf.d
