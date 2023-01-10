@@ -87,6 +87,13 @@
     >python manage.py buildadmin
     >```
 
+## Docker
+- #### Dockerfile (Container Mode - `SQLite` + `LocMem` + `Whoosh`)
+  ```commandline
+  docker build -t zmh .
+  docker run -p 8000:8000 -t zmh
+  ```
+
 ## 🍉 QuickStart Production 🍎
 
 1. initialize
@@ -300,6 +307,11 @@ IS_CONTAINER = False
     - Tags
     - Likes
     - Search & Highlight (haystack)
+- ⛳ `Pre 2.15.0 to 2.15.5`
+  - change code & frontend structure
+  - django commands
+  - operation throttle
+- 🔍 ``
 <br><br>
 
 ## Thanks
