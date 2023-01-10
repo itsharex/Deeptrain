@@ -3,6 +3,7 @@ services:
   mysql:
     image: mysql:latest
     restart: always
+    hostname: mysql
     environment:
       - MYSQL_DATABASE=django-database
       - MYSQL_ROOT_PASSWORD=zmh200904
@@ -13,11 +14,22 @@ services:
 
   redis:
     image: redis:latest
+    hostname: redis
     restart: always
     ports:
       - "6379:6379"
     networks:
       - db_network
+
+  elasticsearch:
+    image: elasticsearch:latest
+    hostname: elasticsearch
+    restart: always
+    networks:
+      - db_network
+    ports:
+      - '9300:9300'
+    privileged: true
 
   app:
     build:
