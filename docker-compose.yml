@@ -17,6 +17,7 @@ services:
 
   django:
     build:
+      context: .
       dockerfile: Dockerfile-deploy
     ports:
       - "8000:8000"
@@ -37,3 +38,5 @@ services:
       - "443:443"
     volumes:
       - /compose/nginx/nginx.conf/:/etc/nginx/conf.d
+    depends_on:
+      - django
