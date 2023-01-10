@@ -1,4 +1,4 @@
-version: '2.16'
+version: '3'
 services:
   mysql:
     image: mysql:latest
@@ -44,6 +44,7 @@ services:
       - app
     networks:
       - app_network
+    privileged: true
 
 networks:
   db_network:
