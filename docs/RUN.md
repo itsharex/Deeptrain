@@ -22,7 +22,7 @@
             python manage.py
           ```
 
-   2. #### Deploy
+   2. #### Deployment
       1. initialize
          ```commandline
           cd Zh-Website

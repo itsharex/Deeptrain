@@ -76,6 +76,8 @@
 
 ![application](/docs/screenshot/application.jpg)
 
+### [👉 Production & Deployment 👈](/docs/RUN.md)
+
 ## 📜 Change Log 📰
 
 ### version `1.x.x`
@@ -190,9 +192,9 @@
   - change code & frontend structure
   - django commands
   - operation throttle
-- 🔍 `Release 2.16.0 to 2.16.4`
+- 🔍 `Release 2.16.0 to 2.16.4.1`
   - Text Audit (paddlehub dataset & model)
-  - Docker-compose 
+  - Docker-compose
 <br><br>
 
 ## Thanks
