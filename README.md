@@ -30,7 +30,7 @@
 &nbsp;
 ![python: 3.9+](https://img.shields.io/badge/python-3.9%2B-success)
 &nbsp;
-![django: 3.2](https://img.shields.io/badge/Django-3.2-informational)
+![django: 4.1](https://img.shields.io/badge/Django-4.1-informational)
 
 </div>
 
@@ -188,13 +188,22 @@
     - Tags
     - Likes
     - Search & Highlight (haystack)
+<br><br>
+
 - ⛳ `Pre 2.15.0 to 2.15.5`
   - change code & frontend structure
   - django commands
   - operation throttle
-- 🔍 `Release 2.16.0 to 2.16.4.4`
+<br><br>
+
+- 🔍 `Pre 2.16.0 to 2.16.4.4`
   - Text Audit (paddlehub dataset & model)
   - Docker-compose
+<br><br>
+
+- 👆 `Release 2.17`
+  - python 3.7 -> 3.9
+  - django 3.2 -> 4.1
 <br><br>
 
 ## Thanks
