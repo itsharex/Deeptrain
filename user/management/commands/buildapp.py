@@ -286,8 +286,8 @@ def create_app(app_name, author, profile="", repo: dict = None, info_urls_string
 \n\n@appHandler.register\nclass Application(SyncApplication):\n    pass\n""")
 
     with open(os.path.join(parent_dir, "urls.py"), "w", encoding="utf-8") as fp:
-        fp.write(f"""from django.conf.urls import url
-from django.urls import path\n\nfrom applications.{app_name} import views\n\nurlpatterns = [\n    \n]\n""")
+        fp.write(f"""from django.urls import path
+\nfrom applications.{app_name} import views\n\nurlpatterns = [\n    \n]\n""")
         application_directory(parent_dir)
 
 

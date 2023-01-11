@@ -3,7 +3,7 @@ from django.http import HttpResponse, FileResponse, JsonResponse, Http404
 from django.shortcuts import render
 import files.models
 from DjangoWebsite.settings import FILE_PERMISSION_LEVEL
-from utils.wraps import login_required, identity_required, ajax_required
+from utils.wraps import login_required, identity_required, xml_required
 from .forms import FileForm
 from .models import *
 from .cache import fileCache
@@ -54,7 +54,7 @@ def download(request: WSGIRequest, _, uid: int, ufile: str) -> FileResponse:
         raise Http404("File does not exists.")
 
 
-@ajax_required
+@xml_required
 @login_required
 def search(request: WSGIRequest, _):
     try:

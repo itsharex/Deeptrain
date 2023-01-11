@@ -28,7 +28,7 @@
 
 ![system: linux/unix](https://img.shields.io/badge/system-Linux%2FUnix-important)
 &nbsp;
-![python: 3.7+](https://img.shields.io/badge/python-3.7%2B-success)
+![python: 3.9+](https://img.shields.io/badge/python-3.9%2B-success)
 &nbsp;
 ![django: 3.2](https://img.shields.io/badge/Django-3.2-informational)
 

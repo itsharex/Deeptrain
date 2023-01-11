@@ -4,16 +4,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required as _auth_login_required
 
 
-def ajax_required(_decorate_exec: callable) -> callable:
+def xml_required(_decorate_exec: callable) -> callable:
     def _exec_function(request: WSGIRequest, *args, **kwargs) -> HttpResponse:
-        if request.is_ajax():
+        if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
             return _decorate_exec(
                 request,
                 *args, **kwargs,
             )
         else:
             raise Http404("404")
-
     return _exec_function
 
 
