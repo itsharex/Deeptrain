@@ -1,4 +1,8 @@
-# Zh Website
+<div align="center">
+
+# <img height='50px' width='50px' src='favicon.ico'></img> Zh Website
+
+</div>
 
 <div align="center">
 
@@ -195,7 +199,7 @@
   - Text Audit (paddlehub dataset & model)
   - Docker-compose
 <br><br>
-- 👆 `Release 2.17 to 2.17.0.1`
+- 👆 `Release 2.17 to 2.17.0.2`
   - python 3.7 -> 3.9
   - django 3.2 -> 4.1
 <br><br>
