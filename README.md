@@ -192,7 +192,7 @@
   - change code & frontend structure
   - django commands
   - operation throttle
-- 🔍 `Release 2.16.0 to 2.16.4.2`
+- 🔍 `Release 2.16.0 to 2.16.4.3`
   - Text Audit (paddlehub dataset & model)
   - Docker-compose
 <br><br>

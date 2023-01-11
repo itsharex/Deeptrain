@@ -23,8 +23,8 @@
           ```
 
    2. #### Deployment
-      https://github.com/zmh-program/Zh-Website/blob/main/DjangoWebsite/settings.py#L41
       1. initialize
+         https://github.com/zmh-program/Zh-Website/blob/main/DjangoWebsite/settings.py#L41
          ```commandline
           pip install -r requirements.txt
 
