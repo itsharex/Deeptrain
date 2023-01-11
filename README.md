@@ -101,7 +101,7 @@
   4. 🔥 Websocket: Channels -> dwebsocket 🔥
   5. 🚀 Application Config 🚀
 <br><br>
-- 🍎 `Release 2.1.3`
+- 🍎 `Release 2.1.0 to 2.1.3`
   1. **putting on `ICP record`, deploy website**
   2. Use Django-form
   3. Add `django-simple-captcha` validation
@@ -109,7 +109,7 @@
   5. Add `Gunicorn` Support
   6. Add `Websocket Security`(wss) Support
 <br><br>
-- 🍋 `Release(s) 2.2.4.1`
+- 🍋 `Release 2.2.0 to 2.2.4.1`
   - File Features
     1. validation, limits (including `permission`, `file size`, `file name length`)
     2. download
@@ -138,7 +138,7 @@
     - Users & Requests Region Distribution
     - Server & Website Monitor
 <br><br>
-- 🌱 `Pre 2.7.3 to 2.7.12`
+- 🎇 `Release 2.7.3 to 2.7.12`
   - Change Password Page
   - **Intelligent verification**
     - change password page
@@ -146,8 +146,6 @@
     - register page
   - User Avatars
   - update Profile Page (`gitee`, `github`, `codepen` info)
-<br><br>
-- 🎇 `Release 2.7`
 <br><br>
 - 🍀 `Pre 2.8.0 to 2.8.4.2`
   - dockerfile
@@ -180,7 +178,6 @@
     - OAuth Bind *(Support `Github`, `Gitee`)*
     - OAuth Config
 <br><br>
-
 - 📚 `Release 2.14.0-alpha to 2.14.7.1`
   - **Markdown Blog System** (`haystack` & `whoosh` & `jieba` & `mptt` & `layui`)
     - Articles
@@ -189,19 +186,16 @@
     - Likes
     - Search & Highlight (haystack)
 <br><br>
-
 - ⛳ `Pre 2.15.0 to 2.15.5`
   - change code & frontend structure
   - django commands
   - operation throttle
 <br><br>
-
 - 🔍 `Pre 2.16.0 to 2.16.4.4`
   - Text Audit (paddlehub dataset & model)
   - Docker-compose
 <br><br>
-
-- 👆 `Release 2.17`
+- 👆 `Release 2.17 to 2.17.0.1`
   - python 3.7 -> 3.9
   - django 3.2 -> 4.1
 <br><br>
