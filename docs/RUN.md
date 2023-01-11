@@ -23,9 +23,9 @@
           ```
 
    2. #### Deployment
+      https://github.com/zmh-program/Zh-Website/blob/main/DjangoWebsite/settings.py#L41
       1. initialize
          ```commandline
-          cd Zh-Website
           pip install -r requirements.txt
 
           python manage.py migrate
@@ -33,7 +33,7 @@
          ```
       2. run
          ```commandline
-         gunicorn -c gunicorn.conf.py DjangoWebsite:wsgi:application
+         gunicorn -c gunicorn.conf.py DjangoWebsite.wsgi:application
          ```
 
 ## 🚘 Commands 🚜
