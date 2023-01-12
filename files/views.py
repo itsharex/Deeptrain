@@ -1,10 +1,11 @@
+import os
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, FileResponse, JsonResponse, Http404
 from django.shortcuts import render
 import files.models
-from DjangoWebsite.settings import FILE_PERMISSION_LEVEL
-from utils.wraps import login_required, identity_required, xml_required
-from .forms import FileForm
+from DjangoWebsite.settings import MAX_FILE_SIZE
+from utils.wraps import login_required, admin_required, xml_required
+from .forms import FileForm, get_directory
 from .models import *
 from .cache import fileCache
 
@@ -14,24 +15,13 @@ def index(request: WSGIRequest, _) -> HttpResponse:
     return render(request, "files/index.html")
 
 
-@identity_required(FILE_PERMISSION_LEVEL)
-def upload(request: WSGIRequest, user) -> HttpResponse:
+@admin_required
+def upload(request: WSGIRequest, _) -> HttpResponse:
     if request.POST:
-        form = FileForm(user, request.POST, request.FILES)
-        if form.is_valid():
-            return JsonResponse({
-                "success": True,
-                "link": form.get_link(),
-            })
-
-        else:
-            return JsonResponse({
-                "success": False,
-                "error": form.get_error(),
-            })
+        return FileForm(request).as_response()
     else:
         return render(request, "files/upload.html", {
-            "form": FileForm(user),
+            "form": FileForm(request),
             "max_size": MAX_FILE_SIZE,
             "max_name": MAX_FILE_NAME_LENGTH,
         })

@@ -32,7 +32,7 @@ def is_available_profile(profile: str) -> bool:
 
 class BaseUserForm(forms.Form):
     def __init__(self, request: WSGIRequest):
-        super().__init__(data=request.POST or None)
+        super().__init__(data=request.POST or None, files=request.FILES or None)
         self.request = request
 
     def clean(self):

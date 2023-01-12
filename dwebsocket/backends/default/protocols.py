@@ -195,9 +195,9 @@ class WebSocketProtocol13(object):
             self._abort()
 
     def can_read(self, timeout=0.0):
-        '''
+        """
         Return ``True`` if new data can be read from the socket.
-        '''
+        """
         timeout = int(timeout * 1000)
         events = self.poller.poll(timeout)
         return bool(events and events[0][1] & READ_MASK)
