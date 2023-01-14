@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.center {
+.main {
   display: flex;
   justify-content: center;
   align-items: center;

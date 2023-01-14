@@ -20,10 +20,11 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile-deploy
+      dockerfile: Dockerfile
     restart: always
     environment:
       - MYSQL=mysql
+      - DOCKER=true
     command: bash -c "python manage.py migrate && gunicorn -c gunicorn.conf.py DjangoWebsite.wsgi:application"
     depends_on:
       - mysql

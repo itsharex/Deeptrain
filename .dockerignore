@@ -6,4 +6,3 @@ LICENSE
 vercel.json
 utils/test/*
 db.sqlite3
-/Dockerfile

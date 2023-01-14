@@ -19,8 +19,8 @@ def not_serious_throttle(user, operate_type) -> bool:
 
 
 def simple_throttle(user, operate_type) -> bool:
-    # 一分钟内操作7次 限流, 如评论操作 (≈ 8.751s per query)
-    return _user_throttle(user, operate_type, times=7, expiration=60)
+    # 一分钟内操作6次 限流, 如评论操作 (10s per query)
+    return _user_throttle(user, operate_type, times=6, expiration=60)
 
 
 def important_level_throttle(client, operate_type) -> int:

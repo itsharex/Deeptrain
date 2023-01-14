@@ -1,0 +1,56 @@
+<style>
+    @import url("https://fonts.googleapis.com/css?family=Nunito:400,600,700");
+    * {
+        font-family: Verdana, Nunito, monospace, Consolas, Monospace, sans-serif;
+    }
+    .main{
+        display: flex;
+        flex-direction: column;
+        align-content: center; align-items: center;
+        justify-content: center; justify-items: center;
+        background-color: rgba(250,250,250);
+        width: max-content;
+        padding: 40px 35px;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        gap: 20px;
+        margin: 10px auto;
+    }
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        align-content: center; align-items: center;
+        justify-content: center; justify-items: center;
+    }
+    a {
+        text-decoration: none;
+        transition: .5s;
+        color: #009efd;
+    }
+    a:active, a:hover {
+        color: #0d64fd;
+    }
+
+    img {
+        width: 64px;
+        height: 64px;
+        transform: translateY(46px);
+    }
+
+    .vf-code {color: orange;transition: .4s; font-size: large;} .vf-code:hover, .vf-code:active {color: darkorange;}
+</style>
+<body>
+<div class="main">
+    <div class="column"><img src="https://zmh-program.site/favicon.ico" alt=""><h1>Zh-Website</h1></div>
+    <div class="column"><p>Your Verification Code is <strong class="vf-code">{{ code }}</strong></p></div>
+    <div class="column" style="color:gray;">
+        <span>Please enter the code in the input box.</span>
+        <span>The code will expire in <strong>10 minutes</strong>.</span>
+        <span>If it is not operated by yourself, please ignore it.</span>
+    </div>
+    <br><div class="column">
+        <a href="https://zmh-program.site/">&copy; zmh-program.site</a>
+    </div>
+</div>
+</body>

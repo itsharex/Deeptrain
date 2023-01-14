@@ -23,7 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-with open(os.path.join(BASE_DIR, "config.json"), "r") as f:
+_config_path = n if (n := os.path.join(os.path.dirname(BASE_DIR), "config.json")) \
+    else os.path.join(BASE_DIR, "config.json")
+with open(_config_path, "r") as f:
     _config = json.load(f)
 
 TURNSTILE_DEFAULT_CONFIG = {
@@ -35,7 +37,16 @@ if all(_config.values()):
     TURNSTILE_SECRET = _config["TURNSTILE_SECRET"]
     HCAPTCHA_SITEKEY = _config["HCAPTCHA_SITEKEY"]
     HCAPTCHA_SECRET = _config["HCAPTCHA_SECRET"]
-SECRET_KEY = _config["SECRET_KEY"] or "django-insecure-#l#3ps7+(*+7f#0cz=aj-sp!6$-waaf6h=*+=5h*(5njj_^)@8"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = _config['EMAIL_HOST']  # example: mail.zmh-program.site
+EMAIL_PORT = _config['EMAIL_PORT']  # example: 25
+EMAIL_HOST_USER = _config['EMAIL_USER']  # example: zmh@zmh-program.site
+EMAIL_HOST_PASSWORD = _config['EMAIL_PASSWORD']
+EMAIL_USE_TLS = _config['EMAIL_USE_TLS']
+DEFAULT_FROM_EMAIL = 'Server <%s>' % (EMAIL_HOST_USER, )
+
+SECRET_KEY = _config["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -65,6 +76,7 @@ INSTALLED_APPS = [
     'hcaptcha',
     'imagekit',
     'user',
+    'utils',
     'oauth',
     'im',
     'files',
@@ -116,48 +128,44 @@ WSGI_APPLICATION = 'DjangoWebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-IS_CONTAINER = not bool(os.getenv("COMPOSE", False))
-# Container: Do not have MySQL & Redis, Production environment
-# Compose: Have MySQL, Redis, Deploy environment
-# Go to Zh-Website Replit Page: https://Zh-Website.zmh-program.repl.co/
-if IS_CONTAINER:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+IS_DOCKER = bool(os.getenv("DOCKER", False))
 
-    # Cache
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'website-cache',
-        }
-    }
-else:
-    DATABASES = {
-        'default':
-            {
-                'ENGINE': 'django.db.backends.mysql',  # module
-                'NAME': 'django-database',  # database name
-                'HOST': os.getenv('MYSQL', 'mysql') or '127.0.0.1',
-                'PORT': 3306,
-                'USER': 'root',
-                'PASSWORD': 'zmh200904',
-            }
-    }
+REDIS_HOST = "redis" if IS_DOCKER else "127.0.0.1"
+MYSQL_HOST = "mysql" if IS_DOCKER else "127.0.0.1"
+RABBITMQ_HOST = "rabbitmq" if IS_DOCKER else "127.0.0.1"
 
-    # Cache
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": f"redis://{os.getenv('REDIS', 'redis') or '127.0.0.1'}:6379/",
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            }
+DATABASES = {
+    'default':
+        {
+            'ENGINE': 'django.db.backends.mysql',  # module
+            'NAME': 'django-database',  # database name
+            'HOST': MYSQL_HOST,
+            'PORT': 3306,
+            'USER': 'root',
+            'PASSWORD': 'zmh200904',
+        }
+}
+
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:6379/",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
+}
+
+CELERIES = {
+    "broker": {
+        "HOST": RABBITMQ_HOST,
+        "PORT": 5672,
+        "USER": "zmh-program",
+        "PASSWORD": "zmh200904",
+    },
+    "backend": "rpc://",
+}
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

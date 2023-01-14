@@ -1,8 +1,10 @@
 {
     "TURNSTILE_SITEKEY": "",
     "TURNSTILE_SECRET": "",
+
     "HCAPTCHA_SITEKEY": "",
     "HCAPTCHA_SECRET": "",
+
     "OAUTH": {
         "GitHub": {
             "SITEKEY": "05b353c81e2c15bf148d",
@@ -13,6 +15,13 @@
             "SECRET": "3786a2b1f9d6b77e6ba3079613ac4e76ff388b32d98f2d110fa845f1d0eaedc6"
         }
     },
-    "SECRET_KEY": "",
+
+    "EMAIL_HOST": "",
+    "EMAIL_USE_TLS": false,
+    "EMAIL_PORT": 0,
+    "EMAIL_USER": "",
+    "EMAIL_PASSWORD": "",
+
+    "SECRET_KEY": "django-insecure-#l#3ps7+(*+7f#0cz=aj-sp!6$-waaf6h=*+=5h*(5njj_^)@8",
     "ALLOWED_HOSTS": ["*"]
 }
