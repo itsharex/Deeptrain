@@ -53,4 +53,4 @@ def mail_verify(recipe: str) -> bool:
 
 
 def mail_validate(recipe: str, code: str) -> bool:
-    return cache.get("mail-verify", version=recipe) == code
+    return cache.get("mail-verify", version=recipe) == str(code)
