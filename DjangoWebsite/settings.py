@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-_config_path = n if (n := os.path.join(os.path.dirname(BASE_DIR), "config.json")) \
+_config_path = n if os.path.isfile(n := os.path.join(os.path.dirname(BASE_DIR), "config.json")) \
     else os.path.join(BASE_DIR, "config.json")
 with open(_config_path, "r") as f:
     _config = json.load(f)
