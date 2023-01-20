@@ -256,11 +256,11 @@ def create_app(app_name, author, profile="", repo: dict = None, info_urls_string
     migrations_dir = os.path.join(parent_dir, "migrations")
     if not os.path.isdir(migrations_dir):
         os.mkdir(migrations_dir)
-    with open(os.path.join(migrations_dir, "../../../user/management/commands/__init__.py"), "w", encoding="utf-8"):
+    with open(os.path.join(migrations_dir, "__init__.py"), "w", encoding="utf-8"):
         pass
 
     # manage startapp files
-    with open(os.path.join(parent_dir, "../../../user/management/commands/__init__.py"), "w", encoding="utf-8"):
+    with open(os.path.join(parent_dir, "__init__.py"), "w", encoding="utf-8"):
         pass
 
     with open(os.path.join(parent_dir, "admin.py"), "w", encoding="utf-8") as fp:
