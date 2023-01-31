@@ -4,7 +4,7 @@
     background: #000;
     display: flex;
 }
-#app canvas {
+canvas.earth {
     width: 100% !important;
     height: 100% !important;
 }
@@ -133,6 +133,24 @@
     animation: blink 0.8s ease-in-out infinite;
 }
 
+.operation-buttons {
+    position: absolute;
+    color: #fff;
+    display: flex;
+    user-select: none;
+    top: 64%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: 12dvw;
+}
+
+.operation-buttons button {
+    backdrop-filter: blur(2px);
+    width: max(16dvw, 106px);
+    height: 12dvh;
+    font-family: 'Inconsolata', monospace;
+    font-size: max(2dvw, 18px);
+}
 @keyframes blink {
     0%,
     75%,

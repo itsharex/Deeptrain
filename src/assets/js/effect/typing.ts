@@ -1,15 +1,18 @@
 import { ref } from 'vue';
+import type { Ref } from 'vue';
 
 export class TypingEffect {
-  public operation: string
-  public enableCursor: boolean
-  public ref: any
+  public operation: string;
+  public timeout: number;
+  public enableCursor: boolean;
+  public ref: Ref<string>;
   private cursor: boolean;
   private index: number;
   private asLoading: number;
 
-  constructor(operation: string, enableCursor: boolean = false) {
+  constructor(operation: string, timeout: number = 800, enableCursor: boolean = false) {
       this.operation = operation;
+      this.timeout = timeout;
       this.enableCursor = enableCursor;
       this.ref = ref("");
       this.cursor = true;
@@ -20,26 +23,27 @@ export class TypingEffect {
   protected count(): void {
     this.index += 1;
     this.cursor = !this.cursor;
-    const _this: TypingEffect = this;
     if (this.index <= this.operation.length) {
       this.ref.value = this.operation.substring( 0, this.index ) + ( this.cursor ? "|" : "&nbsp;" );
-      setTimeout(() => (_this.count()), Math.random() * (this.enableCursor ? 200 : 100));
+      this.delayerCall(Math.random() * (this.enableCursor ? 200 : 100));
     } else {
       if (this.enableCursor && this.asLoading <= 11) {
         this.ref.value = this.operation + ( this.asLoading % 2 === 1 ? "|" : "&nbsp;" );
         this.asLoading += 1;
-        setTimeout(() =>(_this.count()), 800);
+        this.delayerCall(800);
       } else {
         this.ref.value = this.operation;
       }
     }
   }
 
-  public run() {
-    this.count();
-    return this.getRef();
+  protected delayerCall(timeout: number): void {
+    const _this = this;
+    setTimeout(() => (_this.count()), timeout);
   }
-  public getRef(): any {
+
+  public run(): Ref<string> {
+    this.delayerCall(this.timeout);
     return this.ref;
   }
 }
