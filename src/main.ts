@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/dark/css-vars.css';
-import './assets/main.css'; /** @ts-ignore **/
+import './assets/css/main.css'; /** @ts-ignore **/
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
