@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import HCaptcha from "@/components/captcha/hCaptcha.vue";
 </script>
 
