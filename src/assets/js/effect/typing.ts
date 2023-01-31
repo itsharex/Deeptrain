@@ -20,15 +20,13 @@ export class TypingEffect {
   protected count(): void {
     this.index += 1;
     this.cursor = !this.cursor;
-
     const _this: TypingEffect = this;
-
     if (this.index <= this.operation.length) {
-      this.ref.value = this.operation.substring( 0, this.index ) + ( this.cursor ? "|" : " " );
+      this.ref.value = this.operation.substring( 0, this.index ) + ( this.cursor ? "|" : "&nbsp;" );
       setTimeout(() => (_this.count()), Math.random() * (this.enableCursor ? 200 : 100));
     } else {
       if (this.enableCursor && this.asLoading <= 11) {
-        this.ref.value = this.operation + ( this.asLoading % 2 === 1 ? "|" : " " );
+        this.ref.value = this.operation + ( this.asLoading % 2 === 1 ? "|" : "&nbsp;" );
         this.asLoading += 1;
         setTimeout(() =>(_this.count()), 800);
       } else {

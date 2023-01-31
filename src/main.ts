@@ -7,10 +7,10 @@ import './assets/css/main.css'; /** @ts-ignore **/
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-
 AOS.init({ duration: 1000 });
+
 const app = createApp(App);
 
-app.use(router).use(ElementPlus);
-
-app.mount('#app');
+app.use(router)
+   .use(ElementPlus)
+   .mount('#app');
