@@ -11,9 +11,6 @@ AOS.init({ duration: 1000 });
 
 const app = createApp(App);
 
-app.config.globalProperties.$hcaptcha = '10000000-ffff-ffff-ffff-000000000001';
-app.config.globalProperties.$turnstile = '1x00000000000000000000AA';
-
 app.use(router)
    .use(ElementPlus)
    .mount('#app');

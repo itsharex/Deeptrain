@@ -3,7 +3,7 @@ import HCaptcha from "@/components/captcha/hCaptcha.vue";
 </script>
 
 <template>
-<hCaptcha />
+<hCaptcha id="hcaptcha-field" />
 </template>
 
 <style scoped>

@@ -1,7 +1,4 @@
-import { getCurrentInstance } from "vue";
 import type { Ref } from "vue";
-
-export const properties: any = getCurrentInstance()?.appContext.config.globalProperties;
 
 function convertNode(el: Ref<HTMLElement> | HTMLElement): HTMLElement {
   return el instanceof HTMLElement ? el : el.value;
