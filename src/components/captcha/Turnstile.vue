@@ -1,10 +1,34 @@
-<template>
+<script setup lang="ts">
+import { insertScriptExceptExists } from "@/assets/js/utils";
+import { turnstile_sitekey } from "@/config/config";
+import { onMounted, ref } from "vue";
+import type { Ref } from "vue";
 
-</template>
+const props = defineProps<{
+  id: string,
+  theme?: string,
+}>();
+const emit = defineEmits(["update:modelValue"]);
 
-<script>
+const field: Ref<any> = ref();
+onMounted(() => {
+  insertScriptExceptExists(
+    'turnstile', "https://challenges.cloudflare.com/turnstile/v0/api.js", field,
+    true, true,
+    (): void => {   /** @ts-ignore **/
+    const turnstile = window.turnstile;
+      turnstile.render(field.value, {
+        sitekey: turnstile_sitekey,
+        theme: props.theme,
+        callback: (val: string): void => (
+          emit("update:modelValue", val)
+        ),
+      });
+    }
+  )
+});
+
 </script>
-
-<style scoped>
-
-</style>
+<template>
+  <div ref="field" :id="id" />
+</template>

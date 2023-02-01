@@ -8,6 +8,7 @@ const props = defineProps<{
   id: string,
   theme?: string,
 }>();
+const emit = defineEmits(["update:modelValue"]);
 
 const field: Ref<any> = ref();
 onMounted(() => {
@@ -19,7 +20,9 @@ onMounted(() => {
       hcaptcha.render(props.id, {
         sitekey: hcaptcha_sitekey,
         theme: props.theme,
-        callback: console.log,
+        callback: (val: string): void => (
+          emit("update:modelValue", val)
+        ),
       });
     }
   )
