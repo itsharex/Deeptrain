@@ -3,7 +3,11 @@
 # <img height='44px' width='44px' src='favicon.ico'></img> Zh Website
 
 </div>
+<div align="center">
 
+![code statistic](https://codeline-statistic.zmh-program.repl.co/repo/zmh-program/Zh-Website/?theme=dark)
+
+</div>
 <div align="center">
 
 ![GitHub forks](https://img.shields.io/github/forks/zmh-program/Zh-Website)
