@@ -1,7 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Consolas, Monospace, monospace !important;
+}
+
+.nunito {
+    font-family: 'Nunito', Consolas, Monospace, monospace !important;
 }
 
 section {
@@ -46,9 +52,8 @@ section .color:nth-child(3) {
 
 .box {
     position: relative;
-	border-radius: 10px;
+    border-radius: 10px;
 }
-
 
 .box .circle {
     position: absolute;
@@ -135,11 +140,11 @@ section .color:nth-child(3) {
     padding: 50px;
 }
 .checkip {
-	position: absolute;
-	left:0;
-	bottom:-10px;
+    position: absolute;
+    left:0;
+    bottom:-10px;
     width: 100%;
-	height: 6%;
+    height: 6%;
 }
 
 .form .title-div {
@@ -208,7 +213,7 @@ section .color:nth-child(3) {
 
 .checkip .inputText {
     width: 100%;
-	height:100%;
+    height:100%;
     margin-top: 20px;
 }
 
@@ -236,10 +241,10 @@ section .color:nth-child(3) {
 
 
 .checkip .inputText input {
-	position: absolute;
-	width:55%;
-	right:20%;
-	bottom:50%;
+    position: absolute;
+    width:55%;
+    right:20%;
+    bottom:50%;
     background: rgba(255, 255, 255, 0);
     outline: none;
     border: 1px solid rgba(255, 255, 255, 0);

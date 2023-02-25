@@ -1,22 +1,90 @@
 <script setup lang="ts">
-import HCaptcha from "@/components/captcha/hCaptcha.vue";
 import Turnstile from "@/components/captcha/Turnstile.vue";
-import { ref } from "vue";
-import type { Ref } from "vue";
+import { RouterLink } from "vue-router";
+import { reactive } from "vue";
 
-const datakey: Ref<string> = ref("");
-const datakey2: Ref<string> = ref("");
-const datakey3: Ref<string> = ref("");
-const datakey4: Ref<string> = ref("");
+const form = reactive({
+  username: "",
+  password: "",
+  captcha: "",
+})
 </script>
 
 <template>
-  <p>1 {{ datakey }} </p><hCaptcha id="hcaptcha-field" v-model="datakey" />
-  <p>2 {{ datakey2 }} </p><hCaptcha id="hcaptcha-field2" theme="dark" v-model="datakey2" />
-  <p>3 {{ datakey3 }} </p><Turnstile id="hcaptcha-field3" theme="light" v-model="datakey3" />
-  <p>4 {{ datakey4 }} </p><Turnstile id="hcaptcha-field4" v-model="datakey4" />
+  <el-container>
+    <el-header>
+      <RouterLink to="/" class="header">
+        <img src="/favicon.ico" alt="Zh-Website">
+      </RouterLink>
+    </el-header>
+    <el-main class="main">
+      <h1>Sign in to Zh-Website</h1>
+      <el-card shadow="hover">
+        <el-form :model="form" :label-position="'top'">
+          <el-form-item label="Username or email address">
+            <el-input v-model="form.username" />
+          </el-form-item>
+          <el-form-item label="Password">
+            <el-input v-model="form.password" type="password" show-password />
+          </el-form-item>
+          <Turnstile id="cf-captcha" v-model="form.captcha" />
+          <el-button class="validate-button">Sign in</el-button>
+        </el-form>
+        <el-divider />
+        <p class="oauth-tag">Sign in with OAuth</p>
+        <p>{{ form }}</p>
+      </el-card>
+      <el-card shadow="never" class="help">
+        Do not have an account? <RouterLink to="/register">Create one</RouterLink>.
+      </el-card>
+    </el-main>
+  </el-container>
 </template>
 
 <style scoped>
-
+.header {
+  margin: 20px auto;
+  display: flex;
+  width: max-content;
+  background: none !important;
+}
+.header img {
+  width: 64px;
+  height: 64px;
+}
+.main {
+  margin: 20px 0;
+  display: grid;
+  grid-gap: 24px;
+  justify-content: center;
+}
+.main h1 {
+  color: #fff;
+  font-weight: 100;
+  text-align: center;
+}
+#cf-captcha {
+  margin: 10px 0;
+  border-radius: 2px;
+}
+.oauth-tag {
+  text-align: center;
+  transform: translateY(-16px);
+}
+.validate-button {
+  background: #238623;
+  color: #fff !important;
+  border-color: rgba(240, 246, 252, 0.1) !important;
+  width: 100%;
+}
+.validate-button:hover,
+.validate-button:active,
+.validate-button:focus {
+  background: #2ea043;
+}
+.help {
+  padding: 8px 20px;
+  background: transparent;
+  text-align: center;
+}
 </style>
