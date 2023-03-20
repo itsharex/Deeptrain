@@ -5,9 +5,9 @@ ENV DOCKER 1
 
 MAINTAINER zmh-program
 
-RUN mkdir /opt/Zh-Website
-WORKDIR /opt/Zh-Website
-ADD . /opt/Zh-Website
+RUN mkdir /opt/Deeptrain
+WORKDIR /opt/Deeptrain
+ADD . /opt/Deeptrain
 
 RUN apt-get update \
   && apt-get install ffmpeg libsm6 libxext6  -y

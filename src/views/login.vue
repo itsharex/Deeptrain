@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import Turnstile from "@/components/captcha/Turnstile.vue";
 import { RouterLink } from "vue-router";
-import { reactive } from "vue";
+import { ref } from "vue";
 
-const form = reactive({
+const form = ref({
   username: "",
   password: "",
   captcha: "",
@@ -14,11 +14,11 @@ const form = reactive({
   <el-container>
     <el-header>
       <RouterLink to="/" class="header">
-        <img src="/favicon.ico" alt="Zh-Website">
+        <img src="/favicon.ico" alt="Deeptrain">
       </RouterLink>
     </el-header>
     <el-main class="main">
-      <h1>Sign in to Zh-Website</h1>
+      <h1>Sign in to Deeptrain</h1>
       <el-card shadow="hover">
         <el-form :model="form" :label-position="'top'">
           <el-form-item label="Username or email address">
@@ -62,6 +62,7 @@ const form = reactive({
   color: #fff;
   font-weight: 100;
   text-align: center;
+  height: max-content;
 }
 #cf-captcha {
   margin: 10px 0;

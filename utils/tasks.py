@@ -35,7 +35,7 @@ def mail_verify_sending(recipe: str):
     code = text.generate_ncode(6)
 
     base_mail_sending.delay(
-        "Zh-Website | Mail Verify",
+        "Deeptrain | Mail Verify",
         "Your verification code is %s" % code,
         recipe,
         loader.render_to_string("mail.html", {"code": code}),

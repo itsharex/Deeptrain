@@ -24,7 +24,7 @@
 
    2. #### Deployment
       1. initialize
-         https://github.com/zmh-program/Zh-Website/blob/d10abc31ae7244d5705efd3dc42f945032c69ffe/DjangoWebsite/settings.py#L41
+         https://github.com/zmh-program/Deeptrain/blob/d10abc31ae7244d5705efd3dc42f945032c69ffe/DjangoWebsite/settings.py#L41
          ```commandline
           pip install -r requirements.txt
 
@@ -51,13 +51,13 @@
 
 ## 📮 Configs 🎨
 
-https://github.com/zmh-program/Zh-Website/blob/7a44e9597a40d7407e1fe8c9c995663c266eecc8/config.json#L1-L18
+https://github.com/zmh-program/Deeptrain/blob/7a44e9597a40d7407e1fe8c9c995663c266eecc8/config.json#L1-L18
 
 ## 📕 Settings 📚
 
 *⚠ initialize then!*
 
-https://github.com/zmh-program/Zh-Website/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/DjangoWebsite/settings.py#L114
+https://github.com/zmh-program/Deeptrain/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/DjangoWebsite/settings.py#L114
 
 rewrite to
 
@@ -67,7 +67,7 @@ IS_CONTAINER = False
 
 - `MySQL`
 
-  https://github.com/zmh-program/Zh-Website/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/DjangoWebsite/settings.py#L133-L143
+  https://github.com/zmh-program/Deeptrain/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/DjangoWebsite/settings.py#L133-L143
 
   > ```sql
   > create DATABASE `django-database`;
@@ -75,4 +75,4 @@ IS_CONTAINER = False
   >
 - `Redis`
 
-  https://github.com/zmh-program/Zh-Website/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/DjangoWebsite/settings.py#L145-L154
+  https://github.com/zmh-program/Deeptrain/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/DjangoWebsite/settings.py#L145-L154

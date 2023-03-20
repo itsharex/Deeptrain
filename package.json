@@ -1,6 +1,6 @@
 {
-  "name": "zh-website",
-  "version": "0.0.0",
+  "name": "deeptrain",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",

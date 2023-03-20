@@ -8,7 +8,7 @@ function initializeSiteRequest(ajax_url) {
         success: data => (updateSiteRequestChart(data)),
     })
 }
-initGithubRepositoryData("zmh-program", "Zh-Website");
+initGithubRepositoryData("zmh-program", "Deeptrain");
 function initializeWebsocket(url) {
     ChartSocket = new websocket(url, document.querySelector("#message-window"));
     baseStamp = Number(new Date());

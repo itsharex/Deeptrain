@@ -8,21 +8,21 @@ const router = createRouter({
       name: 'index',
       component: () => import('../views/index.vue'),
       meta: {
-        title: 'Zh-Website',
+        title: 'Deeptrain',
       }
     },{
       path: '/register',
       name: 'register',
       component: () => import('../views/register.vue'),
       meta: {
-        title: 'Sign up | Zh-Website',
+        title: 'Sign up | Deeptrain',
       }
     },{
       path: '/login',
       name: 'login',
       component: () => import('../views/login.vue'),
       meta: {
-        title: 'Sign in | Zh-Website',
+        title: 'Sign in | Deeptrain',
       }
     }
   ]

@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 <template>
   <canvas ref="earth" class="earth"></canvas>
-  <h1 class="noise">Zh-Website</h1>
+  <h1 class="noise">Deeptrain</h1>
   <h3 class="description" v-html="description" />
   <div class="operation-buttons">
     <RouterLink to="/login"><el-button plain>Sign in</el-button></RouterLink>

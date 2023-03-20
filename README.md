@@ -5,32 +5,32 @@
 </div>
 <div align="center">
 
-![code statistic](https://codeline-statistic.zmh-program.repl.co/repo/zmh-program/Zh-Website/?theme=dark)
+![code statistic](https://codeline-statistic.zmh-program.repl.co/repo/zmh-program/Deeptrain/?theme=dark)
 
 </div>
 <div align="center">
 
-![GitHub forks](https://img.shields.io/github/forks/zmh-program/Zh-Website)
-![GitHub Repo stars](https://img.shields.io/github/stars/zmh-program/Zh-Website)
-![GitHub repo size](https://img.shields.io/github/repo-size/zmh-program/Zh-Website)
-![GitHub repo file count](https://img.shields.io/github/directory-file-count/zmh-program/Zh-Website)
-![GitHub](https://img.shields.io/github/license/zmh-program/Zh-Website)
-[![star](https://gitee.com/zmh-program/Zh-Website/badge/star.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/stargazers)
-[![fork](https://gitee.com/zmh-program/Zh-Website/badge/fork.svg?theme=dark)](https://gitee.com/zmh-program/Zh-Website/members)
+![GitHub forks](https://img.shields.io/github/forks/zmh-program/Deeptrain)
+![GitHub Repo stars](https://img.shields.io/github/stars/zmh-program/Deeptrain)
+![GitHub repo size](https://img.shields.io/github/repo-size/zmh-program/Deeptrain)
+![GitHub repo file count](https://img.shields.io/github/directory-file-count/zmh-program/Deeptrain)
+![GitHub](https://img.shields.io/github/license/zmh-program/Deeptrain)
+[![star](https://gitee.com/zmh-program/Deeptrain/badge/star.svg?theme=dark)](https://gitee.com/zmh-program/Deeptrain/stargazers)
+[![fork](https://gitee.com/zmh-program/Deeptrain/badge/fork.svg?theme=dark)](https://gitee.com/zmh-program/Deeptrain/members)
 
 </div>
 
 <div align="center">
 
-![Lines of code](https://img.shields.io/tokei/lines/github/zmh-program/Zh-Website)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/zmh-program/Zh-Website)
+![Lines of code](https://img.shields.io/tokei/lines/github/zmh-program/Deeptrain)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/zmh-program/Deeptrain)
 &nbsp;
-![GitHub language count](https://img.shields.io/github/languages/count/zmh-program/Zh-Website)
-![GitHub top language](https://img.shields.io/github/languages/top/zmh-program/Zh-Website)
+![GitHub language count](https://img.shields.io/github/languages/count/zmh-program/Deeptrain)
+![GitHub top language](https://img.shields.io/github/languages/top/zmh-program/Deeptrain)
 
 </div>
 
-> 🔥 Zh-Website, An Open Source Deep Reinforcement Learning training platform
+> 🔥 Deeptrain, An Open Source Deep Reinforcement Learning training platform
 
 <div align="center">
 
@@ -48,8 +48,8 @@
 > <br>&nbsp;&nbsp;![Website](https://img.shields.io/website?url=https%3A%2F%2Fzmh-program.site)
 >
 > 1. **[zmh-program.site](https://zmh-program.site) - tencent cloud**
-> 2. *[zh-website.zmh-program.repl.co](https://zh-website.zmh-program.repl.co) - replit (container)*
-> 3. *[zh-website.vercel.app](https://zh-website.vercel.app) - vercel (redirect)*
+> 2. *[Deeptrain.zmh-program.repl.co](https://Deeptrain.zmh-program.repl.co) - replit (container)*
+> 3. *[Deeptrain.vercel.app](https://Deeptrain.vercel.app) - vercel (redirect)*
 
 ## 🚀️ ScreenShot 🎋
 

@@ -296,5 +296,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # 由于接口数量过多, 且涉及多行输出, 因此不提供命令行解析 (说实话就是懒)
-        # 迁移于 startapp.py (Zh-Website V1.0 update)
+        # 迁移于 startapp.py (Deeptrain V1.0 update)
         console_create_app()
