@@ -1,55 +1,33 @@
 <div align="center">
 
-# <img height='44px' width='44px' src='favicon.ico'></img> Deeptrain
-
-</div>
-<div align="center">
-
-![code statistic](https://codeline-statistic.zmh-program.repl.co/repo/zmh-program/Deeptrain/?theme=dark)
-
-</div>
-<div align="center">
-
-![GitHub forks](https://img.shields.io/github/forks/zmh-program/Deeptrain)
-![GitHub Repo stars](https://img.shields.io/github/stars/zmh-program/Deeptrain)
-![GitHub repo size](https://img.shields.io/github/repo-size/zmh-program/Deeptrain)
-![GitHub repo file count](https://img.shields.io/github/directory-file-count/zmh-program/Deeptrain)
-![GitHub](https://img.shields.io/github/license/zmh-program/Deeptrain)
-[![star](https://gitee.com/zmh-program/Deeptrain/badge/star.svg?theme=dark)](https://gitee.com/zmh-program/Deeptrain/stargazers)
-[![fork](https://gitee.com/zmh-program/Deeptrain/badge/fork.svg?theme=dark)](https://gitee.com/zmh-program/Deeptrain/members)
+# <a href="deeptrain.net"><img height='44px' width='44px' src='favicon.ico' style="transform: translateY(10px)"></img> <span>Deeptrain<span></a>
 
 </div>
 
-<div align="center">
 
-![Lines of code](https://img.shields.io/tokei/lines/github/zmh-program/Deeptrain)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/zmh-program/Deeptrain)
-&nbsp;
-![GitHub language count](https://img.shields.io/github/languages/count/zmh-program/Deeptrain)
-![GitHub top language](https://img.shields.io/github/languages/top/zmh-program/Deeptrain)
-
-</div>
 
 > 🔥 Deeptrain, An Open Source Deep Reinforcement Learning training platform
 
 <div align="center">
 
-![system: linux/unix](https://img.shields.io/badge/system-Linux%2FUnix-important)
+![system: linux/unix](https://img.shields.io/badge/system-Unix-important)
 &nbsp;
-![python: 3.9+](https://img.shields.io/badge/python-3.9%2B-success)
+![python: 3.9](https://img.shields.io/badge/python-3.9-success)
 &nbsp;
 ![django: 4.1](https://img.shields.io/badge/Django-4.1-informational)
+&nbsp;
+![vue: 3.2](https://img.shields.io/badge/vue-3.2-42b883)
+</div>
+
+---
+<div align="center">
+
+[![Deeptrain Github Stats](https://stats.deeptrain.net/repo/zmh-program/Deeptrain?theme=dark)](https://github.com/zmh-program/code-statistic)
 
 </div>
 
 ---
 
-> **🌎 Website Online 🌏**
-> <br>&nbsp;&nbsp;![Website](https://img.shields.io/website?url=https%3A%2F%2Fzmh-program.site)
->
-> 1. **[zmh-program.site](https://zmh-program.site) - tencent cloud**
-> 2. *[Deeptrain.zmh-program.repl.co](https://Deeptrain.zmh-program.repl.co) - replit (container)*
-> 3. *[Deeptrain.vercel.app](https://Deeptrain.vercel.app) - vercel (redirect)*
 
 ## 🚀️ ScreenShot 🎋
 
@@ -206,7 +184,11 @@
 - 👆 `Release 2.17 to 2.17.0.3`
   - python 3.7 -> 3.9
   - django 3.2 -> 4.1
-<br><br>
+
+### version `2.x.x`
+- Zh-Website -> Deeptrain
+- Vue3 + Django REST
+- MAIL
 
 ## Thanks
 
@@ -216,15 +198,9 @@
 [<img height="32px" src="https://www.kaggle.com/static/images/favicon.ico" alt="kaggle">](https://kaggle.com/)&nbsp;
 [<img height="32px" src="https://docs.replit.com/image/logo.svg" alt="replit">](https://replit.com/)&nbsp;
 [<img height="32px" src="https://cdn-icons-png.flaticon.com/128/5969/5969044.png" alt="cloudflare">](https://cloudflare.com/)&nbsp;
+[<img height="32px" src="https://account.jetbrains.com/static/favicon.ico" alt="jetbrains oss">](https://www.jetbrains.com/community/opensource/#support)&nbsp;
+[<svg viewBox="0 0 32 32" style="width: 32px; height: 32px; fill:orange"><g><path d="M4.54,9.46,2.19,7.1a6.93,6.93,0,0,0,0,9.79l2.36-2.36A3.59,3.59,0,0,1,4.54,9.46Z" style="fill:var(--colab-logo-dark)"></path><path d="M2.19,7.1,4.54,9.46a3.59,3.59,0,0,1,5.08,0l1.71-2.93h0l-.1-.08h0A6.93,6.93,0,0,0,2.19,7.1Z" style="fill:var(--colab-logo-light)"></path><path d="M11.34,17.46h0L9.62,14.54a3.59,3.59,0,0,1-5.08,0L2.19,16.9a6.93,6.93,0,0,0,9,.65l.11-.09" style="fill:var(--colab-logo-light)"></path><path d="M12,7.1a6.93,6.93,0,0,0,0,9.79l2.36-2.36a3.59,3.59,0,1,1,5.08-5.08L21.81,7.1A6.93,6.93,0,0,0,12,7.1Z" style="fill:var(--colab-logo-light)"></path><path d="M21.81,7.1,19.46,9.46a3.59,3.59,0,0,1-5.08,5.08L12,16.9A6.93,6.93,0,0,0,21.81,7.1Z" style="fill:var(--colab-logo-dark)"></path></g></svg>](https://colab.research.google.com)
 <br>
-[<img height="32px" src="https://code.visualstudio.com/favicon.ico" alt="vscode">](https://code.visualstudio.com/)&nbsp;
-[<img height="32px" src="https://cdn-icons-png.flaticon.com/128/1377/1377243.png" alt="codepen">](https://codepen.io/)&nbsp;
-[<img height="32px" src="https://account.jetbrains.com/static/favicon.ico" alt="jetbrains">](https://www.jetbrains.com/)&nbsp;
-<br>
-[<img height="32px" src="https://media.flaticon.com/dist/min/img/logo/flaticon_negative.svg" alt="favicon">](https://www.flaticon.com/)&nbsp;
-[<img height="32px" src="https://wallhaven.cc/images/layout/logo.png" alt="wallhaven">](https://wallhaven.cc/)&nbsp;
-<br>
-
-[`Jetbrains OSS` <br>`(Open Source Development Community Support)`](https://www.jetbrains.com/community/opensource/#support)
+[<img height="72px" src="https://www.rainyun.cc/img/logo.3dcf7adc.png" alt="rainyun" style="background: #fff; border-radius:6px;padding: 8px 12px; margin-top:4px">](https://www.rainyun.cc/?ref=MzE4MDA=)
 
 </div>
