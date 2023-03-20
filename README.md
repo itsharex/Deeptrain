@@ -66,7 +66,7 @@
 
 ## 📜 Change Log 📰
 
-### version `1.x.x`
+### 🔨 version `1.x.x`
 
 - 🥎 `Release 1.0`
 
@@ -78,7 +78,7 @@
 - 🎍 `Pre 1.2`
   1. Update Static Files
 
-### version `2.x.x`
+### 🛠 version `2.x.x`
 
 - 🍒 `Release 2.0.0`
   1. 🎉 Emoji Support 🎉
@@ -185,7 +185,7 @@
   - python 3.7 -> 3.9
   - django 3.2 -> 4.1
 
-### version `2.x.x`
+### ⚡ version `3.x.x`
 - Zh-Website -> Deeptrain
 - Vue3 + Django REST
 - MAIL
