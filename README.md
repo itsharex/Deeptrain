@@ -1,14 +1,14 @@
 <div align="center">
 
 # <a href="https://deeptrain.net"><img height='44px' width='44px' src='favicon.ico' style="transform: translateY(10px)"></img> <span>Deeptrain<span></a>
-
+####  🔥 An Open Source Deep Reinforcement Learning training platform
+####  🔥 一个开源深度强化学习训练平台
 </div>
 
-
-
-> 🔥 Deeptrain, An Open Source Deep Reinforcement Learning training platform
-
+---
 <div align="center">
+
+[![Deeptrain Github Stats](https://stats.deeptrain.net/repo/zmh-program/Deeptrain?theme=dark)](https://github.com/zmh-program/code-statistic)
 
 ![system: linux/unix](https://img.shields.io/badge/system-Unix-important)
 &nbsp;
@@ -17,12 +17,6 @@
 ![django: 4.1](https://img.shields.io/badge/Django-4.1-informational)
 &nbsp;
 ![vue: 3.2](https://img.shields.io/badge/vue-3.2-42b883)
-</div>
-
----
-<div align="center">
-
-[![Deeptrain Github Stats](https://stats.deeptrain.net/repo/zmh-program/Deeptrain?theme=dark)](https://github.com/zmh-program/code-statistic)
 
 </div>
 
