@@ -17,7 +17,7 @@ const form = reactive({
 const rules = reactive<FormRules>({
   username: [
     { required: true, message: 'Please input username', trigger: 'blur' },
-    { min: 3, max: 12, message: 'Length should be 3 to 12', trigger: 'change' },
+    { min: 3, max: 14, message: 'Length should be 3 to 14', trigger: 'change' },
   ],
   email: [
     { required: true, message: 'Please input email', trigger: 'blur' },
@@ -25,11 +25,11 @@ const rules = reactive<FormRules>({
   ],
   password: [
     { required: true, message: 'Please input password', trigger: 'blur' },
-    { min: 6, max: 18, message: 'Length should be 6 to 18', trigger: 'change' },
+    { min: 6, max: 26, message: 'Length should be 6 to 26', trigger: 'change' },
   ],
   repassword: [
     { required: true, message: 'Please input password', trigger: 'blur' },
-    { min: 6, max: 18, message: 'Length should be 6 to 18', trigger: 'change' },
+    { min: 6, max: 26, message: 'Length should be 6 to 26', trigger: 'change' },
     { validator: validateRePassword(form), trigger: 'change' },
   ],
   captcha: [
@@ -56,7 +56,7 @@ async function submit() {
       <el-card shadow="hover">
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
           <el-form-item label="Username" prop="username">
-            <el-input v-model="form.username" type="text" minlength="3" maxlength="12" />
+            <el-input v-model="form.username" type="text" minlength="3" maxlength="14" />
           </el-form-item>
           <el-form-item label="Email address" prop="email">
             <el-input v-model="form.email" type="email" />
@@ -70,10 +70,10 @@ async function submit() {
             </p>
           </el-alert>
           <el-form-item label="Password" prop="password">
-            <el-input v-model="form.password" type="password" show-password minlength="6" maxlength="18" />
+            <el-input v-model="form.password" type="password" show-password minlength="6" maxlength="26" />
           </el-form-item>
           <el-form-item label="Enter the password again" prop="repassword">
-            <el-input v-model="form.repassword" type="password" show-password minlength="6" maxlength="18" />
+            <el-input v-model="form.repassword" type="password" show-password minlength="6" maxlength="26" />
           </el-form-item>
           <el-form-item prop="captcha">
             <keep-alive>
