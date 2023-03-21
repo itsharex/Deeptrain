@@ -1,4 +1,9 @@
 {
+    "CORS_WHITELIST": [
+        "http://localhost:5173",
+        "https://deeptrain.net",
+        "https://www.deeptrain.net"
+    ],
     "TURNSTILE_SITEKEY": "",
     "TURNSTILE_SECRET": "",
 

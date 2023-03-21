@@ -60,6 +60,10 @@ APPLICATIONS_DIR = [f"applications.{app_path}" for app_path in os.listdir(BASE_A
                     if os.path.isdir(os.path.join(BASE_APPLICATION_DIR, app_path)) and app_path != "__pycache__"
                     and os.path.isfile(os.path.join(BASE_APPLICATION_DIR, app_path, APPLICATIONS_CONFIG_FILE))]
 
+# CORS
+CORS_ORIGIN_WHITELIST = _config["CORS_WHITELIST"]
+CORS_ALLOW_CREDENTIALS = False
+
 INSTALLED_APPS = [
     'simpleui',
     'django.contrib.admin',
@@ -68,6 +72,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'haystack',
     'mdeditor',
     'mptt',
@@ -90,6 +95,7 @@ INSTALLED_APPS = [
 #  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
