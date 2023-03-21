@@ -30,7 +30,7 @@ onMounted(() => {
 
 </script>
 <template>
-<div ref="field" class="hcaptcha" :id="id" />
+  <div ref="field" class="hcaptcha" :id="id" />
 </template>
 
 <style scoped>

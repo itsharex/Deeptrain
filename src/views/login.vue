@@ -56,7 +56,9 @@ async function submit() {
             <el-input v-model="form.password" type="password" show-password />
           </el-form-item>
           <el-form-item prop="captcha">
-            <Turnstile id="cf-captcha" v-model="form.captcha" />
+            <keep-alive>
+              <Turnstile id="cf-captcha" v-model="form.captcha" />
+            </keep-alive>
           </el-form-item>
           <el-button class="validate-button" @click="submit">Sign in</el-button>
         </el-form>

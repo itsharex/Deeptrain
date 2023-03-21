@@ -56,13 +56,15 @@ async function submit() {
             <el-input v-model="form.password" type="password" show-password />
           </el-form-item>
           <el-form-item prop="captcha">
-            <h-captcha id="h-captcha" v-model="form.captcha" />
+            <keep-alive>
+              <h-captcha id="h-captcha" v-model="form.captcha" />
+            </keep-alive>
           </el-form-item>
           <el-button class="validate-button" @click="submit">Sign up</el-button>
         </el-form>
       </el-card>
       <el-card shadow="never" class="help">
-        <div>Do not have an account? <RouterLink to="/register">Create one</RouterLink>.</div>
+        <div>Already have an account? <RouterLink to="/login">Sign in</RouterLink>.</div>
         <div>Forgot password? <RouterLink to="/forgot">Reset password</RouterLink>.</div>
       </el-card>
     </el-main>

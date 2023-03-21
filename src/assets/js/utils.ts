@@ -20,7 +20,7 @@ export function insertScriptExceptExists(val: string, src: string, el: Ref<HTMLE
                                          async: boolean = false, defer: boolean = false,
                                          hook: ((this:GlobalEventHandlers, event: Event) => any) | null = null
                                         ): HTMLScriptElement | undefined {
-  return val in window ? undefined : insertScript(
-    src, el, async, defer, hook
+  if (!(val in window)) return insertScript(
+    src, el, async, defer, hook,
   );
 }
