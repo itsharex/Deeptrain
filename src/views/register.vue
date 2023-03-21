@@ -56,7 +56,7 @@ async function submit() {
       <el-card shadow="hover">
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
           <el-form-item label="Username" prop="username">
-            <el-input v-model="form.username" type="text" />
+            <el-input v-model="form.username" type="text" minlength="3" maxlength="12" />
           </el-form-item>
           <el-form-item label="Email address" prop="email">
             <el-input v-model="form.email" type="email" />
@@ -70,10 +70,10 @@ async function submit() {
             </p>
           </el-alert>
           <el-form-item label="Password" prop="password">
-            <el-input v-model="form.password" type="password" show-password />
+            <el-input v-model="form.password" type="password" show-password minlength="6" maxlength="18" />
           </el-form-item>
           <el-form-item label="Enter the password again" prop="repassword">
-            <el-input v-model="form.repassword" type="password" show-password />
+            <el-input v-model="form.repassword" type="password" show-password minlength="6" maxlength="18" />
           </el-form-item>
           <el-form-item prop="captcha">
             <keep-alive>

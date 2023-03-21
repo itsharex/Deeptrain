@@ -14,20 +14,14 @@ const form = reactive({
 const rules = reactive<FormRules>({
   username: [
     { required: true, message: 'Please input username', trigger: 'blur' },
-    { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+    { min: 3, max: 12, message: 'Length should be 3 to 12', trigger: 'change' },
   ],
   password: [
-    {
-      required: true,
-      message: 'Please input password',
-      trigger: 'change',
-    },
+    { required: true, message: 'Please input password', trigger: 'blur' },
+    { min: 6, max: 18, message: 'Length should be 6 to 18', trigger: 'change' },
   ],
   captcha: [
-    {
-      required: true,
-      message: '',
-    },
+    { required: true, message: '', trigger: 'blur' },
   ],
 })
 
@@ -50,10 +44,10 @@ async function submit() {
       <el-card shadow="hover">
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
           <el-form-item label="Username or email address" prop="username">
-            <el-input v-model="form.username" />
+            <el-input v-model="form.username" type="text" minlength="3" maxlength="12" />
           </el-form-item>
           <el-form-item label="Password" prop="password">
-            <el-input v-model="form.password" type="password" show-password />
+            <el-input v-model="form.password" type="password" show-password minlength="6" maxlength="18" />
           </el-form-item>
           <el-form-item prop="captcha">
             <keep-alive>
