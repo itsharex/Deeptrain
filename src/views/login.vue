@@ -6,6 +6,7 @@ import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 
 const element = ref<FormInstance>();
+const loading = ref<boolean>(false);
 const form = reactive({
   username: "",
   password: "",
@@ -28,7 +29,9 @@ const rules = reactive<FormRules>({
 
 async function submit() {
   await element.value?.validate((valid: boolean, fields) => {
-    console.log(valid, fields)
+    if (valid) {  // trigger submit event
+      loading.value = true;
+    }
   })
 }
 </script>
@@ -42,7 +45,7 @@ async function submit() {
     </el-header>
     <el-main class="main">
       <h1>Sign in to Deeptrain</h1>
-      <el-card shadow="hover">
+      <el-card shadow="hover" v-loading="loading">
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
           <el-form-item label="Username or email address" prop="username">
             <el-input v-model="form.username" type="text" minlength="3" maxlength="14" />

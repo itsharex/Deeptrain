@@ -6,6 +6,7 @@ import HCaptcha from "@/components/captcha/hCaptcha.vue";
 import { validateEmail, validateRePassword } from "@/assets/js/utils";
 
 const element = ref<FormInstance>();
+const loading = ref<boolean>(false);
 const form = reactive({
   username: "",
   email: "",
@@ -39,7 +40,9 @@ const rules = reactive<FormRules>({
 
 async function submit() {
   await element.value?.validate((valid: boolean, fields) => {
-    console.log(valid, fields)
+    if (valid) {
+      loading.value = true;
+    }
   })
 }
 </script>
@@ -53,7 +56,7 @@ async function submit() {
     </el-header>
     <el-main class="main">
       <h1>Sign up to Deeptrain</h1>
-      <el-card shadow="hover">
+      <el-card shadow="hover" v-loading="loading">
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
           <el-form-item label="Username" prop="username">
             <el-input v-model="form.username" type="text" minlength="3" maxlength="14" />
@@ -85,7 +88,6 @@ async function submit() {
       </el-card>
       <el-card shadow="never" class="help">
         <div>Already have an account? <RouterLink to="/login">Sign in</RouterLink>.</div>
-        <div>Forgot password? <RouterLink to="/forgot">Reset password</RouterLink>.</div>
       </el-card>
     </el-main>
   </el-container>

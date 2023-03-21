@@ -57,6 +57,7 @@
     color: #fff !important;
     border-color: rgba(240, 246, 252, 0.1) !important;
     width: 100%;
+    transition: .25s;
 }
 
 .validate-button:hover,
