@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(["update:modelValue"]);
 
-const field: Ref<any> = ref();
+const field: Ref<undefined | HTMLElement> = ref();
 onMounted(() => {
   insertScriptExceptExists(
     'turnstile', "https://challenges.cloudflare.com/turnstile/v0/api.js", field,
@@ -30,5 +30,11 @@ onMounted(() => {
 
 </script>
 <template>
-  <div ref="field" :id="id" />
+  <div ref="field" class="cf-captcha" :id="id" />
 </template>
+
+<style scoped>
+.cf-captcha {
+  margin-top: 2px;
+}
+</style>

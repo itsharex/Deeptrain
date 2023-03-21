@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 
-export class TypingEffect {
+export class Typing {
   public operation: string;
   public timeout: number;
   public enableCursor: boolean;

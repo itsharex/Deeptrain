@@ -30,5 +30,11 @@ onMounted(() => {
 
 </script>
 <template>
-<div ref="field" :id="id" />
+<div ref="field" class="hcaptcha" :id="id" />
 </template>
+
+<style scoped>
+.hcaptcha {
+  margin-top: 2px;
+}
+</style>
