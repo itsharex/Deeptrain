@@ -1,6 +1,6 @@
 # Global
 .idea
-config.json
+./config.json
 
 # Backend (Django)
 backend/.idea

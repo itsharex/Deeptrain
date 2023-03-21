@@ -1,0 +1,16 @@
+{
+    "name": "Snake",
+    "repository_address": {
+        "github": "https://github.com/zmh-program/Z-RLSnake",
+        "gitee": "https://gitee.com/zmh-program/Z-RLSnake",
+        "gitcode": "https://gitcode.net/m0_60394896/Z-RLSnake"
+    },
+    "author": "zmh-program",
+    "profile": "Online Snake Game!",
+    "image": "https://cdn-icons-png.flaticon.com/128/3245/3245498.png",
+    "info_urls": [
+        "https://img.shields.io/github/forks/zmh-program/Z-RLSnake?style=plastic",
+        "https://img.shields.io/github/stars/zmh-program/Z-RLSnake?style=plastic"
+    ],
+    "UrlRoute": true
+}
