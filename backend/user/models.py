@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from utils.webtoken import generate_token
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
@@ -18,7 +19,8 @@ identity_choices = list(identities.items())
 class User(AbstractUser):
     class Meta:
         db_table = "auth"
-        verbose_name = "User"
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
 
     identity = models.SmallIntegerField(choices=identity_choices, default=0)
     country = models.TextField(max_length=50, default="Unknown")

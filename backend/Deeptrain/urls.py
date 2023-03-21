@@ -20,10 +20,10 @@ from django.urls import path, include
 from django.views.generic.base import RedirectView
 from user import views
 from django.conf import settings
-
+from utils.router import router
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path('', include(router.urls)),
     path("favicon.ico", RedirectView.as_view(url="/static/images/favicon.ico")),
     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
     url(r'^media/(?P<path>.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}, name='media'),

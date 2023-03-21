@@ -1,7 +1,7 @@
 from typing import List
 import numpy
-import paddlehub as paddle
-import jieba
+# import paddlehub as paddle  # hey! replace it in production env!
+# import jieba
 
 
 class Audit:
@@ -36,7 +36,7 @@ class Audit:
         return True
 
 
-audit = Audit(use_gpu=False)
+audit = Audit  # (use_gpu=False)
 
 if __name__ == "__main__":
     from benchmark import fps_analysis

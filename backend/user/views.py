@@ -3,11 +3,24 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
-from user.models import User
-from user.forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm, UserProfileForm
+from rest_framework import viewsets
+
+from .models import User
+from .forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm, UserProfileForm
+from .serializers import UserSerializer
 from Deeptrain.settings import LOGIN_URL
 from oauth.oauth import oauthManager
 from utils.wraps import login_required, authenticated_redirect
+from utils.router import register
+
+
+@register("user")
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
 
 
 @cache_page(60)

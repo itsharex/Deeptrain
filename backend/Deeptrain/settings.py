@@ -64,6 +64,12 @@ APPLICATIONS_DIR = [f"applications.{app_path}" for app_path in os.listdir(BASE_A
 CORS_ORIGIN_WHITELIST = _config["CORS_WHITELIST"]
 CORS_ALLOW_CREDENTIALS = False
 
+# REST
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+
 INSTALLED_APPS = [
     'simpleui',
     'django.contrib.admin',
