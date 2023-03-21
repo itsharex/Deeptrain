@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { insertScriptExceptExists } from "@/assets/js/utils";
+import { insertScriptExceptExists } from "@/assets/script/utils";
 import { turnstile_sitekey } from "@/config/config";
 import { onMounted, ref } from "vue";
 import type { Ref } from "vue";

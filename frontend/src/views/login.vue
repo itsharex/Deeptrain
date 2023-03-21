@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { redirect } from "@/assets/js/utils";
+import { redirect } from "@/assets/script/utils";
 import Turnstile from "@/components/captcha/Turnstile.vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { RouterLink } from "vue-router";
@@ -75,5 +75,5 @@ async function submit() {
 </template>
 
 <style scoped>
-@import "@/assets/css/user.css";
+@import "@/assets/sytle/user.css";
 </style>

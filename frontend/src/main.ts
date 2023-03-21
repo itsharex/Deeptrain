@@ -4,7 +4,7 @@ import { backend_url } from "@/config/config";
 import router from './router';
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/dark/css-vars.css';
-import './assets/css/main.css'; /** @ts-ignore **/
+import './assets/sytle/main.css'; /** @ts-ignore **/
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import axios from "axios";

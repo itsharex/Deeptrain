@@ -3,7 +3,7 @@ import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import HCaptcha from "@/components/captcha/hCaptcha.vue";
-import { validateEmail, validateRePassword } from "@/assets/js/utils";
+import { validateEmail, validateRePassword } from "@/assets/script/utils";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -94,5 +94,5 @@ async function submit() {
 </template>
 
 <style scoped>
-@import "@/assets/css/user.css";
+@import "@/assets/sytle/user.css";
 </style>
