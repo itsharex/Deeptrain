@@ -21,7 +21,7 @@ const rules = reactive<FormRules>({
     { min: 3, max: 14, message: 'Length should be 3 to 14', trigger: 'change' },
   ],
   email: [
-    { required: true, message: 'Please input email', trigger: 'blur' },
+    { type: 'email', required: true, message: 'Please input email', trigger: 'blur' },
     { validator: validateEmail, trigger: 'change'},
   ],
   password: [
