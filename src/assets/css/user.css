@@ -30,6 +30,10 @@
     margin: 0 auto;
 }
 
+.oauth a {
+    cursor: pointer;
+}
+
 .oauth a:hover {
     background: none;
 }

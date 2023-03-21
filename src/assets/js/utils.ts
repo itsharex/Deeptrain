@@ -25,6 +25,11 @@ export function insertScriptExceptExists(val: string, src: string, el: Ref<HTMLE
   );
 }
 
+export function redirect(href: string) {
+  /**  Hide URL.  **/
+  return window.location.href = href;
+}
+
 export const mailSuffixes: string[] = [
   "gmail.com",
   "yahoo.com",
