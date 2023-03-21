@@ -19,7 +19,7 @@ onMounted(() => {
       const hcaptcha = window.hcaptcha;
       hcaptcha.render(props.id, {
         sitekey: hcaptcha_sitekey,
-        theme: props.theme,
+        theme: props.theme || "light",
         callback: (val: string): void => (
           emit("update:modelValue", val)
         ),

@@ -3,31 +3,37 @@ import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import HCaptcha from "@/components/captcha/hCaptcha.vue";
+import { validateEmail, validateRePassword } from "@/assets/js/utils";
 
 const element = ref<FormInstance>();
 const form = reactive({
   username: "",
+  email: "",
   password: "",
+  repassword: "",
   captcha: "",
 });
 
 const rules = reactive<FormRules>({
   username: [
     { required: true, message: 'Please input username', trigger: 'blur' },
-    { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+    { min: 3, max: 12, message: 'Length should be 3 to 12', trigger: 'change' },
+  ],
+  email: [
+    { required: true, message: 'Please input email', trigger: 'blur' },
+    { validator: validateEmail, trigger: 'change'},
   ],
   password: [
-    {
-      required: true,
-      message: 'Please input password',
-      trigger: 'change',
-    },
+    { required: true, message: 'Please input password', trigger: 'blur' },
+    { min: 6, max: 18, message: 'Length should be 6 to 18', trigger: 'change' },
+  ],
+  repassword: [
+    { required: true, message: 'Please input password', trigger: 'blur' },
+    { min: 6, max: 18, message: 'Length should be 6 to 18', trigger: 'change' },
+    { validator: validateRePassword(form), trigger: 'change' },
   ],
   captcha: [
-    {
-      required: true,
-      message: '',
-    },
+    { required: true, message: '', trigger: 'blur' },
   ],
 })
 
@@ -49,11 +55,25 @@ async function submit() {
       <h1>Sign up to Deeptrain</h1>
       <el-card shadow="hover">
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
-          <el-form-item label="Username or email address" prop="username">
-            <el-input v-model="form.username" />
+          <el-form-item label="Username" prop="username">
+            <el-input v-model="form.username" type="text" />
           </el-form-item>
+          <el-form-item label="Email address" prop="email">
+            <el-input v-model="form.email" type="email" />
+          </el-form-item>
+          <el-alert type="info" show-icon :closable="false">
+            <p>
+              Supported Email Suffixes: <br>
+              &nbsp;&nbsp;@gmail.com, @qq.com, <br>
+              &nbsp;&nbsp;@yahoo.com, @163.com, <br>
+              &nbsp;&nbsp;@dingtalk.com.
+            </p>
+          </el-alert>
           <el-form-item label="Password" prop="password">
             <el-input v-model="form.password" type="password" show-password />
+          </el-form-item>
+          <el-form-item label="Enter the password again" prop="repassword">
+            <el-input v-model="form.repassword" type="password" show-password />
           </el-form-item>
           <el-form-item prop="captcha">
             <keep-alive>

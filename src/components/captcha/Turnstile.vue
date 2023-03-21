@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(["update:modelValue"]);
 
-const field: Ref<undefined | HTMLElement> = ref();
+const field: Ref<any> = ref();
 onMounted(() => {
   insertScriptExceptExists(
     'turnstile', "https://challenges.cloudflare.com/turnstile/v0/api.js", field,
@@ -19,7 +19,7 @@ onMounted(() => {
     const turnstile = window.turnstile;
       turnstile.render(field.value, {
         sitekey: turnstile_sitekey,
-        theme: props.theme? props.theme: "dark",
+        theme: props.theme || "dark",
         callback: (val: string): void => (
           emit("update:modelValue", val)
         ),
