@@ -1,4 +1,4 @@
-from DjangoWebsite.settings import CODING
+from Deeptrain.settings import CODING
 from geoip.cache import countryCache
 from geoip.geoip import get_ip
 from ..monitor import monitor

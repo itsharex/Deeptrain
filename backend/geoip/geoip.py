@@ -2,7 +2,7 @@ from typing import *
 from django.contrib.gis.geoip2 import GeoIP2, GeoIP2Exception
 from geoip2.errors import GeoIP2Error
 from django.core.handlers.wsgi import WSGIRequest
-from DjangoWebsite.settings import GEOIP_DATABASE_FILE
+from Deeptrain.settings import GEOIP_DATABASE_FILE
 
 geoip2 = GeoIP2(GEOIP_DATABASE_FILE)
 

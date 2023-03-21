@@ -4,7 +4,7 @@ import jwt.exceptions
 from django.utils.functional import cached_property
 
 from dwebsocket.backends.default import websocket
-from DjangoWebsite.settings import CODING
+from Deeptrain.settings import CODING
 from utils.webtoken import validate_token
 from user.models import User, Profile
 

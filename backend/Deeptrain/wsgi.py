@@ -1,5 +1,5 @@
 """
-WSGI config for DjangoWebsite project.
+WSGI config for Deeptrain project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -10,9 +10,9 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 import os
 import django
 from django.core.handlers.wsgi import WSGIHandler
-from DjangoWebsite import settings
+from Deeptrain import settings
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoWebsite.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Deeptrain.settings')
 
 
 class WSGIApplication(WSGIHandler):

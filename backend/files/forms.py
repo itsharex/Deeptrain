@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from turnstile.fields import TurnstileField as CaptchaField
 from user.forms import BaseUserForm
 from .models import UserFile
-from DjangoWebsite.settings import FILE_DATABASE_DIR, MAX_FILE_NAME_LENGTH, MAX_FILE_SIZE
+from Deeptrain.settings import FILE_DATABASE_DIR, MAX_FILE_NAME_LENGTH, MAX_FILE_SIZE
 
 
 def get_directory(uid, ufile):

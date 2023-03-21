@@ -5,7 +5,7 @@ import sys
 from typing import *
 from django.core.handlers.wsgi import WSGIRequest
 from .models import IPRequestAnalysis
-from DjangoWebsite.settings import GEOIP_RELEASE_INTERVAL
+from Deeptrain.settings import GEOIP_RELEASE_INTERVAL
 
 
 class CountryCache(object):

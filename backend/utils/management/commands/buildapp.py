@@ -1,6 +1,6 @@
 import logging
 from typing import *
-from DjangoWebsite import settings
+from Deeptrain import settings
 from rich import console
 import os
 import pathlib

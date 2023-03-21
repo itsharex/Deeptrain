@@ -1,4 +1,4 @@
-from DjangoWebsite import app
+from Deeptrain import app
 from typing import Union
 from celery import shared_task
 from django.core.mail import send_mail

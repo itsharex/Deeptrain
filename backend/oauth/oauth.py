@@ -10,7 +10,7 @@ from django.utils.functional import cached_property
 from django.urls import path
 from user.models import User
 from .models import OAuthModel
-from DjangoWebsite.settings import OAUTH_CONFIG
+from Deeptrain.settings import OAUTH_CONFIG
 from utils.error import throw_bad_request
 
 

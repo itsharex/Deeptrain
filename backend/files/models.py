@@ -3,7 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from user.models import User
-from DjangoWebsite.settings import MAX_FILE_NAME_LENGTH
+from Deeptrain.settings import MAX_FILE_NAME_LENGTH
 
 
 class UserFile(models.Model):

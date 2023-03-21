@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_page
 from user.models import User
 from user.forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm, UserProfileForm
-from DjangoWebsite.settings import LOGIN_URL
+from Deeptrain.settings import LOGIN_URL
 from oauth.oauth import oauthManager
 from utils.wraps import login_required, authenticated_redirect
 

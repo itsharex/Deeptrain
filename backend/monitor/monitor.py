@@ -1,7 +1,7 @@
 from datetime import timedelta
 import psutil
 from typing import *
-from DjangoWebsite.settings import MONITOR_INTERVAL
+from Deeptrain.settings import MONITOR_INTERVAL
 from utils.websocket import WebClientGroup, WebClient
 from utils.loop import loop
 

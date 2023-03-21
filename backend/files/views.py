@@ -3,7 +3,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, FileResponse, JsonResponse, Http404
 from django.shortcuts import render
 import files.models
-from DjangoWebsite.settings import MAX_FILE_SIZE
+from Deeptrain.settings import MAX_FILE_SIZE
 from utils.wraps import login_required, admin_required, xml_required
 from .forms import FileForm, get_directory
 from .models import *

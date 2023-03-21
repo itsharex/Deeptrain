@@ -1,7 +1,7 @@
 import time
 import jwt
 from django.apps import apps
-from DjangoWebsite.settings import SECRET_KEY, TOKEN_VALID_TIME
+from Deeptrain.settings import SECRET_KEY, TOKEN_VALID_TIME
 
 
 def generate_token(username, password) -> str:

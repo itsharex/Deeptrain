@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'Delete all of the migration files and regenerate migration files'
 
     def handle(self, *args, **options):
-        from DjangoWebsite.settings import INSTALLED_APPS
+        from Deeptrain.settings import INSTALLED_APPS
 
         print("  Delete Migrations:")
         for app in INSTALLED_APPS:

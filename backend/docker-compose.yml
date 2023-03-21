@@ -25,7 +25,7 @@ services:
     environment:
       - MYSQL=mysql
       - DOCKER=true
-    command: bash -c "python manage.py migrate && gunicorn -c gunicorn.conf.py DjangoWebsite.wsgi:application"
+    command: bash -c "python manage.py migrate && gunicorn -c gunicorn.conf.py Deeptrain.wsgi:application"
     depends_on:
       - mysql
       - redis

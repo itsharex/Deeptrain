@@ -10,7 +10,7 @@ from inspect import currentframe, getmodule
 from django.utils.functional import cached_property
 from applications.config import json_parser, JSONConfig
 from django import urls
-from DjangoWebsite.settings import APPLICATIONS_DIR
+from Deeptrain.settings import APPLICATIONS_DIR
 from . import websocket_protocol as protocol
 
 logger = logging.getLogger(__name__)

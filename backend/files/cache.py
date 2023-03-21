@@ -1,7 +1,7 @@
 import sys
 from django.core.paginator import Paginator, EmptyPage, Page
 from django.db.models import QuerySet
-from DjangoWebsite.settings import FILE_CACHE_CAPABILITY, FILE_PAGINATION
+from Deeptrain.settings import FILE_CACHE_CAPABILITY, FILE_PAGINATION
 from typing import *
 from functools import reduce
 

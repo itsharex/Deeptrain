@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from haystack.views import SearchView
 from .models import Article, Comment
-from DjangoWebsite.settings import BLOG_PAGINATION
+from Deeptrain.settings import BLOG_PAGINATION
 from utils.error import throw_bad_request
 from utils.throttle import not_serious_throttle as like_throttle
 from utils.throttle import simple_throttle as comment_throttle

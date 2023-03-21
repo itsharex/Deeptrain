@@ -40,8 +40,8 @@ def exec_website() -> 0:
 
 if __name__ == '__main__':
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoWebsite.settings')
-    from DjangoWebsite import settings
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Deeptrain.settings')
+    from Deeptrain import settings
     settings.IS_DEPLOYED = False
 
     sys.exit(exec_website())

@@ -8,6 +8,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            call_commandline("celery -A DjangoWebsite worker --loglevel=INFO -P eventlet")
+            call_commandline("celery -A Deeptrain worker --loglevel=INFO -P eventlet")
         except KeyboardInterrupt:
             exit(0)

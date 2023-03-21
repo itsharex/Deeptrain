@@ -1,7 +1,7 @@
 import json
 import os.path
 from typing import *
-from DjangoWebsite.settings import APPLICATIONS_CONFIG_FILE, CODING
+from Deeptrain.settings import APPLICATIONS_CONFIG_FILE, CODING
 
 
 class RepositoryAddress(object):  # NamedTuple: AttributeError: attribute '__dict__' of 'type' objects is not writable
