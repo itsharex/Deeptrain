@@ -27,6 +27,7 @@ urlpatterns = [
     path("favicon.ico", RedirectView.as_view(url="/static/images/favicon.ico")),
     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
     url(r'^media/(?P<path>.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
+    path('api/', include('rest_framework.urls')),
     path("admin/", admin.site.urls, name="admin"),
     path("register/", views.register, name="register"),
     path("login/", views.login, name="login"),
