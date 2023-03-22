@@ -2,7 +2,6 @@
 import { insertScriptHook } from "@/assets/script/utils";
 import { hcaptcha_sitekey } from "@/config/config";
 import { onMounted, ref } from "vue";
-import type { Ref } from "vue";
 
 const props = defineProps<{
   id: string,
@@ -10,7 +9,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(["update:modelValue"]);
 
-const field: Ref<any> = ref();
+const field = ref<any>();
 onMounted(() => {
   insertScriptHook(
     'hcaptcha', "https://hcaptcha.com/1/api.js", field,

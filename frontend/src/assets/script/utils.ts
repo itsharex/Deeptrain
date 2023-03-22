@@ -1,4 +1,4 @@
-import type { Ref, reactive } from "vue";
+import type { Ref } from "vue";
 
 function convertNode(el: Ref<HTMLElement> | HTMLElement): HTMLElement {
   return el instanceof HTMLElement ? el : el.value;
