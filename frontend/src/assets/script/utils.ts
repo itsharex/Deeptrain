@@ -25,6 +25,15 @@ export function insertScriptExceptExists(val: string, src: string, el: Ref<HTMLE
   );
 }
 
+export function insertScriptHook(val: string, src: string, el: Ref<HTMLElement> | HTMLElement,
+                                         async: boolean = false, defer: boolean = false,
+                                         hook: ((...arg: any[]) => any) | null = null
+): void {
+  ( val in window ) ? hook?.() : insertScript(
+    src, el, async, defer, hook,
+  );
+}
+
 export function redirect(href: string) {
   /**  Hide URL.  **/
   return window.location.href = href;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { insertScriptExceptExists } from "@/assets/script/utils";
+import { insertScriptHook } from "@/assets/script/utils";
 import { turnstile_sitekey } from "@/config/config";
 import { onMounted, ref } from "vue";
 import type { Ref } from "vue";
@@ -12,7 +12,7 @@ const emit = defineEmits(["update:modelValue"]);
 
 const field: Ref<any> = ref();
 onMounted(() => {
-  insertScriptExceptExists(
+  insertScriptHook(
     'turnstile', "https://challenges.cloudflare.com/turnstile/v0/api.js", field,
     true, true,
     (): void => {   /** @ts-ignore **/
