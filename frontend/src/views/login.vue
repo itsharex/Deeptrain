@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { redirect } from "@/assets/script/utils";
+import { captchaSize } from "@/assets/script/user";
 import Turnstile from "@/components/captcha/Turnstile.vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { RouterLink } from "vue-router";
@@ -71,7 +72,7 @@ async function submit() {
           </el-form-item>
           <el-form-item prop="captcha">
             <keep-alive>
-              <Turnstile id="cf-captcha" v-model="form.captcha" />
+              <Turnstile :size="captchaSize" id="cf-captcha" v-model="form.captcha" />
             </keep-alive>
           </el-form-item>
           <el-button class="validate-button" @click="submit">Sign in</el-button>

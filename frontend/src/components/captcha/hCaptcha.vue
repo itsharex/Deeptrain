@@ -5,6 +5,7 @@ import { onMounted, ref } from "vue";
 
 const props = defineProps<{
   id: string,
+  size?: string,
   theme?: string,
 }>();
 const emit = defineEmits(["update:modelValue"]);
@@ -18,6 +19,7 @@ onMounted(() => {
       const hcaptcha = window.hcaptcha;
       hcaptcha.render(props.id, {
         sitekey: hcaptcha_sitekey,
+        size: props.size || "normal",
         theme: props.theme || "light",
         callback: (val: string): void => emit("update:modelValue", val),
       });
@@ -32,6 +34,6 @@ onMounted(() => {
 
 <style scoped>
 .hcaptcha {
-  margin-top: 2px;
+  margin: 2px auto 0;
 }
 </style>

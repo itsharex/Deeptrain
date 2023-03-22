@@ -5,6 +5,7 @@ import { onMounted, ref } from "vue";
 
 const props = defineProps<{
   id: string,
+  size?: string,
   theme?: string,
 }>();
 const emit = defineEmits(["update:modelValue"]);
@@ -18,6 +19,7 @@ onMounted(() => {
     const turnstile = window.turnstile;
       turnstile.render(field.value, {
         sitekey: turnstile_sitekey,
+        size: props.size || "normal",
         theme: props.theme || "dark",
         callback: (val: string): void => emit("update:modelValue", val),
       });
@@ -32,6 +34,6 @@ onMounted(() => {
 
 <style scoped>
 .cf-captcha {
-  margin-top: 2px;
+  margin: 2px auto 0;
 }
 </style>
