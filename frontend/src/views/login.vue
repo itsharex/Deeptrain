@@ -4,9 +4,11 @@ import Turnstile from "@/components/captcha/Turnstile.vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
+import axios from "axios";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
+const error = ref<string>("");
 const form = reactive({
   username: "",
   password: "",
@@ -30,7 +32,18 @@ const rules = reactive<FormRules>({
 async function submit() {
   await element.value?.validate((valid: boolean, fields) => {
     if (valid) {  // trigger submit event
+      error.value = "";
       loading.value = true;
+      axios.post('login/', form)
+        .then(function(response) {
+          console.log(response)
+        })
+        .catch(function(err) {
+          error.value = err.message;
+        })
+        .finally(function() {
+          loading.value = false;
+        })
     }
   })
 }
@@ -46,8 +59,9 @@ async function submit() {
     <el-main class="main">
       <h1>Sign in to Deeptrain</h1>
       <el-card shadow="hover" v-loading="loading">
+        <el-alert v-if="error" style="transform: translateY(-8px)" :closable="false" :title="error" type="error" show-icon />
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
-          <el-form-item label="Username or email address" prop="username">
+          <el-form-item label="Username" prop="username">
             <el-input v-model="form.username" type="text" minlength="3" maxlength="14" />
           </el-form-item>
           <el-form-item label="Password" prop="password">

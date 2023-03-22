@@ -1,40 +1,51 @@
+from django.utils.translation import gettext as _
 from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
-from django.views.decorators.cache import cache_page
-from rest_framework import viewsets
+from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.status import *
 
 from .models import User
-from .forms import UserRegisterForm, UserLoginForm, UserChangePasswordForm, UserProfileForm
-from .serializers import UserSerializer
+from .forms import UserRegisterForm, LoginForm, UserChangePasswordForm, UserProfileForm
 from Deeptrain.settings import LOGIN_URL
 from oauth.oauth import oauthManager
 from utils.wraps import login_required, authenticated_redirect
-from utils.router import register
 
 
-@register("user")
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
+class LoginView(APIView):
+    permission_classes = [permissions.AllowAny]
 
+    def post(self, request, *args, **kwargs):
+        form = LoginForm(request.data)
+        if form.is_valid():
+            if user := auth.authenticate(username=form.get("username"), password=form.get("password")):
+                auth.login(request, user)
+                return Response({
+                    "status": True,
+                    "message": _("Login successfully"),
+                }, status=HTTP_200_OK)
 
-@cache_page(60)
-def index(request: WSGIRequest) -> HttpResponse:
-    return render(request, "index.html")
+            return Response({
+                "status": False,
+                "message": _("Authorization error"),
+            }, status=HTTP_403_FORBIDDEN)
+
+        return Response({
+            "status": False,
+            "message": _("Invalid parameters"),
+        }, status=HTTP_400_BAD_REQUEST)
 
 
 @authenticated_redirect
 def login(request: WSGIRequest) -> HttpResponse:
     if request.POST:
-        return UserLoginForm(request).as_response()
+        return LoginForm(request).as_response()
     else:
         return render(request, 'user/login.html',
-                      {"form": UserLoginForm(request), "oauth": oauthManager.login_template})
+                      {"form": LoginForm(request), "oauth": oauthManager.login_template})
 
 
 @authenticated_redirect

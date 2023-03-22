@@ -4,9 +4,11 @@ import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import HCaptcha from "@/components/captcha/hCaptcha.vue";
 import { validateEmail, validateRePassword } from "@/assets/script/utils";
+import axios from "axios";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
+const error = ref<string>("");
 const form = reactive({
   username: "",
   email: "",
@@ -40,9 +42,18 @@ const rules = reactive<FormRules>({
 
 async function submit() {
   await element.value?.validate((valid: boolean, fields) => {
-    if (valid) {
-      loading.value = true;
-    }
+    error.value = "";
+    loading.value = true;
+    axios.post('register/', { data: form })
+      .then(function(response) {
+        console.log(response)
+      })
+      .catch(function(err) {
+        error.value = err.message;
+      })
+      .finally(function() {
+        loading.value = false;
+      })
   })
 }
 </script>
@@ -57,6 +68,7 @@ async function submit() {
     <el-main class="main">
       <h1>Sign up to Deeptrain</h1>
       <el-card shadow="hover" v-loading="loading">
+        <el-alert v-if="error" style="transform: translateY(-8px)" :closable="false" :title="error" type="error" show-icon />
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
           <el-form-item label="Username" prop="username">
             <el-input v-model="form.username" type="text" minlength="3" maxlength="14" />

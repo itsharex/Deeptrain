@@ -3,31 +3,38 @@ from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.utils.functional import cached_property
-from turnstile.fields import TurnstileField as CaptchaField
+from turnstile.fields import TurnstileField
 from hcaptcha.fields import hCaptchaField
 from django.core.exceptions import ValidationError
 from user.models import User, Profile
 from utils.throttle import user_submit_detection, user_ip_detection
+from django.utils.translation import gettext_lazy as _
 
-
-spec_string = "\'\"<>~`?/\\*&^%$#@!:"  # 抵御大部分SQL注入, emoji导致长度识别错位, XSS攻击
 default_detail = "nothing..."
 
 
-def regular_string(string: str) -> bool:
-    return not any(map(lambda s: s in spec_string, string))
+def isRegular(string: str) -> bool:
+    return not any(map(lambda s: s in "\'\"<>~`?/\\*&^%$#@!:", string))
 
 
 def is_available_username(username: str) -> bool:
-    return 3 <= len(username) <= 12 and regular_string(username)
+    return 3 <= len(username) <= 12 and isRegular(username)
 
 
 def is_available_password(password: str) -> bool:
-    return 6 <= len(password) <= 14 and regular_string(password)
+    return 6 <= len(password) <= 14 and isRegular(password)
 
 
 def is_available_profile(profile: str) -> bool:
     return 1 <= len(profile) <= 200
+
+
+class AbstractForm(forms.Form):
+    class Meta:
+        abstract = True
+
+    def get(self, key, default=None):
+        return self.cleaned_data.get(key, default)
 
 
 class BaseUserForm(forms.Form):
@@ -57,61 +64,37 @@ class BaseUserForm(forms.Form):
         return JsonResponse(self.get_response())
 
 
-class UserLoginForm(BaseUserForm):
+class LoginForm(AbstractForm):
     username = forms.CharField(
-        min_length=3, max_length=12,
-        label="username",
+        min_length=3, max_length=14, label="username",
         error_messages={
-            "min_length": "The user name cannot be smaller than 3 characters. Please enter 3 to 12 characters",
-            "max_length": "The user name cannot be larger than 12 characters. Please enter 3 to 12 characters",
-            "required": "Please enter your user name"
+            "min_length": _("Length of username should be 3 to 14"),
+            "max_length": _("Length of username should be 3 to 14"),
+            "required": _("Please input username"),
         },
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "User name",
-                "value": ""
-            }
-        )
     )
 
     password = forms.CharField(
-        min_length=6, max_length=14,
-        label="password",
+        min_length=6, max_length=26, label="password",
         error_messages={
-            "required": "Please enter your password",
-            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
-            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
-        },
-        widget=forms.PasswordInput(
-            attrs={
-                "placeholder": "Password",
-                "value": ""
-            }
-        )
-    )
-
-    captcha = CaptchaField(
-        label="captcha",
-
-        error_messages={
-            "required": "Please enter the captcha field",
-            "invalid": "The captcha is incorrect"
+            "required": _("Please input password"),
+            "min_length": _("Length of password should be 6 to 26"),
+            "max_length": _("Length of password should be 6 to 26"),
         },
     )
 
-    def clean(self):
-        super().clean()
-        username, password = self.cleaned_data.get("username"), self.cleaned_data.get("password")
-        if not is_available_username(username):
-            raise ValidationError("Username format entered wrong! Do not enter illegal characters")
-        if not is_available_password(password):
-            raise ValidationError("Password format entered wrong! Do not enter illegal characters")
-        user_submit_detection(self.request, "login")
-        user = auth.authenticate(username=username, password=password)
-        if not user:
-            raise ValidationError("Login error!")
-        auth.login(self.request, user)
-        return self.cleaned_data
+    captcha = TurnstileField(
+        required=True, label="captcha",
+        error_messages={
+            "required": _("Please check the captcha"),
+            "invalid": _("The captcha is incorrect"),
+        },
+    )
+
+    def clean_username(self):
+        if not isRegular((n := self.cleaned_data["username"])):
+            raise ValidationError(_("The format of username is incorrect"))
+        return n
 
 
 class UserRegisterForm(BaseUserForm):
@@ -243,7 +226,7 @@ class UserChangePasswordForm(BaseUserForm):
         )
     )
 
-    captcha = CaptchaField(
+    captcha = TurnstileField(
         label="captcha",
         required=True,
         error_messages={
@@ -288,7 +271,7 @@ class UserProfileForm(BaseUserForm):
             }
         )
     )
-    captcha = CaptchaField(
+    captcha = TurnstileField(
         label="captcha",
         required=True,
         error_messages={

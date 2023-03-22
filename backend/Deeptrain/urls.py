@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/', include('rest_framework.urls')),
     path("admin/", admin.site.urls, name="admin"),
     path("register/", views.register, name="register"),
-    path("login/", views.login, name="login"),
+    path("login/", views.LoginView.as_view(), name="login"),
     path("logout/", views.logout, name="logout"),
     path("change/", views.change, name="change"),
     path("home/", views.home, name="home"),
