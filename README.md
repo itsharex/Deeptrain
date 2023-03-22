@@ -1,6 +1,6 @@
 <div align="center">
 
-# <img height='44px' width='44px' src='favicon.ico' style="transform: translateY(10px)"></img> <a href="https://deeptrain.net"><span>Deeptrain<span></a>
+# <a href="https://deeptrain.net"><img height='44px' width='44px' src='favicon.ico' style="transform: translateY(10px)"></img></a> <a href="https://deeptrain.net"><span>Deeptrain<span></a>
 ###  🔥 An Open Source Deep Reinforcement Learning training platform
 ###  🔥 一个开源深度强化学习训练平台
 </div>
