@@ -70,7 +70,7 @@ IS_CONTAINER = False
   https://github.com/zmh-program/Deeptrain/blob/aac95dbd5a1ae9a0b64a245063538e4567f07d72/DjangoWebsite/settings.py#L133-L143
 
   > ```sql
-  > create DATABASE `django-database`;
+  > create DATABASE `deeptrain`;
   > ```
   >
 - `Redis`

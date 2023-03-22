@@ -151,7 +151,7 @@ DATABASES = {
     'default':
         {
             'ENGINE': 'django.db.backends.mysql',  # module
-            'NAME': 'django-database',  # database name
+            'NAME': 'deeptrain',  # database name
             'HOST': MYSQL_HOST,
             'PORT': 3306,
             'USER': 'root',

@@ -5,7 +5,7 @@ services:
     restart: always
     hostname: mysql
     environment:
-      - MYSQL_DATABASE=django-database
+      - MYSQL_DATABASE=deeptrain
       - MYSQL_ROOT_PASSWORD=zmh200904
     networks:
       - db_network
