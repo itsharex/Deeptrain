@@ -32,14 +32,14 @@ const rules = reactive<FormRules>({
 async function submit() {
   await element.value?.validate((valid: boolean, fields) => {
     if (valid) {  // trigger submit event
-      error.value = "";
       loading.value = true;
       axios.post('login/', form)
         .then(function(response) {
-          console.log(response)
+          console.log(response);
+          error.value = "";
         })
         .catch(function(err) {
-          error.value = err.message;
+          error.value = err.response ? err.response.data['message'] : err.message;
         })
         .finally(function() {
           loading.value = false;
