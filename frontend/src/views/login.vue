@@ -30,7 +30,8 @@ const rules = reactive<FormRules>({
 })
 
 async function submit() {
-  await element.value?.validate((valid: boolean, fields) => {
+  await element.value?.validate((valid: boolean, _) => {
+    if (!valid) return;
     if (valid) {  // trigger submit event
       loading.value = true;
       axios.post('login/', form)
@@ -39,7 +40,8 @@ async function submit() {
           error.value = "";
         })
         .catch(function(err) {
-          error.value = err.response ? err.response.data['message'] : err.message;
+          error.value = err.response ? err.response.data['message'] : err.message; //@ts-ignore
+          window['turnstile']?.reset("#cf-captcha");
         })
         .finally(function() {
           loading.value = false;

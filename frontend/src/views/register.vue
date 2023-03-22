@@ -41,7 +41,8 @@ const rules = reactive<FormRules>({
 })
 
 async function submit() {
-  await element.value?.validate((valid: boolean, fields) => {
+  await element.value?.validate((valid: boolean, _) => {
+    if (!valid) return;
     error.value = "";
     loading.value = true;
     axios.post('register/', { data: form })
@@ -49,7 +50,8 @@ async function submit() {
         console.log(response)
       })
       .catch(function(err) {
-        error.value = err.message;
+        error.value = err.message; //@ts-ignore
+        window['hcaptcha']?.reset("#h-captcha");
       })
       .finally(function() {
         loading.value = false;

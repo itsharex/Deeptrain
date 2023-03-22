@@ -19,9 +19,7 @@ onMounted(() => {
       turnstile.render(field.value, {
         sitekey: turnstile_sitekey,
         theme: props.theme || "dark",
-        callback: (val: string): void => (
-          emit("update:modelValue", val)
-        ),
+        callback: (val: string): void => emit("update:modelValue", val),
       });
     }
   )
