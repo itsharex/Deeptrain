@@ -51,7 +51,7 @@ async function submit() {
       })
       .catch(function(err) {
         error.value = err.message; //@ts-ignore
-        window['hcaptcha']?.reset("#h-captcha");
+        window['hcaptcha']?.reset();
       })
       .finally(function() {
         loading.value = false;
