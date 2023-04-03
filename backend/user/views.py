@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.status import *
 
 from .models import User
-from .forms import RegisterForm, LoginForm, UserChangePasswordForm, UserProfileForm
+from .forms import RegisterForm, LoginForm, ResetPasswordForm, UserProfileForm
 from Deeptrain.settings import LOGIN_URL
 from oauth.oauth import oauthManager
 from utils.wraps import login_required
@@ -76,9 +76,9 @@ def register(request):
 @login_required
 def change(request: WSGIRequest, _) -> HttpResponse:
     if request.POST:
-        return UserChangePasswordForm(request).as_response()
+        return ResetPasswordForm(request).as_response()
     else:
-        return render(request, 'user/change.html', {"form": UserChangePasswordForm(request)})
+        return render(request, 'user/change.html', {"form": ResetPasswordForm(request)})
 
 
 @login_required

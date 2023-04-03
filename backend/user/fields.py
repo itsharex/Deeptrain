@@ -74,3 +74,14 @@ class TurnstileField(_TurnstileField):
 class hCaptchaField(_hCaptchaField):
     def __init__(self, **kwargs):
         super().__init__(required=True, label="captcha", **kwargs)
+
+
+class ProfileField(CharField):
+    def __init__(self, **kwargs):
+        super().__init__(
+            required=True, max_length=200, label="profile",
+            error_messages={
+                "required": _("Please input profile"),
+                "max_length": _("Length of profile should be 1 to 200"),
+            }, **kwargs,
+        )

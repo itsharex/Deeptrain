@@ -3,24 +3,12 @@ from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.utils.functional import cached_property
-from user.models import User, Profile
+from user.models import User
 from utils.throttle import user_submit_detection, user_ip_detection
 from django.utils.translation import gettext_lazy as _
 from .fields import *
 
 default_detail = "nothing..."
-
-
-def isRegular(string: str) -> bool:
-    return not any(map(lambda s: s in "\'\"<>~`?/\\*&^%$#@!:", string))
-
-
-def is_available_username(username: str) -> bool:
-    return 3 <= len(username) <= 12 and isRegular(username)
-
-
-def is_available_password(password: str) -> bool:
-    return 6 <= len(password) <= 14 and isRegular(password)
 
 
 def is_available_profile(profile: str) -> bool:
@@ -81,7 +69,7 @@ class RegisterForm(AbstractForm):
     email = EmailField()
 
 
-class UserChangePasswordForm(BaseUserForm):
+class ResetPasswordForm(BaseUserForm):
     password = PasswordField()
     captcha = TurnstileField()
 
@@ -95,21 +83,7 @@ class UserChangePasswordForm(BaseUserForm):
 
 
 class UserProfileForm(BaseUserForm):
-    textarea = forms.CharField(
-        min_length=1, max_length=200,
-        label="textarea",
-        error_messages={
-            "required": "Please enter the profile",
-            "min_length": "The profile cannot be smaller than 1 characters. Please enter 1 to 200 characters",
-            "max_length": "The profile cannot be larger than 200 characters. Please enter 6 to 200 characters"
-        },
-        widget=forms.Textarea(
-            attrs={
-                "placeholder": "Say something...",
-                "value": ""
-            }
-        )
-    )
+    profile = ProfileField()
     captcha = TurnstileField()
 
     def clean(self):
