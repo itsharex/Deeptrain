@@ -6,14 +6,13 @@ from django.shortcuts import render, redirect
 from rest_framework import permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.status import *
 
 from .models import User
-from .forms import UserRegisterForm, LoginForm, UserChangePasswordForm, UserProfileForm
+from .forms import RegisterForm, LoginForm, UserChangePasswordForm, UserProfileForm
 from Deeptrain.settings import LOGIN_URL
 from oauth.oauth import oauthManager
-from utils.wraps import login_required, authenticated_redirect
+from utils.wraps import login_required
 
 
 @api_view(['POST'])
@@ -34,21 +33,44 @@ def login(request):
 
     return Response({
         "status": False,
-        "message": _("Invalid parameters"),
+        "message": form.error,
     }, status=HTTP_400_BAD_REQUEST)
 
 
-@authenticated_redirect
-def register(request: WSGIRequest) -> HttpResponse:
+@api_view(['POST'])
+def register(request):
+    form = RegisterForm(request.data)
+    if form.is_valid():
+        if user := auth.authenticate(username=form.get("username"), password=form.get("password")):
+            auth.login(request, user)
+            return Response({
+                "status": True,
+                "message": _("Login successfully"),
+            }, status=HTTP_200_OK)
+
+        return Response({
+            "status": False,
+            "message": _("Authorization error"),
+        }, status=HTTP_403_FORBIDDEN)
+
+    return Response({
+        "status": False,
+        "message": form.error,
+    }, status=HTTP_400_BAD_REQUEST)
+
+    user_submit_detection(self.request, "register")
+    user_ip_detection(self.request)
+    if User.objects.filter(username=username).exists():
+        raise ValidationError("The user already exists!")
+
+    user = User.objects.create_user(username=username, password=password, identity=0,
+                                    country=getattr(self.request, "country"))
+    Profile.objects.create(user=user, ip=getattr(self.request, "ip"))
+    auth.login(self.request, user)
     if request.POST:
         return UserRegisterForm(request).as_response()
     else:
         return render(request, 'user/register.html', {"form": UserRegisterForm(request)})
-
-
-def logout(request: WSGIRequest) -> HttpResponse:
-    auth.logout(request)
-    return redirect(LOGIN_URL)
 
 
 @login_required

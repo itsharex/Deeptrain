@@ -34,6 +34,12 @@ class AbstractForm(forms.Form):
     def get(self, key, default=None):
         return self.cleaned_data.get(key, default)
 
+    @property
+    def error(self):
+        generator = iter(self.errors.get_json_data().values())
+        errors = next(generator)
+        return errors[0]['message']
+
 
 class BaseUserForm(forms.Form):
     def __init__(self, request: WSGIRequest):
@@ -68,97 +74,20 @@ class LoginForm(AbstractForm):
     captcha = TurnstileField()
 
 
-class UserRegisterForm(BaseUserForm):
+class RegisterForm(AbstractForm):
     username = UsernameField()
     password = PasswordField()
     captcha = hCaptchaField()
-
-    def clean(self):
-        super().clean()
-        user_submit_detection(self.request, "register")
-        user_ip_detection(self.request)
-        if User.objects.filter(username=username).exists():
-            raise ValidationError("The user already exists!")
-
-        user = User.objects.create_user(username=username, password=password, identity=0,
-                                        country=getattr(self.request, "country"))
-        Profile.objects.create(user=user, ip=getattr(self.request, "ip"))
-        auth.login(self.request, user)
-        return self.cleaned_data
+    email = EmailField()
 
 
 class UserChangePasswordForm(BaseUserForm):
-    old_password = forms.CharField(
-        min_length=6, max_length=14,
-        label="old_password",
-        error_messages={
-            "required": "Please enter your password",
-            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
-            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
-        },
-        widget=forms.PasswordInput(
-            attrs={
-                "placeholder": "Old password",
-                "value": ""
-            }
-        )
-    )
-
-    password = forms.CharField(
-        min_length=6, max_length=14,
-        label="password",
-        error_messages={
-            "required": "Please enter your password",
-            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
-            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
-        },
-        widget=forms.PasswordInput(
-            attrs={
-                "placeholder": "New password",
-                "value": ""
-            }
-        )
-    )
-
-    re_password = forms.CharField(
-        min_length=6, max_length=14,
-        label="re-password",
-        error_messages={
-            "required": "Please enter your password again",
-            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
-            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
-        },
-        widget=forms.PasswordInput(
-            attrs={
-                "placeholder": "Enter the new password again",
-                "value": ""
-            }
-        )
-    )
-
-    captcha = TurnstileField(
-        label="captcha",
-        required=True,
-        error_messages={
-            "required": "Please enter the captcha field",
-            "invalid": "The captcha is incorrect"
-        },
-    )
+    password = PasswordField()
+    captcha = TurnstileField()
 
     def clean(self):
         super().clean()
-        old_password, password, re_password = \
-            self.cleaned_data.get("old_password"), self.cleaned_data.get("password"), self.cleaned_data.get(
-                "re_password")
-        if (not is_available_password(old_password)) or (not self.user.check_password(old_password)):
-            # check raw password
-            raise ValidationError("Old password is incorrect!")
-        if not is_available_password(password):
-            raise ValidationError("Password format entered wrong! Do not enter illegal characters")
-        if not password == re_password:
-            raise ValidationError("The two new passwords are inconsistent!")
-        if password == old_password:
-            raise ValidationError("The old and new passwords are the same!")
+        password = self.cleaned_data.get("password")
         self.user.set_password(password)
         self.user.save()
         auth.login(self.request, self.user)
@@ -181,14 +110,7 @@ class UserProfileForm(BaseUserForm):
             }
         )
     )
-    captcha = TurnstileField(
-        label="captcha",
-        required=True,
-        error_messages={
-            "required": "Please enter the captcha field",
-            "invalid": "The captcha is incorrect"
-        },
-    )
+    captcha = TurnstileField()
 
     def clean(self):
         super().clean()

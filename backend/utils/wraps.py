@@ -28,18 +28,6 @@ def login_required(_decorate_exec: callable) -> callable:
     return _exec_function
 
 
-def authenticated_redirect(_decorate_exec: callable) -> callable:
-    def _exec_function(request: WSGIRequest, *args, **kwargs) -> HttpResponse:
-        if request.user.is_authenticated:
-            return redirect("/home/")
-        else:
-            return _decorate_exec(
-                request,
-                *args, **kwargs
-            )
-    return _exec_function
-
-
 def identity_required(level: int):
     def _decorate_(_decorate_exec: callable) -> callable:
         @login_required
