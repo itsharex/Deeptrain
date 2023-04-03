@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import json
 import os
-import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,7 +43,7 @@ EMAIL_PORT = _config['EMAIL_PORT']  # example: 25
 EMAIL_HOST_USER = _config['EMAIL_USER']  # example: zmh@zmh-program.site
 EMAIL_HOST_PASSWORD = _config['EMAIL_PASSWORD']
 EMAIL_USE_TLS = _config['EMAIL_USE_TLS']
-DEFAULT_FROM_EMAIL = 'Server <%s>' % (EMAIL_HOST_USER, )
+DEFAULT_FROM_EMAIL = 'Server <%s>' % (EMAIL_HOST_USER,)
 
 SECRET_KEY = _config["SECRET_KEY"]
 
@@ -67,7 +66,10 @@ CORS_ALLOW_CREDENTIALS = False
 # REST
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
 }
 
 INSTALLED_APPS = [
@@ -98,8 +100,6 @@ INSTALLED_APPS = [
 
     *APPLICATIONS_DIR[:],
 ]
-
-#  appHandler.app_settings(): django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -290,7 +290,6 @@ OAUTH_CONFIG = _config["OAUTH"]
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 # AUTO DETECTION! DO NOT CHANGED! (run manage.py -> False, gunicorn wsgi.py -> True)
 IS_DEPLOYED = True

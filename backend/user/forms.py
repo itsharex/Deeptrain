@@ -3,12 +3,10 @@ from django.contrib import auth
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from django.utils.functional import cached_property
-from turnstile.fields import TurnstileField
-from hcaptcha.fields import hCaptchaField
-from django.core.exceptions import ValidationError
 from user.models import User, Profile
 from utils.throttle import user_submit_detection, user_ip_detection
 from django.utils.translation import gettext_lazy as _
+from .fields import *
 
 default_detail = "nothing..."
 
@@ -65,106 +63,18 @@ class BaseUserForm(forms.Form):
 
 
 class LoginForm(AbstractForm):
-    username = forms.CharField(
-        min_length=3, max_length=14, label="username",
-        error_messages={
-            "min_length": _("Length of username should be 3 to 14"),
-            "max_length": _("Length of username should be 3 to 14"),
-            "required": _("Please input username"),
-        },
-    )
-
-    password = forms.CharField(
-        min_length=6, max_length=26, label="password",
-        error_messages={
-            "required": _("Please input password"),
-            "min_length": _("Length of password should be 6 to 26"),
-            "max_length": _("Length of password should be 6 to 26"),
-        },
-    )
-
-    captcha = TurnstileField(
-        required=True, label="captcha",
-        error_messages={
-            "required": _("Please check the captcha"),
-            "invalid": _("The captcha is incorrect"),
-        },
-    )
-
-    def clean_username(self):
-        if not isRegular((n := self.cleaned_data["username"])):
-            raise ValidationError(_("The format of username is incorrect"))
-        return n
+    username = UsernameField()
+    password = PasswordField()
+    captcha = TurnstileField()
 
 
 class UserRegisterForm(BaseUserForm):
-    username = forms.CharField(
-        min_length=3, max_length=12,
-        label="username",
-        error_messages={
-            "min_length": "The user name cannot be smaller than 3 characters. Please enter 3 to 12 characters",
-            "max_length": "The user name cannot be larger than 12 characters. Please enter 3 to 12 characters",
-            "required": "Please enter your user name"
-        },
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "User name",
-                "value": ""
-            }
-        )
-    )
-
-    password = forms.CharField(
-        min_length=6, max_length=14,
-        label="password",
-        error_messages={
-            "required": "Please enter your password",
-            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
-            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
-        },
-        widget=forms.PasswordInput(
-            attrs={
-                "placeholder": "Password",
-                "value": ""
-            }
-        )
-    )
-
-    re_password = forms.CharField(
-        min_length=6, max_length=14,
-        label="re-password",
-        error_messages={
-            "required": "Please enter your password again",
-            "min_length": "The password cannot be smaller than 6 characters. Please enter 6 to 14 characters",
-            "max_length": "The password cannot be larger than 14 characters. Please enter 6 to 14 characters"
-        },
-        widget=forms.PasswordInput(
-            attrs={
-                "placeholder": "Enter the password again",
-                "value": ""
-            }
-        )
-    )
-
-    captcha = hCaptchaField(
-        label="captcha",
-        required=True,
-        error_messages={
-            "required": "Please enter the captcha field",
-            "invalid": "The captcha is incorrect"
-        },
-    )
+    username = UsernameField()
+    password = PasswordField()
+    captcha = hCaptchaField()
 
     def clean(self):
         super().clean()
-        username, password, re_password = \
-            self.cleaned_data.get("username"), self.cleaned_data.get("password"), self.cleaned_data.get("re_password")
-        if not is_available_username(username):
-            raise ValidationError("Username format entered wrong! Do not enter illegal characters")
-        if not is_available_password(password):
-            raise ValidationError("Password format entered wrong! Do not enter illegal characters")
-        if not password == re_password:
-            raise ValidationError("The two passwords are inconsistent!")
         user_submit_detection(self.request, "register")
         user_ip_detection(self.request)
         if User.objects.filter(username=username).exists():
