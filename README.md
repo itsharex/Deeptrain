@@ -26,6 +26,7 @@
 ## 🚀️ ScreenShot 🎋
 
 ![screenshot](/docs/screenshot/screenshot.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain?ref=badge_shield)
 
 ## 🌊 Website Features 🔮
 
@@ -197,3 +198,7 @@
 [<img height="72px" src="https://www.rainyun.cc/img/logo.3dcf7adc.png" alt="rainyun" style="background: #fff; border-radius:6px;padding: 8px 12px; margin-top:4px">](https://www.rainyun.cc/?ref=MzE4MDA=)
 
 </div>
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain?ref=badge_large)
