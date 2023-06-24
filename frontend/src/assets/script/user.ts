@@ -2,10 +2,9 @@ export const captchaSize: string = ( document.body.offsetWidth <= 390 ) ? "compa
 
 const mailSuffixes: string[] = [
   "gmail.com",
-  "yahoo.com",
+  "outlook.com",
   "163.com",
   "qq.com",
-  "dingtalk.com",
   "deeptrain.net",
 ]
 

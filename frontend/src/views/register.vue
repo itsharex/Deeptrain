@@ -82,8 +82,7 @@ async function submit() {
             <p>
               Supported Email Suffixes: <br>
               &nbsp;&nbsp;@gmail.com, @qq.com, <br>
-              &nbsp;&nbsp;@yahoo.com, @163.com, <br>
-              &nbsp;&nbsp;@dingtalk.com.
+              &nbsp;&nbsp;@outlook.com, @163.com.
             </p>
           </el-alert>
           <el-form-item label="Password" prop="password">

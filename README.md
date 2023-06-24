@@ -17,6 +17,8 @@
 ![django: 4.1](https://img.shields.io/badge/Django-4.1-informational)
 &nbsp;
 ![vue: 3.2](https://img.shields.io/badge/vue-3.2-42b883)
+&nbsp;
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain?ref=badge_shield)
 
 </div>
 
@@ -26,7 +28,6 @@
 ## 🚀️ ScreenShot 🎋
 
 ![screenshot](/docs/screenshot/screenshot.png)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain?ref=badge_shield)
 
 ## 🌊 Website Features 🔮
 
@@ -185,6 +186,11 @@
 - Vue3 + Django REST
 - MAIL
 
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain?ref=badge_large)
+
+
 ## Thanks
 
 <div align="center">
@@ -198,7 +204,3 @@
 [<img height="72px" src="https://www.rainyun.cc/img/logo.3dcf7adc.png" alt="rainyun" style="background: #fff; border-radius:6px;padding: 8px 12px; margin-top:4px">](https://www.rainyun.cc/?ref=MzE4MDA=)
 
 </div>
-
-
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fzmh-program%2FDeeptrain?ref=badge_large)
