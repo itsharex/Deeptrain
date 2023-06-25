@@ -2,8 +2,16 @@ server:
   addr: ":8080"
 
 flush: true
+
 redis:
-    addr: "localhost:6379"
+    host: "localhost"
+    port: 6379
     password: ""
     db: 0
 
+mysql:
+    host: "localhost"
+    port: 3306
+    user: root
+    password: "zmh200904"
+    db: "deeptrain"

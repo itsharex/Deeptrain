@@ -12,6 +12,7 @@ func main() {
 		log.Fatalf("Error reading config file, %s", err)
 	}
 	ConnectRedis()
+	ConnectMySQL()
 
 	app := gin.Default()
 

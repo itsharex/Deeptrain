@@ -12,8 +12,9 @@ import (
 
 func ConnectRedis() *redis.Client {
 	// connect to redis
+	fmt.Println(viper.GetString("redis:host"), viper.GetInt("redis:port"))
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     viper.GetString("redis:addr"),
+		Addr:     fmt.Sprintf("%s:%d", viper.GetString("redis:host"), viper.GetInt("redis:port")),
 		Password: viper.GetString("redis:password"),
 		DB:       viper.GetInt("redis:db"),
 	})
@@ -48,5 +49,5 @@ func ConnectMySQL() *sql.DB {
 	} else {
 		log.Println("Connected to MySQL server successfully")
 	}
-
+	return db
 }
