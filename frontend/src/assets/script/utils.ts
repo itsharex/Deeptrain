@@ -1,4 +1,5 @@
 import type { Ref } from "vue";
+import { onMounted } from "vue";
 
 function convertNode(el: Ref<HTMLElement> | HTMLElement): HTMLElement {
   return el instanceof HTMLElement ? el : el.value;
@@ -37,4 +38,9 @@ export function insertScriptHook(val: string, src: string, el: Ref<HTMLElement> 
 export function redirect(href: string) {
   /**  Hide URL.  **/
   return window.location.href = href;
+}
+
+export function onLoaded(callback: () => void): void {
+  if (document.readyState === "complete") onMounted(callback);
+  window.addEventListener("load", callback);
 }

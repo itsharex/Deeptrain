@@ -92,9 +92,7 @@ async function submit() {
             <el-input v-model="form.repassword" type="password" show-password minlength="6" maxlength="26" />
           </el-form-item>
           <el-form-item prop="captcha">
-            <keep-alive>
-              <re-captcha :size="captchaSize" id="h-captcha" v-model="form.captcha" />
-            </keep-alive>
+            <re-captcha :size="captchaSize" id="recaptcha" v-model="form.captcha" />
           </el-form-item>
           <el-button class="validate-button" @click="submit">Sign up</el-button>
         </el-form>

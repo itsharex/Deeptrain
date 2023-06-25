@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { insertScriptHook } from "@/assets/script/utils";
+/// <reference types="@/assets/components/types/captcha.d.ts" />
+
 import { sitekey } from "@/config/config";
 import { onMounted, ref } from "vue";
 
@@ -10,26 +11,19 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(["update:modelValue"]);
 
-const field = ref<any>();
-onMounted(() => {
-  insertScriptHook(
-    'turnstile', "https://challenges.cloudflare.com/turnstile/v0/api.js", field,
-    true, true,
-    (): void => {   /** @ts-ignore **/
-    const turnstile = window.turnstile;
-      turnstile.render(field.value, {
-        sitekey: sitekey,
-        size: props.size || "normal",
-        theme: props.theme || "dark",
-        callback: (val: string): void => emit("update:modelValue", val),
-      });
-    }
-  )
+const field = ref<HTMLElement>();
+window.addEventListener('load', () => {
+  if (field.value) turnstile.render(props.id, {
+    sitekey: sitekey.turnstile,
+    size: props.size || "normal",
+    theme: props.theme || "dark",
+    callback: (val: string): void => emit("update:modelValue", val),
+  });
 });
-
 </script>
+
 <template>
-  <div ref="field" class="cf-captcha" :id="id" />
+  <div class="cf-captcha" :id="id" />
 </template>
 
 <style scoped>
