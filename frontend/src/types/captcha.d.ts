@@ -6,15 +6,9 @@ declare namespace grecaptcha {
       theme?: string,
       callback?: (response: string) => any,
     });
+
+    async function execute(sitekey: string, options?: {
+      action?: string,
+    });
   }
-}
-
-
-declare namespace turnstile {
-  function render(element: HTMLElement | string, options: {
-    sitekey: string,
-    size?: string,
-    theme?: string,
-    callback?: (response: string) => any,
-  });
 }

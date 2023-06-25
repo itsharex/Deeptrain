@@ -17,11 +17,11 @@ declare module '@vue/runtime-core' {
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
+    InvisibleReCaptcha: typeof import('./src/components/captcha/InvisibleReCaptcha.vue')['default']
     ReCaptcha: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     ReCaptcha2: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Turnstile: typeof import('./src/components/captcha/Turnstile.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
