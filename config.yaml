@@ -1,1 +1,9 @@
-addr: ":8080"
+server:
+  addr: ":8080"
+
+flush: true
+redis:
+    addr: "localhost:6379"
+    password: ""
+    db: 0
+

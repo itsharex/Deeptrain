@@ -11,10 +11,11 @@ func main() {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)
 	}
+	ConnectRedis()
 
 	app := gin.Default()
 
-	if err := app.Run(viper.GetString("addr")); err != nil {
+	if err := app.Run(viper.GetString("server:addr")); err != nil {
 		panic(err)
 	}
 }
