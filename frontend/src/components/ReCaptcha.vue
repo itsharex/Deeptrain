@@ -1,5 +1,4 @@
 <script setup lang="ts">
-/// <reference types="@/assets/components/types/captcha.d.ts" />
 
 import { sitekey } from "@/config/config";
 import { ref } from "vue";

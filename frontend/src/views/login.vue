@@ -4,6 +4,7 @@ import type { FormInstance, FormRules } from "element-plus";
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import axios from "axios";
+import { performCheck } from "@/assets/script/invisible";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -28,7 +29,8 @@ const rules = reactive<FormRules>({
   ],
 })
 
-async function submit() {
+async function submit(e: Event) {
+  await performCheck(e)
   await element.value?.validate((valid: boolean, _) => {
     if (!valid) return;
     if (valid) {  // trigger submit event
