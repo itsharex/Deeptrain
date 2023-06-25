@@ -42,6 +42,7 @@ onLoaded(() => {
 
 @media (max-width: 390px) {
   .recaptcha div {
+    border-right: 1px solid #525252;
     width: 157px !important;
     height: 137px !important;
   }

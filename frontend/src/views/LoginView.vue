@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { redirect } from "@/assets/script/utils";
 import type { FormInstance, FormRules } from "element-plus";
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
@@ -7,7 +6,7 @@ import axios from "axios";
 import { performCheck } from "@/assets/script/invisible";
 import Github from "@/components/icons/github.vue";
 import Gitee from "@/components/icons/gitee.vue";
-import Olink from "@/components/oauth/olink.vue";
+import OLink from "@/components/oauth/olink.vue";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -76,8 +75,8 @@ async function submit(e: Event) {
         </el-form>
         <el-divider />
         <div class="oauth">
-          <olink uri="https://github.com/"><github /></olink>
-          <olink uri="https://gitee.com/"><gitee /></olink>
+          <o-link uri="https://github.com/"><github /></o-link>
+          <o-link uri="https://gitee.com/"><gitee /></o-link>
         </div>
       </el-card>
       <el-card shadow="never" class="help">
