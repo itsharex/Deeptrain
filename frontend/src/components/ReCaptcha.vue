@@ -29,10 +29,11 @@ onLoaded(() => {
 
 <style>
 .recaptcha {
-  margin: 2px auto 0;
+  margin: 2px auto 4px;
 }
 
 .recaptcha div {
+  border-bottom: 1px solid #525252;
   border-radius: 6px;
   overflow: hidden;
   width: 301px !important;

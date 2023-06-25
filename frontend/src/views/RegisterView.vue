@@ -50,8 +50,8 @@ async function submit() {
         console.log(response)
       })
       .catch(function(err) {
-        error.value = err.message; //@ts-ignore
-        window['hcaptcha']?.reset();
+        error.value = err.message;
+        grecaptcha.enterprise.reset();
       })
       .finally(function() {
         loading.value = false;

@@ -6,21 +6,21 @@ const router = createRouter({
     {
       path: '/',
       name: 'index',
-      component: () => import('../views/index.vue'),
+      component: () => import('../views/IndexView.vue'),
       meta: {
         title: 'Deeptrain',
       }
     },{
       path: '/register',
       name: 'register',
-      component: () => import('../views/register.vue'),
+      component: () => import('../views/RegisterView.vue'),
       meta: {
         title: 'Sign up | Deeptrain',
       }
     },{
       path: '/login',
       name: 'login',
-      component: () => import('../views/login.vue'),
+      component: () => import('../views/LoginView.vue'),
       meta: {
         title: 'Sign in | Deeptrain',
       }
