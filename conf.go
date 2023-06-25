@@ -12,11 +12,10 @@ import (
 
 func ConnectRedis() *redis.Client {
 	// connect to redis
-	fmt.Println(viper.GetString("redis:host"), viper.GetInt("redis:port"))
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", viper.GetString("redis:host"), viper.GetInt("redis:port")),
-		Password: viper.GetString("redis:password"),
-		DB:       viper.GetInt("redis:db"),
+		Addr:     fmt.Sprintf("%s:%d", viper.GetString("redis.host"), viper.GetInt("redis.port")),
+		Password: viper.GetString("redis.password"),
+		DB:       viper.GetInt("redis.db"),
 	})
 	_, err := rdb.Ping(context.Background()).Result()
 
@@ -38,11 +37,11 @@ func ConnectMySQL() *sql.DB {
 	// connect to MySQL
 	db, err := sql.Open("mysql", fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s",
-		viper.GetString("mysql:user"),
-		viper.GetString("mysql:password"),
-		viper.GetString("mysql:host"),
-		viper.GetInt("mysql:port"),
-		viper.GetString("mysql:db"),
+		viper.GetString("mysql.user"),
+		viper.GetString("mysql.password"),
+		viper.GetString("mysql.host"),
+		viper.GetInt("mysql.port"),
+		viper.GetString("mysql.db"),
 	))
 	if err != nil {
 		log.Fatalln("Failed to connect to MySQL server: ", err)

@@ -16,7 +16,7 @@ func main() {
 
 	app := gin.Default()
 
-	if err := app.Run(viper.GetString("server:addr")); err != nil {
+	if err := app.Run(viper.GetString("server.addr")); err != nil {
 		panic(err)
 	}
 }
