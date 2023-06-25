@@ -15,3 +15,12 @@ mysql:
     user: root
     password: "zmh200904"
     db: "deeptrain"
+
+recaptcha:
+    register:
+        project: ""
+        secret: ""
+    login:
+        project: ""
+        secret: ""
+    

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"deeptrain/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"log"
@@ -11,10 +12,13 @@ func main() {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)
 	}
-	ConnectRedis()
-	ConnectMySQL()
+	rdb := utils.ConnectRedis()
+	db := utils.ConnectMySQL()
 
 	app := gin.Default()
+
+	defer rdb.Close()
+	defer db.Close()
 
 	if err := app.Run(viper.GetString("server.addr")); err != nil {
 		panic(err)
