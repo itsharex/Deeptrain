@@ -18,6 +18,8 @@ declare module '@vue/runtime-core' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
     HCaptcha: typeof import('./src/components/captcha/hCaptcha.vue')['default']
+    ReCaptcha: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
+    ReCaptcha2: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Turnstile: typeof import('./src/components/captcha/Turnstile.vue')['default']

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { insertScriptHook } from "@/assets/script/utils";
-import { turnstile_sitekey } from "@/config/config";
+import { sitekey } from "@/config/config";
 import { onMounted, ref } from "vue";
 
 const props = defineProps<{
@@ -18,7 +18,7 @@ onMounted(() => {
     (): void => {   /** @ts-ignore **/
     const turnstile = window.turnstile;
       turnstile.render(field.value, {
-        sitekey: turnstile_sitekey,
+        sitekey: sitekey,
         size: props.size || "normal",
         theme: props.theme || "dark",
         callback: (val: string): void => emit("update:modelValue", val),

@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
-import HCaptcha from "@/components/captcha/hCaptcha.vue";
+import ReCaptcha from "@/components/captcha/ReCaptcha.vue";
 import { captchaSize, validateEmail, validateRePassword } from "@/assets/script/user";
 import axios from "axios";
 
@@ -93,7 +93,7 @@ async function submit() {
           </el-form-item>
           <el-form-item prop="captcha">
             <keep-alive>
-              <h-captcha :size="captchaSize" id="h-captcha" v-model="form.captcha" />
+              <re-captcha :size="captchaSize" id="h-captcha" v-model="form.captcha" />
             </keep-alive>
           </el-form-item>
           <el-button class="validate-button" @click="submit">Sign up</el-button>

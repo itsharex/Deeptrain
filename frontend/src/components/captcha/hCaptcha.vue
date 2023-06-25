@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { insertScriptHook } from "@/assets/script/utils";
-import { hcaptcha_sitekey } from "@/config/config";
+import { sitekey } from "@/config/config";
 import { onMounted, ref } from "vue";
 
 const props = defineProps<{
@@ -18,7 +18,7 @@ onMounted(() => {
     (): void => {   /** @ts-ignore **/
       const hcaptcha = window.hcaptcha;
       hcaptcha.render(props.id, {
-        sitekey: hcaptcha_sitekey,
+        sitekey: sitekey.hcaptcha,
         size: props.size || "normal",
         theme: props.theme || "light",
         callback: (val: string): void => emit("update:modelValue", val),
