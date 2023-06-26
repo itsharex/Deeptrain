@@ -1,14 +1,24 @@
 package auth
 
 import (
+	"deeptrain/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 type LoginForm struct {
-	Username string `form:"user" binding:"required"`
+	Username string `form:"username" binding:"required"`
 	Password string `form:"password" binding:"required"`
 	Captcha  string `form:"captcha" binding:"required"`
+}
+
+type RegisterForm struct {
+	Username   string `form:"username" binding:"required"`
+	Password   string `form:"password" binding:"required"`
+	RePassword string `form:"re_password" binding:"required"`
+	Email      string `form:"email" binding:"required"`
+	Captcha    string `form:"captcha" binding:"required"`
 }
 
 func LoginView(c *gin.Context) {
@@ -17,13 +27,35 @@ func LoginView(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "bad request"})
 		return
 	}
-	if !(ValidateUsername(form.Username) && ValidatePassword(form.Password)) {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "bad request"})
-	}
-	if LoginCaptcha(form.Captcha) < 0.7 {
+	username, password, captcha := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password), strings.TrimSpace(form.Captcha)
+	if !utils.All(
+		ValidateUsername(username),
+		ValidatePassword(password),
+		LoginCaptcha(captcha) >= 0.8,
+	) {
 		c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
 		return
 	}
-	
+
+	c.JSON(http.StatusOK, gin.H{"status": "ok"})
+}
+
+func RegisterView(c *gin.Context) {
+	var form RegisterForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "bad request"})
+		return
+	}
+	username, password, email, captcha := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password), strings.TrimSpace(form.Email), strings.TrimSpace(form.Captcha)
+	if !utils.All(
+		ValidateUsername(username),
+		ValidatePassword(password),
+		ValidateEmail(email),
+		RegisterCaptcha(captcha) >= 0.8,
+	) {
+		c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }

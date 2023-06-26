@@ -21,6 +21,10 @@ type CaptchaResponse struct {
 }
 
 func LoginCaptcha(token string) (score float64) {
+	if token == "" {
+		return 0.
+	}
+
 	uri := fmt.Sprintf(
 		"https://recaptchaenterprise.googleapis.com/v1/projects/%s/assessments?key=%s",
 		viper.GetString("recaptcha.project"),
@@ -43,4 +47,32 @@ func LoginCaptcha(token string) (score float64) {
 		return 0.
 	}
 	return resp.RiskAnalysis.Score
+}
+
+func RegisterCaptcha(token string) (score float64) {
+	if token == "" {
+		return 0.
+	}
+
+	uri := fmt.Sprintf(
+		"https://recaptchaenterprise.googleapis.com/v1/projects/%s/assessments?key=%s",
+		viper.GetString("recaptcha.project"),
+		viper.GetString("recaptcha.apikey"),
+	)
+
+	data, err := utils.Post(uri, headers, map[string]interface{}{
+		"event": map[string]interface{}{
+			"token":   token,
+			"siteKey": viper.GetString("recaptcha.register.sitekey"),
+		},
+	})
+	if err != nil {
+		return 0.
+	}
+
+	// data.(CaptchaResponse) is not working here. I don't know how to solve it. So I use type converting here.
+	if valid := data.(map[string]interface{})["tokenProperties"].(map[string]interface{})["valid"]; !valid.(bool) {
+		return 0.
+	}
+	return data.(map[string]interface{})["riskAnalysis"].(map[string]interface{})["score"].(float64)
 }

@@ -23,6 +23,7 @@ func main() {
 	}
 	{
 		app.POST("/login", auth.LoginView)
+		app.POST("/register", auth.RegisterView)
 	}
 
 	defer rdb.Close()

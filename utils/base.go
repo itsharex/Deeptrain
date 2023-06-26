@@ -16,3 +16,21 @@ func Sum[N int | float64](m []N) N {
 	}
 	return total
 }
+
+func All(condition ...bool) bool {
+	for _, c := range condition {
+		if !c {
+			return false
+		}
+	}
+	return true
+}
+
+func Any(condition ...bool) bool {
+	for _, c := range condition {
+		if c {
+			return true
+		}
+	}
+	return false
+}

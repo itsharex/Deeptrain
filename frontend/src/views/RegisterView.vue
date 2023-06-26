@@ -45,7 +45,7 @@ async function submit() {
     if (!valid) return;
     error.value = "";
     loading.value = true;
-    axios.post('register/', { data: form })
+    axios.post('register', form)
       .then(function(response) {
         console.log(response)
       })
