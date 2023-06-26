@@ -8,11 +8,11 @@ import (
 	"log"
 )
 
-var db *sql.DB
+var DB *sql.DB
 
 func ConnectMySQL() *sql.DB {
 	// connect to MySQL
-	db, err := sql.Open("mysql", fmt.Sprintf(
+	DB, err := sql.Open("mysql", fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s",
 		viper.GetString("mysql.user"),
 		viper.GetString("mysql.password"),
@@ -26,5 +26,25 @@ func ConnectMySQL() *sql.DB {
 		log.Println("Connected to MySQL server successfully")
 	}
 
-	return db
+	// initialize user model
+	initializeUserModel()
+
+	return DB
+}
+
+func initializeUserModel() {
+	_, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS auth (
+		    id INT AUTO_INCREMENT PRIMARY KEY,
+			username VARCHAR(24) PRIMARY KEY,
+			password VARCHAR(46) NOT NULL,
+			email VARCHAR(100) NOT NULL,
+		    active BOOLEAN NOT NULL DEFAULT FALSE,
+		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		    is_admin BOOLEAN NOT NULL DEFAULT FALSE
+		)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

@@ -16,12 +16,12 @@ var mailSuffixes = []string{
 
 func ValidateUsername(username string) bool {
 	length := len(username)
-	return length >= 3 && length <= 14
+	return length >= 3 && length <= 24
 }
 
 func ValidatePassword(password string) bool {
 	length := len(password)
-	return length >= 6 && length <= 26
+	return length >= 6 && length <= 46
 }
 
 func ValidateEmail(value string) bool {
