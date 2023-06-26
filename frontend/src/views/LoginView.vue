@@ -37,12 +37,24 @@ async function submit(e: Event) {
   if (await validateForm(element.value)) {
     loading.value = true;
     try {
-      const resp = await axios.post('login', form);
-
+      const resp = await axios.post('login', form), data = resp.data;
+      if (!data.status) ElNotification.error({
+          title: "Login failed",
+          message: data.reason,
+          showClose: false,
+        });
+      else {
+        ElNotification.success({
+          title: "Login succeeded",
+          message: `Welcome back ${form.username} !`,
+          showClose: false,
+        });
+      }
     } catch (e) {
       ElNotification.warning({
         title: "Error occurred",
         message: "There was an error while logging in. Please check you network and try again.",
+        showClose: false,
       });
     }
     loading.value = false;

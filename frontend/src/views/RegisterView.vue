@@ -78,7 +78,7 @@ async function submit() {
           <el-form-item label="Email address" prop="email">
             <el-input v-model="form.email" type="email" />
           </el-form-item>
-          <el-alert type="info" show-icon :closable="false">
+          <el-alert type="info" show-icon :closable="false" style="margin-bottom: 4px">
             <p>
               Supported Email Suffixes: <br>
               &nbsp;&nbsp;@gmail.com, @qq.com, <br>

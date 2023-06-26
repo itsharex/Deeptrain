@@ -24,7 +24,7 @@ type RegisterForm struct {
 func LoginView(c *gin.Context) {
 	var form LoginForm
 	if err := c.ShouldBind(&form); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "bad request"})
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
 	}
 	username, password, captcha := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password), strings.TrimSpace(form.Captcha)
@@ -33,11 +33,11 @@ func LoginView(c *gin.Context) {
 		ValidatePassword(password),
 		LoginCaptcha(captcha) >= 0.8,
 	) {
-		c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "We cannot verify your identity. Please check again to verify you are human."})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	c.JSON(http.StatusOK, gin.H{"status": true})
 }
 
 func RegisterView(c *gin.Context) {
