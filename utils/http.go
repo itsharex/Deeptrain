@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -23,11 +22,7 @@ func Http(uri string, method string, ptr interface{}, headers map[string]string,
 		return err
 	}
 
-	defer func(Body io.ReadCloser) {
-		if err := Body.Close(); err != nil {
-			log.Println(err)
-		}
-	}(resp.Body)
+	defer resp.Body.Close()
 
 	if err = json.NewDecoder(resp.Body).Decode(ptr); err != nil {
 		return err

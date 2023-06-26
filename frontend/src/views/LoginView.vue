@@ -8,6 +8,7 @@ import Github from "@/components/icons/github.vue";
 import Gitee from "@/components/icons/gitee.vue";
 import OLink from "@/components/oauth/olink.vue";
 import { validateForm } from "@/assets/script/utils";
+import { token } from "@/assets/script/user";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -44,6 +45,7 @@ async function submit(e: Event) {
           showClose: false,
         });
       else {
+        token.value = data.token;
         ElNotification.success({
           title: "Login succeeded",
           message: `Welcome back ${form.username} !`,

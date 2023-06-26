@@ -1,7 +1,7 @@
+debug:  true
+secret: ""
 server:
     addr: ":8080"
-
-flush: true
 
 redis:
     host: "localhost"

@@ -1,4 +1,14 @@
+import type { Ref } from "vue";
+import { watch, ref } from "vue";
+import axios from "axios";
+
 export const captchaSize: string = ( document.body.offsetWidth <= 390 ) ? "compact" : "normal";
+export const token: Ref<string> = ref(localStorage.getItem("token") || "");
+
+watch(token, () => {
+  localStorage.setItem("token", token.value);
+  axios.defaults.headers.common["Authorization"] = token.value;
+});
 
 const mailSuffixes: string[] = [
   "gmail.com",

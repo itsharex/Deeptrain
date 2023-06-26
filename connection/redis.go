@@ -25,7 +25,7 @@ func ConnectRedis() *redis.Client {
 		log.Println("Connected to Redis server successfully")
 	}
 
-	if viper.GetBool("flush") {
+	if viper.GetBool("debug") {
 		Cache.FlushAll(context.Background())
 		log.Println("Flushed all cache")
 	}

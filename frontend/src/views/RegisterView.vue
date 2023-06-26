@@ -3,7 +3,7 @@ import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import ReCaptcha from "@/components/ReCaptcha.vue";
-import { captchaSize, validateEmail, validateRePassword } from "@/assets/script/user";
+import { captchaSize, token, validateEmail, validateRePassword } from "@/assets/script/user";
 import axios from "axios";
 import { validateForm } from "@/assets/script/utils";
 
@@ -52,7 +52,7 @@ async function submit() {
           showClose: false,
         });
       else {
-        localStorage.setItem("token", data.token);
+        token.value = data.token;
         ElNotification.success({
           title: "Register succeeded",
           message: `Welcome to Deeptrain, ${form.username} !`,

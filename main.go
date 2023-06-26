@@ -17,6 +17,12 @@ func main() {
 	cache := connection.ConnectRedis()
 	db := connection.ConnectMySQL()
 
+	if viper.GetBool("debug") {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	app := gin.Default()
 	{
 		app.Use(middleware.CORSMiddleware())
