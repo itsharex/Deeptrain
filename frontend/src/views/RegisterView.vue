@@ -5,6 +5,7 @@ import type { FormInstance, FormRules } from "element-plus";
 import ReCaptcha from "@/components/ReCaptcha.vue";
 import { captchaSize, validateEmail, validateRePassword } from "@/assets/script/user";
 import axios from "axios";
+import { validateForm } from "@/assets/script/utils";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -41,22 +42,31 @@ const rules = reactive<FormRules>({
 })
 
 async function submit() {
-  await element.value?.validate((valid: boolean, _) => {
-    if (!valid) return;
-    error.value = "";
+  if (await validateForm(element.value)) {
     loading.value = true;
-    axios.post('register', form)
-      .then(function(response) {
-        console.log(response)
-      })
-      .catch(function(err) {
-        error.value = err.message;
-        grecaptcha.enterprise.reset();
-      })
-      .finally(function() {
-        loading.value = false;
-      })
-  })
+    try {
+      const resp = await axios.post('register', form), data = resp.data;
+      if (!data.status) ElNotification.error({
+          title: "Register failed",
+          message: data.reason,
+          showClose: false,
+        });
+      else {
+        ElNotification.success({
+          title: "Register succeeded",
+          message: `Welcome to Deeptrain, ${form.username} !`,
+          showClose: false,
+        });
+      }
+    } catch (e) {
+      ElNotification.warning({
+        title: "Error occurred",
+        message: "There was an error while registering. Please check you network and try again.",
+        showClose: false,
+      });
+    }
+    loading.value = false;
+  }
 }
 </script>
 

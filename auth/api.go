@@ -43,7 +43,7 @@ func LoginView(c *gin.Context) {
 func RegisterView(c *gin.Context) {
 	var form RegisterForm
 	if err := c.ShouldBind(&form); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "bad request"})
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
 	}
 	username, password, email, captcha := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password), strings.TrimSpace(form.Email), strings.TrimSpace(form.Captcha)
@@ -53,9 +53,9 @@ func RegisterView(c *gin.Context) {
 		ValidateEmail(email),
 		RegisterCaptcha(captcha) >= 0.8,
 	) {
-		c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "We cannot verify your identity. Please check again to verify you are human."})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	c.JSON(http.StatusOK, gin.H{"status": true})
 }
