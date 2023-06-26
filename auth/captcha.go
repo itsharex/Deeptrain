@@ -16,13 +16,7 @@ func LoginCaptcha(token string) (score float64) {
 		viper.GetString("recaptcha.project"),
 		viper.GetString("recaptcha.apikey"),
 	)
-	fmt.Println(map[string]interface{}{
-		"event": map[string]interface{}{
-			"token":          token,
-			"siteKey":        viper.GetString("recaptcha.login.sitekey"),
-			"expectedAction": "login",
-		},
-	})
+
 	data, err := utils.Post(uri, headers, map[string]interface{}{
 		"event": map[string]interface{}{
 			"token":          token,
@@ -33,6 +27,5 @@ func LoginCaptcha(token string) (score float64) {
 	if err != nil {
 		return 0.
 	}
-	fmt.Println(data)
 	return data.(map[string]interface{})["riskAnalysis"].(map[string]interface{})["score"].(float64)
 }

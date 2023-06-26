@@ -42,7 +42,7 @@ func Get(uri string, headers map[string]string) (data interface{}, err error) {
 
 func Post(uri string, headers map[string]string, body interface{}) (data interface{}, err error) {
 	var form io.Reader
-	if buffer, ok := body.([]byte); ok {
+	if buffer, err := json.Marshal(body); err == nil {
 		form = bytes.NewBuffer(buffer)
 	}
 	err = Http(uri, http.MethodPost, &data, headers, form)
