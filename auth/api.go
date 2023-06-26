@@ -20,7 +20,10 @@ func LoginView(c *gin.Context) {
 	if !(ValidateUsername(form.Username) && ValidatePassword(form.Password)) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "bad request"})
 	}
-
-	score := LoginCaptcha(form.Captcha)
-	c.JSON(http.StatusOK, gin.H{"status": "ok", "score": score})
+	if LoginCaptcha(form.Captcha) < 0.7 {
+		c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+		return
+	}
+	
+	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
