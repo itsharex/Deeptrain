@@ -1,5 +1,6 @@
 import type { Ref } from "vue";
 import { onMounted } from "vue";
+import type { FormInstance } from "element-plus";
 
 function convertNode(el: Ref<HTMLElement> | HTMLElement): HTMLElement {
   return el instanceof HTMLElement ? el : el.value;
@@ -43,4 +44,12 @@ export function redirect(href: string) {
 export function onLoaded(callback: () => void): void {
   if (document.readyState === "complete") onMounted(callback);
   window.addEventListener("load", callback);
+}
+
+
+export async function validateForm(form: FormInstance | undefined): Promise<boolean> {
+  if (!form) return false;
+  return new Promise(resolve => {
+    form.validate(valid => resolve(valid));
+  });
 }

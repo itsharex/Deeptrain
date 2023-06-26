@@ -7,6 +7,7 @@ import { performCheck } from "@/assets/script/invisible";
 import Github from "@/components/icons/github.vue";
 import Gitee from "@/components/icons/gitee.vue";
 import OLink from "@/components/oauth/olink.vue";
+import { validateForm } from "@/assets/script/utils";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -33,23 +34,19 @@ const rules = reactive<FormRules>({
 
 async function submit(e: Event) {
   form.captcha = await performCheck(e);
-  await element.value?.validate(async (valid: boolean, _) => {
-    if (!valid) return;
-    if (valid) {
-      loading.value = true;
-      axios.post('login', form)
-        .then(function(response) {
-          console.log(response);
-          error.value = "";
-        })
-        .catch(function(err) {
-          error.value = err.response ? err.response.data['message'] : err.message;
-        })
-        .finally(function() {
-          loading.value = false;
-        })
+  if (await validateForm(element.value)) {
+    loading.value = true;
+    try {
+      const resp = await axios.post('login', form);
+
+    } catch (e) {
+      ElNotification.warning({
+        title: "Error occurred",
+        message: "There was an error while logging in. Please check you network and try again.",
+      });
     }
-  })
+    loading.value = false;
+  }
 }
 </script>
 
