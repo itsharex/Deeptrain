@@ -37,11 +37,18 @@ func LoginView(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": true})
+	if !ValidateUser(utils.GetDBFromContext(c), username, password) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Username or password is incorrect."})
+		return
+	}
+
+	user := User{Username: username, Password: password}
+	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
 }
 
 func RegisterView(c *gin.Context) {
 	var form RegisterForm
+	db := utils.GetDBFromContext(c)
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
@@ -57,5 +64,25 @@ func RegisterView(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": true})
+	if isUserExists(db, username) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User already exists. Please try another username."})
+		return
+	}
+	if isEmailExists(db, email) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email already exists. Please try another email."})
+		return
+	}
+	user := User{
+		Username: username,
+		Password: utils.Sha2Encrypt(password),
+		Email:    email,
+		Active:   false,
+		IsAdmin:  false,
+	}
+	if !user.Save(db) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later or contact admin."})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
 }

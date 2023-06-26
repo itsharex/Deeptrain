@@ -52,11 +52,13 @@ async function submit() {
           showClose: false,
         });
       else {
+        localStorage.setItem("token", data.token);
         ElNotification.success({
           title: "Register succeeded",
           message: `Welcome to Deeptrain, ${form.username} !`,
           showClose: false,
         });
+        return loading.value = false;
       }
     } catch (e) {
       ElNotification.warning({
@@ -66,6 +68,7 @@ async function submit() {
       });
     }
     loading.value = false;
+    grecaptcha.enterprise.reset();
   }
 }
 </script>

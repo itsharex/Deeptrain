@@ -20,6 +20,7 @@ func main() {
 	app := gin.Default()
 	{
 		app.Use(middleware.CORSMiddleware())
+		app.Use(middleware.DBMiddleWare(db))
 	}
 	{
 		app.POST("/login", auth.LoginView)

@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-var DB *sql.DB
+var _ *sql.DB
 
 func ConnectMySQL() *sql.DB {
 	// connect to MySQL
@@ -27,17 +27,16 @@ func ConnectMySQL() *sql.DB {
 	}
 
 	// initialize user model
-	initializeUserModel()
+	initializeUserModel(DB)
 
 	return DB
 }
 
-func initializeUserModel() {
+func initializeUserModel(DB *sql.DB) {
 	_, err := DB.Exec(`
 		CREATE TABLE IF NOT EXISTS auth (
-		    id INT AUTO_INCREMENT PRIMARY KEY,
 			username VARCHAR(24) PRIMARY KEY,
-			password VARCHAR(46) NOT NULL,
+			password VARCHAR(64) NOT NULL,
 			email VARCHAR(100) NOT NULL,
 		    active BOOLEAN NOT NULL DEFAULT FALSE,
 		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
