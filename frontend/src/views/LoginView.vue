@@ -37,7 +37,7 @@ async function submit(e: Event) {
     if (!valid) return;
     if (valid) {
       loading.value = true;
-      axios.post('login/', form)
+      axios.post('login', form)
         .then(function(response) {
           console.log(response);
           error.value = "";

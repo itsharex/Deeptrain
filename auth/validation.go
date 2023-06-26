@@ -33,5 +33,5 @@ func ValidateEmail(value string) bool {
 	if !regexp.MustCompile(`^\S+$`).MatchString(mail) {
 		return false
 	}
-	return utils.Contains(mailSuffixes, suffix)
+	return utils.Contains(suffix, mailSuffixes)
 }

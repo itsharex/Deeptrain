@@ -17,11 +17,10 @@ mysql:
     db: "deeptrain"
 
 recaptcha:
+    project: ""
+    apikey: ""
+
     register:
-        project: ""
         sitekey: ""
-        secret: ""
     login:
-        project: ""
         sitekey: ""
-        secret: ""
