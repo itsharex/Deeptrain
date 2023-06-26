@@ -2,8 +2,8 @@ package main
 
 import (
 	"deeptrain/auth"
+	"deeptrain/connection"
 	"deeptrain/middleware"
-	"deeptrain/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"log"
@@ -14,8 +14,8 @@ func main() {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)
 	}
-	rdb := utils.ConnectRedis()
-	db := utils.ConnectMySQL()
+	cache := connection.ConnectRedis()
+	db := connection.ConnectMySQL()
 
 	app := gin.Default()
 	{
@@ -26,7 +26,7 @@ func main() {
 		app.POST("/register", auth.RegisterView)
 	}
 
-	defer rdb.Close()
+	defer cache.Close()
 	defer db.Close()
 
 	if err := app.Run(viper.GetString("server.addr")); err != nil {
