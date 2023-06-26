@@ -16,7 +16,7 @@ var loginUri = fmt.Sprintf(
 	viper.Get("recaptcha.login.api_key"),
 )
 
-func login(token string) (score float64) {
+func Login(token string) (score float64) {
 	data, err := utils.Post(loginUri, headers, map[string]interface{}{
 		"event": map[string]interface{}{
 			"token":          token,

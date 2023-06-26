@@ -1,6 +1,8 @@
 package main
 
 import (
+	"deeptrain/auth"
+	"deeptrain/middleware"
 	"deeptrain/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -16,6 +18,12 @@ func main() {
 	db := utils.ConnectMySQL()
 
 	app := gin.Default()
+	{
+		app.Use(middleware.CORSMiddleware())
+	}
+	{
+		app.POST("/login", auth.LoginView)
+	}
 
 	defer rdb.Close()
 	defer db.Close()
