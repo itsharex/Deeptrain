@@ -32,11 +32,11 @@ const rules = reactive<FormRules>({
 })
 
 async function submit(e: Event) {
+  form.captcha = await performCheck(e);
   await element.value?.validate(async (valid: boolean, _) => {
     if (!valid) return;
     if (valid) {
       loading.value = true;
-      const token = await performCheck(e);
       axios.post('login/', form)
         .then(function(response) {
           console.log(response);

@@ -1,6 +1,6 @@
 import { sitekey } from "@/config/config";
 
-export async function performCheck(e: Event) {
+export async function performCheck(e: Event): Promise<string> {
   e.preventDefault();
   return new Promise(resolve => grecaptcha.enterprise.ready(
     async () => {
