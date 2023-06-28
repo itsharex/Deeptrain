@@ -24,3 +24,10 @@ recaptcha:
         sitekey: ""
     login:
         sitekey: ""
+
+smtp:
+    host: ""
+    port: 25
+    username: ""
+    password: ""
+    from: "*@*.com"
