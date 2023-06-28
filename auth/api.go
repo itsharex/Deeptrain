@@ -1,10 +1,13 @@
 package auth
 
 import (
+	"context"
 	"deeptrain/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type LoginForm struct {
@@ -48,7 +51,7 @@ func LoginView(c *gin.Context) {
 
 func RegisterView(c *gin.Context) {
 	var form RegisterForm
-	db := utils.GetDBFromContext(c)
+	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
@@ -83,6 +86,10 @@ func RegisterView(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later or contact admin."})
 		return
 	}
+
+	code := utils.GenerateCode(6)
+	cache.Set(context.Background(), fmt.Sprintf(":verify:%s", username), code, 30*time.Minute)
+	go SendVerifyMail(email, code)
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
 }

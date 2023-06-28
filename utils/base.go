@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"database/sql"
-	"github.com/gin-gonic/gin"
+	"math/rand"
+	"strconv"
 )
 
 func Contains[T comparable](value T, slice []T) bool {
@@ -60,6 +60,10 @@ func Min[N int | float64](m []N) N {
 	return min
 }
 
-func GetDBFromContext(c *gin.Context) *sql.DB {
-	return c.MustGet("db").(*sql.DB)
+func GenerateCode(length int) string {
+	var code string
+	for i := 0; i < length; i++ {
+		code += strconv.Itoa(rand.Intn(10))
+	}
+	return code
 }
