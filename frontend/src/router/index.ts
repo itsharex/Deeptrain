@@ -24,12 +24,18 @@ const router = createRouter({
       meta: {
         title: 'Sign in | Deeptrain',
       }
+    },{
+      path: '/verify',
+      name: 'verify',
+      component: () => import('../views/VerifyView.vue'),
+      meta: {
+        title: 'Verify | Deeptrain',
+      }
     }
   ]
 })
 
-router.beforeEach((to) => {
-  let title = to.meta.title; /** @ts-ignore **/
-  title?document.title=title:undefined;
+router.beforeEach((to) => {  // @ts-ignore
+  if (to.meta.title) document.title = to.meta.title
 })
 export default router

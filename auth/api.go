@@ -93,3 +93,26 @@ func RegisterView(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
 }
+
+func VerifyView(c *gin.Context) {
+	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
+	user := c.MustGet("user")
+	if user == nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+		return
+	}
+	instance := user.(*User)
+	fmt.Println(instance.Username)
+	code := cache.Get(c, fmt.Sprintf(":verify:%s", instance.Username))
+	if c.Query("code") != code.Val() {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your verification code is incorrect. Please check again."})
+		return
+	}
+
+	instance.Activate(db)
+
+	if email, err := instance.GetField(db, "email"); err != nil {
+		go SendWelcomeMail(instance.Username, email)
+	}
+	c.JSON(http.StatusOK, gin.H{"status": true})
+}

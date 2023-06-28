@@ -87,3 +87,16 @@ func (u *User) Save(db *sql.DB) bool {
 	}
 	return true
 }
+
+func (u *User) Activate(db *sql.DB) bool {
+	_, err := db.Exec("UPDATE auth SET active = true WHERE username = ?", u.Username)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func (u *User) GetField(db *sql.DB, field string) (data string, err error) {
+	err = db.QueryRow("SELECT "+field+" FROM auth WHERE username = ?", u.Username).Scan(&data)
+	return data, err
+}

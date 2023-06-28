@@ -27,10 +27,12 @@ func main() {
 	{
 		app.Use(middleware.CORSMiddleware())
 		app.Use(middleware.DBMiddleWare(db, cache))
+		app.Use(middleware.AuthMiddleware())
 	}
 	{
 		app.POST("/login", auth.LoginView)
 		app.POST("/register", auth.RegisterView)
+		app.POST("/verify", auth.VerifyView)
 	}
 
 	defer cache.Close()
