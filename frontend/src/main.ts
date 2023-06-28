@@ -6,6 +6,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/dark/css-vars.css';
 import './assets/sytle/main.css'; /** @ts-ignore **/
 import AOS from 'aos';
+import '@/assets/script/global';
 import 'aos/dist/aos.css';
 import axios from "axios";
 

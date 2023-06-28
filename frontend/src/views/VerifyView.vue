@@ -24,6 +24,7 @@ async function submit() {
     loading.value = true;
     try {
       const resp = await axios.post('verify', form), data = resp.data;
+      console.log(data)
       if (!data.status) ElNotification.error({
         title: "Verify failed",
         message: data.reason,

@@ -4,10 +4,13 @@ import axios from "axios";
 
 export const captchaSize: string = ( document.body.offsetWidth <= 390 ) ? "compact" : "normal";
 export const token: Ref<string> = ref(localStorage.getItem("token") || "");
-
+axios.defaults.headers.common["Authorization"] = token.value;
 watch(token, () => {
-  localStorage.setItem("token", token.value);
-  axios.defaults.headers.common["Authorization"] = token.value;
+  const val = token.value;
+  if (val) {
+    localStorage.setItem("token", val);
+    axios.defaults.headers.common["Authorization"] = val;
+  }
 });
 
 const mailSuffixes: string[] = [

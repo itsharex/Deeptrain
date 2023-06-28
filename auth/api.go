@@ -24,6 +24,10 @@ type RegisterForm struct {
 	Captcha    string `form:"captcha" binding:"required"`
 }
 
+type VerifyForm struct {
+	Code string `form:"code" binding:"required"`
+}
+
 func LoginView(c *gin.Context) {
 	var form LoginForm
 	if err := c.ShouldBind(&form); err != nil {
@@ -95,24 +99,44 @@ func RegisterView(c *gin.Context) {
 }
 
 func VerifyView(c *gin.Context) {
+	var form VerifyForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
+		return
+	}
+
 	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
-	user := c.MustGet("user")
-	if user == nil {
+	username := c.MustGet("user")
+	if username == "" {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
 		return
 	}
-	instance := user.(*User)
-	fmt.Println(instance.Username)
+	instance := &User{Username: username.(string)}
 	code := cache.Get(c, fmt.Sprintf(":verify:%s", instance.Username))
-	if c.Query("code") != code.Val() {
+	if form.Code != code.Val() {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your verification code is incorrect. Please check again."})
 		return
 	}
 
 	instance.Activate(db)
 
-	if email, err := instance.GetField(db, "email"); err != nil {
+	if email, err := instance.GetField(db, "email"); err == nil {
 		go SendWelcomeMail(instance.Username, email)
 	}
+	cache.Del(c, fmt.Sprintf(":verify:%s", instance.Username))
 	c.JSON(http.StatusOK, gin.H{"status": true})
+}
+
+func StateView(c *gin.Context) {
+	username := c.MustGet("user")
+	if username == "" {
+		c.JSON(http.StatusOK, gin.H{"status": 0})
+		return
+	}
+	instance := &User{Username: username.(string)}
+	if instance.IsActive(utils.GetDBFromContext(c)) {
+		c.JSON(http.StatusOK, gin.H{"status": 2})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"state": 1})
 }

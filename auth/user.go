@@ -88,6 +88,15 @@ func (u *User) Save(db *sql.DB) bool {
 	return true
 }
 
+func (u *User) IsActive(db *sql.DB) bool {
+	var active bool
+	err := db.QueryRow("SELECT active FROM auth WHERE username = ?", u.Username).Scan(&active)
+	if err != nil {
+		return false
+	}
+	return active
+}
+
 func (u *User) Activate(db *sql.DB) bool {
 	_, err := db.Exec("UPDATE auth SET active = true WHERE username = ?", u.Username)
 	if err != nil {

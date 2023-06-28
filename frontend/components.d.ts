@@ -19,7 +19,6 @@ declare module '@vue/runtime-core' {
     ElMain: typeof import('element-plus/es')['ElMain']
     Gitee: typeof import('./src/components/icons/gitee.vue')['default']
     Github: typeof import('./src/components/icons/github.vue')['default']
-    Link: typeof import('./src/components/oauth/link.vue')['default']
     Olink: typeof import('./src/components/oauth/olink.vue')['default']
     ReCaptcha: typeof import('./src/components/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

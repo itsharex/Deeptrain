@@ -33,6 +33,7 @@ func main() {
 		app.POST("/login", auth.LoginView)
 		app.POST("/register", auth.RegisterView)
 		app.POST("/verify", auth.VerifyView)
+		app.GET("/state", auth.StateView)
 	}
 
 	defer cache.Close()
