@@ -10,6 +10,7 @@ import { validateForm } from "@/assets/script/utils";
 import { token } from "@/assets/script/user";
 import { refreshState } from "@/assets/script/global";
 import router from "@/router";
+import { app } from "@/assets/script/allauth";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -48,7 +49,7 @@ async function submit(e: Event) {
         });
         refreshState({
           callback: (value: number) => {
-            console.log(value)
+            app.exec();
             if (value === 2) router.push({ path: "/" });
           },
         });
@@ -63,6 +64,8 @@ async function submit(e: Event) {
     loading.value = false;
   }
 }
+
+app.set();
 </script>
 
 <template>

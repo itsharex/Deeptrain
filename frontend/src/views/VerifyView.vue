@@ -7,6 +7,7 @@ import { validateForm } from "@/assets/script/utils";
 import { token } from "@/assets/script/user";
 import router from "@/router";
 import { state } from "@/assets/script/global";
+import { app } from "@/assets/script/allauth";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -34,6 +35,7 @@ async function submit() {
       else {
         token.value = data.token;
         state.value = 2;
+        app.exec();
         ElNotification.success({
           title: "Verify succeeded",
           message: `Welcome to Deeptrain!`,

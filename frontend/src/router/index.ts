@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { state } from "@/assets/script/global";
+import { app } from "@/assets/script/allauth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+  if (to.path === '/login') app.guard();
   if (["/login", "/register"].includes(to.path) && state.value === 1) return await router.push('/verify');
   if (["/login", "/register"].includes(to.path) && state.value === 2) return await router.push('/');
   if (to.path === '/verify' && state.value !== 1) return await router.push('/');
