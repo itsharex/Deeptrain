@@ -56,11 +56,11 @@ async function submit() {
         token.value = data.token;
         ElNotification.success({
           title: "Register succeeded",
-          message: `Welcome to Deeptrain, ${form.username} !`,
+          message: `Welcome to Deeptrain, ${form.username}!`,
           showClose: false,
         });
-        state.value = 1;
         loading.value = false;
+        state.value = 1;
         await router.push('/verify');
       }
     } catch (e) {

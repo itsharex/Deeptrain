@@ -36,10 +36,11 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async (to) => {  // @ts-ignore
+router.beforeEach(async (to) => {
+  if (["/login", "/register"].includes(to.path) && state.value === 1) return await router.push('/verify');
+  if (["/login", "/register"].includes(to.path) && state.value === 2) return await router.push('/');
+  if (to.path === '/verify' && state.value !== 1) return await router.push('/');
+  // @ts-ignore
   if (to.meta.title) document.title = to.meta.title;
-  if (to.path in ["/login", "/register"] && state.value === 1) await router.push('/verify');
-  if (to.path in ["/login", "/register"] && state.value === 2) await router.push('/');
-  if (to.path === '/verify' && state.value !== 1) await router.push('/');
 })
 export default router

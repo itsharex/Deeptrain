@@ -6,6 +6,7 @@ import axios from "axios";
 import { validateForm } from "@/assets/script/utils";
 import { token } from "@/assets/script/user";
 import router from "@/router";
+import { state } from "@/assets/script/global";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -25,7 +26,6 @@ async function submit() {
     loading.value = true;
     try {
       const resp = await axios.post('verify', form), data = resp.data;
-      console.log(data)
       if (!data.status) ElNotification.error({
         title: "Verify failed",
         message: data.reason,
@@ -33,6 +33,7 @@ async function submit() {
       });
       else {
         token.value = data.token;
+        state.value = 2;
         ElNotification.success({
           title: "Verify succeeded",
           message: `Welcome to Deeptrain!`,
@@ -55,7 +56,6 @@ async function resend() {
   loading.value = true;
   try {
     const resp = await axios.post('resend', form), data = resp.data;
-    console.log(data)
     if (!data.status) ElNotification.error({
       title: "Resend failed",
       message: data.reason,
@@ -73,6 +73,7 @@ async function resend() {
       showClose: false,
     });
   }
+  loading.value = false;
 }
 </script>
 

@@ -3,12 +3,13 @@ import type { FormInstance, FormRules } from "element-plus";
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import axios from "axios";
-import { performCheck } from "@/assets/script/invisible";
 import Github from "@/components/icons/github.vue";
 import Gitee from "@/components/icons/gitee.vue";
 import OLink from "@/components/oauth/olink.vue";
 import { validateForm } from "@/assets/script/utils";
 import { token } from "@/assets/script/user";
+import { refreshState } from "@/assets/script/global";
+import router from "@/router";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -42,8 +43,14 @@ async function submit(e: Event) {
         token.value = data.token;
         ElNotification.success({
           title: "Login succeeded",
-          message: `Welcome back ${form.username} !`,
+          message: `Welcome back ${form.username}!`,
           showClose: false,
+        });
+        refreshState({
+          callback: (value: number) => {
+            console.log(value)
+            if (value === 2) router.push({ path: "/" });
+          },
         });
       }
     } catch (e) {
