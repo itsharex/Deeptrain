@@ -5,11 +5,9 @@ import axios from "axios";
 export const token: Ref<string> = ref(localStorage.getItem("token") || "");
 axios.defaults.headers.common["Authorization"] = token.value;
 watch(token, () => {
-  const val = token.value;
-  if (val) {
-    localStorage.setItem("token", val);
-    axios.defaults.headers.common["Authorization"] = val;
-  }
+  const _token = token.value;
+  localStorage.setItem("token", _token);
+  axios.defaults.headers.common["Authorization"] = _token;
 });
 
 const mailSuffixes: string[] = [

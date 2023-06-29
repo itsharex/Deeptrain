@@ -1,0 +1,39 @@
+<script setup lang="ts">
+import { RouterLink } from "vue-router";
+import { token } from "@/assets/script/user";
+import { refreshState } from "@/assets/script/global";
+import router from "@/router";
+
+async function submit() {
+  token.value = "";
+  refreshState();
+  await router.push('/');
+}
+</script>
+
+<template>
+  <el-container>
+    <el-header>
+      <RouterLink to="/" class="header">
+        <img src="/favicon.ico" alt="Deeptrain">
+      </RouterLink>
+    </el-header>
+    <el-main class="main">
+      <h1>Logout</h1>
+      <el-card shadow="hover">
+        <div class="tips">Are you sure to log out?</div>
+        <el-button class="validate-button" @click="submit">Logout</el-button>
+      </el-card>
+    </el-main>
+  </el-container>
+</template>
+
+<style scoped>
+@import "@/assets/sytle/user.css";
+
+.tips {
+  text-align: center;
+  max-width: 280px;
+  margin: 20px 30px 50px;
+}
+</style>

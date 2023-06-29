@@ -5,6 +5,7 @@ import axios from "axios";
 <template>
   <RouterLink to="/register">Register</RouterLink>
   <RouterLink to="/login">Login</RouterLink>
+  <RouterLink to="/logout">Logout</RouterLink>
 </template>
 
 <style scoped>
