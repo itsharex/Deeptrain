@@ -1,4 +1,4 @@
-export const backend_url = 'http://api.deeptrain.net/';
+export const backend_url = 'https://api.deeptrain.net/';
 
 export namespace sitekey {
   export const register = '6Ld7I8gmAAAAACiyFPXekOJTP3skNBDOU5934ULn';
