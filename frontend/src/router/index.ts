@@ -51,11 +51,12 @@ const router = createRouter({
   ]
 })
 
+const auth_pages = ["/login", "/register", "/forgot"];
 router.beforeEach(async (to) => {
   await blockUtilSetup();
   if (to.path === '/login') app.guard();
-  if (["/login", "/register"].includes(to.path) && state.value === 1) return await router.push('/verify');
-  if (["/login", "/register"].includes(to.path) && state.value === 2) return await router.push('/');
+  if (auth_pages.includes(to.path) && state.value === 1) return await router.push('/verify');
+  if (auth_pages.includes(to.path) && state.value === 2) return await router.push('/');
   if (to.path === '/logout' && state.value !== 2) return await router.push('/');
   if (to.path === '/verify' && state.value !== 1) return await router.push('/');
   // @ts-ignore
