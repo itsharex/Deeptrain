@@ -36,6 +36,7 @@ func main() {
 		app.POST("/verify", auth.VerifyView)
 		app.POST("/resend", auth.ResendView)
 		app.GET("/state", auth.StateView)
+		app.GET("/user/:username", auth.UserView)
 	}
 
 	defer cache.Close()

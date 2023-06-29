@@ -167,3 +167,23 @@ func StateView(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"state": 1})
 }
+
+func UserView(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	username := c.Param("username")
+	if isUserExists(db, username) {
+		user := &User{Username: username}
+		if user.IsActive(db) {
+			err := db.QueryRow("SELECT is_admin, created_at From auth WHERE username = ?", username).Scan(&user.IsAdmin, &user.CreateAt)
+			if err == nil {
+				c.JSON(http.StatusOK, gin.H{"status": true, "user": map[string]interface{}{
+					"username":   user.Username,
+					"created_at": user.CreateAt,
+					"is_admin":   user.IsAdmin,
+				}})
+				return
+			}
+		}
+	}
+	c.JSON(http.StatusOK, gin.H{"status": false})
+}

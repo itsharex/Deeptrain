@@ -29,7 +29,7 @@ func (l *Limiter) RateLimit(ctx context.Context, ip string, path string) bool {
 var limits = map[string]Limiter{
 	"login":    {Duration: 60, Count: 5},
 	"register": {Duration: 60, Count: 5},
-	"verify":   {Duration: 60, Count: 1},
+	"verify":   {Duration: 60, Count: 3},
 	"resend":   {Duration: 60, Count: 1},
 }
 

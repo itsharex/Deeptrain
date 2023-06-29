@@ -3,6 +3,7 @@ package auth
 import (
 	"database/sql"
 	"deeptrain/utils"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/viper"
 	"time"
@@ -88,6 +89,14 @@ func (u *User) Save(db *sql.DB) bool {
 	return true
 }
 
+func (u *User) Delete(db *sql.DB) bool {
+	_, err := db.Exec("DELETE FROM auth WHERE username = ?", u.Username)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func (u *User) IsActive(db *sql.DB) bool {
 	var active bool
 	err := db.QueryRow("SELECT active FROM auth WHERE username = ?", u.Username).Scan(&active)
@@ -108,4 +117,26 @@ func (u *User) Activate(db *sql.DB) bool {
 func (u *User) GetField(db *sql.DB, field string) (data string, err error) {
 	err = db.QueryRow("SELECT "+field+" FROM auth WHERE username = ?", u.Username).Scan(&data)
 	return data, err
+}
+
+func (u *User) GetFields(db *sql.DB, fields []string) (data []string, err error) {
+	query := "SELECT "
+	for i, field := range fields {
+		if i == len(fields)-1 {
+			query += field
+		} else {
+			query += field + ", "
+		}
+	}
+	query += " FROM auth WHERE username = ?"
+	err = db.QueryRow(query, u.Username).Scan(&data)
+	return data, err
+}
+
+func (u *User) UpdateField(db *sql.DB, field string, value string) bool {
+	_, err := db.Exec(fmt.Sprintf("UPDATE auth SET %s = ? WHERE username = ?", field), value, u.Username)
+	if err != nil {
+		return false
+	}
+	return true
 }
