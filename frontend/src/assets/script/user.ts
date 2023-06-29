@@ -2,7 +2,6 @@ import type { Ref } from "vue";
 import { watch, ref } from "vue";
 import axios from "axios";
 
-export const captchaSize: string = ( document.body.offsetWidth <= 390 ) ? "compact" : "normal";
 export const token: Ref<string> = ref(localStorage.getItem("token") || "");
 axios.defaults.headers.common["Authorization"] = token.value;
 watch(token, () => {

@@ -3,7 +3,7 @@ import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import ReCaptcha from "@/components/captcha/ReCaptcha.vue";
-import { captchaSize, token, validateEmail, validateRePassword } from "@/assets/script/user";
+import { token, validateEmail, validateRePassword } from "@/assets/script/user";
 import axios from "axios";
 import { state } from "@/assets/script/global";
 import { validateForm } from "@/assets/script/utils";
@@ -18,7 +18,7 @@ const form = reactive({
   repassword: "",
   captcha: "",
 });
-
+const captchaSize: string = ( document.body.offsetWidth <= 390 ) ? "compact" : "normal";
 const rules = reactive<FormRules>({
   username: [
     { required: true, message: 'Please input username', trigger: 'blur' },
