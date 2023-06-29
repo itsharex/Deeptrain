@@ -23,6 +23,11 @@ type RegisterForm struct {
 	Captcha    string `form:"captcha" binding:"required"`
 }
 
+type ResetForm struct {
+	Email   string `form:"email" binding:"required"`
+	Captcha string `form:"captcha" binding:"required"`
+}
+
 type VerifyForm struct {
 	Code string `form:"code" binding:"required"`
 }

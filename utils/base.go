@@ -1,9 +1,6 @@
 package utils
 
-import (
-	"math/rand"
-	"strconv"
-)
+import "strings"
 
 func Contains[T comparable](value T, slice []T) bool {
 	for _, item := range slice {
@@ -60,10 +57,38 @@ func Min[N int | float64](m []N) N {
 	return min
 }
 
-func GenerateCode(length int) string {
-	var code string
-	for i := 0; i < length; i++ {
-		code += strconv.Itoa(rand.Intn(10))
+func GetPrefixArray(s string, p []string) string {
+	for _, v := range p {
+		if strings.HasPrefix(s, v) {
+			return v
+		}
 	}
-	return code
+	return ""
+}
+
+func GetSuffixArray(s string, p []string) string {
+	for _, v := range p {
+		if strings.HasSuffix(s, v) {
+			return v
+		}
+	}
+	return ""
+}
+
+func GetPrefixMap[T comparable](s string, p map[string]T) *T {
+	for k, v := range p {
+		if strings.HasPrefix(s, k) {
+			return &v
+		}
+	}
+	return nil
+}
+
+func GetSuffixMap[T comparable](s string, p map[string]T) *T {
+	for k, v := range p {
+		if strings.HasSuffix(s, k) {
+			return &v
+		}
+	}
+	return nil
 }

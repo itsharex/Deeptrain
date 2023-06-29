@@ -3,9 +3,9 @@ package middleware
 import (
 	"context"
 	"deeptrain/connection"
+	"deeptrain/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"strings"
 	"time"
 )
 
@@ -27,24 +27,23 @@ func (l *Limiter) RateLimit(ctx context.Context, ip string, path string) bool {
 }
 
 var limits = map[string]Limiter{
-	"login":    {Duration: 60, Count: 5},
-	"register": {Duration: 60, Count: 5},
-	"verify":   {Duration: 60, Count: 3},
-	"resend":   {Duration: 60, Count: 1},
+	"/login":    {Duration: 60, Count: 5},
+	"/register": {Duration: 60, Count: 5},
+	"/verify":   {Duration: 60, Count: 3},
+	"/resend":   {Duration: 60, Count: 1},
+	"/state":    {Duration: 1, Count: 2},
+	"/user":     {Duration: 1, Count: 2},
 }
 
 func ThrottleMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ip := c.ClientIP()
 		path := c.Request.URL.Path
-		for prefix, limit := range limits {
-			if strings.HasPrefix(path, "/"+prefix) {
-				if limit.RateLimit(c, ip, path) {
-					c.JSON(200, gin.H{"status": false, "reason": "You have sent too many requests. Please try again later."})
-					c.Abort()
-					return
-				}
-			}
+		limiter := utils.GetPrefixMap[Limiter](path, limits)
+		if limiter != nil && limiter.RateLimit(c, ip, path) {
+			c.JSON(200, gin.H{"status": false, "reason": "You have sent too many requests. Please try again later."})
+			c.Abort()
+			return
 		}
 		c.Next()
 	}
