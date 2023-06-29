@@ -15,7 +15,6 @@ const loading = ref<boolean>(false);
 const form = reactive({
   username: "",
   password: "",
-  captcha: "",
 });
 
 const rules = reactive<FormRules>({
@@ -26,14 +25,10 @@ const rules = reactive<FormRules>({
   password: [
     { required: true, message: 'Please input password', trigger: 'blur' },
     { min: 6, max: 46, message: 'Length should be 6 to 46', trigger: 'change' },
-  ],
-  captcha: [
-    { required: true, message: '', trigger: 'blur' },
-  ],
+  ]
 })
 
 async function submit(e: Event) {
-  form.captcha = await performCheck(e);
   if (await validateForm(element.value)) {
     loading.value = true;
     try {

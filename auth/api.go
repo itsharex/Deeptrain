@@ -13,7 +13,6 @@ import (
 type LoginForm struct {
 	Username string `form:"username" binding:"required"`
 	Password string `form:"password" binding:"required"`
-	Captcha  string `form:"captcha" binding:"required"`
 }
 
 type RegisterForm struct {
@@ -34,11 +33,10 @@ func LoginView(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
 	}
-	username, password, captcha := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password), strings.TrimSpace(form.Captcha)
+	username, password := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password)
 	if !utils.All(
 		ValidateUsername(username),
 		ValidatePassword(password),
-		LoginCaptcha(captcha) >= 0.8,
 	) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "We cannot verify your identity. Please check again to verify you are human."})
 		return
