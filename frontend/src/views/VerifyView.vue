@@ -5,6 +5,8 @@ import { reactive, ref } from "vue";
 import axios from "axios";
 import { validateForm } from "@/assets/script/utils";
 import { token } from "@/assets/script/user";
+import { state } from "@/assets/script/global";
+import router from "@/router";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);

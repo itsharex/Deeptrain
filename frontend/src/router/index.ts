@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { state } from "@/assets/script/global";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,7 +36,9 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to) => {  // @ts-ignore
-  if (to.meta.title) document.title = to.meta.title
+router.beforeEach(async (to) => {  // @ts-ignore
+  if (to.meta.title) document.title = to.meta.title;
+  if (to.path !== '/verify' && state.value == 1) await router.push('/verify');
+  if (to.path === '/verify' && state.value != 1) await router.push('/');
 })
 export default router

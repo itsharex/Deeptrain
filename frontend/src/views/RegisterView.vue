@@ -5,7 +5,9 @@ import type { FormInstance, FormRules } from "element-plus";
 import ReCaptcha from "@/components/ReCaptcha.vue";
 import { captchaSize, token, validateEmail, validateRePassword } from "@/assets/script/user";
 import axios from "axios";
+import { state } from "@/assets/script/global";
 import { validateForm } from "@/assets/script/utils";
+import router from "@/router";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -57,7 +59,9 @@ async function submit() {
           message: `Welcome to Deeptrain, ${form.username} !`,
           showClose: false,
         });
-        return loading.value = false;
+        state.value = 1;
+        loading.value = false;
+        await router.push('/verify');
       }
     } catch (e) {
       ElNotification.warning({
