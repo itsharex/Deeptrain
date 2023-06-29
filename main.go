@@ -33,6 +33,7 @@ func main() {
 	{
 		app.POST("/login", auth.LoginView)
 		app.POST("/register", auth.RegisterView)
+		app.POST("/reset", auth.ResetView)
 		app.POST("/verify", auth.VerifyView)
 		app.POST("/resend", auth.ResendView)
 		app.GET("/state", auth.StateView)

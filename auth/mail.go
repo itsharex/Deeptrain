@@ -45,3 +45,23 @@ func SendWelcomeMail(username string, to string) error {
 	utils.SendMail(to, subject, buf.String())
 	return nil
 }
+
+func SendResetMail(to string, code string) error {
+	subject := "[Deeptrain] Reset your password"
+
+	tmpl, err := template.New("reset.html").ParseFiles("auth/templates/reset.html")
+	if err != nil {
+		return err
+	}
+
+	var buf bytes.Buffer
+	err = tmpl.ExecuteTemplate(&buf, "reset.html", struct {
+		Code string
+	}{code})
+	if err != nil {
+		return err
+	}
+
+	utils.SendMail(to, subject, buf.String())
+	return nil
+}

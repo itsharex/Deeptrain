@@ -20,7 +20,7 @@ type CaptchaResponse struct {
 	} `json:"tokenProperties"`
 }
 
-func LoginCaptcha(token string) (score float64) {
+func InvisibleCaptcha(token string) (score float64) {
 	if token == "" {
 		return 0.
 	}
@@ -49,7 +49,7 @@ func LoginCaptcha(token string) (score float64) {
 	return resp.RiskAnalysis.Score
 }
 
-func RegisterCaptcha(token string) (score float64) {
+func CheckCaptcha(token string) (score float64) {
 	if token == "" {
 		return 0.
 	}
