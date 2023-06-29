@@ -1,4 +1,5 @@
 <template>
+  <img src="/favicon.ico" alt="Deeptrain" />
   <div class="loader">
     <span class="bar" />
     <span class="bar" />
@@ -11,6 +12,15 @@
   Copyright - 2023 aryamitra06 (Aryamitra Chaudhuri)
   License - MIT
  */
+
+img {
+  position: absolute;
+  top: calc(50% - 52px);
+  left: 50%;
+  transform: translate(-50%, calc(-50% - 24px));
+  width: 64px;
+  height: 64px;
+}
 
 .loader {
   position: absolute;
