@@ -2,6 +2,10 @@
 .idea
 config.yaml
 
+# Build
+deeptrain
+deeptrain.exe
+
 # Backend (Django)
 backend/.idea
 backend/.vscode
