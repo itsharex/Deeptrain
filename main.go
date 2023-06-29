@@ -28,6 +28,7 @@ func main() {
 		app.Use(middleware.CORSMiddleware())
 		app.Use(middleware.DBMiddleWare(db, cache))
 		app.Use(middleware.AuthMiddleware())
+		app.Use(middleware.ThrottleMiddleware())
 	}
 	{
 		app.POST("/login", auth.LoginView)

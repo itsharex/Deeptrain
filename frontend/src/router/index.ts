@@ -40,6 +40,13 @@ const router = createRouter({
       meta: {
         title: 'Logout | Deeptrain',
       }
+    }, {
+      path: '/forgot',
+      name: 'forgot',
+      component: () => import('../views/ResetPassword.vue'),
+      meta: {
+        title: 'Reset password | Deeptrain',
+      }
     }
   ]
 })
