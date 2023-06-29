@@ -5,7 +5,6 @@ import { reactive, ref } from "vue";
 import axios from "axios";
 import { validateForm } from "@/assets/script/utils";
 import { token } from "@/assets/script/user";
-import { state } from "@/assets/script/global";
 import router from "@/router";
 
 const element = ref<FormInstance>();
@@ -63,10 +62,12 @@ async function submit() {
     <el-main class="main">
       <h1>Verify your account</h1>
       <el-card shadow="hover" v-loading="loading">
+        <div class="tips">We have sent a verification mail to your email address.</div>
         <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
           <el-form-item label="Code" prop="code">
             <el-input v-model="form.code" type="text" minlength="6" maxlength="6" />
-          </el-form-item><br>
+          </el-form-item>
+          <el-alert class="tips" description="Please fill in the verification code, it will expire in 30 minutes." type="info" center :closable="false" :show-icon="false"></el-alert>
           <el-button class="validate-button" @click="submit">Verify</el-button>
         </el-form>
       </el-card>
@@ -76,4 +77,14 @@ async function submit() {
 
 <style scoped>
 @import "@/assets/sytle/user.css";
+
+.tips {
+  text-align: center;
+  max-width: 280px;
+  margin: 20px 0;
+}
+
+.tips strong {
+  font-weight: bolder;
+}
 </style>
