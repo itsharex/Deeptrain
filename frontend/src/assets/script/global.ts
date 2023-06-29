@@ -5,6 +5,7 @@ import router from "@/router";
 import { token } from "@/assets/script/user";
 
 export const state = ref(-1);
+export const ready = ref(false);
 window.addEventListener('load', refreshState);
 
 export function refreshState(option?: any) {
@@ -21,6 +22,7 @@ export function blockUtilSetup(): Promise<void> {
     let interval = setInterval(() => {
       if (state.value !== -1) {
         clearInterval(interval);
+        ready.value = true;
         resolve();
       }
     }, 100);

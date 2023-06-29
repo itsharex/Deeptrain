@@ -20,6 +20,7 @@ declare module '@vue/runtime-core' {
     GeeTest: typeof import('./src/components/captcha/GeeTest.vue')['default']
     Gitee: typeof import('./src/components/icons/gitee.vue')['default']
     Github: typeof import('./src/components/icons/github.vue')['default']
+    Loader: typeof import('./src/components/Loader.vue')['default']
     Olink: typeof import('./src/components/oauth/olink.vue')['default']
     ReCaptcha: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
