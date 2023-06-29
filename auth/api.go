@@ -93,6 +93,7 @@ func RegisterView(c *gin.Context) {
 
 	code := utils.GenerateCode(6)
 	cache.Set(context.Background(), fmt.Sprintf(":verify:%s", username), code, 30*time.Minute)
+	cache.Set(context.Background(), fmt.Sprintf(":mailrate:%s", username), "1", 1*time.Minute)
 	go SendVerifyMail(email, code)
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
@@ -124,6 +125,34 @@ func VerifyView(c *gin.Context) {
 		go SendWelcomeMail(instance.Username, email)
 	}
 	cache.Del(c, fmt.Sprintf(":verify:%s", instance.Username))
+	c.JSON(http.StatusOK, gin.H{"status": true})
+}
+
+func ResendView(c *gin.Context) {
+	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
+	username := c.MustGet("user")
+	if username == "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+		return
+	}
+	rate := cache.Get(c, fmt.Sprintf(":mailrate:%s", username.(string)))
+	if rate.Val() != "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "You can only resend verification code once per 1 minutes."})
+		return
+	}
+	cache.Set(context.Background(), fmt.Sprintf(":mailrate:%s", username.(string)), "1", 1*time.Minute)
+
+	instance := &User{Username: username.(string)}
+	if instance.IsActive(db) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is already activated."})
+		return
+	}
+
+	code := utils.GenerateCode(6)
+	cache.Set(context.Background(), fmt.Sprintf(":verify:%s", instance.Username), code, 30*time.Minute)
+	if email, err := instance.GetField(db, "email"); err == nil {
+		go SendVerifyMail(email, code)
+	}
 	c.JSON(http.StatusOK, gin.H{"status": true})
 }
 

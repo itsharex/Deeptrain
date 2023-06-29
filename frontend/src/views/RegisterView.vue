@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
-import ReCaptcha from "@/components/ReCaptcha.vue";
+import ReCaptcha from "@/components/captcha/ReCaptcha.vue";
 import { captchaSize, token, validateEmail, validateRePassword } from "@/assets/script/user";
 import axios from "axios";
 import { state } from "@/assets/script/global";

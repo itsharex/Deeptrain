@@ -5,7 +5,7 @@ export async function performCheck(e: Event): Promise<string> {
   return new Promise(resolve => grecaptcha.enterprise.ready(
     async () => {
       const token: string = await grecaptcha.enterprise.execute(
-        sitekey.login,
+        sitekey.geetest,
         { action: 'login' },
       );
       resolve(token);

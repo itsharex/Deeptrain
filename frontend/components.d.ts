@@ -17,10 +17,11 @@ declare module '@vue/runtime-core' {
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
+    GeeTest: typeof import('./src/components/captcha/GeeTest.vue')['default']
     Gitee: typeof import('./src/components/icons/gitee.vue')['default']
     Github: typeof import('./src/components/icons/github.vue')['default']
     Olink: typeof import('./src/components/oauth/olink.vue')['default']
-    ReCaptcha: typeof import('./src/components/ReCaptcha.vue')['default']
+    ReCaptcha: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

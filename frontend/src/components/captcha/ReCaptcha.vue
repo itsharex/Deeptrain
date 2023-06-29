@@ -15,7 +15,7 @@ const field = ref<any>();
 
 onLoaded(() => {
   grecaptcha.enterprise.render(props.id, {
-    sitekey: sitekey.register,
+    sitekey: sitekey.recaptcha,
     size: props.size || "normal",
     theme: props.theme || "dark",
     callback: (val: string): void => emit("update:modelValue", val),

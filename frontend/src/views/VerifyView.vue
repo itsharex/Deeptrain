@@ -50,6 +50,30 @@ async function submit() {
     loading.value = false;
   }
 }
+
+async function resend() {
+  loading.value = true;
+  try {
+    const resp = await axios.post('resend', form), data = resp.data;
+    console.log(data)
+    if (!data.status) ElNotification.error({
+      title: "Resend failed",
+      message: data.reason,
+      showClose: false,
+    });
+    else ElNotification.success({
+        title: "Resend succeeded",
+        message: `We have sent a verification mail to your email address.`,
+        showClose: false,
+      });
+  } catch (e) {
+    ElNotification.warning({
+      title: "Error occurred",
+      message: "There was an error while resending. Please check you network and try again.",
+      showClose: false,
+    });
+  }
+}
 </script>
 
 <template>
@@ -67,6 +91,7 @@ async function submit() {
           <el-form-item label="Code" prop="code">
             <el-input v-model="form.code" type="text" minlength="6" maxlength="6" />
           </el-form-item>
+          <div>Didn't get the email? <a class="resend" @click="resend">Resend Code</a>.</div>
           <el-alert class="tips" description="Please fill in the verification code, it will expire in 30 minutes." type="info" center :closable="false" :show-icon="false"></el-alert>
           <el-button class="validate-button" @click="submit">Verify</el-button>
         </el-form>
@@ -86,5 +111,9 @@ async function submit() {
 
 .tips strong {
   font-weight: bolder;
+}
+
+.resend {
+  cursor: pointer;
 }
 </style>
