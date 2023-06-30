@@ -4,6 +4,8 @@ import axios from "axios";
 import { RouterLink } from "vue-router";
 import { state } from "@/assets/script/global";
 import Translate from "@/components/icons/translate.vue";
+import Home from "@/components/icons/home.vue";
+import Login from "@/components/icons/login.vue";
 
 const I18nPopover = ref(null);
 </script>
@@ -27,6 +29,17 @@ const I18nPopover = ref(null);
       <el-button class="nav-btn" type="primary">登录</el-button>
     </router-link>
   </header>
+  <aside class="sidebar">
+    <router-link class="no-background" to="/">
+      <home class="icon" />
+    </router-link>
+    <div class="flex" />
+    <router-link class="no-background" to="/login">
+      <el-button class="nav-btn" type="primary">
+        <login class="icon" />
+      </el-button>
+    </router-link>
+  </aside>
 </template>
 
 <style scoped>
