@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     GeeTest: typeof import('./src/components/captcha/GeeTest.vue')['default']
     Gitee: typeof import('./src/components/icons/gitee.vue')['default']
     Github: typeof import('./src/components/icons/github.vue')['default']
@@ -30,5 +31,6 @@ declare module '@vue/runtime-core' {
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+    vPopover: typeof import('element-plus/es')['ElPopoverDirective']
   }
 }
