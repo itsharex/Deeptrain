@@ -8,17 +8,19 @@ import { state } from "@/assets/script/global";
 import { validateForm } from "@/assets/script/utils";
 import router from "@/router";
 import GeeTest from "@/components/captcha/GeeTest.vue";
+import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
+const captcha = ref<Geetest.Geetest | null>(null);
 const form = reactive({
   username: "",
   email: "",
   password: "",
   repassword: "",
-  captcha: "",
+  captcha: {},
 });
-const captchaSize: string = ( document.body.offsetWidth <= 390 ) ? "compact" : "normal";
+
 const rules = reactive<FormRules>({
   username: [
     { required: true, message: 'Please input username', trigger: 'blur' },
@@ -44,6 +46,7 @@ const rules = reactive<FormRules>({
 
 async function submit() {
   if (await validateForm(element.value)) {
+    form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
       const resp = await axios.post('register', form), data = resp.data;
@@ -60,6 +63,7 @@ async function submit() {
           showClose: false,
         });
         loading.value = false;
+        captcha.value?.destroy();
         state.value = 1;
         await router.push('/verify');
       }
@@ -71,7 +75,6 @@ async function submit() {
       });
     }
     loading.value = false;
-    grecaptcha.enterprise.reset();
   }
 }
 </script>
@@ -107,7 +110,7 @@ async function submit() {
             <el-input v-model="form.repassword" type="password" show-password minlength="6" maxlength="46" />
           </el-form-item>
           <el-form-item prop="captcha">
-            <gee-test id="register-captcha" v-model="form.captcha" />
+            <gee-test id="register-captcha" v-model="captcha" />
           </el-form-item>
           <el-button class="validate-button" @click="submit">Sign up</el-button>
         </el-form>
