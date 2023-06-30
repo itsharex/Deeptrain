@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/url"
 )
 
 func Http(uri string, method string, ptr interface{}, headers map[string]string, body io.Reader) (err error) {
@@ -42,4 +43,26 @@ func Post(uri string, headers map[string]string, body interface{}) (data interfa
 	}
 	err = Http(uri, http.MethodPost, &data, headers, form)
 	return data, err
+}
+
+func PostForm(uri string, body map[string]interface{}) (data map[string]interface{}, err error) {
+	client := &http.Client{}
+	form := make(url.Values)
+	for key, value := range body {
+		form[key] = []string{value.(string)}
+	}
+	res, err := client.PostForm(uri, form)
+	if err != nil {
+		return nil, err
+	}
+	content, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = json.Unmarshal(content, &data); err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }

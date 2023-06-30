@@ -2,23 +2,23 @@
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
-import ReCaptcha from "@/components/captcha/ReCaptcha.vue";
-import { token, validateEmail, validateRePassword } from "@/assets/script/user";
+import { validateEmail } from "@/assets/script/user";
 import axios from "axios";
-import { state } from "@/assets/script/global";
 import { validateForm } from "@/assets/script/utils";
 import router from "@/router";
+import GeeTest from "@/components/captcha/GeeTest.vue";
+import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
+const captcha = ref<Geetest.Geetest | null>(null);
 const form = reactive({
   username: "",
   email: "",
   password: "",
   repassword: "",
-  captcha: "",
+  captcha: {},
 });
-const captchaSize: string = ( document.body.offsetWidth <= 390 ) ? "compact" : "normal";
 const rules = reactive<FormRules>({
   email: [
     { type: 'email', required: true, message: 'Please input email', trigger: 'blur' },
@@ -31,6 +31,7 @@ const rules = reactive<FormRules>({
 
 async function submit() {
   if (await validateForm(element.value)) {
+    form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
       const resp = await axios.post('reset', form), data = resp.data;
@@ -46,6 +47,7 @@ async function submit() {
           showClose: false,
         });
         loading.value = false;
+        captcha.value?.destroy();
         await router.push('/login');
       }
     } catch (e) {
@@ -56,7 +58,6 @@ async function submit() {
       });
     }
     loading.value = false;
-    grecaptcha.enterprise.reset();
   }
 }
 </script>
@@ -76,7 +77,7 @@ async function submit() {
             <el-input v-model="form.email" type="email" />
           </el-form-item>
           <el-form-item prop="captcha">
-            <re-captcha :size="captchaSize" id="register-captcha" v-model="form.captcha" />
+            <gee-test id="reset-captcha" v-model="captcha" />
           </el-form-item>
           <el-button class="validate-button" @click="submit">Reset</el-button>
         </el-form>

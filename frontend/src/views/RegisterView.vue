@@ -2,12 +2,12 @@
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
-import ReCaptcha from "@/components/captcha/ReCaptcha.vue";
 import { token, validateEmail, validateRePassword } from "@/assets/script/user";
 import axios from "axios";
 import { state } from "@/assets/script/global";
 import { validateForm } from "@/assets/script/utils";
 import router from "@/router";
+import GeeTest from "@/components/captcha/GeeTest.vue";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -107,7 +107,7 @@ async function submit() {
             <el-input v-model="form.repassword" type="password" show-password minlength="6" maxlength="46" />
           </el-form-item>
           <el-form-item prop="captcha">
-            <re-captcha :size="captchaSize" id="register-captcha" v-model="form.captcha" />
+            <gee-test id="register-captcha" v-model="form.captcha" />
           </el-form-item>
           <el-button class="validate-button" @click="submit">Sign up</el-button>
         </el-form>

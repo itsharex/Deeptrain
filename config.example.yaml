@@ -16,14 +16,9 @@ mysql:
     password: ""
     db: "deeptrain"
 
-recaptcha:
-    project: ""
-    apikey: ""
-
-    register:
-        sitekey: ""
-    login:
-        sitekey: ""
+geetest:
+    id: ""
+    token: ""
 
 smtp:
     host: ""

@@ -11,21 +11,22 @@ import (
 )
 
 type LoginForm struct {
-	Username string `form:"username" binding:"required"`
-	Password string `form:"password" binding:"required"`
+	Username string         `form:"username" binding:"required"`
+	Password string         `form:"password" binding:"required"`
+	Captcha  GeeTestRequest `form:"captcha" binding:"required"`
 }
 
 type RegisterForm struct {
-	Username   string `form:"username" binding:"required"`
-	Password   string `form:"password" binding:"required"`
-	RePassword string `form:"re_password" binding:"required"`
-	Email      string `form:"email" binding:"required"`
-	Captcha    string `form:"captcha" binding:"required"`
+	Username   string         `form:"username" binding:"required"`
+	Password   string         `form:"password" binding:"required"`
+	RePassword string         `form:"re_password" binding:"required"`
+	Email      string         `form:"email" binding:"required"`
+	Captcha    GeeTestRequest `form:"captcha" binding:"required"`
 }
 
 type ResetForm struct {
-	Email   string `form:"email" binding:"required"`
-	Captcha string `form:"captcha" binding:"required"`
+	Email   string         `form:"email" binding:"required"`
+	Captcha GeeTestRequest `form:"captcha" binding:"required"`
 }
 
 type VerifyForm struct {
@@ -42,6 +43,7 @@ func LoginView(c *gin.Context) {
 	if !utils.All(
 		ValidateUsername(username),
 		ValidatePassword(password),
+		GeeTestCaptcha(form.Captcha),
 	) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "We cannot verify your identity. Please check again to verify you are human."})
 		return
@@ -63,12 +65,12 @@ func RegisterView(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
 	}
-	username, password, email, captcha := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password), strings.TrimSpace(form.Email), strings.TrimSpace(form.Captcha)
+	username, password, email := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password), strings.TrimSpace(form.Email)
 	if !utils.All(
 		ValidateUsername(username),
 		ValidatePassword(password),
 		ValidateEmail(email),
-		CheckCaptcha(captcha) >= 0.8,
+		GeeTestCaptcha(form.Captcha),
 	) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "We cannot verify your identity. Please check again to verify you are human."})
 		return
@@ -109,10 +111,10 @@ func ResetView(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
 	}
-	email, captcha := strings.TrimSpace(form.Email), strings.TrimSpace(form.Captcha)
+	email := strings.TrimSpace(form.Email)
 	if !utils.All(
 		ValidateEmail(email),
-		CheckCaptcha(captcha) >= 0.8,
+		GeeTestCaptcha(form.Captcha),
 	) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "We cannot verify your identity. Please check again to verify you are human."})
 		return
@@ -126,7 +128,8 @@ func ResetView(c *gin.Context) {
 	code := utils.GenerateChar(12)
 	cache.Set(context.Background(), fmt.Sprintf(":reset:%s", email), code, 30*time.Minute)
 	cache.Set(context.Background(), fmt.Sprintf(":mailrate:%s", email), "1", 1*time.Minute)
-	
+
+	utils.GetDBFromContext(c).Query("UPDATE auth SET password = ? WHERE email = ?", utils.Sha2Encrypt(code), email)
 	go SendResetMail(email, code)
 
 	c.JSON(http.StatusOK, gin.H{"status": true})

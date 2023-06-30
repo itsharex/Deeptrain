@@ -93,3 +93,8 @@ body {
 .grecaptcha-badge {
   display: none !important;
 }
+
+.geetest_slice_bg,
+.geetest_slice {
+  z-index: 1 !important;
+}
