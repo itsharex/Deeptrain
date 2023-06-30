@@ -25,6 +25,8 @@ declare module '@vue/runtime-core' {
     ReCaptcha: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Translate: typeof import('./src/components/icons/translate.vue')['default']
+    Translation: typeof import('./src/components/icons/translation.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
