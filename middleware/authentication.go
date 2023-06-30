@@ -12,8 +12,8 @@ func AuthMiddleware() gin.HandlerFunc {
 		if raw != "" {
 			if token := auth.ParseToken(raw); token != nil {
 				c.Set("user", token.Username)
+				c.Next()
 			}
-			c.Next()
 		}
 		c.Set("user", "")
 		c.Next()

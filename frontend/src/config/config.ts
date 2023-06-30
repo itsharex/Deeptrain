@@ -1,5 +1,5 @@
-// export const backend_url: string = 'https://api.deeptrain.net/';
-export const backend_url: string = 'http://localhost:8080/';
+export const backend_url: string = 'https://api.deeptrain.net/';
+// export const backend_url: string = 'http://localhost:8080/';
 
 export namespace sitekey {
   export const recaptcha: string = '6Ld7I8gmAAAAACiyFPXekOJTP3skNBDOU5934ULn';
