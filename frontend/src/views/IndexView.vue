@@ -1,5 +1,5 @@
-<script setup>
-import { onMounted, ref } from "vue";
+<script setup lang="ts">
+import { onMounted, reactive, ref } from "vue";
 import axios from "axios";
 import { RouterLink } from "vue-router";
 import { state } from "@/assets/script/global";
@@ -9,8 +9,16 @@ import Login from "@/components/icons/login.vue";
 import Setting from "@/components/icons/setting.vue";
 
 const I18nPopover = ref(null);
+
+const currentIcon = ref<HTMLElement | null>(null);
 function iconToggle(e: Event) {
-  console.log(e.target);
+  let target = e.target as HTMLElement;
+  const name = target.localName;
+  if (name === "path") target = target.parentElement as HTMLElement;
+  if (name === "a") target = target.children[0] as HTMLElement;
+  target.classList.add("checked");
+  console.log(currentIcon.value)
+  if (currentIcon.value) currentIcon.value.classList.remove("checked");
 }
 </script>
 <template>
@@ -21,9 +29,9 @@ function iconToggle(e: Event) {
     </router-link>
     <div class="flex" />
 
-    <el-button type="text" plain class="translate" v-popover="I18nPopover">
+    <div class="translate" v-popover="I18nPopover">
       <translate class="icon" />
-    </el-button>
+    </div>
     <el-popover ref="I18nPopover" trigger="click" virtual-triggering persistent>
       <span>Hi</span>
     </el-popover>
@@ -34,8 +42,8 @@ function iconToggle(e: Event) {
     </router-link>
   </header>
   <aside class="sidebar">
-    <router-link class="no-background" to="/"><home class="icon checked" /></router-link>
-    <router-link class="no-background" to="/settings"><setting class="icon checked" /></router-link>
+    <router-link @click="iconToggle" class="no-background" to="/"><home class="icon checked" ref="currentIcon" /></router-link>
+    <router-link @click="iconToggle" class="no-background" to="/settings"><setting class="icon" /></router-link>
     <div class="flex" />
     <router-link class="no-background" to="/login" v-if="state !== 2">
       <el-button class="nav-btn" type="primary">

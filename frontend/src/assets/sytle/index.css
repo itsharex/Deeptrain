@@ -55,7 +55,7 @@
 }
 
 .nav .translate {
-    margin: 12px 14px;
+    margin: 18px 14px;
 }
 
 .nav .icon {
@@ -116,7 +116,9 @@
         display: none;
     }
 
-    .nav .translate,
+    .nav .translate {
+        margin: 18px 6px;
+    }
     .nav-btn {
         margin: 12px 6px;
     }

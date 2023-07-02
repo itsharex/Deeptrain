@@ -49,12 +49,16 @@ func LoginView(c *gin.Context) {
 		return
 	}
 
-	if !ValidateUser(utils.GetDBFromContext(c), username, password) {
+	db := utils.GetDBFromContext(c)
+	user := User{
+		Username: username,
+		Password: utils.Sha2Encrypt(password),
+	}
+
+	if !user.Validate(db, c) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Username or password is incorrect."})
 		return
 	}
-
-	user := User{Username: username, Password: password}
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
 }
 
@@ -126,10 +130,19 @@ func ResetView(c *gin.Context) {
 	}
 
 	code := utils.GenerateChar(12)
+	password := utils.Sha2Encrypt(code)
 	cache.Set(context.Background(), fmt.Sprintf(":reset:%s", email), code, 30*time.Minute)
 	cache.Set(context.Background(), fmt.Sprintf(":mailrate:%s", email), "1", 1*time.Minute)
 
-	utils.GetDBFromContext(c).Query("UPDATE auth SET password = ? WHERE email = ?", utils.Sha2Encrypt(code), email)
+	utils.GetDBFromContext(c).Query("UPDATE auth SET password = ? WHERE email = ?", password, email)
+
+	var username string
+	err := db.QueryRow("SELECT username FROM auth WHERE email = ?", email).Scan(&username)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later or contact admin."})
+		return
+	}
+	cache.Set(c, fmt.Sprintf(":validate:%s", username), password, 30*time.Minute)
 	go SendResetMail(email, code)
 
 	c.JSON(http.StatusOK, gin.H{"status": true})

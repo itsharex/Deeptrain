@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"deeptrain/connection"
-	"deeptrain/utils"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/viper"
@@ -38,16 +37,6 @@ func isEmailExists(db *sql.DB, email string) bool {
 	return count > 0
 }
 
-func ValidateUser(db *sql.DB, username string, raw string) bool {
-	var count int
-	password := utils.Sha2Encrypt(raw)
-	err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ? AND password = ?", username, password).Scan(&count)
-	if err != nil {
-		return false
-	}
-	return count > 0
-}
-
 func ParseToken(ctx context.Context, db *sql.DB, token string) *User {
 	instance, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(viper.GetString("secret")), nil
@@ -63,7 +52,7 @@ func ParseToken(ctx context.Context, db *sql.DB, token string) *User {
 			Username: claims["username"].(string),
 			Password: claims["password"].(string),
 		}
-		if user.QuickValidate(db, ctx) {
+		if user.Validate(db, ctx) {
 			return user
 		}
 	}
@@ -146,17 +135,18 @@ func (u *User) UpdateField(db *sql.DB, field string, value string) bool {
 	return true
 }
 
-func (u *User) QuickValidate(db *sql.DB, ctx context.Context) bool {
+func (u *User) Validate(db *sql.DB, ctx context.Context) bool {
 	cache := connection.Cache
-	password, err := cache.Get(ctx, u.Username).Result()
+	password, err := cache.Get(ctx, fmt.Sprintf(":validate:%s", u.Username)).Result()
 	if err == nil && len(password) > 0 {
 		return u.Password == password
 	}
 
 	var count int
 	err = db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ? AND password = ?", u.Username, u.Password).Scan(&count)
-	if err != nil {
+	if err != nil || count == 0 {
 		return false
 	}
-	return count > 0
+	cache.Set(ctx, fmt.Sprintf(":validate:%s", u.Username), u.Password, 30*time.Minute)
+	return true
 }
