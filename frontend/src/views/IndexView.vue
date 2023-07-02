@@ -6,8 +6,12 @@ import { state } from "@/assets/script/global";
 import Translate from "@/components/icons/translate.vue";
 import Home from "@/components/icons/home.vue";
 import Login from "@/components/icons/login.vue";
+import Setting from "@/components/icons/setting.vue";
 
 const I18nPopover = ref(null);
+function iconToggle(e: Event) {
+  console.log(e.target);
+}
 </script>
 <template>
   <header class="nav">
@@ -26,15 +30,14 @@ const I18nPopover = ref(null);
 
     <img class="avatar" v-if="state === 2" src="/user.png" alt="" />
     <router-link class="no-background" to="/login" v-else>
-      <el-button class="nav-btn" type="primary">登录</el-button>
+      <el-button class="nav-btn" type="primary">Login</el-button>
     </router-link>
   </header>
   <aside class="sidebar">
-    <router-link class="no-background" to="/">
-      <home class="icon" />
-    </router-link>
+    <router-link class="no-background" to="/"><home class="icon checked" /></router-link>
+    <router-link class="no-background" to="/settings"><setting class="icon checked" /></router-link>
     <div class="flex" />
-    <router-link class="no-background" to="/login">
+    <router-link class="no-background" to="/login" v-if="state !== 2">
       <el-button class="nav-btn" type="primary">
         <login class="icon" />
       </el-button>

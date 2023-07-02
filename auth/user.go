@@ -1,7 +1,9 @@
 package auth
 
 import (
+	"context"
 	"database/sql"
+	"deeptrain/connection"
 	"deeptrain/utils"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -46,7 +48,7 @@ func ValidateUser(db *sql.DB, username string, raw string) bool {
 	return count > 0
 }
 
-func ParseToken(token string) *User {
+func ParseToken(ctx context.Context, db *sql.DB, token string) *User {
 	instance, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(viper.GetString("secret")), nil
 	})
@@ -57,9 +59,12 @@ func ParseToken(token string) *User {
 		if claims["exp"].(float64) < float64(time.Now().Unix()) {
 			return nil
 		}
-		return &User{
+		user := &User{
 			Username: claims["username"].(string),
 			Password: claims["password"].(string),
+		}
+		if user.QuickValidate(db, ctx) {
+			return user
 		}
 	}
 	return nil
@@ -139,4 +144,19 @@ func (u *User) UpdateField(db *sql.DB, field string, value string) bool {
 		return false
 	}
 	return true
+}
+
+func (u *User) QuickValidate(db *sql.DB, ctx context.Context) bool {
+	cache := connection.Cache
+	password, err := cache.Get(ctx, u.Username).Result()
+	if err == nil && len(password) > 0 {
+		return u.Password == password
+	}
+
+	var count int
+	err = db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ? AND password = ?", u.Username, u.Password).Scan(&count)
+	if err != nil {
+		return false
+	}
+	return count > 0
 }

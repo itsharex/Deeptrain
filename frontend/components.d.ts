@@ -7,16 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']
-    ElCard: typeof import('element-plus/es')['ElCard']
-    ElContainer: typeof import('element-plus/es')['ElContainer']
-    ElDivider: typeof import('element-plus/es')['ElDivider']
-    ElForm: typeof import('element-plus/es')['ElForm']
-    ElFormItem: typeof import('element-plus/es')['ElFormItem']
-    ElHeader: typeof import('element-plus/es')['ElHeader']
-    ElInput: typeof import('element-plus/es')['ElInput']
-    ElMain: typeof import('element-plus/es')['ElMain']
     ElPopover: typeof import('element-plus/es')['ElPopover']
     GeeTest: typeof import('./src/components/captcha/GeeTest.vue')['default']
     Gitee: typeof import('./src/components/icons/gitee.vue')['default']
@@ -28,11 +19,11 @@ declare module '@vue/runtime-core' {
     ReCaptcha: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Setting: typeof import('./src/components/icons/setting.vue')['default']
     Translate: typeof import('./src/components/icons/translate.vue')['default']
-    Translation: typeof import('./src/components/icons/translation.vue')['default']
+    User: typeof import('./src/components/icons/user.vue')['default']
   }
   export interface ComponentCustomProperties {
-    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
     vPopover: typeof import('element-plus/es')['ElPopoverDirective']
   }
 }

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { blockUtilSetup, state } from "@/assets/script/global";
 import { app } from "@/assets/script/allauth";
+import SettingsView from "@/views/SettingsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,7 +12,14 @@ const router = createRouter({
       component: () => import('../views/IndexView.vue'),
       meta: {
         title: 'Deeptrain',
-      }
+      },
+      children: [
+        {
+          path: 'settings',
+          name: 'settings',
+          component: SettingsView,
+        }
+      ]
     }, {
       path: '/register',
       name: 'register',
@@ -51,7 +59,12 @@ const router = createRouter({
   ]
 })
 
-const auth_pages = ["/login", "/register", "/forgot"];
+const auth_pages = [
+  "/login",
+  "/register",
+  "/forgot",
+];
+
 router.beforeEach(async (to) => {
   await blockUtilSetup();
   if (to.path === '/login') app.guard();

@@ -209,7 +209,7 @@ func StateView(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": 2})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"state": 1})
+	c.JSON(http.StatusOK, gin.H{"status": 1})
 }
 
 func UserView(c *gin.Context) {
