@@ -21,25 +21,30 @@ const form = reactive({
 });
 const rules = reactive<FormRules>({
   email: [
-    { type: 'email', required: true, message: 'Please input email', trigger: 'blur' },
-    { validator: validateEmail, trigger: 'change'},
+    {
+      type: "email",
+      required: true,
+      message: "Please input email",
+      trigger: "blur",
+    },
+    { validator: validateEmail, trigger: "change" },
   ],
-  captcha: [
-    { required: true, message: '', trigger: 'blur' },
-  ],
-})
+  captcha: [{ required: true, message: "", trigger: "blur" }],
+});
 
 async function submit() {
   if (await validateForm(element.value)) {
     form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
-      const resp = await axios.post('reset', form), data = resp.data;
-      if (!data.status) ElNotification.error({
-        title: "Reset failed",
-        message: data.reason,
-        showClose: false,
-      });
+      const resp = await axios.post("reset", form),
+        data = resp.data;
+      if (!data.status)
+        ElNotification.error({
+          title: "Reset failed",
+          message: data.reason,
+          showClose: false,
+        });
       else {
         ElNotification.success({
           title: "Reset succeeded",
@@ -48,12 +53,13 @@ async function submit() {
         });
         loading.value = false;
         captcha.value?.destroy();
-        await router.push('/login');
+        await router.push("/login");
       }
     } catch (e) {
       ElNotification.warning({
         title: "Error occurred",
-        message: "There was an error while reset. Please check you network and try again.",
+        message:
+          "There was an error while reset. Please check you network and try again.",
         showClose: false,
       });
     }
@@ -66,13 +72,18 @@ async function submit() {
   <el-container>
     <el-header>
       <RouterLink to="/" class="header">
-        <img src="/favicon.ico" alt="Deeptrain">
+        <img src="/favicon.ico" alt="Deeptrain" />
       </RouterLink>
     </el-header>
     <el-main class="main">
       <h1>Reset your password</h1>
       <el-card shadow="hover" v-loading="loading">
-        <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
+        <el-form
+          ref="element"
+          :model="form"
+          :rules="rules"
+          :label-position="'top'"
+        >
           <el-form-item label="Email address" prop="email">
             <el-input v-model="form.email" type="email" />
           </el-form-item>
@@ -83,7 +94,10 @@ async function submit() {
         </el-form>
       </el-card>
       <el-card shadow="never" class="help">
-        <div>Do not have an account? <RouterLink to="/register">Create one</RouterLink>.</div>
+        <div>
+          Do not have an account?
+          <RouterLink to="/register">Create one</RouterLink>.
+        </div>
       </el-card>
     </el-main>
   </el-container>

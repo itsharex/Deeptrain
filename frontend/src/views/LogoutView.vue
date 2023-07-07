@@ -7,7 +7,7 @@ import router from "@/router";
 async function submit() {
   token.value = "";
   refreshState();
-  await router.push('/');
+  await router.push("/");
 }
 </script>
 
@@ -15,7 +15,7 @@ async function submit() {
   <el-container>
     <el-header>
       <RouterLink to="/" class="header">
-        <img src="/favicon.ico" alt="Deeptrain">
+        <img src="/favicon.ico" alt="Deeptrain" />
       </RouterLink>
     </el-header>
     <el-main class="main">

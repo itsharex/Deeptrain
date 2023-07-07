@@ -25,25 +25,25 @@ const form = reactive({
 
 const rules = reactive<FormRules>({
   username: [
-    { required: true, message: 'Please input username', trigger: 'blur' },
-    { min: 3, max: 24, message: 'Length should be 3 to 24', trigger: 'change' },
+    { required: true, message: "Please input username", trigger: "blur" },
+    { min: 3, max: 24, message: "Length should be 3 to 24", trigger: "change" },
   ],
   password: [
-    { required: true, message: 'Please input password', trigger: 'blur' },
-    { min: 6, max: 46, message: 'Length should be 6 to 46', trigger: 'change' },
+    { required: true, message: "Please input password", trigger: "blur" },
+    { min: 6, max: 46, message: "Length should be 6 to 46", trigger: "change" },
   ],
-  captcha: [
-    { required: true, message: '', trigger: 'blur' },
-  ],
-})
+  captcha: [{ required: true, message: "", trigger: "blur" }],
+});
 
 async function submit() {
   if (await validateForm(element.value)) {
     form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
-      const resp = await axios.post('login', form), data = resp.data;
-      if (!data.status) ElNotification.error({
+      const resp = await axios.post("login", form),
+        data = resp.data;
+      if (!data.status)
+        ElNotification.error({
           title: "Login failed",
           message: data.reason,
           showClose: false,
@@ -66,7 +66,8 @@ async function submit() {
     } catch (e) {
       ElNotification.warning({
         title: "Error occurred",
-        message: "There was an error while logging in. Please check you network and try again.",
+        message:
+          "There was an error while logging in. Please check you network and try again.",
         showClose: false,
       });
     }
@@ -81,18 +82,34 @@ app.set();
   <el-container>
     <el-header>
       <RouterLink to="/" class="header">
-        <img src="/favicon.ico" alt="Deeptrain">
+        <img src="/favicon.ico" alt="Deeptrain" />
       </RouterLink>
     </el-header>
     <el-main class="main">
       <h1>Sign in to Deeptrain</h1>
       <el-card shadow="hover" v-loading="loading">
-        <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
+        <el-form
+          ref="element"
+          :model="form"
+          :rules="rules"
+          :label-position="'top'"
+        >
           <el-form-item label="Username" prop="username">
-            <el-input v-model="form.username" type="text" minlength="3" maxlength="24" />
+            <el-input
+              v-model="form.username"
+              type="text"
+              minlength="3"
+              maxlength="24"
+            />
           </el-form-item>
           <el-form-item label="Password" prop="password">
-            <el-input v-model="form.password" type="password" show-password minlength="6" maxlength="46" />
+            <el-input
+              v-model="form.password"
+              type="password"
+              show-password
+              minlength="6"
+              maxlength="46"
+            />
           </el-form-item>
           <el-form-item prop="captcha">
             <gee-test id="register-captcha" v-model="captcha" />
@@ -106,8 +123,13 @@ app.set();
         </div>
       </el-card>
       <el-card shadow="never" class="help">
-        <div>Do not have an account? <RouterLink to="/register">Create one</RouterLink>.</div>
-        <div>Forgot password? <RouterLink to="/forgot">Reset password</RouterLink>.</div>
+        <div>
+          Do not have an account?
+          <RouterLink to="/register">Create one</RouterLink>.
+        </div>
+        <div>
+          Forgot password? <RouterLink to="/forgot">Reset password</RouterLink>.
+        </div>
       </el-card>
     </el-main>
   </el-container>

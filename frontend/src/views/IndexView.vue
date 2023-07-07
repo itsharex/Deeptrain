@@ -17,7 +17,7 @@ function iconToggle(e: Event) {
   if (name === "path") target = target.parentElement as HTMLElement;
   if (name === "a") target = target.children[0] as HTMLElement;
   target.classList.add("checked");
-  console.log(currentIcon.value)
+  console.log(currentIcon.value);
   if (currentIcon.value) currentIcon.value.classList.remove("checked");
 }
 </script>
@@ -42,8 +42,12 @@ function iconToggle(e: Event) {
     </router-link>
   </header>
   <aside class="sidebar">
-    <router-link @click="iconToggle" class="no-background" to="/"><home class="icon checked" ref="currentIcon" /></router-link>
-    <router-link @click="iconToggle" class="no-background" to="/settings"><setting class="icon" /></router-link>
+    <router-link @click="iconToggle" class="no-background" to="/"
+      ><home class="icon checked" ref="currentIcon"
+    /></router-link>
+    <router-link @click="iconToggle" class="no-background" to="/settings"
+      ><setting class="icon"
+    /></router-link>
     <div class="flex" />
     <router-link class="no-background" to="/login" v-if="state !== 2">
       <el-button class="nav-btn" type="primary">

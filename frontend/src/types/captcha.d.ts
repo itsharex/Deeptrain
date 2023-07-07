@@ -2,22 +2,27 @@ declare namespace grecaptcha {
   namespace enterprise {
     function ready(hook: () => any): void;
     function reset(id?: string): void;
-    function render(id: string, options: {
-      sitekey: string,
-      size?: string,
-      theme?: string,
-      callback?: (response: string) => any,
-    }): void;
+    function render(
+      id: string,
+      options: {
+        sitekey: string;
+        size?: string;
+        theme?: string;
+        callback?: (response: string) => any;
+      }
+    ): void;
 
-    async function execute(sitekey: string, options?: {
-      action?: string,
-    }): Promise<string>;
+    async function execute(
+      sitekey: string,
+      options?: {
+        action?: string;
+      }
+    ): Promise<string>;
   }
 }
 
-
 declare namespace Geetest {
-  type Product = 'float' | 'popup' | 'bind';
+  type Product = "float" | "popup" | "bind";
 
   interface NativeButton {
     width?: string;
@@ -30,21 +35,21 @@ declare namespace Geetest {
   }
 
   type Language =
-    | 'zho'
-    | 'eng'
-    | 'zho-tw'
-    | 'zho-hk'
-    | 'udm'
-    | 'jpn'
-    | 'ind'
-    | 'kor'
-    | 'rus'
-    | 'ara'
-    | 'spa'
-    | 'pon'
-    | 'por'
-    | 'fra'
-    | 'deu';
+    | "zho"
+    | "eng"
+    | "zho-tw"
+    | "zho-hk"
+    | "udm"
+    | "jpn"
+    | "ind"
+    | "kor"
+    | "rus"
+    | "ara"
+    | "spa"
+    | "pon"
+    | "por"
+    | "fra"
+    | "deu";
 
   type RiskType = string;
 
@@ -82,4 +87,7 @@ declare namespace Geetest {
   }
 }
 
-function initGeetest4(option: Geetest.GeetestOptions, callback: (captcha: Geetest.Geetest) => any);
+function initGeetest4(
+  option: Geetest.GeetestOptions,
+  callback: (captcha: Geetest.Geetest) => any
+);

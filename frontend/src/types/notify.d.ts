@@ -1,37 +1,36 @@
 type ElMessageOptions = {
-  message: string,
-  type?: string,
-  title?: string,
-  duration?: number,
-  offset?: number,
-  onClose?: () => any,
-  center?: boolean,
-  customClass?: string,
-  showClose?: boolean,
-  dangerouslyUseHTMLString?: boolean,
-  appendTo?: string | HTMLElement,
-  grouping?: boolean,
-  repeatNum?: number,
-}
+  message: string;
+  type?: string;
+  title?: string;
+  duration?: number;
+  offset?: number;
+  onClose?: () => any;
+  center?: boolean;
+  customClass?: string;
+  showClose?: boolean;
+  dangerouslyUseHTMLString?: boolean;
+  appendTo?: string | HTMLElement;
+  grouping?: boolean;
+  repeatNum?: number;
+};
 
 function ElMessage(option: ElMessageOptions): void;
 
-
 namespace ElNotification {
   type ElNotificationOptions = {
-    title?: string,
-    message: string,
-    type?: string,
-    iconClass?: string,
-    customClass?: string,
-    duration?: number,
-    offset?: number,
-    onClose?: () => any,
-    showClose?: boolean,
-    closeOnClick?: boolean,
-    position?: string,
-    dangerouslyUseHTMLString?: boolean,
-  }
+    title?: string;
+    message: string;
+    type?: string;
+    iconClass?: string;
+    customClass?: string;
+    duration?: number;
+    offset?: number;
+    onClose?: () => any;
+    showClose?: boolean;
+    closeOnClick?: boolean;
+    position?: string;
+    dangerouslyUseHTMLString?: boolean;
+  };
 
   function success(option: ElNotificationOptions): void;
   function warning(option: ElNotificationOptions): void;

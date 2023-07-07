@@ -5,10 +5,13 @@ import type { FormInstance } from "element-plus";
 function convertNode(el: Ref<HTMLElement> | HTMLElement): HTMLElement {
   return el instanceof HTMLElement ? el : el.value;
 }
-export function insertScript(src: string, el: Ref<HTMLElement> | HTMLElement,
-                             async: boolean = false, defer: boolean = false,
-                             hook: ((this:GlobalEventHandlers, event: Event) => any) | null = null
-                            ): HTMLScriptElement {
+export function insertScript(
+  src: string,
+  el: Ref<HTMLElement> | HTMLElement,
+  async: boolean = false,
+  defer: boolean = false,
+  hook: ((this: GlobalEventHandlers, event: Event) => any) | null = null
+): HTMLScriptElement {
   let script = document.createElement("script");
   script.src = src;
   script.async = async;
@@ -18,27 +21,31 @@ export function insertScript(src: string, el: Ref<HTMLElement> | HTMLElement,
   return script;
 }
 
-export function insertScriptExceptExists(val: string, src: string, el: Ref<HTMLElement> | HTMLElement,
-                                         async: boolean = false, defer: boolean = false,
-                                         hook: ((this:GlobalEventHandlers, event: Event) => any) | null = null
-                                        ): HTMLScriptElement | undefined {
-  if (!(val in window)) return insertScript(
-    src, el, async, defer, hook,
-  );
+export function insertScriptExceptExists(
+  val: string,
+  src: string,
+  el: Ref<HTMLElement> | HTMLElement,
+  async: boolean = false,
+  defer: boolean = false,
+  hook: ((this: GlobalEventHandlers, event: Event) => any) | null = null
+): HTMLScriptElement | undefined {
+  if (!(val in window)) return insertScript(src, el, async, defer, hook);
 }
 
-export function insertScriptHook(val: string, src: string, el: Ref<HTMLElement> | HTMLElement,
-                                         async: boolean = false, defer: boolean = false,
-                                         hook: ((...arg: any[]) => any) | null = null
+export function insertScriptHook(
+  val: string,
+  src: string,
+  el: Ref<HTMLElement> | HTMLElement,
+  async: boolean = false,
+  defer: boolean = false,
+  hook: ((...arg: any[]) => any) | null = null
 ): void {
-  ( val in window ) ? hook?.() : insertScript(
-    src, el, async, defer, hook,
-  );
+  val in window ? hook?.() : insertScript(src, el, async, defer, hook);
 }
 
 export function redirect(href: string) {
   /**  Hide URL.  **/
-  return window.location.href = href;
+  return (window.location.href = href);
 }
 
 export function onLoaded(callback: () => void): void {
@@ -46,10 +53,11 @@ export function onLoaded(callback: () => void): void {
   window.addEventListener("load", callback);
 }
 
-
-export async function validateForm(form: FormInstance | undefined): Promise<boolean> {
+export async function validateForm(
+  form: FormInstance | undefined
+): Promise<boolean> {
   if (!form) return false;
-  return new Promise(resolve => {
-    form.validate(valid => resolve(valid));
+  return new Promise((resolve) => {
+    form.validate((valid) => resolve(valid));
   });
 }

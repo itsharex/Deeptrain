@@ -2,7 +2,7 @@
 import { redirect } from "@/assets/script/utils";
 
 const props = defineProps<{
-  uri: string,
+  uri: string;
 }>();
 
 function click() {

@@ -17,21 +17,32 @@ const form = reactive({
 
 const rules = reactive<FormRules>({
   code: [
-    { required: true, message: 'Please input your verify code', trigger: 'blur' },
-    { min: 6, max: 6, message: 'Please input the correct format', trigger: 'change' },
+    {
+      required: true,
+      message: "Please input your verify code",
+      trigger: "blur",
+    },
+    {
+      min: 6,
+      max: 6,
+      message: "Please input the correct format",
+      trigger: "change",
+    },
   ],
-})
+});
 
 async function submit() {
   if (await validateForm(element.value)) {
     loading.value = true;
     try {
-      const resp = await axios.post('verify', form), data = resp.data;
-      if (!data.status) ElNotification.error({
-        title: "Verify failed",
-        message: data.reason,
-        showClose: false,
-      });
+      const resp = await axios.post("verify", form),
+        data = resp.data;
+      if (!data.status)
+        ElNotification.error({
+          title: "Verify failed",
+          message: data.reason,
+          showClose: false,
+        });
       else {
         token.value = data.token;
         state.value = 2;
@@ -41,12 +52,13 @@ async function submit() {
           message: `Welcome to Deeptrain!`,
           showClose: false,
         });
-        await router.push('/');
+        await router.push("/");
       }
     } catch (e) {
       ElNotification.warning({
         title: "Error occurred",
-        message: "There was an error while verifying. Please check you network and try again.",
+        message:
+          "There was an error while verifying. Please check you network and try again.",
         showClose: false,
       });
     }
@@ -57,13 +69,16 @@ async function submit() {
 async function resend() {
   loading.value = true;
   try {
-    const resp = await axios.post('resend', form), data = resp.data;
-    if (!data.status) ElNotification.error({
-      title: "Resend failed",
-      message: data.reason,
-      showClose: false,
-    });
-    else ElNotification.success({
+    const resp = await axios.post("resend", form),
+      data = resp.data;
+    if (!data.status)
+      ElNotification.error({
+        title: "Resend failed",
+        message: data.reason,
+        showClose: false,
+      });
+    else
+      ElNotification.success({
         title: "Resend succeeded",
         message: `We have sent a verification mail to your email address.`,
         showClose: false,
@@ -71,7 +86,8 @@ async function resend() {
   } catch (e) {
     ElNotification.warning({
       title: "Error occurred",
-      message: "There was an error while resending. Please check you network and try again.",
+      message:
+        "There was an error while resending. Please check you network and try again.",
       showClose: false,
     });
   }
@@ -83,19 +99,41 @@ async function resend() {
   <el-container>
     <el-header>
       <RouterLink to="/" class="header">
-        <img src="/favicon.ico" alt="Deeptrain">
+        <img src="/favicon.ico" alt="Deeptrain" />
       </RouterLink>
     </el-header>
     <el-main class="main">
       <h1>Verify your account</h1>
       <el-card shadow="hover" v-loading="loading">
-        <div class="tips">We have sent a verification mail to your email address.</div>
-        <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
+        <div class="tips">
+          We have sent a verification mail to your email address.
+        </div>
+        <el-form
+          ref="element"
+          :model="form"
+          :rules="rules"
+          :label-position="'top'"
+        >
           <el-form-item label="Code" prop="code">
-            <el-input v-model="form.code" type="text" minlength="6" maxlength="6" />
+            <el-input
+              v-model="form.code"
+              type="text"
+              minlength="6"
+              maxlength="6"
+            />
           </el-form-item>
-          <div>Didn't get the email? <a class="resend" @click="resend">Resend Code</a>.</div>
-          <el-alert class="tips" description="Please fill in the verification code, it will expire in 30 minutes." type="info" center :closable="false" :show-icon="false"></el-alert>
+          <div>
+            Didn't get the email?
+            <a class="resend" @click="resend">Resend Code</a>.
+          </div>
+          <el-alert
+            class="tips"
+            description="Please fill in the verification code, it will expire in 30 minutes."
+            type="info"
+            center
+            :closable="false"
+            :show-icon="false"
+          ></el-alert>
           <el-button class="validate-button" @click="submit">Verify</el-button>
         </el-form>
       </el-card>

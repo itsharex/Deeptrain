@@ -23,34 +23,39 @@ const form = reactive({
 
 const rules = reactive<FormRules>({
   username: [
-    { required: true, message: 'Please input username', trigger: 'blur' },
-    { min: 3, max: 24, message: 'Length should be 3 to 24', trigger: 'change' },
+    { required: true, message: "Please input username", trigger: "blur" },
+    { min: 3, max: 24, message: "Length should be 3 to 24", trigger: "change" },
   ],
   email: [
-    { type: 'email', required: true, message: 'Please input email', trigger: 'blur' },
-    { validator: validateEmail, trigger: 'change'},
+    {
+      type: "email",
+      required: true,
+      message: "Please input email",
+      trigger: "blur",
+    },
+    { validator: validateEmail, trigger: "change" },
   ],
   password: [
-    { required: true, message: 'Please input password', trigger: 'blur' },
-    { min: 6, max: 46, message: 'Length should be 6 to 46', trigger: 'change' },
+    { required: true, message: "Please input password", trigger: "blur" },
+    { min: 6, max: 46, message: "Length should be 6 to 46", trigger: "change" },
   ],
   repassword: [
-    { required: true, message: 'Please input password', trigger: 'blur' },
-    { min: 6, max: 46, message: 'Length should be 6 to 46', trigger: 'change' },
-    { validator: validateRePassword(form), trigger: 'change' },
+    { required: true, message: "Please input password", trigger: "blur" },
+    { min: 6, max: 46, message: "Length should be 6 to 46", trigger: "change" },
+    { validator: validateRePassword(form), trigger: "change" },
   ],
-  captcha: [
-    { required: true, message: '', trigger: 'blur' },
-  ],
-})
+  captcha: [{ required: true, message: "", trigger: "blur" }],
+});
 
 async function submit() {
   if (await validateForm(element.value)) {
     form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
-      const resp = await axios.post('register', form), data = resp.data;
-      if (!data.status) ElNotification.error({
+      const resp = await axios.post("register", form),
+        data = resp.data;
+      if (!data.status)
+        ElNotification.error({
           title: "Register failed",
           message: data.reason,
           showClose: false,
@@ -65,12 +70,13 @@ async function submit() {
         loading.value = false;
         captcha.value?.destroy();
         state.value = 1;
-        await router.push('/verify');
+        await router.push("/verify");
       }
     } catch (e) {
       ElNotification.warning({
         title: "Error occurred",
-        message: "There was an error while registering. Please check you network and try again.",
+        message:
+          "There was an error while registering. Please check you network and try again.",
         showClose: false,
       });
     }
@@ -83,31 +89,58 @@ async function submit() {
   <el-container>
     <el-header>
       <RouterLink to="/" class="header">
-        <img src="/favicon.ico" alt="Deeptrain">
+        <img src="/favicon.ico" alt="Deeptrain" />
       </RouterLink>
     </el-header>
     <el-main class="main">
       <h1>Sign up to Deeptrain</h1>
       <el-card shadow="hover" v-loading="loading">
-        <el-form ref="element" :model="form" :rules="rules" :label-position="'top'">
+        <el-form
+          ref="element"
+          :model="form"
+          :rules="rules"
+          :label-position="'top'"
+        >
           <el-form-item label="Username" prop="username">
-            <el-input v-model="form.username" type="text" minlength="3" maxlength="24" />
+            <el-input
+              v-model="form.username"
+              type="text"
+              minlength="3"
+              maxlength="24"
+            />
           </el-form-item>
           <el-form-item label="Email address" prop="email">
             <el-input v-model="form.email" type="email" />
           </el-form-item>
-          <el-alert type="info" show-icon :closable="false" style="margin-bottom: 4px">
+          <el-alert
+            type="info"
+            show-icon
+            :closable="false"
+            style="margin-bottom: 4px"
+          >
             <p>
-              Supported Email Suffixes: <br>
-              &nbsp;&nbsp;@gmail.com, @qq.com, <br>
+              Supported Email Suffixes: <br />
+              &nbsp;&nbsp;@gmail.com, @qq.com, <br />
               &nbsp;&nbsp;@outlook.com, @163.com.
             </p>
           </el-alert>
           <el-form-item label="Password" prop="password">
-            <el-input v-model="form.password" type="password" show-password minlength="6" maxlength="46" />
+            <el-input
+              v-model="form.password"
+              type="password"
+              show-password
+              minlength="6"
+              maxlength="46"
+            />
           </el-form-item>
           <el-form-item label="Enter the password again" prop="repassword">
-            <el-input v-model="form.repassword" type="password" show-password minlength="6" maxlength="46" />
+            <el-input
+              v-model="form.repassword"
+              type="password"
+              show-password
+              minlength="6"
+              maxlength="46"
+            />
           </el-form-item>
           <el-form-item prop="captcha">
             <gee-test id="register-captcha" v-model="captcha" />
@@ -116,7 +149,9 @@ async function submit() {
         </el-form>
       </el-card>
       <el-card shadow="never" class="help">
-        <div>Already have an account? <RouterLink to="/login">Sign in</RouterLink>.</div>
+        <div>
+          Already have an account? <RouterLink to="/login">Sign in</RouterLink>.
+        </div>
       </el-card>
     </el-main>
   </el-container>

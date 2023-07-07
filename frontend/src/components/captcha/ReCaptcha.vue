@@ -1,13 +1,12 @@
 <script setup lang="ts">
-
 import { sitekey } from "@/config/config";
 import { ref } from "vue";
 import { onLoaded } from "@/assets/script/utils";
 
 const props = defineProps<{
-  id: string,
-  size?: string,
-  theme?: string,
+  id: string;
+  size?: string;
+  theme?: string;
 }>();
 const emit = defineEmits(["update:modelValue"]);
 
