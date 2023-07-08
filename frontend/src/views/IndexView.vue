@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
-import axios from "axios";
 import { RouterLink } from "vue-router";
 import { state } from "@/assets/script/global";
 import Translate from "@/components/icons/translate.vue";

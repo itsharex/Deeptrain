@@ -4,9 +4,10 @@ import { watch } from "vue";
 
 export namespace app {
   const apps: Record<string, string> = {
-    fystart: "https://fystart.deeptrain.net",
+    fystart: "https://fystart.cn",
     fymonitor: "https://fymonitor.deeptrain.net",
     vokkot: "https://vokkot.deeptrain.net",
+    lightnotes: "https://notes.lightxi.com",
   };
 
   export function set(): void {
