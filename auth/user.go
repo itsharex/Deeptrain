@@ -17,6 +17,7 @@ type User struct {
 	Active   bool
 	CreateAt string
 	IsAdmin  bool
+	ID       int
 }
 
 func isUserExists(db *sql.DB, username string) bool {
@@ -89,6 +90,15 @@ func (u *User) Delete(db *sql.DB) bool {
 		return false
 	}
 	return true
+}
+
+func (u *User) GetID(db *sql.DB) int {
+	var id int
+	err := db.QueryRow("SELECT id FROM auth WHERE username = ?", u.Username).Scan(&id)
+	if err != nil {
+		return -1
+	}
+	return id
 }
 
 func (u *User) IsActive(db *sql.DB) bool {

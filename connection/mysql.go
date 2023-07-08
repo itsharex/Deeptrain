@@ -35,7 +35,8 @@ func ConnectMySQL() *sql.DB {
 func initializeUserModel(DB *sql.DB) {
 	_, err := DB.Exec(`
 		CREATE TABLE IF NOT EXISTS auth (
-			username VARCHAR(24) PRIMARY KEY,
+		    id INT AUTO_INCREMENT PRIMARY KEY,
+			username VARCHAR(24) UNIQUE,
 			password VARCHAR(64) NOT NULL,
 			email VARCHAR(100) NOT NULL,
 		    active BOOLEAN NOT NULL DEFAULT FALSE,

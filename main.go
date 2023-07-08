@@ -2,6 +2,7 @@ package main
 
 import (
 	"deeptrain/auth"
+	oauth "deeptrain/auth/app"
 	"deeptrain/connection"
 	"deeptrain/middleware"
 	"github.com/gin-gonic/gin"
@@ -38,6 +39,8 @@ func main() {
 		app.POST("/resend", auth.ResendView)
 		app.GET("/state", auth.StateView)
 		app.GET("/user/:username", auth.UserView)
+
+		oauth.Register(app)
 	}
 
 	defer cache.Close()
