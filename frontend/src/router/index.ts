@@ -68,7 +68,7 @@ const auth_pages = ["/login", "/register", "/forgot"];
 
 router.beforeEach(async (to) => {
   await blockUtilSetup();
-  if (to.path === "/login") app.guard();
+  if (auth_pages.includes(to.path)) app.guard();
   if (auth_pages.includes(to.path) && state.value === 1)
     return await router.push("/verify");
   if (auth_pages.includes(to.path) && state.value === 2)
