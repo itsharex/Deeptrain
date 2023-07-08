@@ -28,6 +28,7 @@ export namespace app {
 
   export function guard() {
     set();
+    exec();
     watch(state, exec);
   }
 }

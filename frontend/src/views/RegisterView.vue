@@ -9,6 +9,7 @@ import { validateForm } from "@/assets/script/utils";
 import router from "@/router";
 import GeeTest from "@/components/captcha/GeeTest.vue";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
+import { app } from "@/assets/script/allauth";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -83,6 +84,8 @@ async function submit() {
     loading.value = false;
   }
 }
+
+app.set();
 </script>
 
 <template>
