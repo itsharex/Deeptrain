@@ -13,7 +13,7 @@ func ValidateUserAPI(ctx *gin.Context) {
 	password := ctx.PostForm("password")
 	raw := strings.TrimSpace(ctx.PostForm("token"))
 
-	if password != viper.GetString("allauth.access") && raw != "" {
+	if password != viper.GetString("allauth.access") || raw != "" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status": false,
 			"error":  "invalid access password",
