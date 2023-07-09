@@ -6,14 +6,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
-	"strings"
 )
 
-func ValidateUserAPI(ctx *gin.Context) {
-	password := ctx.PostForm("password")
-	raw := strings.TrimSpace(ctx.PostForm("token"))
+type ValidateUserRequest struct {
+	Access string `json:"password" required:"true"`
+	Token  string `json:"token" required:"true"`
+}
 
-	if password != viper.GetString("allauth.access") || raw == "" {
+func ValidateUserAPI(ctx *gin.Context) {
+	var req ValidateUserRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	if req.Access != viper.GetString("allauth.access") || req.Token == "" {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status": false,
 			"error":  "invalid access password",
@@ -23,7 +33,7 @@ func ValidateUserAPI(ctx *gin.Context) {
 
 	db := utils.GetDBFromContext(ctx)
 
-	token, err := utils.AES256Decrypt(raw, viper.GetString("allauth.secret"))
+	token, err := utils.AES256Decrypt(viper.GetString("allauth.aeskey"), req.Token)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status": false,
