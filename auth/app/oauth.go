@@ -11,6 +11,7 @@ import (
 type ValidateUserRequest struct {
 	Access string `json:"password" required:"true"`
 	Token  string `json:"token" required:"true"`
+	Hash   string `json:"hash" required:"true"`
 }
 
 func ValidateUserAPI(ctx *gin.Context) {
@@ -23,7 +24,7 @@ func ValidateUserAPI(ctx *gin.Context) {
 		return
 	}
 
-	if req.Access != viper.GetString("allauth.access") || req.Token == "" {
+	if req.Access != viper.GetString("allauth.access") || !utils.Sha2Compare(req.Token+viper.GetString("allauth.salt"), req.Hash) {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status": false,
 			"error":  "invalid access password",
@@ -33,15 +34,7 @@ func ValidateUserAPI(ctx *gin.Context) {
 
 	db := utils.GetDBFromContext(ctx)
 
-	token, err := utils.AES256Decrypt(viper.GetString("allauth.aeskey"), req.Token)
-	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"status": false,
-			"error":  "invalid token",
-		})
-	}
-
-	user := auth.ParseToken(ctx, db, token)
+	user := auth.ParseToken(ctx, db, req.Token)
 	if user == nil {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status": false,
