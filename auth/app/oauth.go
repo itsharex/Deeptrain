@@ -44,8 +44,7 @@ func ValidateUserAPI(ctx *gin.Context) {
 	}
 
 	var id int64
-	_ = db.QueryRow("SELECT id FROM auth WHERE username = $1", user.Username).Scan(&id)
-
+	_ = db.QueryRow("SELECT id FROM auth WHERE username = ?", user.Username).Scan(&id)
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":   user.IsActive(db),
 		"username": user.Username,
