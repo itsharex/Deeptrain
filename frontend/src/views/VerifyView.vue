@@ -44,7 +44,6 @@ async function submit() {
           showClose: false,
         });
       else {
-        token.value = data.token;
         state.value = 2;
         app.exec();
         ElNotification.success({

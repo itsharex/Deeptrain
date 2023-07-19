@@ -5,6 +5,7 @@ import { watch } from "vue";
 export namespace app {
   const apps: Record<string, string> = {
     fystart: "https://fystart.cn",
+    chatnio: "https://nio.fystart.cn",
     fymonitor: "https://fymonitor.deeptrain.net",
     vokkot: "https://vokkot.deeptrain.net",
     lightnotes: "https://notes.lightxi.com",
