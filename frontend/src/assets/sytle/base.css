@@ -98,3 +98,7 @@ body {
 .geetest_slice {
   z-index: 1 !important;
 }
+
+html {
+  scrollbar-width: thin;
+}
