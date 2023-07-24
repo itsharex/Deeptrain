@@ -318,4 +318,20 @@ footer .copyright:hover {
     margin: 8px 0;
   }
 }
+
+@media (max-width: 520px) {
+  .logo {
+    display: none;
+  }
+
+  .name {
+    margin-left: 16px;
+  }
+
+  .container .title {
+    font-size: 26px;
+  }
+
+
+}
 </style>
