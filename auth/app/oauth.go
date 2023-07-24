@@ -3,6 +3,7 @@ package app
 import (
 	"deeptrain/auth"
 	"deeptrain/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
@@ -12,6 +13,14 @@ type ValidateUserRequest struct {
 	Access string `json:"password" required:"true"`
 	Token  string `json:"token" required:"true"`
 	Hash   string `json:"hash" required:"true"`
+}
+
+type EmailRequest struct {
+	Access  string `json:"password" required:"true"`
+	User    string `json:"user" required:"true"`
+	Hash    string `json:"hash" required:"true"`
+	Subject string `json:"subject" required:"true"`
+	Body    string `json:"body" required:"true"`
 }
 
 func ValidateUserAPI(ctx *gin.Context) {
@@ -49,5 +58,51 @@ func ValidateUserAPI(ctx *gin.Context) {
 		"status":   user.IsActive(db),
 		"username": user.Username,
 		"id":       id,
+	})
+}
+
+func EmailAPI(ctx *gin.Context) {
+	var req EmailRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	if req.Access != viper.GetString("allauth.access") || !utils.Sha2Compare(req.User+viper.GetString("allauth.salt"), req.Hash) {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status": false,
+			"error":  "invalid access password",
+		})
+		return
+	}
+
+	if req.Subject == "" || req.Body == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  "subject or body is empty",
+		})
+		return
+	}
+
+	db := utils.GetDBFromContext(ctx)
+
+	var email string
+	if err := db.QueryRow("SELECT email FROM auth WHERE username = ?", req.User).Scan(&email); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  fmt.Sprintf("user %s not found", req.User),
+		})
+		return
+	}
+
+	utils.SendMail(email, req.Subject, req.Body)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"user":   req.User,
+		"email":  email,
 	})
 }

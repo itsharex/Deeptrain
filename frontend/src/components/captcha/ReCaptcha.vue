@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sitekey } from "@/config/config";
+import { sitekey } from "@/config";
 import { ref } from "vue";
 import { onLoaded } from "@/assets/script/utils";
 

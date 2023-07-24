@@ -1,4 +1,4 @@
-import { sitekey } from "@/config/config";
+import { sitekey } from "@/config";
 
 export async function performCheck(e: Event): Promise<string> {
   e.preventDefault();
