@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import router from "@/router";
 
+function login() {
+  router.push("/login");
+}
 </script>
 <template>
   <main>
@@ -10,9 +14,7 @@
         <span class="en">Deeptrain Team</span>
       </div>
       <div style="flex-grow: 1" />
-      <div class="login">
-        登录账号
-      </div>
+      <div class="login" @click="login">登录账号</div>
     </header>
     <div class="container">
       <div class="landing">
@@ -172,6 +174,7 @@ header {
   left: 50%;
   width: 32px;
   height: 32px;
+  transform: translateX(-50%);
   border-radius: 50%;
   background: #1e1e20;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
@@ -233,6 +236,33 @@ header {
   text-shadow: 0 0 12px rgba(0, 0, 0, .6);
 }
 
+.line {
+  margin: 64px 0 32px;
+  padding: 0 24px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  user-select: none;
+  white-space: pre-wrap;
+  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  text-align: center;
+}
+
+.line:before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 88px;
+  width: 24px;
+  height: 4px;
+  background: #3370ff;
+  border-radius: 100px;
+}
+
+.line span {
+  font-family: Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
 .app-container {
   position: relative;
   width: 100%;
@@ -261,6 +291,12 @@ header {
   color: #fff;
 }
 
+.app:hover {
+  border: 1px solid #252529;
+  background: #232325;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+}
+
 .app img {
   width: 58px;
   height: 58px;
@@ -270,43 +306,26 @@ header {
   user-select: none;
   border-radius: 12px;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+  transition: .5s;
 }
 
-.line {
-  margin: 64px 0 32px;
-  padding: 0 24px;
-  font-size: 24px;
-  font-weight: 600;
-  color: #fff;
-  user-select: none;
-  white-space: pre-wrap;
-  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
-  text-align: center;
-  transform: translateX(16px);
+.app:hover img {
+  width: 66px;
+  height: 66px;
 }
 
-.line:before {
-  content: "";
-  position: absolute;
-  top: -16px;
-  left: 88px;
-  width: 24px;
-  height: 4px;
-  background: #3370ff;
-  border-radius: 100px;
-}
-
-.line span {
-  font-family: Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-.desc {
+.app .desc {
   display: flex;
   margin-top: 12px;
   flex-direction: column;
   text-align: left;
   user-select: none;
   white-space: nowrap;
+  transition: .5s;
+}
+
+.app:hover .desc {
+  margin-top: 4px;
 }
 
 .app h1 {
