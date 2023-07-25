@@ -199,5 +199,20 @@ axios.get("info")
   .logo span {
     display: none;
   }
+
+  .form .item {
+    text-align: left;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form .item .label {
+    margin-right: 0;
+    text-align: left;
+  }
+
+  .form .item .value {
+
+  }
 }
 </style>
