@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { blockUtilSetup, state } from "@/assets/script/global";
 import { app } from "@/assets/script/allauth";
-import SettingsView from "@/views/SettingsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,13 +12,6 @@ const router = createRouter({
       meta: {
         title: "Deeptrain",
       },
-      children: [
-        {
-          path: "settings",
-          name: "settings",
-          component: SettingsView,
-        },
-      ],
     },
     {
       path: "/register",
@@ -61,6 +53,14 @@ const router = createRouter({
         title: "Reset password | Deeptrain",
       },
     },
+    {
+      path: "/home",
+      name: "home",
+      component: () => import("../views/HomeView.vue"),
+      meta: {
+        title: "Home | Deeptrain",
+      }
+    }
   ],
 });
 
@@ -72,10 +72,11 @@ router.beforeEach(async (to) => {
   if (auth_pages.includes(to.path) && state.value === 1)
     return await router.push("/verify");
   if (auth_pages.includes(to.path) && state.value === 2)
-    return await router.push("/");
+    return await router.push("/home");
   if (to.path === "/logout" && state.value !== 2) return await router.push("/");
   if (to.path === "/verify" && state.value !== 1) return await router.push("/");
-  // @ts-ignore
-  if (to.meta.title) document.title = to.meta.title;
+  if (to.path === "/home" && state.value !== 2) return await router.push("/");
+
+  if (to.meta.title) document.title = to.meta.title as string;
 });
 export default router;

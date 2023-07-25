@@ -59,7 +59,7 @@ async function submit() {
         refreshState({
           callback: (value: number) => {
             app.exec();
-            if (value === 2) router.push({ path: "/" });
+            if (value === 2) router.push("/home");
           },
         });
       }

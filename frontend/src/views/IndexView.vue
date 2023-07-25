@@ -52,7 +52,7 @@ function login() {
           </div>
         </a>
         <a class="app" href="https://nio.fystart.cn">
-          <img src="/chatnio.ico" alt="">
+          <img src="/chatnio.png" alt="">
           <div class="desc">
             <h1>Chat Nio</h1>
             <p>一个简洁、美观、轻量的开源 AI 聊天助手。</p>
@@ -69,6 +69,7 @@ function login() {
 </template>
 
 <style scoped>
+@import "@/assets/sytle/anim.css";
 main {
   background: #1e1e20;
   background-size: cover;
@@ -85,11 +86,12 @@ header {
   padding: 1px;
   background: rgba(255, 255, 255, .12);
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px) blur(18px) saturate(50%);
   border-bottom: 1px solid rgba(255, 255, 255, .1);
   display: flex;
   flex-direction: row;
   z-index: 1;
+  animation: FadeInAnimation 1s;
 }
 
 .logo {

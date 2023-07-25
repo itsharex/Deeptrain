@@ -51,7 +51,7 @@ async function submit() {
           message: `Welcome to Deeptrain!`,
           showClose: false,
         });
-        await router.push("/");
+        await router.push("/home");
       }
     } catch (e) {
       ElNotification.warning({
