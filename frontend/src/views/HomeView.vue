@@ -4,10 +4,10 @@ import { state, username } from "@/assets/script/global";
 import router from "@/router";
 import axios from "axios";
 import { formatDate } from "@/assets/script/time";
-import User from "@/components/icons/home/user.vue";
-import Name from "@/components/icons/home/name.vue";
 import Mail from "@/components/icons/home/mail.vue";
 import Date from "@/components/icons/home/date.vue";
+import Key from "@/components/icons/home/key.vue";
+import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
 
 function logout() {
   router.push("/logout");
@@ -20,6 +20,11 @@ const form = reactive<Record<string, any>>({
   created_at: "",
 });
 
+const dialog = reactive<Record<string, boolean>>({
+  change: false,
+  email: false,
+});
+
 axios.get("info")
   .then((res) => {
     for (const key in res.data) {
@@ -29,6 +34,7 @@ axios.get("info")
   })
 </script>
 <template>
+  <ChangePasswordDialog v-model="dialog.change" />
   <el-container>
     <el-main>
       <el-card class="card">
@@ -65,12 +71,23 @@ axios.get("info")
               <span>通用</span>
             </div>
             <div class="item">
-              <div class="label"><mail style="scale: 0.98; transform: translate(-2px, 8px)" /> 邮箱</div>
+              <div class="label"><mail style="scale: 0.98; transform: translate(-2px, 7px)" /> 邮箱</div>
               <div class="grow" />
-              <div class="value">{{ form.email }}</div>
+              <div class="value">
+                <span>{{ form.email }}</span>
+                <div class="button" @click="dialog.email = true">更改</div>
+              </div>
             </div>
             <div class="item">
-              <div class="label"><date style="scale: 0.98; transform: translate(-2px, 7px)" /> 注册时间</div>
+              <div class="label"><key style="scale: 0.98; transform: translate(-2px, 6px)" /> 密码</div>
+              <div class="grow" />
+              <div class="value">
+                <span>********</span>
+                <div class="button" @click="dialog.change = true">更改</div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="label"><date style="scale: 0.98; transform: translate(-2px, 6px)" /> 注册时间</div>
               <div class="grow" />
               <div class="value">{{ form.created_at }}</div>
             </div>
@@ -283,11 +300,37 @@ axios.get("info")
 }
 
 .form .item .value {
+  display: flex;
+  flex-direction: row;
   font-size: 16px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.75);
   user-select: none;
   white-space: nowrap;
+}
+
+.form .item .value span {
+  margin-right: 16px;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.form .item .value .button {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: .5s;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.form .item .value .button:hover {
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 620px) {

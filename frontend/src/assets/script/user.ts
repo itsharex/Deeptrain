@@ -35,11 +35,16 @@ export const validateEmail = (rules: any, value: any, callback: any): void => {
   callback();
 };
 
-export function validateRePassword(form: {
-  password: string;
-}): (rules: any, value: any, callback: any) => void {
+export function validateRePassword(form: Record<string, any>, field?: string): (rules: any, value: any, callback: any) => void {
   return (rules: any, value: any, callback: any): any =>
-    form.password !== value
+    form[field || "password"] !== value
       ? callback("The password does not match")
+      : callback();
+}
+
+export function validateChangePassword(form: Record<string, any>): (rules: any, value: any, callback: any) => void {
+  return (rules: any, value: any, callback: any): any =>
+    form.old_password === value
+      ? callback("The new password cannot be the same as the old password")
       : callback();
 }

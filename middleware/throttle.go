@@ -32,7 +32,9 @@ var limits = map[string]Limiter{
 	"/reset":    {Duration: 600, Count: 3},
 	"/verify":   {Duration: 60, Count: 3},
 	"/resend":   {Duration: 60, Count: 1},
-	"/state":    {Duration: 1, Count: 2},
+	"/state":    {Duration: 1, Count: 5},
+	"/info":     {Duration: 1, Count: 2},
+	"/settings": {Duration: 600, Count: 12},
 	"/user":     {Duration: 1, Count: 2},
 }
 

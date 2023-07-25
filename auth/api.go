@@ -33,6 +33,12 @@ type VerifyForm struct {
 	Code string `form:"code" binding:"required"`
 }
 
+type ChangePasswordForm struct {
+	OldPassword string         `form:"old_password" binding:"required"`
+	NewPassword string         `form:"new_password" binding:"required"`
+	Captcha     GeeTestRequest `form:"captcha" binding:"required"`
+}
+
 func LoginView(c *gin.Context) {
 	var form LoginForm
 	if err := c.ShouldBind(&form); err != nil {
@@ -274,4 +280,57 @@ func UserView(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{"status": false})
+}
+
+func ChangePasswordView(c *gin.Context) {
+	username := c.MustGet("user")
+	if username == "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+		return
+	}
+
+	var form ChangePasswordForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again.", "message": err.Error()})
+		return
+	}
+	oldPassword, newPassword := strings.TrimSpace(form.OldPassword), strings.TrimSpace(form.NewPassword)
+	if !utils.All(
+		ValidatePassword(oldPassword),
+		ValidatePassword(newPassword),
+		GeeTestCaptcha(form.Captcha),
+	) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Password is not valid. Please check again."})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	instance := &User{Username: username.(string)}
+	if !instance.Validate(db, c) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Old password is incorrect."})
+		return
+	}
+
+	if oldPassword == newPassword {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "New password cannot be the same as old password."})
+		return
+	}
+
+	if err := db.QueryRow("SELECT password FROM auth WHERE username = ?", instance.Username).Scan(&instance.Password); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later or contact admin."})
+		return
+	}
+
+	if utils.Sha2Encrypt(oldPassword) == instance.Password {
+		instance.Password = utils.Sha2Encrypt(newPassword)
+		if err := db.QueryRow("UPDATE auth SET password = ? WHERE username = ?", instance.Password, instance.Username); err != nil {
+			c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later or contact admin."})
+			return
+		}
+	} else {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Old password is incorrect."})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true})
 }

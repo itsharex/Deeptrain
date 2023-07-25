@@ -30,6 +30,11 @@
   --el-card-border-color: #21262d !important;
 }
 
+.el-dialog {
+  --el-dialog-width: 90% !important;
+  max-width: 560px !important;
+}
+
 .el-divider {
   --el-border-color: #30363d !important;
 }

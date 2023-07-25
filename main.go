@@ -39,6 +39,7 @@ func main() {
 		app.POST("/resend", auth.ResendView)
 		app.GET("/state", auth.StateView)
 		app.GET("/info", auth.InfoView)
+		app.POST("/settings/password", auth.ChangePasswordView)
 		app.GET("/user/:username", auth.UserView)
 
 		oauth.Register(app)
