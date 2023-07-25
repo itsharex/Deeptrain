@@ -19,37 +19,41 @@
         <div class="left">
           <div class="top">深能科创</div>
           <div class="title">致力于更好的体验</div>
-          <div class="subtitle">不为利益驱，唯献爱与梦。心中善意永存，纯粹之美在手，不断创新之路。</div>
+          <div class="subtitle">保持热爱，共赴山海。</div>
         </div>
       </div>
       <div class="circle" />
+      <div class="line">
+        <span>我们的产品</span>
+        <p>Our Products</p>
+      </div>
       <div class="app-container">
         <a class="app" href="https://lightxi.com">
           <img src="/lightxi.png" alt="">
           <div class="desc">
             <h1>LightXi IDC</h1>
-            <p>保持热爱，共赴山海</p>
+            <p>晞云云计算 - 保持热爱，共赴山海。</p>
           </div>
         </a>
         <a class="app" href="https://fystart.cn">
           <img src="/fystart.webp" alt="">
           <div class="desc">
             <h1>Fystart</h1>
-            <p>一个简洁的起始页，为你所想</p>
+            <p>一个简洁的起始页，铸就高效率工具，为你所想。</p>
           </div>
         </a>
         <a class="app" href="https://notes.lightxi.com">
           <img src="/lightnotes.ico" alt="">
           <div class="desc">
             <h1>Light Notes</h1>
-            <p>大小事，随手记。一个极简、美观、多端同步、支持多种文件格式、支持解析多种文件的轻量化在线便签。</p>
+            <p>大小事，随手记。一个极简、美观、多端同步、支持解析多种文件的轻量化在线便签。</p>
           </div>
         </a>
         <a class="app" href="https://nio.fystart.cn">
           <img src="/chatnio.ico" alt="">
           <div class="desc">
             <h1>Chat Nio</h1>
-            <p>AI 聊天助手</p>
+            <p>一个简洁、美观、轻量的开源 AI 聊天助手。</p>
           </div>
         </a>
       </div>
@@ -64,7 +68,7 @@
 
 <style scoped>
 main {
-  background: linear-gradient(rgba(10, 10, 10, .5), rgba(0, 0, 0, .5));
+  background: #1e1e20;
   background-size: cover;
   width: 100%;
   height: 100vh;
@@ -91,15 +95,6 @@ header {
   width: 62px;
   height: 62px;
   user-select: none;
-}
-
-.desc {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  white-space: nowrap;
 }
 
 .name {
@@ -149,6 +144,7 @@ header {
 
 .container {
   position: relative;
+  background: #1e1e20;
   width: 100%;
   height: max-content;
   display: flex;
@@ -177,7 +173,7 @@ header {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #0d1117;
+  background: #1e1e20;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
 }
 
@@ -246,6 +242,7 @@ header {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  margin-bottom: 64px;
 }
 
 .app {
@@ -253,33 +250,74 @@ header {
   padding: 32px;
   width: 320px;
   height: max-content;
+  min-height: 268px;
   border: 1px solid #252529;
-  border-radius: 8px;
+  border-radius: 12px;
+  background: #252529;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   transition: .5s;
   cursor: pointer;
   color: #fff;
 }
 
 .app img {
-  width: 120px;
-  height: 120px;
+  width: 58px;
+  height: 58px;
+  background: #1e1e20;
+  padding: 4px;
   margin-bottom: 16px;
   user-select: none;
   border-radius: 12px;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
 }
 
-.app h1 {
-  margin-bottom: 8px;
+.line {
+  margin: 64px 0 32px;
+  padding: 0 24px;
   font-size: 24px;
   font-weight: 600;
   color: #fff;
   user-select: none;
+  white-space: pre-wrap;
+  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  text-align: center;
+  transform: translateX(16px);
+}
+
+.line:before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 88px;
+  width: 24px;
+  height: 4px;
+  background: #3370ff;
+  border-radius: 100px;
+}
+
+.line span {
+  font-family: Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+.desc {
+  display: flex;
+  margin-top: 12px;
+  flex-direction: column;
+  text-align: left;
+  user-select: none;
   white-space: nowrap;
+}
+
+.app h1 {
+  margin-bottom: 14px;
+  line-height: 24px;
+  font-size: 22px;
+  font-weight: 600;
+  color: rgba(255,255,255,.86);
+  user-select: none;
+  white-space: nowrap;
+  font-family: "JetBrains Mono", monospace;
 }
 
 .app p {
@@ -288,7 +326,6 @@ header {
   color: rgba(255, 255, 255, .75);
   user-select: none;
   white-space: pre-wrap;
-  text-align: center;
 }
 
 footer {
