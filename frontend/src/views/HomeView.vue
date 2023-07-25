@@ -47,20 +47,22 @@ axios.get("info")
         </div>
       </el-card>
       <el-card class="card">
+        <div class="image">
+          <img class="background" src="/home/background.jpg" alt="">
+          <img class="avatar" src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+        </div>
+        <div class="info">
+          <div class="name">
+            {{ form.username }}
+          </div>
+          <div class="id">
+            {{ form.id }}
+          </div>
+        </div>
         <div class="setting">
           <div class="form general">
             <div class="title">
               <span>通用</span>
-            </div>
-            <div class="item">
-              <div class="label"><user /> ID</div>
-              <div class="grow" />
-              <div class="value">{{ form.id }}</div>
-            </div>
-            <div class="item">
-              <div class="label"><name /> 用户名</div>
-              <div class="grow" />
-              <div class="value">{{ form.username }}</div>
             </div>
             <div class="item">
               <div class="label"><mail style="scale: 0.98; transform: translate(-2px, 8px)" /> 邮箱</div>
@@ -98,7 +100,6 @@ axios.get("info")
   user-select: none;
   display: flex;
   align-items: center;
-
 }
 
 .logo img {
@@ -111,6 +112,82 @@ axios.get("info")
   font-weight: 600;
   margin-left: 16px;
   color: rgba(255, 255, 255, 0.9);
+}
+
+.image {
+  width: calc(100% + 40px);
+  height: 295px;
+  overflow: hidden;
+  position: relative;
+  margin-right: 16px;
+  border-radius: 4px 4px 0 0;
+  transform: translate(-20px, -20px);
+}
+
+.image .background {
+  width: 100%;
+  height: 245px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.image .avatar {
+  position: absolute;
+  bottom: 0;
+  left: 50px;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  padding: 2px;
+  opacity: .9;
+  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,.15);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+  object-position: center;
+  transition: .5s;
+  z-index: 111;
+}
+
+.info {
+  width: 100%;
+  height: 50px;
+  transform: translateY(-12px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 16px;
+  margin-bottom: 16px;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.info .name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-right: 16px;
+  user-select: none;
+  white-space: nowrap;
+  font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+}
+
+.info .id:before {
+  content: "#";
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.info .id {
+  font-size: 24px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  user-select: none;
+  white-space: nowrap;
+  transform: translateY(-2px);
 }
 
 .username {
@@ -144,6 +221,10 @@ axios.get("info")
   width: 100%;
   flex-direction: row;
   align-items: flex-start;
+  padding: 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .form {
@@ -229,6 +310,18 @@ axios.get("info")
     margin-top: 4px;
     margin-left: 6px;
     text-align: left;
+  }
+
+  .image .avatar {
+    width: 86px;
+    height: 86px;
+    left: 16px;
+  }
+}
+
+@media (max-width: 540px) {
+  .username {
+    display: none;
   }
 }
 </style>
