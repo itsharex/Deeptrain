@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const deploy: boolean = false;
+export const deploy: boolean = true;
 export let backend_url: string = 'http://localhost:8080/';
 if (deploy) backend_url = 'https://api.deeptrain.net/';
 

@@ -47,11 +47,7 @@ async function post() {
     form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
-      const resp = await axios.post("/settings/password", {
-        old_password: form.old_password,
-        new_password: form.new_password,
-        captcha: form.captcha,
-        }),
+      const resp = await axios.post("/settings/password", form),
         data = resp.data;
       if (!data.status)
         ElNotification.error({
