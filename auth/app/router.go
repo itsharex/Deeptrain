@@ -6,5 +6,6 @@ func Register(router *gin.Engine) {
 	app := router.Group("/app")
 	{
 		app.POST("/validate", ValidateUserAPI)
+		app.POST("/email", EmailAPI)
 	}
 }

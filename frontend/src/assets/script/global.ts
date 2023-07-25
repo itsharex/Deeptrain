@@ -6,12 +6,15 @@ import { token } from "@/assets/script/user";
 
 export const state = ref(-1);
 export const ready = ref(false);
+export const username = ref("");
+
 window.addEventListener("load", refreshState);
 
 export function refreshState(option?: any) {
   if (token.value === "") return (state.value = 0);
   axios.get("state").then((res) => {
     state.value = res.data.status;
+    username.value = res.data.username;
     if (typeof option == "object" && typeof option.callback == "function")
       option.callback(state.value);
     if (state.value === 1) router.push("/verify").then(() => 0);

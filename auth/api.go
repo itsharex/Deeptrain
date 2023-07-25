@@ -214,15 +214,15 @@ func ResendView(c *gin.Context) {
 func StateView(c *gin.Context) {
 	username := c.MustGet("user")
 	if username == "" {
-		c.JSON(http.StatusOK, gin.H{"status": 0})
+		c.JSON(http.StatusOK, gin.H{"status": 0, "username": username})
 		return
 	}
 	instance := &User{Username: username.(string)}
 	if instance.IsActive(utils.GetDBFromContext(c)) {
-		c.JSON(http.StatusOK, gin.H{"status": 2})
+		c.JSON(http.StatusOK, gin.H{"status": 2, "username": username})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": 1})
+	c.JSON(http.StatusOK, gin.H{"status": 1, "username": username})
 }
 
 func UserView(c *gin.Context) {
