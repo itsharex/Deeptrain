@@ -252,7 +252,8 @@ header {
   content: "";
   position: absolute;
   top: -16px;
-  left: 88px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 24px;
   height: 4px;
   background: #3370ff;
