@@ -225,6 +225,37 @@ func StateView(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "username": username})
 }
 
+func InfoView(c *gin.Context) {
+	username := c.MustGet("user")
+	if username == "" {
+		c.JSON(http.StatusOK, gin.H{"status": false})
+		return
+	}
+	instance := &User{Username: username.(string)}
+	if !instance.IsActive(utils.GetDBFromContext(c)) {
+		c.JSON(http.StatusOK, gin.H{"status": false})
+		return
+	}
+
+	var id int64
+	var email string
+	var isAdmin bool
+	var createdAt []uint8
+	err := utils.GetDBFromContext(c).QueryRow("SELECT id, email, is_admin, created_at FROM auth WHERE username = ?", instance.Username).Scan(&id, &email, &isAdmin, &createdAt)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status":     true,
+		"username":   instance.Username,
+		"id":         id,
+		"email":      email,
+		"is_admin":   isAdmin,
+		"created_at": utils.ConvertTime(createdAt),
+	})
+}
+
 func UserView(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 	username := c.Param("username")

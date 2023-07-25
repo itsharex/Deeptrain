@@ -1,6 +1,9 @@
 package utils
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
 
 func Contains[T comparable](value T, slice []T) bool {
 	for _, item := range slice {
@@ -91,4 +94,12 @@ func GetSuffixMap[T comparable](s string, p map[string]T) *T {
 		}
 	}
 	return nil
+}
+
+func ConvertTime(t []uint8) *time.Time {
+	val, err := time.Parse("2006-01-02 15:04:05", string(t))
+	if err != nil {
+		return nil
+	}
+	return &val
 }
