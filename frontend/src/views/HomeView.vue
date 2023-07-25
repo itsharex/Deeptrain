@@ -4,6 +4,10 @@ import { state, username } from "@/assets/script/global";
 import router from "@/router";
 import axios from "axios";
 import { formatDate } from "@/assets/script/time";
+import User from "@/components/icons/home/user.vue";
+import Name from "@/components/icons/home/name.vue";
+import Mail from "@/components/icons/home/mail.vue";
+import Date from "@/components/icons/home/date.vue";
 
 function logout() {
   router.push("/logout");
@@ -49,22 +53,22 @@ axios.get("info")
               <span>通用</span>
             </div>
             <div class="item">
-              <div class="label">ID</div>
+              <div class="label"><user /> ID</div>
               <div class="grow" />
               <div class="value">{{ form.id }}</div>
             </div>
             <div class="item">
-              <div class="label">用户名</div>
+              <div class="label"><name /> 用户名</div>
               <div class="grow" />
               <div class="value">{{ form.username }}</div>
             </div>
             <div class="item">
-              <div class="label">邮箱</div>
+              <div class="label"><mail style="scale: 0.98; transform: translate(-2px, 8px)" /> 邮箱</div>
               <div class="grow" />
               <div class="value">{{ form.email }}</div>
             </div>
             <div class="item">
-              <div class="label">注册时间</div>
+              <div class="label"><date style="scale: 0.98; transform: translate(-2px, 7px)" /> 注册时间</div>
               <div class="grow" />
               <div class="value">{{ form.created_at }}</div>
             </div>
@@ -178,6 +182,16 @@ axios.get("info")
   margin-bottom: 16px;
 }
 
+.form .item svg {
+  width: 24px;
+  height: 24px;
+  transform: translateY(6px);
+  fill: rgba(255, 255, 255, 0.85);
+  user-select: none;
+  white-space: nowrap;
+  flex-shrink: 1;
+}
+
 .form .item .label {
   font-size: 16px;
   color: rgba(255, 255, 255, 0.9);
@@ -212,7 +226,9 @@ axios.get("info")
   }
 
   .form .item .value {
-
+    margin-top: 4px;
+    margin-left: 6px;
+    text-align: left;
   }
 }
 </style>

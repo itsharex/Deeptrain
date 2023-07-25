@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Date: typeof import('./src/components/icons/home/date.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -24,6 +25,8 @@ declare module '@vue/runtime-core' {
     Home: typeof import('./src/components/icons/home.vue')['default']
     Loader: typeof import('./src/components/Loader.vue')['default']
     Login: typeof import('./src/components/icons/login.vue')['default']
+    Mail: typeof import('./src/components/icons/home/mail.vue')['default']
+    Name: typeof import('./src/components/icons/home/name.vue')['default']
     Olink: typeof import('./src/components/oauth/olink.vue')['default']
     ReCaptcha: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
