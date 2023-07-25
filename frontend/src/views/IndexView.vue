@@ -15,8 +15,14 @@
       </div>
     </header>
     <div class="container">
-      <div class="title">致力于更好的体验</div>
-      <div class="subtitle">不为利益驱，唯献爱与梦。心中善意永存，纯粹之美在手，不断创新之路。</div>
+      <div class="landing">
+        <div class="left">
+          <div class="top">深能科创</div>
+          <div class="title">致力于更好的体验</div>
+          <div class="subtitle">不为利益驱，唯献爱与梦。心中善意永存，纯粹之美在手，不断创新之路。</div>
+        </div>
+      </div>
+      <div class="circle" />
       <div class="app-container">
         <a class="app" href="https://lightxi.com">
           <img src="/lightxi.png" alt="">
@@ -32,6 +38,13 @@
             <p>一个简洁的起始页，为你所想</p>
           </div>
         </a>
+        <a class="app" href="https://notes.lightxi.com">
+          <img src="/lightnotes.ico" alt="">
+          <div class="desc">
+            <h1>Light Notes</h1>
+            <p>大小事，随手记。一个极简、美观、多端同步、支持多种文件格式、支持解析多种文件的轻量化在线便签。</p>
+          </div>
+        </a>
         <a class="app" href="https://nio.fystart.cn">
           <img src="/chatnio.ico" alt="">
           <div class="desc">
@@ -41,22 +54,20 @@
         </a>
       </div>
     </div>
+    <footer>
+      <a class="copyright" href="https://www.baidu.com/baidu?ie=utf-8&wd=%E7%8F%A0%E6%B5%B7%E5%B8%82%E6%99%9E%E4%BA%91%E4%BA%91%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8" target="_blank">
+        © 2023 珠海市晞云云科技有限公司
+      </a>
+    </footer>
   </main>
-  <footer>
-    <a class="copyright" href="https://www.baidu.com/baidu?ie=utf-8&wd=%E7%8F%A0%E6%B5%B7%E5%B8%82%E6%99%9E%E4%BA%91%E4%BA%91%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8" target="_blank">
-      © 2023 珠海市晞云云科技有限公司
-    </a>
-  </footer>
 </template>
 
 <style scoped>
 main {
-  background: linear-gradient(rgba(10, 10, 10, .5), rgba(0, 0, 0, .5)), url("/background.webp");
+  background: linear-gradient(rgba(10, 10, 10, .5), rgba(0, 0, 0, .5));
   background-size: cover;
-  background-position: center;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
 }
 
 header {
@@ -139,31 +150,88 @@ header {
 .container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: max-content;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
 }
 
-.container .title {
-  margin-top: 160px;
+.landing {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: linear-gradient(to right, rgba(0, 0, 0, .2), rgba(10, 10, 10, .05)), url(/background.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.circle {
+  position: absolute;
+  top: calc(100vh - 16px);
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0d1117;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+}
+
+@keyframes LandingAnimation {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.landing .left {
+  margin-left: 160px;
   padding: 16px 18px;
   font-size: 46px;
   font-weight: 600;
   color: #fff;
-  text-align: center;
+  text-align: left;
+  user-select: none;
+  white-space: pre-wrap;
+  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  animation: LandingAnimation 1s forwards;
+}
+
+.landing .top {
+  padding: 16px 18px 0;
+  font-size: 32px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, .95);
+  user-select: none;
+  white-space: pre-wrap;
+  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  transform: translateY(12px);
+}
+
+.landing .title {
+  padding: 16px 18px;
+  font-size: 46px;
+  font-weight: 600;
+  color: #fff;
   user-select: none;
   white-space: pre-wrap;
   text-shadow: 0 0 12px rgba(0, 0, 0, .6);
 }
 
-.container .subtitle {
+.landing .subtitle {
   margin-top: 16px;
   padding: 0 24px;
   font-size: 18px;
   font-weight: 400;
   color: rgba(255, 255, 255, .75);
-  text-align: center;
   user-select: none;
   white-space: pre-wrap;
   text-shadow: 0 0 12px rgba(0, 0, 0, .6);
@@ -184,9 +252,8 @@ header {
   margin: 32px;
   padding: 32px;
   width: 320px;
-  height: 320px;
-  backdrop-filter: blur(2px);
-  background: rgba(255, 255, 255, .12);
+  height: max-content;
+  border: 1px solid #252529;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -202,7 +269,6 @@ header {
   height: 120px;
   margin-bottom: 16px;
   user-select: none;
-  background: rgb(30, 30, 30);
   border-radius: 12px;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
 }
@@ -221,19 +287,15 @@ header {
   font-weight: 400;
   color: rgba(255, 255, 255, .75);
   user-select: none;
-  white-space: nowrap;
+  white-space: pre-wrap;
+  text-align: center;
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   height: 42px;
   padding: 1px;
-  background: rgba(255, 255, 255, .12);
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
-  backdrop-filter: blur(18px);
   border-top: 1px solid rgba(255, 255, 255, .1);
   justify-content: center;
   align-items: center;
@@ -256,66 +318,10 @@ footer .copyright:hover {
   background: none;
 }
 
-@media (max-width: 1200px) {
-  .app {
-    margin: 22px 16px;
-    width: 240px;
-    height: max-content;
-  }
-
-  .app img {
-    width: 82px;
-    height: 82px;
-  }
-
-  .app h1 {
-    font-size: 20px;
-  }
-
-  .app p {
-    font-size: 14px;
-  }
-}
-
 @media (max-width: 800px) {
-  .container .title {
-    margin-top: 100px;
-    font-size: 36px;
-  }
-
-  .container .subtitle {
-    margin: 6px 0;
-  }
-
-  .app-container {
-    flex-direction: column;
-    align-items: unset;
-    padding: 0 4px;
-  }
-
-  .app {
-    margin: 6px 16px;
-    padding: 2px;
-    width: max-content;
-    height: max-content;
-    background: none;
-    backdrop-filter: none;
-    border-radius: 0;
-    box-shadow: none;
-    flex-direction: row;
-  }
-
-  .app .desc {
-    margin-left: 16px;
-    text-align: left;
-    justify-content: left;
-    align-items: flex-start;
-  }
-
-  .app img {
-    width: 82px;
-    height: 82px;
-    margin: 8px 0;
+  .landing .left {
+    margin-left: 0;
+    padding: 0 16px;
   }
 }
 
@@ -331,7 +337,5 @@ footer .copyright:hover {
   .container .title {
     font-size: 26px;
   }
-
-
 }
 </style>
