@@ -161,5 +161,5 @@ app.set();
 </template>
 
 <style scoped>
-@import "@/assets/sytle/user.css";
+@import "@/assets/style/user.css";
 </style>

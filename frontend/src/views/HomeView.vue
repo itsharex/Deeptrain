@@ -2,28 +2,49 @@
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { state } from "@/assets/script/global";
-import Translate from "@/components/icons/translate.vue";
-import Home from "@/components/icons/home.vue";
-import Login from "@/components/icons/login.vue";
-import Setting from "@/components/icons/setting.vue";
-
-const I18nPopover = ref(null);
-
-const currentIcon = ref<HTMLElement | null>(null);
-function iconToggle(e: Event) {
-  let target = e.target as HTMLElement;
-  const name = target.localName;
-  if (name === "path") target = target.parentElement as HTMLElement;
-  if (name === "a") target = target.children[0] as HTMLElement;
-  target.classList.add("checked");
-  console.log(currentIcon.value);
-  if (currentIcon.value) currentIcon.value.classList.remove("checked");
-}
 </script>
 <template>
-
+  <el-container>
+    <el-main>
+      <el-card class="card">
+        <div class="logo">
+          <img src="/favicon.ico" alt="" />
+          <span>Deeptrain 账号管理</span>
+        </div>
+        <div class="grow" />
+        <div class="logout">
+          退出登录
+        </div>
+      </el-card>
+    </el-main>
+  </el-container>
 </template>
 
 <style scoped>
-@import "@/assets/sytle/index.css";
+.card {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.logo {
+  width: max-content;
+  height: max-content;
+  user-select: none;
+  display: flex;
+  align-items: center;
+
+}
+
+.logo img {
+  width: 36px;
+  height: 36px;
+}
+
+.logo span {
+  font-size: 24px;
+  font-weight: 600;
+  margin-left: 16px;
+  color: rgba(255, 255, 255, 0.9);
+}
 </style>

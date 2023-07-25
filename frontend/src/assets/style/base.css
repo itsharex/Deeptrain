@@ -106,3 +106,7 @@ body {
 html {
   scrollbar-width: thin;
 }
+
+.grow {
+  flex-grow: 1;
+}

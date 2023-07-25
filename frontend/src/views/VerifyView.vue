@@ -141,7 +141,7 @@ async function resend() {
 </template>
 
 <style scoped>
-@import "@/assets/sytle/user.css";
+@import "@/assets/style/user.css";
 
 .tips {
   text-align: center;

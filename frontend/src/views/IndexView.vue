@@ -33,7 +33,7 @@ function login() {
         <a class="app" href="https://lightxi.com">
           <img src="/lightxi.png" alt="">
           <div class="desc">
-            <h1>LightXi IDC</h1>
+            <h1>LightXi Cloud</h1>
             <p>晞云云计算 - 保持热爱，共赴山海。</p>
           </div>
         </a>
@@ -69,7 +69,7 @@ function login() {
 </template>
 
 <style scoped>
-@import "@/assets/sytle/anim.css";
+@import "@/assets/style/anim.css";
 main {
   background: #1e1e20;
   background-size: cover;
