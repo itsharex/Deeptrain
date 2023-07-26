@@ -9,7 +9,9 @@ import (
 	"image/color"
 	"log"
 	"math/rand"
+	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -30,7 +32,7 @@ func SaveAvatar(username string) {
 	canvas.WriteString(fmt.Sprintf(`<svg width="%d" height="%d" xmlns="http://www.w3.org/2000/svg">`, avatarSize, avatarSize))
 
 	canvas.WriteString(fmt.Sprintf(`<rect width="%d" height="%d" style="fill:rgb(%d,%d,%d);" />`, avatarSize, avatarSize, background.R, background.G, background.B))
-	canvas.WriteString(fmt.Sprintf(`<text x="%d" y="%d" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="50" fill="white">%s</text>`, avatarSize/2, avatarSize/2+16, string(first)))
+	canvas.WriteString(fmt.Sprintf(`<text x="%d" y="%d" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="50" fill="white">%s</text>`, avatarSize/2, avatarSize/2, string(first)))
 	canvas.WriteString("</svg>")
 
 	data := []byte(canvas.String())
@@ -104,23 +106,82 @@ func GetAvatarConfigWithCache(c *gin.Context, username string) string {
 func GetAvatarView(c *gin.Context) {
 	username := c.Param("username")
 	if len(username) == 0 {
-		c.JSON(400, gin.H{"error": "username is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "username is required"})
 		return
 	}
 
 	path := GetAvatarConfigWithCache(c, username)
 	if len(path) == 0 {
 		db := c.MustGet("db").(*sql.DB)
+		fmt.Println(isUserExists(db, username))
 		if isUserExists(db, username) {
 			SaveAvatar(username)
 			path = GetAvatarConfigWithCache(c, username)
 			c.File(path)
 			return
 		} else {
-			c.JSON(404, gin.H{"error": "avatar not found"})
+			c.JSON(http.StatusNotFound, gin.H{"error": "avatar not found"})
 			return
 		}
 	}
 
 	c.File(fmt.Sprintf("storage/avatar/%s", path))
+}
+
+func PostAvatarView(c *gin.Context) {
+	username := c.MustGet("username").(string)
+	if len(username) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "username is required"})
+		return
+	}
+
+	user := User{Username: username}
+	db := c.MustGet("db").(*sql.DB)
+	if !user.IsActive(db) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "user is not active"})
+		return
+	}
+
+	file, err := c.FormFile("avatar")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Validate file format
+	if !isValidImageFormat(file.Filename) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid image format, supported formats: .webp, .png"})
+		return
+	}
+
+	// Validate file size
+	if file.Size > 2*1024*1024 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "image size should not exceed 2MB"})
+		return
+	}
+
+	if err := c.SaveUploadedFile(file, fmt.Sprintf("storage/avatar/%s", username)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	SaveAvatarConfig(username, username)
+	c.JSON(http.StatusOK, gin.H{"success": true})
+}
+
+func isValidImageFormat(filename string) bool {
+	allowedFormats := map[string]bool{
+		".webp": true,
+		".png":  true,
+		".jpg":  true,
+		".jpeg": true,
+		".gif":  true,
+		".bmp":  true,
+		".svg":  true,
+	}
+
+	ext := strings.ToLower(filepath.Ext(filename))
+	ext = strings.TrimPrefix(ext, ".")
+
+	return allowedFormats[ext]
 }

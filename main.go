@@ -44,6 +44,7 @@ func main() {
 		app.POST("/settings/verify", auth.ChangeEmailVerifyView)
 		app.GET("/user/:username", auth.UserView)
 		app.GET("/avatar/:username", auth.GetAvatarView)
+		app.POST("/avatar", auth.PostAvatarView)
 
 		oauth.Register(app)
 	}

@@ -10,6 +10,7 @@ import Key from "@/components/icons/home/key.vue";
 import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
 import ChangeEmailDialog from "@/views/dialog/ChangeEmailDialog.vue";
 import Edit from "@/components/icons/home/edit.vue";
+import { backend_url } from "@/config";
 
 function logout() {
   router.push("/logout");
@@ -61,7 +62,7 @@ axios.get("info")
           <div class="avatar">
             <input type="file" accept="image/*" style="display: none" id="avatar" />
             <label class="before" for="avatar"><edit /></label>
-            <img src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+            <img :src="`${backend_url}avatar/${username}`" alt="">
           </div>
         </div>
         <div class="info">
