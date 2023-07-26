@@ -28,6 +28,32 @@ const dialog = reactive<Record<string, boolean>>({
   email: false,
 });
 
+function avatar() {
+  const file = (document.getElementById("avatar") as HTMLInputElement).files?.[0];
+  if (!file) return;
+  const formData = new FormData();
+  formData.append("avatar", file);
+  axios.post("avatar", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }).then((res) => {
+    if (res.data.status) {
+      ElNotification.success({
+        title: "Avatar updated",
+        message: "Your avatar has been updated successfully!",
+        showClose: false,
+      });
+    } else {
+      ElNotification.error({
+        title: "Avatar update failed",
+        message: res.data.reason,
+        showClose: false,
+      });
+    }
+  });
+}
+
 axios.get("info")
   .then((res) => {
     for (const key in res.data) {
@@ -60,7 +86,7 @@ axios.get("info")
         <div class="image">
           <img class="background" src="/home/background.jpg" alt="">
           <div class="avatar">
-            <input type="file" accept="image/*" style="display: none" id="avatar" />
+            <input type="file" accept="image/*" style="display: none" id="avatar" @change="avatar" />
             <label class="before" for="avatar"><edit /></label>
             <img :src="`${backend_url}avatar/${username}`" alt="">
           </div>

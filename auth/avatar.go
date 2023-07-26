@@ -113,7 +113,6 @@ func GetAvatarView(c *gin.Context) {
 	path := GetAvatarConfigWithCache(c, username)
 	if len(path) == 0 {
 		db := c.MustGet("db").(*sql.DB)
-		fmt.Println(isUserExists(db, username))
 		if isUserExists(db, username) {
 			SaveAvatar(username)
 			path = GetAvatarConfigWithCache(c, username)
@@ -129,59 +128,65 @@ func GetAvatarView(c *gin.Context) {
 }
 
 func PostAvatarView(c *gin.Context) {
-	username := c.MustGet("username").(string)
+	username := c.MustGet("user").(string)
 	if len(username) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "username is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "error": "username is required"})
 		return
 	}
 
 	user := User{Username: username}
 	db := c.MustGet("db").(*sql.DB)
 	if !user.IsActive(db) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user is not active"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "error": "user is not active"})
 		return
 	}
 
 	file, err := c.FormFile("avatar")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "error": err.Error()})
 		return
 	}
 
 	// Validate file format
-	if !isValidImageFormat(file.Filename) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid image format, supported formats: .webp, .png"})
+	valid, ext := isValidImageFormat(file.Filename)
+	if !valid {
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "error": "invalid image format."})
 		return
 	}
 
-	// Validate file size
+	// Validate file size (2 MiB max)
 	if file.Size > 2*1024*1024 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "image size should not exceed 2MB"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "error": "image size should not exceed 2MB"})
 		return
 	}
 
-	if err := c.SaveUploadedFile(file, fmt.Sprintf("storage/avatar/%s", username)); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	name := fmt.Sprintf("%s.%s", username, ext)
+	if err := c.SaveUploadedFile(file, fmt.Sprintf("storage/avatar/%s", name)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": false, "error": err.Error()})
 		return
 	}
 
-	SaveAvatarConfig(username, username)
-	c.JSON(http.StatusOK, gin.H{"success": true})
+	SaveAvatarConfig(username, name)
+
+	cache := c.MustGet("cache").(*redis.Client)
+	cache.Set(c, fmt.Sprintf("avatar:%s", username), name, time.Minute*30)
+
+	c.JSON(http.StatusOK, gin.H{"status": true})
 }
 
-func isValidImageFormat(filename string) bool {
+func isValidImageFormat(filename string) (bool, string) {
 	allowedFormats := map[string]bool{
-		".webp": true,
-		".png":  true,
-		".jpg":  true,
-		".jpeg": true,
-		".gif":  true,
-		".bmp":  true,
-		".svg":  true,
+		"webp": true,
+		"png":  true,
+		"jpg":  true,
+		"jpeg": true,
+		"gif":  true,
+		"bmp":  true,
+		"svg":  true,
 	}
 
 	ext := strings.ToLower(filepath.Ext(filename))
 	ext = strings.TrimPrefix(ext, ".")
 
-	return allowedFormats[ext]
+	return allowedFormats[ext], ext
 }
