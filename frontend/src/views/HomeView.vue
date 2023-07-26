@@ -186,8 +186,8 @@ axios.get("info")
   position: absolute;
   top: 0;
   left: 0;
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
   background: rgba(0,0,0,0);
   transition: .5s;

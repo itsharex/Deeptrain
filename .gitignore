@@ -6,6 +6,9 @@ config.yaml
 deeptrain
 deeptrain.exe
 
+storage/avatar/*
+!storage/avatar/.gitkeep
+
 # Backend (Django)
 backend/.idea
 backend/.vscode

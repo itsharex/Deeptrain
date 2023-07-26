@@ -120,6 +120,7 @@ func RegisterView(c *gin.Context) {
 	cache.Set(context.Background(), fmt.Sprintf(":verify:%s", username), code, 30*time.Minute)
 	cache.Set(context.Background(), fmt.Sprintf(":mailrate:%s", email), "1", 1*time.Minute)
 	go SendVerifyMail(email, code)
+	go SaveAvatar(username)
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
 }
