@@ -62,7 +62,7 @@ async function post() {
     } catch (e) {
       ElNotification.error({
         title: "Change email failed",
-        message: e.message,
+        message: "There is something wrong, please try again later",
         showClose: false,
       });
     } finally {
