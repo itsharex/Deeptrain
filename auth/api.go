@@ -34,9 +34,9 @@ type VerifyForm struct {
 }
 
 type ChangePasswordForm struct {
-	OldPassword string         `form:"old_password" binding:"required"`
-	NewPassword string         `form:"new_password" binding:"required"`
-	Captcha     GeeTestRequest `form:"captcha" binding:"required"`
+	Old     string         `form:"old" binding:"required"`
+	New     string         `form:"new" binding:"required"`
+	Captcha GeeTestRequest `form:"captcha" binding:"required"`
 }
 
 func LoginView(c *gin.Context) {
@@ -268,7 +268,7 @@ func UserView(c *gin.Context) {
 	if isUserExists(db, username) {
 		user := &User{Username: username}
 		if user.IsActive(db) {
-			err := db.QueryRow("SELECT is_admin, created_at From auth WHERE username = ?", username).Scan(&user.IsAdmin, &user.CreateAt)
+			err := db.QueryRow("SELECT is_admin, created_at FROM auth WHERE username = ?", username).Scan(&user.IsAdmin, &user.CreateAt)
 			if err == nil {
 				c.JSON(http.StatusOK, gin.H{"status": true, "user": map[string]interface{}{
 					"username":   user.Username,
@@ -294,7 +294,7 @@ func ChangePasswordView(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again.", "message": err.Error()})
 		return
 	}
-	oldPassword, newPassword := strings.TrimSpace(form.OldPassword), strings.TrimSpace(form.NewPassword)
+	oldPassword, newPassword := strings.TrimSpace(form.Old), strings.TrimSpace(form.New)
 	if !utils.All(
 		ValidatePassword(oldPassword),
 		ValidatePassword(newPassword),
@@ -305,7 +305,7 @@ func ChangePasswordView(c *gin.Context) {
 	}
 
 	db := utils.GetDBFromContext(c)
-	instance := &User{Username: username.(string)}
+	instance := &User{Username: username.(string), Password: utils.Sha2Encrypt(oldPassword)}
 	if !instance.Validate(db, c) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Old password is incorrect."})
 		return
@@ -316,21 +316,14 @@ func ChangePasswordView(c *gin.Context) {
 		return
 	}
 
-	if err := db.QueryRow("SELECT password FROM auth WHERE username = ?", instance.Username).Scan(&instance.Password); err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later or contact admin."})
+	instance.Password = utils.Sha2Encrypt(newPassword)
+	_, err := db.Query("UPDATE auth SET password = ? WHERE username = ?", instance.Password, instance.Username)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later.", "message": err.Error()})
 		return
 	}
 
-	if utils.Sha2Encrypt(oldPassword) == instance.Password {
-		instance.Password = utils.Sha2Encrypt(newPassword)
-		if err := db.QueryRow("UPDATE auth SET password = ? WHERE username = ?", instance.Password, instance.Username); err != nil {
-			c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later or contact admin."})
-			return
-		}
-	} else {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Old password is incorrect."})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"status": true})
+	cache := utils.GetCacheFromContext(c)
+	cache.Set(c, fmt.Sprintf(":validate:%s", instance.Username), instance.Password, 30*time.Minute)
+	c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken()})
 }

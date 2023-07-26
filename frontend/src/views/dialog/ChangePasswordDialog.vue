@@ -2,7 +2,7 @@
 import { reactive, ref } from "vue";
 import GeeTest from "@/components/captcha/GeeTest.vue";
 import type { FormRules, FormInstance } from "element-plus";
-import { validateChangePassword, validateRePassword } from "@/assets/script/user";
+import { token, validateChangePassword, validateRePassword } from "@/assets/script/user";
 import { validateForm } from "@/assets/script/utils";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 import axios from "axios";
@@ -31,12 +31,12 @@ const rules = reactive<FormRules>({
   new_password: [
     { required: true, message: "请输入新密码", trigger: "blur" },
     { min: 6, max: 46, message: "长度应为 6 到 46", trigger: "change" },
+    { validator: validateChangePassword(form), trigger: "change" },
   ],
   confirm_password: [
     { required: true, message: "请输入确认密码", trigger: "blur" },
     { min: 6, max: 46, message: "长度应为 6 到 46", trigger: "change" },
     { validator: validateRePassword(form, "new_password"), trigger: "change" },
-    { validator: validateChangePassword(form), trigger: "change" },
   ],
   captcha: [{ required: true, message: "", trigger: "blur" }],
 });
@@ -47,12 +47,17 @@ async function post() {
     form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
-      const resp = await axios.post("/settings/password", form),
+      const resp = await axios.post("/settings/password", {
+          old: form.old_password,
+          new: form.new_password,
+          confirm: form.confirm_password,
+          captcha: form.captcha,
+        }),
         data = resp.data;
       if (!data.status)
         ElNotification.error({
           title: "修改密码失败",
-          message: data.message,
+          message: data.reason,
           showClose: false,
         });
       else {
@@ -61,6 +66,7 @@ async function post() {
           message: data.message,
           showClose: false,
         });
+        token.value = data.token;
         close();
       }
     } catch (e) {
