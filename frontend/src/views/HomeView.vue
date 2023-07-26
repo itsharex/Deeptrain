@@ -9,6 +9,7 @@ import Date from "@/components/icons/home/date.vue";
 import Key from "@/components/icons/home/key.vue";
 import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
 import ChangeEmailDialog from "@/views/dialog/ChangeEmailDialog.vue";
+import Edit from "@/components/icons/home/edit.vue";
 
 function logout() {
   router.push("/logout");
@@ -57,7 +58,11 @@ axios.get("info")
       <el-card class="card">
         <div class="image">
           <img class="background" src="/home/background.jpg" alt="">
-          <img class="avatar" src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+          <div class="avatar">
+            <input type="file" accept="image/*" style="display: none" id="avatar" />
+            <label class="before" for="avatar"><edit /></label>
+            <img src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+          </div>
         </div>
         <div class="info">
           <div class="name">
@@ -165,7 +170,57 @@ axios.get("info")
   object-fit: cover;
   object-position: center;
   transition: .5s;
-  z-index: 111;
+  z-index: 64;
+  user-select: none;
+  cursor: pointer;
+}
+
+.image .avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.image .avatar .before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0);
+  transition: .5s;
+  z-index: 64;
+}
+
+.image .avatar:hover .before,
+.image .avatar:active .before {
+  background: rgba(0,0,0,.15);
+}
+
+.image .avatar svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0);
+  border-radius: 8px;
+  padding: 4px;
+  transform: translate(-50%, -50%);
+  fill: rgba(0, 0, 0, 0);
+  user-select: none;
+  white-space: nowrap;
+  flex-shrink: 1;
+  z-index: 64;
+  transition: .5s;
+}
+
+.image .avatar:hover svg,
+.image .avatar:active svg {
+  background: rgba(0, 0, 0, 0.5);
+  fill: rgba(255, 255, 255, 0.9);
 }
 
 .info {
