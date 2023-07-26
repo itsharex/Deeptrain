@@ -39,6 +39,16 @@ type ChangePasswordForm struct {
 	Captcha GeeTestRequest `form:"captcha" binding:"required"`
 }
 
+type ChangeEmailForm struct {
+	Email   string         `form:"email" binding:"required"`
+	Captcha GeeTestRequest `form:"captcha" binding:"required"`
+}
+
+type ChangeEmailVerifyForm struct {
+	Old string `form:"old" binding:"required"`
+	New string `form:"new" binding:"required"`
+}
+
 func LoginView(c *gin.Context) {
 	var form LoginForm
 	if err := c.ShouldBind(&form); err != nil {
@@ -326,4 +336,128 @@ func ChangePasswordView(c *gin.Context) {
 	cache := utils.GetCacheFromContext(c)
 	cache.Set(c, fmt.Sprintf(":validate:%s", instance.Username), instance.Password, 30*time.Minute)
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken()})
+}
+
+func ChangeEmailView(c *gin.Context) {
+	username := c.MustGet("user")
+	if username == "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+		return
+	}
+
+	var form ChangeEmailForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again.", "message": err.Error()})
+		return
+	}
+	email := strings.TrimSpace(form.Email)
+	if !utils.All(
+		ValidateEmail(email),
+		GeeTestCaptcha(form.Captcha),
+	) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email is not valid. Please check again."})
+		return
+	}
+
+	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
+	instance := &User{Username: username.(string)}
+	if !instance.IsActive(db) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not activated."})
+		return
+	}
+
+	if isEmailExists(db, email) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email already exists. Please try another email."})
+		return
+	}
+
+	var oldEmail string
+	err := db.QueryRow("SELECT email FROM auth WHERE username = ?", instance.Username).Scan(&oldEmail)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later.", "message": err.Error()})
+		return
+	}
+
+	if oldEmail == email {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "New email cannot be the same as old email."})
+		return
+	}
+
+	if rate := cache.Get(c, fmt.Sprintf(":mailrate:%s", email)); rate.Val() != "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "You can only change email once per 1 minutes."})
+		return
+	}
+
+	if rate := cache.Get(c, fmt.Sprintf(":mailrate:%s", oldEmail)); rate.Val() != "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "You can only change email once per 1 minutes."})
+		return
+	}
+
+	newCode := utils.GenerateCode(6)
+	oldCode := utils.GenerateCode(6)
+	cache.Set(c, fmt.Sprintf(":changeemail!mail:%s", instance.Username), email, 30*time.Minute)
+	cache.Set(c, fmt.Sprintf(":changeemail!new:%s:%s", instance.Username, email), newCode, 30*time.Minute)
+	cache.Set(c, fmt.Sprintf(":changeemail!old:%s:%s", instance.Username, oldEmail), oldCode, 30*time.Minute)
+
+	cache.Set(c, fmt.Sprintf(":mailrate:%s", email), "1", 1*time.Minute)
+	cache.Set(c, fmt.Sprintf(":mailrate:%s", oldEmail), "1", 1*time.Minute)
+	go SendVerifyMail(email, newCode)
+	go SendVerifyMail(oldEmail, oldCode)
+
+	c.JSON(http.StatusOK, gin.H{"status": true})
+}
+
+func ChangeEmailVerifyView(c *gin.Context) {
+	var form ChangeEmailVerifyForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again.", "message": err.Error()})
+		return
+	}
+
+	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
+	username := c.MustGet("user")
+	if username == "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+		return
+	}
+
+	instance := &User{Username: username.(string)}
+	if !instance.IsActive(db) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not activated."})
+		return
+	}
+
+	var oldEmail string
+	err := db.QueryRow("SELECT email FROM auth WHERE username = ?", instance.Username).Scan(&oldEmail)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later.", "message": err.Error()})
+		return
+	}
+
+	newEmail := cache.Get(c, fmt.Sprintf(":changeemail!mail:%s", instance.Username)).Val()
+
+	newCode := cache.Get(c, fmt.Sprintf(":changeemail!new:%s:%s", instance.Username, newEmail))
+	oldCode := cache.Get(c, fmt.Sprintf(":changeemail!old:%s:%s", instance.Username, oldEmail))
+
+	if form.New != newCode.Val() || form.Old != oldCode.Val() {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your verification code is incorrect. Please check again."})
+		return
+	}
+
+	if isEmailExists(db, newEmail) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email already exists. Please try another email."})
+		return
+	}
+
+	_, err = db.Query("UPDATE auth SET email = ? WHERE username = ?", newEmail, instance.Username)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later.", "message": err.Error()})
+		return
+	}
+
+	cache.Del(c, fmt.Sprintf(":changeemail!mail:%s", instance.Username))
+	cache.Del(c, fmt.Sprintf(":changeemail!new:%s:%s", instance.Username, newEmail))
+	cache.Del(c, fmt.Sprintf(":changeemail!old:%s:%s", instance.Username, oldEmail))
+
+	c.JSON(http.StatusOK, gin.H{"status": true})
 }

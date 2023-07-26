@@ -8,6 +8,7 @@ import Mail from "@/components/icons/home/mail.vue";
 import Date from "@/components/icons/home/date.vue";
 import Key from "@/components/icons/home/key.vue";
 import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
+import ChangeEmailDialog from "@/views/dialog/ChangeEmailDialog.vue";
 
 function logout() {
   router.push("/logout");
@@ -35,6 +36,7 @@ axios.get("info")
 </script>
 <template>
   <ChangePasswordDialog v-model="dialog.change" />
+  <ChangeEmailDialog v-model="dialog.email" />
   <el-container>
     <el-main>
       <el-card class="card">

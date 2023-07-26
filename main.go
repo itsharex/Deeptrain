@@ -40,6 +40,8 @@ func main() {
 		app.GET("/state", auth.StateView)
 		app.GET("/info", auth.InfoView)
 		app.POST("/settings/password", auth.ChangePasswordView)
+		app.POST("/settings/email", auth.ChangeEmailView)
+		app.POST("/settings/verify", auth.ChangeEmailVerifyView)
 		app.GET("/user/:username", auth.UserView)
 
 		oauth.Register(app)
