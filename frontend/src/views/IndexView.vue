@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import router from "@/router";
 import { useI18n } from "vue-i18n";
+import World from "@/components/icons/world.vue";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 function login() {
   router.push("/login");
+}
+
+function i18n() {
+  if (locale.value === "en") {
+    locale.value = "zh";
+  } else {
+    locale.value = "en";
+  }
+  localStorage.setItem("language", locale.value);
 }
 </script>
 <template>
@@ -17,6 +27,7 @@ function login() {
         <span class="en">Deeptrain Team</span>
       </div>
       <div style="flex-grow: 1" />
+      <div class="i18n" @click="i18n"><world /></div>
       <div class="login" @click="login">{{ t('login') }}</div>
     </header>
     <div class="container">
@@ -173,6 +184,27 @@ header {
 
 .login:hover {
   color: #fff;
+  background: rgba(255, 255, 255, .2);
+}
+
+.i18n {
+  margin: 16px 12px 16px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  user-select: none;
+  background: rgba(255, 255, 255, .12);
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: .5s;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+  fill: rgba(255, 255, 255, .8);
+  white-space: nowrap;
+}
+
+.i18n:hover {
+  fill: #fff;
   background: rgba(255, 255, 255, .2);
 }
 

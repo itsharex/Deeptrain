@@ -36,6 +36,7 @@ declare module '@vue/runtime-core' {
     Setting: typeof import('./src/components/icons/setting.vue')['default']
     Translate: typeof import('./src/components/icons/translate.vue')['default']
     User: typeof import('./src/components/icons/user.vue')['default']
+    World: typeof import('./src/components/icons/world.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
