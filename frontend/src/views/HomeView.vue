@@ -3,15 +3,60 @@ import { reactive } from "vue";
 import { username } from "@/assets/script/global";
 import router from "@/router";
 import axios from "axios";
-import { formatDate } from "@/assets/script/time";
 import Mail from "@/components/icons/home/mail.vue";
-import Date from "@/components/icons/home/date.vue";
+import DateIcon from "@/components/icons/home/date.vue";
 import Key from "@/components/icons/home/key.vue";
 import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
 import ChangeEmailDialog from "@/views/dialog/ChangeEmailDialog.vue";
 import Edit from "@/components/icons/home/edit.vue";
 import { backend_url } from "@/config";
 import { useI18n } from "vue-i18n";
+
+function formatDate(time: string | Date, offset: boolean = true): string {
+  const now = new Date(), date = typeof time == 'string' ? new Date(time) : time;
+  const diff = (now.getTime() - date.getTime()) / 1000 + (offset ? 8 * 3600 : 0); // second
+
+  if (diff < 0) {
+    return t('time.none');
+  } else if (diff < 60) {
+    return t('time.justNow');
+  } else if (diff < 3600) {
+    const minutes = Math.floor(diff / 60);
+    return t('time.minutesAgo', { minutes });
+  } else if (diff < 86400) {
+    const hours = Math.floor(diff / 3600);
+    return t('time.hoursAgo', { hours });
+  } else if (diff < 172800) {
+    return t('time.yesterday', { time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}` });
+  } else if (diff < 259200) {
+    return t('time.beforeYesterday', { time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}` });
+  } else if (diff < 604800) {
+    const days = Math.floor(diff / 86400);
+    return `${t('time.daysAgo', { days })} ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
+  } else if (date.getFullYear() === now.getFullYear()) {
+    return t('time.monthDay', {
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+      time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}`
+    });
+  } else {
+    return t('time.yearMonthDay', {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+      time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}`
+    });
+  }
+}
+
+function padZero(n: number): string {
+  return (n < 10 ? '0' : '') + n;
+}
+
+function contain(el: HTMLElement | null | undefined, target: HTMLElement | null): boolean {
+  return (el && target) ? (el == target || el.contains(target)) : false;
+}
+
 
 const { t } = useI18n({
   messages: {
@@ -97,7 +142,8 @@ axios.get("info")
     for (const key in res.data) {
       form[key] = res.data[key];
     }
-    form.created_at = formatDate(t, form.created_at);
+    console.log(formatDate(form.created_at), form.created_at)
+    form.created_at = formatDate(form.created_at);
   })
 </script>
 <template>
@@ -151,7 +197,7 @@ axios.get("info")
               </div>
             </div>
             <div class="item">
-              <div class="label"><date style="scale: 0.98; transform: translate(-2px, 6px)" /> {{ t('created_at') }}</div>
+              <div class="label"><date-icon style="scale: 0.98; transform: translate(-2px, 6px)" /> {{ t('created_at') }}</div>
               <div class="grow" />
               <div class="value">{{ form.created_at }}</div>
             </div>
