@@ -9,7 +9,9 @@ import { validateForm } from "@/assets/script/utils";
 import router from "@/router";
 import GeeTest from "@/components/captcha/GeeTest.vue";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
-import { app } from "@/assets/script/allauth";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -24,26 +26,26 @@ const form = reactive({
 
 const rules = reactive<FormRules>({
   username: [
-    { required: true, message: "Please input username", trigger: "blur" },
-    { min: 3, max: 24, message: "Length should be 3 to 24", trigger: "change" },
+    { required: true, message: t("rule-username"), trigger: "blur" },
+    { min: 3, max: 24, message: t("rule-username-length"), trigger: "change" },
   ],
   email: [
     {
       type: "email",
       required: true,
-      message: "Please input email",
+      message: t("rule-email"),
       trigger: "blur",
     },
-    { validator: validateEmail, trigger: "change" },
+    { validator: validateEmail(t), trigger: "change" },
   ],
   password: [
-    { required: true, message: "Please input password", trigger: "blur" },
-    { min: 6, max: 46, message: "Length should be 6 to 46", trigger: "change" },
+    { required: true, message: t("rule-password"), trigger: "blur" },
+    { min: 6, max: 46, message: t("rule-password-length"), trigger: "change" },
   ],
   repassword: [
-    { required: true, message: "Please input password", trigger: "blur" },
-    { min: 6, max: 46, message: "Length should be 6 to 46", trigger: "change" },
-    { validator: validateRePassword(form), trigger: "change" },
+    { required: true, message: t("rule-re-password"), trigger: "blur" },
+    { min: 6, max: 46, message: t("rule-password-length"), trigger: "change" },
+    { validator: validateRePassword(t, form), trigger: "change" },
   ],
   captcha: [{ required: true, message: "", trigger: "blur" }],
 });
@@ -57,15 +59,15 @@ async function submit() {
         data = resp.data;
       if (!data.status)
         ElNotification.error({
-          title: "Register failed",
+          title: t("register-failed"),
           message: data.reason,
           showClose: false,
         });
       else {
         token.value = data.token;
         ElNotification.success({
-          title: "Register succeeded",
-          message: `Welcome to Deeptrain, ${form.username}!`,
+          title: t("register-succeeded"),
+          message: t("register-success-message", { username: form.username }),
           showClose: false,
         });
         loading.value = false;
@@ -75,18 +77,66 @@ async function submit() {
       }
     } catch (e) {
       ElNotification.warning({
-        title: "Error occurred",
-        message:
-          "There was an error while registering. Please check you network and try again.",
+        title: t("error-occurred"),
+        message: t("network-error"),
         showClose: false,
       });
     }
     loading.value = false;
   }
 }
-
-app.set();
 </script>
+
+<i18n>
+{
+  "en": {
+    "rule-username": "Please input username",
+    "rule-username-length": "Length should be 3 to 24",
+    "rule-email": "Please input email",
+    "rule-password": "Please input password",
+    "rule-re-password": "Please input password",
+    "rule-password-length": "Length should be 6 to 46",
+    "register-failed": "Register failed",
+    "register-succeeded": "Register succeeded",
+    "register-success-message": "Welcome to Deeptrain, {username}!",
+    "error-occurred": "Error occurred",
+    "network-error": "There was an error while registering. Please check your network and try again.",
+    "sign-up": "Sign up",
+    "sign-up-to-deeptrain": "Sign up to Deeptrain",
+    "email-address": "Email address",
+    "no-account-question": "Already have an account?",
+    "sign-in": "Sign in",
+    "sign-in-link": "Sign in",
+    "user.rule-password-not-different": "The new password cannot be the same as the old password",
+    "user.rule-password-not-same": "The password does not match",
+    "user.email-format-error": "The format of the email is incorrect",
+    "user.email-format-unsupported": "Please use a supported email suffix"
+  },
+  "zh": {
+    "rule-username": "请输入用户名",
+    "rule-username-length": "长度应为 3 到 24",
+    "rule-email": "请输入电子邮箱",
+    "rule-password": "请输入密码",
+    "rule-re-password": "请输入密码",
+    "rule-password-length": "长度应为 6 到 46",
+    "register-failed": "注册失败",
+    "register-succeeded": "注册成功",
+    "register-success-message": "欢迎加入 Deeptrain，{username}！",
+    "error-occurred": "发生错误",
+    "network-error": "注册时发生错误，请检查您的网络并重试。",
+    "sign-up": "注册",
+    "sign-up-to-deeptrain": "注册 Deeptrain",
+    "email-address": "电子邮箱地址",
+    "no-account-question": "已有账号?",
+    "sign-in": "登录",
+    "sign-in-link": "登录",
+    "user.rule-password-not-different": "新密码不能与原密码相同",
+    "user.rule-password-not-same": "两次输入的密码不一致",
+    "user.email-format-error": "邮箱格式不正确",
+    "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀"
+  }
+}
+</i18n>
 
 <template>
   <el-container>
@@ -96,7 +146,7 @@ app.set();
       </RouterLink>
     </el-header>
     <el-main class="main">
-      <h1>Sign up to Deeptrain</h1>
+      <h1>{{ t("sign-up-to-deeptrain") }}</h1>
       <el-card shadow="hover" v-loading="loading">
         <el-form
           ref="element"
@@ -104,7 +154,7 @@ app.set();
           :rules="rules"
           :label-position="'top'"
         >
-          <el-form-item label="Username" prop="username">
+          <el-form-item :label="t('username')" prop="username">
             <el-input
               v-model="form.username"
               type="text"
@@ -112,7 +162,7 @@ app.set();
               maxlength="24"
             />
           </el-form-item>
-          <el-form-item label="Email address" prop="email">
+          <el-form-item :label="t('email-address')" prop="email">
             <el-input v-model="form.email" type="email" />
           </el-form-item>
           <el-alert
@@ -122,12 +172,10 @@ app.set();
             style="margin-bottom: 4px"
           >
             <p>
-              Supported Email Suffixes: <br />
-              &nbsp;&nbsp;@gmail.com, @qq.com, <br />
-              &nbsp;&nbsp;@outlook.com, @163.com.
+              {{ t("supported-email-suffixes") }}
             </p>
           </el-alert>
-          <el-form-item label="Password" prop="password">
+          <el-form-item :label="t('password')" prop="password">
             <el-input
               v-model="form.password"
               type="password"
@@ -136,7 +184,7 @@ app.set();
               maxlength="46"
             />
           </el-form-item>
-          <el-form-item label="Enter the password again" prop="repassword">
+          <el-form-item :label="t('enter-password-again')" prop="repassword">
             <el-input
               v-model="form.repassword"
               type="password"
@@ -148,12 +196,14 @@ app.set();
           <el-form-item prop="captcha">
             <gee-test id="register-captcha" v-model="captcha" />
           </el-form-item>
-          <el-button class="validate-button" @click="submit">Sign up</el-button>
+          <el-button class="validate-button" @click="submit">
+            {{ t('sign-up') }}
+          </el-button>
         </el-form>
       </el-card>
       <el-card shadow="never" class="help">
         <div>
-          Already have an account? <RouterLink to="/login">Sign in</RouterLink>.
+          {{ t('no-account-question') }} <RouterLink to="/login">{{ t('sign-in-link') }}</RouterLink>.
         </div>
       </el-card>
     </el-main>
