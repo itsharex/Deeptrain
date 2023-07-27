@@ -107,10 +107,15 @@ async function submit() {
     "no-account-question": "Already have an account?",
     "sign-in": "Sign in",
     "sign-in-link": "Sign in",
+    "enter-password-again": "Enter password again",
+    "username": "Username",
+    "password": "Password",
+    "supported-email-suffixes": "Supported Email Suffixes",
     "user.rule-password-not-different": "The new password cannot be the same as the old password",
     "user.rule-password-not-same": "The password does not match",
     "user.email-format-error": "The format of the email is incorrect",
-    "user.email-format-unsupported": "Please use a supported email suffix"
+    "user.email-format-unsupported": "Please use a supported email suffix",
+    "en-dot": ".",
   },
   "zh": {
     "rule-username": "请输入用户名",
@@ -125,15 +130,20 @@ async function submit() {
     "error-occurred": "发生错误",
     "network-error": "注册时发生错误，请检查您的网络并重试。",
     "sign-up": "注册",
-    "sign-up-to-deeptrain": "注册 Deeptrain",
+    "sign-up-to-deeptrain": "Deeptrain 注册",
     "email-address": "电子邮箱地址",
     "no-account-question": "已有账号?",
     "sign-in": "登录",
     "sign-in-link": "登录",
+    "enter-password-again": "再次输入密码",
+    "username": "用户名",
+    "password": "密码",
+    "supported-email-suffixes": "支持的邮箱后缀",
     "user.rule-password-not-different": "新密码不能与原密码相同",
     "user.rule-password-not-same": "两次输入的密码不一致",
     "user.email-format-error": "邮箱格式不正确",
-    "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀"
+    "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀",
+    "en-dot": "",
   }
 }
 </i18n>
@@ -172,7 +182,7 @@ async function submit() {
             style="margin-bottom: 4px"
           >
             <p>
-              {{ t("supported-email-suffixes") }}
+              {{ t("supported-email-suffixes") }}:<br />&nbsp;&nbsp;@gmail.com, @qq.com, <br />&nbsp;&nbsp;@outlook.com, @163.com.
             </p>
           </el-alert>
           <el-form-item :label="t('password')" prop="password">
@@ -203,7 +213,7 @@ async function submit() {
       </el-card>
       <el-card shadow="never" class="help">
         <div>
-          {{ t('no-account-question') }} <RouterLink to="/login">{{ t('sign-in-link') }}</RouterLink>.
+          {{ t('no-account-question') }} <RouterLink to="/login">{{ t('sign-in-link') }}</RouterLink>{{ t('en-dot') }}
         </div>
       </el-card>
     </el-main>

@@ -71,3 +71,7 @@
     background: transparent;
     text-align: center;
 }
+
+.el-card {
+    min-width: 320px;
+}

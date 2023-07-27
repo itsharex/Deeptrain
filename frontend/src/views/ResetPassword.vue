@@ -85,7 +85,8 @@ async function submit() {
     "no-account-question": "Do not have an account?",
     "create-one": "Create one",
     "user.email-format-error": "The format of the email is incorrect",
-    "user.email-format-unsupported": "Please use a supported email suffix"
+    "user.email-format-unsupported": "Please use a supported email suffix",
+    "en-dot": "."
   },
   "zh": {
     "rule-email": "请输入电子邮箱",
@@ -100,7 +101,8 @@ async function submit() {
     "no-account-question": "没有账号?",
     "create-one": "创建一个",
     "user.email-format-error": "邮箱格式不正确",
-    "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀"
+    "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀",
+    "en-dot": ""
   }
 }
 </i18n>
@@ -135,7 +137,7 @@ async function submit() {
       <el-card shadow="never" class="help">
         <div>
           {{ t('no-account-question') }}
-          <RouterLink to="/register">{{ t('create-one') }}</RouterLink>.
+          <RouterLink to="/register">{{ t('create-one') }}</RouterLink>{{ t('en-dot') }}
         </div>
       </el-card>
     </el-main>

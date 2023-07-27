@@ -110,7 +110,7 @@ async function resend() {
           :rules="rules"
           :label-position="'top'"
         >
-          <el-form-item label="Code" prop="code">
+          <el-form-item :label="t('code')" prop="code">
             <el-input
               v-model="form.code"
               type="text"
@@ -119,8 +119,8 @@ async function resend() {
             />
           </el-form-item>
           <div>
-            {{ t('tips') }}
-            <a class="resend" @click="resend">{{ t('resend') }}</a>.
+            {{ t('resend-tips') }}
+            <a class="resend" @click="resend">{{ t('resend') }}</a>{{ t('en-dot') }}
           </div>
           <el-alert
             class="tips"
@@ -143,7 +143,8 @@ async function resend() {
     "verify-button": "验证",
     "tips": "我们已向您的邮箱发送了一封验证邮件",
     "resend": "重新发送",
-    "description": "请填写验证码 （验证码将在30分钟后过期）。",
+    "code": "验证码",
+    "description": "请填写验证码 （将在30分钟后过期）",
     "resend-failed": "重新发送失败",
     "resend-succeeded": "重新发送成功",
     "error-occurred": "发生错误",
@@ -152,11 +153,14 @@ async function resend() {
     "verify-succeeded": "验证成功",
     "verify-error": "验证时发生错误。请检查您的网络并重试。",
     "rule-code": "请输入验证码",
-    "rule-code-format": "请输入正确的格式"
+    "rule-code-format": "请输入正确的格式",
+    "resend-tips": "没有收到邮件？",
+    "en-dot": "",
   },
   "en": {
     "verify": "Verify your account",
     "verify-button": "Verify",
+    "code": "Code",
     "tips": "We have sent a verification mail to your email address.",
     "resend": "Resend Code",
     "description": "Please fill in the verification code, it will expire in 30 minutes.",
@@ -168,7 +172,9 @@ async function resend() {
     "verify-succeeded": "Verify succeeded",
     "verify-error": "There was an error while verifying. Please check you network and try again.",
     "rule-code": "Please input your verify code",
-    "rule-code-format": "Please input the correct format"
+    "rule-code-format": "Please input the correct format",
+    "resend-tips": "Didn't receive the email?",
+    "en-dot": ".",
   }
 }
 </i18n>

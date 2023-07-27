@@ -97,9 +97,15 @@ app.set();
     "sign-up": "Sign up",
     "sign-up-to-deeptrain": "Sign up to Deeptrain",
     "email-address": "Email address",
-    "no-account-question": "Already have an account?",
+    "no-account-question": "Don't have an account?",
     "sign-in": "Sign in",
     "sign-in-link": "Sign in",
+    "username": "Username",
+    "password": "Password",
+    "forgot-password-question": "Forgot password?",
+    "reset-password": "Reset password",
+    "create-one": "Create one",
+    "sign-in-to-deeptrain": "Sign in to Deeptrain",
     "user.rule-password-not-different": "The new password cannot be the same as the old password",
     "user.rule-password-not-same": "The password does not match",
     "user.email-format-error": "The format of the email is incorrect",
@@ -107,6 +113,7 @@ app.set();
     "login-failed": "Login failed",
     "login-succeeded": "Login succeeded",
     "login-success-message": "Welcome back {username}!",
+    "en-dot": "."
   },
   "zh": {
     "rule-username": "请输入用户名",
@@ -123,9 +130,15 @@ app.set();
     "sign-up": "注册",
     "sign-up-to-deeptrain": "注册 Deeptrain",
     "email-address": "电子邮箱地址",
-    "no-account-question": "已有账号?",
+    "no-account-question": "没有账号?",
     "sign-in": "登录",
     "sign-in-link": "登录",
+    "username": "用户名",
+    "password": "密码",
+    "forgot-password-question": "忘记密码?",
+    "reset-password": "重置密码",
+    "create-one": "创建一个",
+    "sign-in-to-deeptrain": "登录 Deeptrain",
     "user.rule-password-not-different": "新密码不能与原密码相同",
     "user.rule-password-not-same": "两次输入的密码不一致",
     "user.email-format-error": "邮箱格式不正确",
@@ -133,6 +146,7 @@ app.set();
     "login-failed": "登录失败",
     "login-succeeded": "登录成功",
     "login-success-message": "欢迎回来，{username}！",
+    "en-dot": ""
   }
 }
 </i18n>
@@ -184,11 +198,11 @@ app.set();
       <el-card shadow="never" class="help">
         <div>
           {{ t('no-account-question') }}
-          <RouterLink to="/register">{{ t('create-one') }}</RouterLink>.
+          <RouterLink to="/register">{{ t('create-one') }}</RouterLink>{{ t('en-dot') }}
         </div>
         <div>
           {{ t('forgot-password-question') }}
-          <RouterLink to="/forgot">{{ t('reset-password') }}</RouterLink>.
+          <RouterLink to="/forgot">{{ t('reset-password') }}</RouterLink>{{ t('en-dot') }}
         </div>
       </el-card>
     </el-main>
