@@ -14,7 +14,7 @@ import { app } from "@/assets/script/allauth";
 import GeeTest from "@/components/captcha/GeeTest.vue";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 import { useI18n } from "vue-i18n";
-import { language } from "@/config";
+import { language, oauth } from "@/config";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
@@ -193,7 +193,7 @@ app.set();
         </el-form>
         <el-divider />
         <div class="oauth">
-          <o-link uri="https://github.com/"><github /></o-link>
+          <o-link :uri="'https://github.com/login/oauth/authorize?scope=user:email&client_id=' + oauth.github"><github /></o-link>
           <o-link uri="https://gitee.com/"><gitee /></o-link>
         </div>
       </el-card>
