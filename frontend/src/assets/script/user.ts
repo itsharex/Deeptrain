@@ -1,6 +1,7 @@
 import type { Ref } from "vue";
 import { watch, ref } from "vue";
 import axios from "axios";
+import type { ComposerTranslation } from "vue-i18n";
 
 export const token: Ref<string> = ref(localStorage.getItem("token") || "");
 axios.defaults.headers.common["Authorization"] = token.value;
@@ -23,28 +24,30 @@ const isCommonEmailSuffix = (suffix: string): boolean => {
   return false;
 };
 
-export const validateEmail = (rules: any, value: any, callback: any): void => {
-  const res: string[] = value.trim().split("@");
-  if (res.length !== 2 || res.some((n) => !n))
-    return callback("The format of the email is incorrect");
-  const [mail, suffix] = res;
-  if (!/^\S+$/.test(mail))
-    return callback("The format of the email is incorrect");
-  if (!isCommonEmailSuffix(suffix))
-    return callback("Please use a supported email suffix");
-  callback();
-};
+export const validateEmail = function(t: ComposerTranslation) {
+  return (rules: any, value: any, callback: any): void => {
+    const res: string[] = value.trim().split("@");
+    if (res.length !== 2 || res.some((n) => !n))
+      return callback(t("user.email-format-error"));
+    const [mail, suffix] = res;
+    if (!/^\S+$/.test(mail))
+      return callback(t("user.email-format-error"));
+    if (!isCommonEmailSuffix(suffix))
+      return callback(t("user.email-format-unsupported"));
+    callback();
+  };
+}
 
-export function validateRePassword(form: Record<string, any>, field?: string): (rules: any, value: any, callback: any) => void {
+export function validateRePassword(t: ComposerTranslation, form: Record<string, any>, field?: string): (rules: any, value: any, callback: any) => void {
   return (rules: any, value: any, callback: any): any =>
     form[field || "password"] !== value
-      ? callback("The password does not match")
+      ? callback(t("user.rule-password-not-same"))
       : callback();
 }
 
-export function validateChangePassword(form: Record<string, any>): (rules: any, value: any, callback: any) => void {
+export function validateChangePassword(t: ComposerTranslation, form: Record<string, any>) {
   return (rules: any, value: any, callback: any): any =>
-    form.old_password === value
-      ? callback("The new password cannot be the same as the old password")
-      : callback();
+      form.old_password === value
+        ? callback(t("user.rule-password-not-different"))
+        : callback();
 }

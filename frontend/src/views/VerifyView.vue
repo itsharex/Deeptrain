@@ -4,7 +4,6 @@ import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import axios from "axios";
 import { validateForm } from "@/assets/script/utils";
-import { token } from "@/assets/script/user";
 import router from "@/router";
 import { state } from "@/assets/script/global";
 import { app } from "@/assets/script/allauth";
