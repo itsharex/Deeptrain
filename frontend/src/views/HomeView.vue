@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import { state, username } from "@/assets/script/global";
+import { reactive } from "vue";
+import { username } from "@/assets/script/global";
 import router from "@/router";
 import axios from "axios";
 import { formatDate } from "@/assets/script/time";
@@ -31,6 +31,14 @@ const dialog = reactive<Record<string, boolean>>({
 function avatar() {
   const file = (document.getElementById("avatar") as HTMLInputElement).files?.[0];
   if (!file) return;
+  if (file.size > 1024 * 1024 * 2) {
+    ElNotification.error({
+      title: "Avatar update failed",
+      message: "The file size should be less than 2MB",
+      showClose: false,
+    });
+    return;
+  }
   const formData = new FormData();
   formData.append("avatar", file);
   axios.post("avatar", formData, {

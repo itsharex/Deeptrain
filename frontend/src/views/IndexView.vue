@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import router from "@/router";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 function login() {
   router.push("/login");
@@ -10,23 +13,23 @@ function login() {
     <header>
       <img src="/favicon.ico" alt="" class="logo">
       <div class="name">
-        <span class="cn">深能科创</span>
+        <span class="cn">{{ t('title') }}</span>
         <span class="en">Deeptrain Team</span>
       </div>
       <div style="flex-grow: 1" />
-      <div class="login" @click="login">登录账号</div>
+      <div class="login" @click="login">{{ t('login') }}</div>
     </header>
     <div class="container">
       <div class="landing">
         <div class="left">
-          <div class="top">深能科创</div>
-          <div class="title">致力于更好的体验</div>
-          <div class="subtitle">保持热爱，共赴山海。</div>
+          <div class="top">{{ t('title') }}</div>
+          <div class="title">{{ t('subtitle') }}</div>
+          <div class="subtitle">{{ t('slogan') }}</div>
         </div>
       </div>
       <div class="circle" />
       <div class="line">
-        <span>我们的产品</span>
+        <span>{{ t('product') }}</span>
         <p>Our Products</p>
       </div>
       <div class="app-container">
@@ -34,40 +37,67 @@ function login() {
           <img src="/lightxi.png" alt="">
           <div class="desc">
             <h1>LightXi Cloud</h1>
-            <p>晞云云计算 - 保持热爱，共赴山海。</p>
+            <p>{{ t('lightxi-cloud') }}</p>
           </div>
         </a>
         <a class="app" href="https://fystart.cn">
           <img src="/fystart.webp" alt="">
           <div class="desc">
             <h1>Fystart</h1>
-            <p>一个简洁的起始页，铸就高效率工具，为你所想。</p>
+            <p>{{ t('fystart') }}</p>
           </div>
         </a>
         <a class="app" href="https://notes.lightxi.com">
           <img src="/lightnotes.ico" alt="">
           <div class="desc">
             <h1>Light Notes</h1>
-            <p>大小事，随手记。一个极简、美观、多端同步、支持解析多种文件的轻量化在线便签。</p>
+            <p>{{ t('lightnotes') }}</p>
           </div>
         </a>
         <a class="app" href="https://nio.fystart.cn">
           <img src="/chatnio.png" alt="">
           <div class="desc">
             <h1>Chat Nio</h1>
-            <p>一个简洁、美观、轻量的开源 AI 聊天助手。</p>
+            <p>{{ t('chatnio') }}</p>
           </div>
         </a>
       </div>
     </div>
     <footer>
       <a class="copyright" href="https://www.baidu.com/baidu?ie=utf-8&wd=%E7%8F%A0%E6%B5%B7%E5%B8%82%E6%99%9E%E4%BA%91%E4%BA%91%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8" target="_blank">
-        © 2023 珠海市晞云云科技有限公司
+        © 2023 {{ t('copyright') }}
       </a>
     </footer>
   </main>
 </template>
-
+<i18n>
+{
+  "en": {
+    "title": "DeepTech Innovation",
+    "subtitle": "Committed to a better experience",
+    "slogan": "Stay passionate and explore mountains and seas together.",
+    "login": "Login",
+    "copyright": "Lightxi Cloud Technology Ltd.",
+    "product": "",
+    "lightxi-cloud": "Stay passionate and explore mountains and seas together.",
+    "fystart": "A simple start page, crafting efficient tools, tailored to your needs.",
+    "lightnotes": "Keep small and large matters to heart. A lightweight note app that supports multiple file formats and parsing.",
+    "chatnio": "A simple, elegant, lightweight open-source AI chat assistant."
+  },
+  "zh": {
+    "title": "深能科创",
+    "subtitle": "致力于更好的体验",
+    "slogan": "保持热爱，共赴山海。",
+    "login": "登录账号",
+    "copyright": "珠海市晞云云科技有限公司",
+    "product": "我们的产品",
+    "lightxi-cloud": "晞云云计算 - 保持热爱，共赴山海。",
+    "fystart": "一个简洁的起始页，铸就高效率工具，为你所想。",
+    "lightnotes": "大小事，随手记。一个极简、美观、多端同步、支持解析多种文件的轻量化在线便签。",
+    "chatnio": "一个简洁、美观、轻量的开源 AI 聊天助手。"
+  }
+}
+</i18n>
 <style scoped>
 @import "@/assets/style/anim.css";
 main {
