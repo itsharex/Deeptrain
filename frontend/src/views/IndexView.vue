@@ -21,7 +21,7 @@ function i18n() {
 </script>
 <template>
   <main>
-    <header>
+    <header :class="{'chinese': locale === 'zh'}">
       <img src="/favicon.ico" alt="" class="logo">
       <div class="name">
         <span class="cn">{{ t('title') }}</span>
@@ -535,6 +535,42 @@ footer .copyright:hover {
 
   .container .title {
     font-size: 26px;
+  }
+
+  .container .top {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 400px) {
+  .landing .left {
+    padding: 0 12px;
+  }
+
+  .container .title {
+    font-size: 22px;
+  }
+
+  .container .top {
+    font-size: 18px;
+  }
+
+  .name .cn {
+    font-size: 18px;
+    white-space: pre-wrap;
+  }
+
+  .name {
+    display: flex;
+    justify-content: center;
+  }
+
+  .chinese .name .cn {
+    white-space: nowrap;
+  }
+
+  .name .en {
+    display: none;
   }
 }
 </style>

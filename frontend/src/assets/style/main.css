@@ -8,6 +8,7 @@ html, body, #app {
 }
 #app {
   font-weight: normal;
+  overflow-x: hidden;
 }
 
 a,
