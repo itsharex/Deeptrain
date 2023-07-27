@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../assets/style/anim.css">
 <script setup lang="ts">
 import { reactive } from "vue";
 import { username } from "@/assets/script/global";
@@ -232,10 +233,13 @@ axios.get("info")
 }
 </i18n>
 <style scoped>
+@import "@/assets/style/anim.css";
+
 .card {
   width: 100%;
   max-width: 820px;
   margin: 8px auto 12px;
+  animation: FadeInAnimation 1s;
 }
 
 .header {
@@ -272,6 +276,9 @@ axios.get("info")
   margin-right: 16px;
   border-radius: 4px 4px 0 0;
   transform: translate(-20px, -20px);
+  opacity: 0;
+  animation: FadeInAnimation 1s forwards;
+  animation-delay: .25s;
 }
 
 .image .background {
@@ -360,6 +367,9 @@ axios.get("info")
   margin-bottom: 16px;
   user-select: none;
   white-space: nowrap;
+  opacity: 0;
+  animation: FadeInAnimation 1s forwards;
+  animation-delay: .5s;
 }
 
 .info .name {
@@ -425,6 +435,9 @@ axios.get("info")
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  animation: FadeInAnimation 1s forwards;
+  animation-delay: .75s;
 }
 
 .form {

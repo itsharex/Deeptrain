@@ -2,6 +2,7 @@
 import router from "@/router";
 import { useI18n } from "vue-i18n";
 import World from "@/components/icons/world.vue";
+import Github from "@/components/icons/github.vue";
 
 const { t, locale } = useI18n();
 
@@ -40,40 +41,70 @@ function i18n() {
         </div>
       </div>
       <div class="circle" />
-      <div class="line">
-        <span>{{ t('product') }}</span>
-        <p>Our Products</p>
-      </div>
-      <div class="app-container">
-        <a class="app" href="https://lightxi.com">
-          <img src="/lightxi.png" alt="">
-          <div class="desc">
-            <h1>LightXi Cloud</h1>
-            <p>{{ t('lightxi-cloud') }}</p>
+      <section class="product">
+        <div class="line">
+          <span>{{ t('product') }}</span>
+          <p>Our Products</p>
+        </div>
+        <div class="app-container">
+          <a class="app" href="https://lightxi.com">
+            <img src="/lightxi.png" alt="">
+            <div class="desc">
+              <h1>LightXi Cloud</h1>
+              <p>{{ t('lightxi-cloud') }}</p>
+            </div>
+          </a>
+          <a class="app" href="https://fystart.cn">
+            <img src="/fystart.webp" alt="">
+            <div class="desc">
+              <h1>Fystart</h1>
+              <p>{{ t('fystart') }}</p>
+            </div>
+          </a>
+          <a class="app" href="https://notes.lightxi.com">
+            <img src="/lightnotes.ico" alt="">
+            <div class="desc">
+              <h1>Light Notes</h1>
+              <p>{{ t('lightnotes') }}</p>
+            </div>
+          </a>
+          <a class="app" href="https://nio.fystart.cn">
+            <img src="/chatnio.png" alt="">
+            <div class="desc">
+              <h1>Chat Nio</h1>
+              <p>{{ t('chatnio') }}</p>
+            </div>
+          </a>
+        </div>
+      </section>
+      <section class="team">
+        <div class="line">
+          <span>{{ t('team') }}</span>
+          <p>Our Team</p>
+          <div class="app-container">
+            <a class="app" href="https://zmh-program.site">
+              <img src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+              <div class="desc">
+                <h1>zmh-program</h1>
+                <p>— {{ t('motto-zmh') }}</p>
+                <a href="https://github.com/zmh-program" target="_blank" class="github">
+                  <github />
+                </a>
+              </div>
+            </a>
+            <a class="app" href="https://shinezz.cc">
+              <img src="https://zmh-program.site/friend/sh1n3zz.webp" alt="">
+              <div class="desc">
+                <h1>Sh1n3zZ</h1>
+                <p>— {{ t('motto-zz') }}</p>
+                <a href="https://github.com/sh1n3zz" target="_blank" class="github">
+                  <github />
+                </a>
+              </div>
+            </a>
           </div>
-        </a>
-        <a class="app" href="https://fystart.cn">
-          <img src="/fystart.webp" alt="">
-          <div class="desc">
-            <h1>Fystart</h1>
-            <p>{{ t('fystart') }}</p>
-          </div>
-        </a>
-        <a class="app" href="https://notes.lightxi.com">
-          <img src="/lightnotes.ico" alt="">
-          <div class="desc">
-            <h1>Light Notes</h1>
-            <p>{{ t('lightnotes') }}</p>
-          </div>
-        </a>
-        <a class="app" href="https://nio.fystart.cn">
-          <img src="/chatnio.png" alt="">
-          <div class="desc">
-            <h1>Chat Nio</h1>
-            <p>{{ t('chatnio') }}</p>
-          </div>
-        </a>
-      </div>
+        </div>
+      </section>
     </div>
     <footer>
       <a class="copyright" href="https://www.baidu.com/baidu?ie=utf-8&wd=%E7%8F%A0%E6%B5%B7%E5%B8%82%E6%99%9E%E4%BA%91%E4%BA%91%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8" target="_blank">
@@ -89,12 +120,15 @@ function i18n() {
     "subtitle": "Committed to a better experience",
     "slogan": "Stay passionate and explore mountains and seas together.",
     "login": "Login",
-    "copyright": "LightXi Cloud Technology Ltd.",
+    "copyright": "LightXi Cloud Technology Co., Ltd.",
     "product": "",
+    "team": "",
     "lightxi-cloud": "Stay passionate and explore mountains and seas together.",
     "fystart": "A simple start page, crafting efficient tools, tailored to your needs.",
     "lightnotes": "Keep small and large matters to heart. A lightweight note app that supports multiple file formats and parsing.",
-    "chatnio": "A simple, elegant, lightweight open-source AI chat assistant."
+    "chatnio": "A simple, elegant, lightweight open-source AI chat assistant.",
+    "motto-zmh": "Nothing is impossible.",
+    "motto-zz": "There is no justice in following unjust laws."
   },
   "zh": {
     "title": "深能科创",
@@ -103,10 +137,13 @@ function i18n() {
     "login": "登录账号",
     "copyright": "珠海市晞云云科技有限公司",
     "product": "我们的产品",
+    "team": "开源团队",
     "lightxi-cloud": "晞云云计算 - 保持热爱，共赴山海。",
     "fystart": "一个简洁的起始页，铸就高效率工具，为你所想。",
     "lightnotes": "大小事，随手记。一个极简、美观、多端同步、支持解析多种文件的轻量化在线便签。",
-    "chatnio": "一个简洁、美观、轻量的开源 AI 聊天助手。"
+    "chatnio": "一个简洁、美观、轻量的开源 AI 聊天助手。",
+    "motto-zmh": "Nothing is impossible.",
+    "motto-zz": "There is no justice in following unjust laws."
   }
 }
 </i18n>
@@ -240,6 +277,15 @@ header {
   object-position: center;
 }
 
+section {
+  width: 100%;
+  height: max-content;
+}
+
+.team {
+  background: #181717;
+}
+
 .circle {
   position: absolute;
   top: calc(100vh - 16px);
@@ -318,6 +364,11 @@ header {
   white-space: pre-wrap;
   text-shadow: 0 0 12px rgba(0, 0, 0, .6);
   text-align: center;
+}
+
+section.white .line {
+  color: #1e1e20;
+  text-shadow: 0 0 12px rgba(255, 255, 255, .6);
 }
 
 .line:before {
@@ -418,6 +469,25 @@ header {
   color: rgba(255, 255, 255, .75);
   user-select: none;
   white-space: pre-wrap;
+}
+
+.team img {
+  background: none;
+}
+
+.team .desc {
+  min-height: 120px;
+}
+
+.team .github {
+  margin-top: auto;
+  margin-left: auto;
+  transform: translate(8px, 2px);
+  width: 24px;
+  height: 24px;
+  fill: rgba(255, 255, 255, .75);
+  transition: .5s;
+  background: none;
 }
 
 footer {
