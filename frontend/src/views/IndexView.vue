@@ -32,6 +32,7 @@ function i18n() {
     </header>
     <div class="container">
       <div class="landing">
+        <img src="/background.png" alt="" class="background" loading="lazy">
         <div class="left">
           <div class="top">{{ t('title') }}</div>
           <div class="title">{{ t('subtitle') }}</div>
@@ -226,10 +227,17 @@ header {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: linear-gradient(to right, rgba(0, 0, 0, .2), rgba(10, 10, 10, .05)), url(/background.png);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+}
+
+.landing .background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  user-select: none;
+  object-fit: cover;
+  object-position: center;
 }
 
 .circle {

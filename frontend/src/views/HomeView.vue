@@ -118,11 +118,11 @@ axios.get("info")
       </el-card>
       <el-card class="card">
         <div class="image">
-          <img class="background" src="/home/background.jpg" alt="">
+          <img class="background" src="/home/background.jpg" alt="" loading="lazy">
           <div class="avatar">
             <input type="file" accept="image/*" style="display: none" id="avatar" @change="avatar" />
             <label class="before" for="avatar"><edit /></label>
-            <img :src="`${backend_url}avatar/${username}`" alt="">
+            <img :src="`${backend_url}avatar/${username}`" alt="" loading="lazy">
           </div>
         </div>
         <div class="info">
