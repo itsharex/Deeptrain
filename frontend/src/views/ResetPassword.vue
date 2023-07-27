@@ -8,6 +8,9 @@ import { validateForm } from "@/assets/script/utils";
 import router from "@/router";
 import GeeTest from "@/components/captcha/GeeTest.vue";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
@@ -24,10 +27,10 @@ const rules = reactive<FormRules>({
     {
       type: "email",
       required: true,
-      message: "Please input email",
+      message: t("rule-email"),
       trigger: "blur",
     },
-    { validator: validateEmail, trigger: "change" },
+    { validator: validateEmail(t), trigger: "change" },
   ],
   captcha: [{ required: true, message: "", trigger: "blur" }],
 });
@@ -41,14 +44,14 @@ async function submit() {
         data = resp.data;
       if (!data.status)
         ElNotification.error({
-          title: "Reset failed",
+          title: t("reset-failed"),
           message: data.reason,
           showClose: false,
         });
       else {
         ElNotification.success({
-          title: "Reset succeeded",
-          message: `Your password has been reset. Please check your email for further instructions.`,
+          title: t("reset-succeeded"),
+          message: t("reset-success-message"),
           showClose: false,
         });
         loading.value = false;
@@ -57,9 +60,8 @@ async function submit() {
       }
     } catch (e) {
       ElNotification.warning({
-        title: "Error occurred",
-        message:
-          "There was an error while reset. Please check you network and try again.",
+        title: t("error-occurred"),
+        message: t("network-error"),
         showClose: false,
       });
     }
@@ -68,6 +70,30 @@ async function submit() {
 }
 </script>
 
+<i18n>
+{
+  "en": {
+    "rule-email": "Please input email",
+    "reset-failed": "Reset failed",
+    "reset-succeeded": "Reset succeeded",
+    "reset-success-message": "Your password has been reset. Please check your email for further instructions.",
+    "error-occurred": "Error occurred",
+    "network-error": "There was an error while reset. Please check your network and try again.",
+    "user.email-format-error": "The format of the email is incorrect",
+    "user.email-format-unsupported": "Please use a supported email suffix"
+  },
+  "zh": {
+    "rule-email": "请输入电子邮箱",
+    "reset-failed": "重置失败",
+    "reset-succeeded": "重置成功",
+    "reset-success-message": "您的密码已重置，请查看您的电子邮箱获取进一步说明。",
+    "error-occurred": "发生错误",
+    "network-error": "重置时发生错误，请检查您的网络并重试。",
+    "user.email-format-error": "邮箱格式不正确",
+    "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀"
+  }
+}
+</i18n>
 <template>
   <el-container>
     <el-header>
