@@ -4,8 +4,10 @@ import { token } from "@/assets/script/user";
 import { refreshState } from "@/assets/script/global";
 import router from "@/router";
 import { useI18n } from "vue-i18n";
+import { language } from "@/config";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
+locale.value = language.value;
 
 async function submit() {
   token.value = "";

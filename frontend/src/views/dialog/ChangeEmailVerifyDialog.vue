@@ -4,12 +4,14 @@ import { useI18n } from "vue-i18n";
 import type { FormRules, FormInstance } from "element-plus";
 import { validateForm } from "@/assets/script/utils";
 import axios from "axios";
+import { language } from "@/config";
 
 const props = defineProps<{
   modelValue: boolean;
 }>();
 const emit = defineEmits(["update:modelValue"]);
-const { t } = useI18n();
+const { t, locale } = useI18n();
+locale.value = language.value;
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);

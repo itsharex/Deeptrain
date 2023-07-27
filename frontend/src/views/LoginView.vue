@@ -14,8 +14,10 @@ import { app } from "@/assets/script/allauth";
 import GeeTest from "@/components/captcha/GeeTest.vue";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 import { useI18n } from "vue-i18n";
+import { language } from "@/config";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
+locale.value = language.value;
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);

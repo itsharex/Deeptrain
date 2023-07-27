@@ -8,13 +8,15 @@ import { validateForm } from "@/assets/script/utils";
 import router from "@/router";
 import { state } from "@/assets/script/global";
 import { app } from "@/assets/script/allauth";
+import { language } from "@/config";
 
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
 const form = reactive({
   code: "",
 });
-const { t } = useI18n();
+const { t, locale } = useI18n();
+locale.value = language.value;
 
 const rules = reactive<FormRules>({
   code: [

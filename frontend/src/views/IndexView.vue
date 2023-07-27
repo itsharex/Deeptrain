@@ -3,8 +3,10 @@ import router from "@/router";
 import { useI18n } from "vue-i18n";
 import World from "@/components/icons/world.vue";
 import Github from "@/components/icons/github.vue";
+import { language } from "@/config";
 
 const { t, locale } = useI18n();
+locale.value = language.value;
 
 function login() {
   router.push("/login");
@@ -16,7 +18,7 @@ function i18n() {
   } else {
     locale.value = "en";
   }
-  localStorage.setItem("language", locale.value);
+  language.value = locale.value;
 }
 </script>
 <template>

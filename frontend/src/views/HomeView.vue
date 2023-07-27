@@ -10,7 +10,7 @@ import Key from "@/components/icons/home/key.vue";
 import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
 import ChangeEmailDialog from "@/views/dialog/ChangeEmailDialog.vue";
 import Edit from "@/components/icons/home/edit.vue";
-import { backend_url } from "@/config";
+import { backend_url, language } from "@/config";
 import { useI18n } from "vue-i18n";
 
 function formatDate(time: string | Date, offset: boolean = true): string {
@@ -58,8 +58,8 @@ function contain(el: HTMLElement | null | undefined, target: HTMLElement | null)
   return (el && target) ? (el == target || el.contains(target)) : false;
 }
 
-
-const { t } = useI18n();
+const { t, locale } = useI18n();
+locale.value = language.value;
 
 function logout() {
   router.push("/logout");
