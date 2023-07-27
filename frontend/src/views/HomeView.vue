@@ -58,34 +58,7 @@ function contain(el: HTMLElement | null | undefined, target: HTMLElement | null)
 }
 
 
-const { t } = useI18n({
-  messages: {
-    en: {
-      'time.none': 'none',
-      'time.ago': 'ago',
-      'time.justNow': 'just now',
-      'time.minutesAgo': '{minutes} minutes ago',
-      'time.hoursAgo': '{hours} hours ago',
-      'time.yesterday': 'yesterday {time}',
-      'time.beforeYesterday': 'before yesterday {time}',
-      'time.daysAgo': '{days} days ago {time}',
-      'time.monthDay': '{month}/{day} {time}',
-      'time.yearMonthDay': '{year} {month}/{day} {time}'
-    },
-    zh: {
-      'time.none': '无',
-      'time.ago': '前',
-      'time.justNow': '刚刚',
-      'time.minutesAgo': '{minutes} 分钟前',
-      'time.hoursAgo': '{hours} 小时前',
-      'time.yesterday': '昨天 {time}',
-      'time.beforeYesterday': '前天 {time}',
-      'time.daysAgo': '{days} 天前 {time}',
-      'time.monthDay': '{month}月{day}日 {time}',
-      'time.yearMonthDay': '{year}年{month}月{day}日 {time}'
-    }
-  }
-});
+const { t } = useI18n();
 
 function logout() {
   router.push("/logout");
@@ -142,7 +115,6 @@ axios.get("info")
     for (const key in res.data) {
       form[key] = res.data[key];
     }
-    console.log(formatDate(form.created_at), form.created_at)
     form.created_at = formatDate(form.created_at);
   })
 </script>
@@ -221,7 +193,17 @@ axios.get("info")
     "avatar-update-failed": "Avatar update failed",
     "avatar-updated": "Avatar updated",
     "avatar-updated-successfully": "Your avatar has been updated successfully!",
-    "avatar-update-failed-reason": "The file size should be less than 2MB"
+    "avatar-update-failed-reason": "The file size should be less than 2MB",
+    "time.none": "none",
+    "time.ago": "ago",
+    "time.justNow": "just now",
+    "time.minutesAgo": "{minutes} minutes ago",
+    "time.hoursAgo": "{hours} hours ago",
+    "time.yesterday": "yesterday {time}",
+    "time.beforeYesterday": "before yesterday {time}",
+    "time.daysAgo": "{days} days ago {time}",
+    "time.monthDay": "{month}/{day} {time}",
+    "time.yearMonthDay": "{year} {month}/{day} {time}"
   },
   "zh": {
     "title": "Deeptrain 账号管理",
@@ -235,7 +217,17 @@ axios.get("info")
     "avatar-update-failed": "头像更新失败",
     "avatar-updated": "头像更新成功",
     "avatar-updated-successfully": "您的头像已成功更新！",
-    "avatar-update-failed-reason": "文件大小应小于 2MB"
+    "avatar-update-failed-reason": "文件大小应小于 2MB",
+    "time.none": "无",
+    "time.ago": "前",
+    "time.justNow": "刚刚",
+    "time.minutesAgo": "{minutes} 分钟前",
+    "time.hoursAgo": "{hours} 小时前",
+    "time.yesterday": "昨天 {time}",
+    "time.beforeYesterday": "前天 {time}",
+    "time.daysAgo": "{days} 天前 {time}",
+    "time.monthDay": "{month}月{day}日 {time}",
+    "time.yearMonthDay": "{year}年{month}月{day}日 {time}"
   }
 }
 </i18n>
