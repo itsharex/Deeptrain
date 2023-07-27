@@ -35,7 +35,7 @@ function i18n() {
     </header>
     <div class="container">
       <div class="landing">
-        <img src="/background.png" alt="" class="background" loading="lazy">
+        <img src="https://cdn.zmh-program.site/deeptrain/background.jpg" alt="" class="background" loading="lazy">
         <div class="left">
           <div class="top">{{ t('title') }}</div>
           <div class="title">{{ t('subtitle') }}</div>
