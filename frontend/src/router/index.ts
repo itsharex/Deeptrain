@@ -60,6 +60,14 @@ const router = createRouter({
       meta: {
         title: "Home | Deeptrain",
       }
+    },
+    {
+      path: "/oauth/github",
+      name: "oauth_github",
+      component: () => import("../views/oauth/GithubView.vue"),
+      meta: {
+        title: "Github OAuth | Deeptrain",
+      }
     }
   ],
 });
