@@ -11,6 +11,36 @@ import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
 import ChangeEmailDialog from "@/views/dialog/ChangeEmailDialog.vue";
 import Edit from "@/components/icons/home/edit.vue";
 import { backend_url } from "@/config";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n({
+  messages: {
+    en: {
+      'time.none': 'none',
+      'time.ago': 'ago',
+      'time.justNow': 'just now',
+      'time.minutesAgo': '{minutes} minutes ago',
+      'time.hoursAgo': '{hours} hours ago',
+      'time.yesterday': 'yesterday {time}',
+      'time.beforeYesterday': 'before yesterday {time}',
+      'time.daysAgo': '{days} days ago {time}',
+      'time.monthDay': '{month}/{day} {time}',
+      'time.yearMonthDay': '{year} {month}/{day} {time}'
+    },
+    zh: {
+      'time.none': '无',
+      'time.ago': '前',
+      'time.justNow': '刚刚',
+      'time.minutesAgo': '{minutes} 分钟前',
+      'time.hoursAgo': '{hours} 小时前',
+      'time.yesterday': '昨天 {time}',
+      'time.beforeYesterday': '前天 {time}',
+      'time.daysAgo': '{days} 天前 {time}',
+      'time.monthDay': '{month}月{day}日 {time}',
+      'time.yearMonthDay': '{year}年{month}月{day}日 {time}'
+    }
+  }
+});
 
 function logout() {
   router.push("/logout");
@@ -33,8 +63,8 @@ function avatar() {
   if (!file) return;
   if (file.size > 1024 * 1024 * 2) {
     ElNotification.error({
-      title: "Avatar update failed",
-      message: "The file size should be less than 2MB",
+      title: t("avatar-update-failed"),
+      message: t("avatar-update-failed-reason"),
       showClose: false,
     });
     return;
@@ -48,13 +78,13 @@ function avatar() {
   }).then((res) => {
     if (res.data.status) {
       ElNotification.success({
-        title: "Avatar updated",
-        message: "Your avatar has been updated successfully!",
+        title: t("avatar-updated"),
+        message: t("avatar-updated-successfully"),
         showClose: false,
       });
     } else {
       ElNotification.error({
-        title: "Avatar update failed",
+        title: t("avatar-update-failed"),
         message: res.data.reason,
         showClose: false,
       });
@@ -67,7 +97,7 @@ axios.get("info")
     for (const key in res.data) {
       form[key] = res.data[key];
     }
-    form.created_at = formatDate(form.created_at);
+    form.created_at = formatDate(t, form.created_at);
   })
 </script>
 <template>
@@ -79,15 +109,11 @@ axios.get("info")
         <div class="header">
           <div class="logo">
             <img src="/favicon.ico" alt="" />
-            <span>Deeptrain 账号管理</span>
+            <span>{{ t('title') }}</span>
           </div>
           <div class="grow" />
-          <div class="username">
-            {{ username }}
-          </div>
-          <div class="logout" @click="logout">
-            退出登录
-          </div>
+          <div class="username">{{ username }}</div>
+          <div class="logout" @click="logout">{{ t('logout') }}</div>
         </div>
       </el-card>
       <el-card class="card">
@@ -100,36 +126,32 @@ axios.get("info")
           </div>
         </div>
         <div class="info">
-          <div class="name">
-            {{ form.username }}
-          </div>
-          <div class="id">
-            {{ form.id }}
-          </div>
+          <div class="name">{{ form.username }}</div>
+          <div class="id">{{ form.id }}</div>
         </div>
         <div class="setting">
           <div class="form general">
             <div class="title">
-              <span>通用</span>
+              <span>{{ t('general') }}</span>
             </div>
             <div class="item">
-              <div class="label"><mail style="scale: 0.98; transform: translate(-2px, 7px)" /> 邮箱</div>
+              <div class="label"><mail style="scale: 0.98; transform: translate(-2px, 7px)" /> {{ t('email') }}</div>
               <div class="grow" />
               <div class="value">
                 <span>{{ form.email }}</span>
-                <div class="button" @click="dialog.email = true">更改</div>
+                <div class="button" @click="dialog.email = true">{{ t('change') }}</div>
               </div>
             </div>
             <div class="item">
-              <div class="label"><key style="scale: 0.98; transform: translate(-2px, 6px)" /> 密码</div>
+              <div class="label"><key style="scale: 0.98; transform: translate(-2px, 6px)" /> {{ t('password') }}</div>
               <div class="grow" />
               <div class="value">
                 <span>********</span>
-                <div class="button" @click="dialog.change = true">更改</div>
+                <div class="button" @click="dialog.change = true">{{ t('change') }}</div>
               </div>
             </div>
             <div class="item">
-              <div class="label"><date style="scale: 0.98; transform: translate(-2px, 6px)" /> 注册时间</div>
+              <div class="label"><date style="scale: 0.98; transform: translate(-2px, 6px)" /> {{ t('created_at') }}</div>
               <div class="grow" />
               <div class="value">{{ form.created_at }}</div>
             </div>
@@ -139,7 +161,38 @@ axios.get("info")
     </el-main>
   </el-container>
 </template>
-
+<i18n>
+{
+  "en": {
+    "title": "Deeptrain",
+    "general": "General",
+    "email": "Email",
+    "password": "Password",
+    "created_at": "Created At",
+    "change": "Change",
+    "logout": "Logout",
+    "avatar": "Avatar",
+    "avatar-update-failed": "Avatar update failed",
+    "avatar-updated": "Avatar updated",
+    "avatar-updated-successfully": "Your avatar has been updated successfully!",
+    "avatar-update-failed-reason": "The file size should be less than 2MB"
+  },
+  "zh": {
+    "title": "Deeptrain 账号管理",
+    "general": "通用",
+    "email": "邮箱",
+    "password": "密码",
+    "created_at": "注册时间",
+    "change": "更改",
+    "logout": "退出登录",
+    "avatar": "头像",
+    "avatar-update-failed": "头像更新失败",
+    "avatar-updated": "头像更新成功",
+    "avatar-updated-successfully": "您的头像已成功更新！",
+    "avatar-update-failed-reason": "文件大小应小于 2MB"
+  }
+}
+</i18n>
 <style scoped>
 .card {
   width: 100%;

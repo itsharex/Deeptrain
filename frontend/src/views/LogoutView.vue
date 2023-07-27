@@ -3,6 +3,9 @@ import { RouterLink } from "vue-router";
 import { token } from "@/assets/script/user";
 import { refreshState } from "@/assets/script/global";
 import router from "@/router";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 async function submit() {
   token.value = "";
@@ -19,15 +22,28 @@ async function submit() {
       </RouterLink>
     </el-header>
     <el-main class="main">
-      <h1>Logout</h1>
+      <h1>{{ t('logout') }}</h1>
       <el-card shadow="hover">
-        <div class="tips">Are you sure to log out?</div>
-        <el-button class="validate-button" @click="submit">Logout</el-button>
+        <div class="tips">{{ t('tips') }}</div>
+        <el-button class="validate-button" @click="submit">{{ t('confirm') }}</el-button>
       </el-card>
     </el-main>
   </el-container>
 </template>
-
+<i18n>
+{
+  "zh": {
+    "logout": "退出登录",
+    "tips": "是否确认退出登录？",
+    "confirm": "确定"
+  },
+  "en": {
+    "logout": "Logout",
+    "tips": "Are you sure to log out?",
+    "confirm": "Confirm"
+  }
+}
+</i18n>
 <style scoped>
 @import "@/assets/style/user.css";
 

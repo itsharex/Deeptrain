@@ -77,7 +77,7 @@ function login() {
     "subtitle": "Committed to a better experience",
     "slogan": "Stay passionate and explore mountains and seas together.",
     "login": "Login",
-    "copyright": "Lightxi Cloud Technology Ltd.",
+    "copyright": "LightXi Cloud Technology Ltd.",
     "product": "",
     "lightxi-cloud": "Stay passionate and explore mountains and seas together.",
     "fystart": "A simple start page, crafting efficient tools, tailored to your needs.",
