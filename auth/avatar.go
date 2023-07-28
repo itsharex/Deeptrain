@@ -113,7 +113,7 @@ func GetAvatarView(c *gin.Context) {
 	path := GetAvatarConfigWithCache(c, username)
 	if len(path) == 0 {
 		db := c.MustGet("db").(*sql.DB)
-		if isUserExists(db, username) {
+		if IsUserExists(db, username) {
 			SaveAvatar(username)
 			path = GetAvatarConfigWithCache(c, username)
 			c.File(path)

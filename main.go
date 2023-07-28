@@ -2,7 +2,8 @@ package main
 
 import (
 	"deeptrain/auth"
-	oauth "deeptrain/auth/app"
+	allauth "deeptrain/auth/app"
+	"deeptrain/auth/oauth"
 	"deeptrain/connection"
 	"deeptrain/middleware"
 	"github.com/gin-gonic/gin"
@@ -40,6 +41,8 @@ func main() {
 		app.POST("/resend", auth.ResendView)
 		app.GET("/state", auth.StateView)
 		app.GET("/info", auth.InfoView)
+		app.POST("/oauth/github/prefight", oauth.GithubPreFightView)
+		app.POST("/oauth/github/register", oauth.GithubRegisterView)
 		app.POST("/settings/password", auth.ChangePasswordView)
 		app.POST("/settings/email", auth.ChangeEmailView)
 		app.POST("/settings/verify", auth.ChangeEmailVerifyView)
@@ -47,7 +50,7 @@ func main() {
 		app.GET("/avatar/:username", auth.GetAvatarView)
 		app.POST("/avatar", auth.PostAvatarView)
 
-		oauth.Register(app)
+		allauth.Register(app)
 	}
 
 	defer cache.Close()

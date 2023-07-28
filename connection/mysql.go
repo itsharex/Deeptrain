@@ -57,7 +57,6 @@ func initializeOAuthModel(DB *sql.DB) {
 		    user_id INT NOT NULL,
 		    provider VARCHAR(24) NOT NULL,
 		    provider_id VARCHAR(100) NOT NULL,
-		    provider_token VARCHAR(120) NOT NULL,
 		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		    FOREIGN KEY (user_id) REFERENCES auth(id)
 		)

@@ -96,11 +96,11 @@ func RegisterView(c *gin.Context) {
 		return
 	}
 
-	if isUserExists(db, username) {
+	if IsUserExists(db, username) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User already exists. Please try another username."})
 		return
 	}
-	if isEmailExists(db, email) {
+	if IsEmailExists(db, email) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email already exists. Please try another email."})
 		return
 	}
@@ -141,7 +141,7 @@ func ResetView(c *gin.Context) {
 		return
 	}
 
-	if !isEmailExists(db, email) {
+	if !IsEmailExists(db, email) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email does not exist. Please try another email."})
 		return
 	}
@@ -276,7 +276,7 @@ func InfoView(c *gin.Context) {
 func UserView(c *gin.Context) {
 	db := utils.GetDBFromContext(c)
 	username := c.Param("username")
-	if isUserExists(db, username) {
+	if IsUserExists(db, username) {
 		user := &User{Username: username}
 		if user.IsActive(db) {
 			err := db.QueryRow("SELECT is_admin, created_at FROM auth WHERE username = ?", username).Scan(&user.IsAdmin, &user.CreateAt)
@@ -367,7 +367,7 @@ func ChangeEmailView(c *gin.Context) {
 		return
 	}
 
-	if isEmailExists(db, email) {
+	if IsEmailExists(db, email) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email already exists. Please try another email."})
 		return
 	}
@@ -445,7 +445,7 @@ func ChangeEmailVerifyView(c *gin.Context) {
 		return
 	}
 
-	if isEmailExists(db, newEmail) {
+	if IsEmailExists(db, newEmail) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email already exists. Please try another email."})
 		return
 	}

@@ -20,7 +20,7 @@ type User struct {
 	ID       int
 }
 
-func isUserExists(db *sql.DB, username string) bool {
+func IsUserExists(db *sql.DB, username string) bool {
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE username = ?", username).Scan(&count)
 	if err != nil {
@@ -29,7 +29,7 @@ func isUserExists(db *sql.DB, username string) bool {
 	return count > 0
 }
 
-func isEmailExists(db *sql.DB, email string) bool {
+func IsEmailExists(db *sql.DB, email string) bool {
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM auth WHERE email = ?", email).Scan(&count)
 	if err != nil {
