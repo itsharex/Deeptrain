@@ -89,14 +89,14 @@ func GeeTestCaptcha(form GeeTestRequest) bool {
 	id := viper.GetString("geetest.id")
 
 	uri := fmt.Sprintf("https://gcaptcha4.geetest.com/validate??captcha_id=%s", id)
-	data, err := utils.PostForm(uri, map[string]interface{}{
+	data, err := utils.PostForm(utils.PostFormRequest{Uri: uri, Body: map[string]interface{}{
 		"lot_number":     form.LotNumber,
 		"pass_token":     form.PassToken,
 		"captcha_id":     id,
 		"captcha_output": form.CaptchaOutput,
 		"gen_time":       form.GenTime,
 		"sign_token":     utils.HmacEncrypt(viper.GetString("geetest.token"), form.LotNumber),
-	})
+	}})
 	if err != nil {
 		fmt.Println(err)
 		return false

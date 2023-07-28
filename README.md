@@ -14,6 +14,8 @@
 &nbsp;
 ![python: 3.9](https://img.shields.io/badge/python-3.9-success)
 &nbsp;
+![go: 1.22](https://img.shields.io/badge/go-1.22-00ADD8)
+&nbsp;
 ![django: 4.1](https://img.shields.io/badge/Django-4.1-informational)
 &nbsp;
 ![vue: 3.2](https://img.shields.io/badge/vue-3.2-42b883)
@@ -40,9 +42,11 @@
 7. [X]  👋  **OAuth** *(Open Authorization)*
 8. [X]  📚  **Blog & Text Audit**
 9. [X]  🔍  **IP Verify**
-10. [ ] 🌀  **Front-end and Back-end Separation**
-11. [ ] 🌏  **i18n** *(Internationalization)*
-12. [ ] 📫  **Email Validation**
+10. [x] 🌀  **Front-end and Back-end Separation**
+11. [x] 🌏  **i18n** *(Internationalization)*
+12. [x] 📫  **Email Validation**
+13. [x] 📧  **Notification**
+14. [x] 📝  **UAM**
 
 ## ✨ Open Authorization Support 🎈
 

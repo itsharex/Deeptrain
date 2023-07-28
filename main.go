@@ -15,6 +15,7 @@ func main() {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)
 	}
+
 	cache := connection.ConnectRedis()
 	db := connection.ConnectMySQL()
 

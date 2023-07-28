@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"strings"
 	"time"
 )
@@ -102,4 +103,12 @@ func ConvertTime(t []uint8) *time.Time {
 		return nil
 	}
 	return &val
+}
+
+func MapToStruct(m interface{}, s interface{}) error {
+	b, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(b, s)
 }

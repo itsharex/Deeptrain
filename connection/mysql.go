@@ -26,8 +26,9 @@ func ConnectMySQL() *sql.DB {
 		log.Println("Connected to MySQL server successfully")
 	}
 
-	// initialize user model
+	// initialize model
 	initializeUserModel(DB)
+	initializeOAuthModel(DB)
 
 	return DB
 }
@@ -42,6 +43,23 @@ func initializeUserModel(DB *sql.DB) {
 		    active BOOLEAN NOT NULL DEFAULT FALSE,
 		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		    is_admin BOOLEAN NOT NULL DEFAULT FALSE
+		)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func initializeOAuthModel(DB *sql.DB) {
+	_, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS oauth (
+		    id INT AUTO_INCREMENT PRIMARY KEY,
+		    user_id INT NOT NULL,
+		    provider VARCHAR(24) NOT NULL,
+		    provider_id VARCHAR(100) NOT NULL,
+		    provider_token VARCHAR(120) NOT NULL,
+		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		    FOREIGN KEY (user_id) REFERENCES auth(id)
 		)
 	`)
 	if err != nil {
