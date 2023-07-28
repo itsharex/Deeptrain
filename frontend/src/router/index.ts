@@ -72,7 +72,7 @@ const router = createRouter({
   ],
 });
 
-const auth_pages = ["/login", "/register", "/forgot"];
+const auth_pages = ["/login", "/register", "/forgot", "/oauth/github"];
 
 router.beforeEach(async (to) => {
   await blockUtilSetup();

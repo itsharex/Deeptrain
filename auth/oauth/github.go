@@ -148,6 +148,7 @@ func GithubPreFlightView(c *gin.Context) {
 		// login
 		instance := GetUserFromOAuth(db, "github", user.Id)
 		c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken(), "username": instance.Username, "register": false})
+		return
 	}
 
 	cache := utils.GetCacheFromContext(c)

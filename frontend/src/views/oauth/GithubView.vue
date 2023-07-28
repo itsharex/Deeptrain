@@ -19,9 +19,10 @@ const param = new URLSearchParams(window.location.search);
 const code = param.get("code");
 const preflight = ref(false);
 const form = reactive({
-  username: "zmh-program",
+  username: "",
   email: "",
 })
+
 const rules = reactive<FormRules>({
   email: [
     { type: "email", required: true, message: t("rule-email"), trigger: "blur", },
@@ -36,7 +37,7 @@ axios.get("oauth/github/preflight?code=" + code)
         message: res.data.error,
         type: "error",
       });
-      setTimeout(() => router.push("/login"), 1000);
+      setTimeout(() => router.push("/login"), 500);
       return
     }
 
@@ -52,6 +53,7 @@ axios.get("oauth/github/preflight?code=" + code)
       });
 
       token.value = res.data.token;
+      axios.defaults.headers.common["Authorization"] = token.value;
       refreshState({
         callback: (value: number) => {
           app.exec();
@@ -70,7 +72,11 @@ axios.get("oauth/github/preflight?code=" + code)
 
 async function register() {
   if (await validateForm(element.value)) {
-    axios.post("oauth/github/register", form)
+    axios.post("oauth/github/register", {
+      code: code,
+      username: form.username,
+      email: form.email,
+    })
       .then((res) => {
         if (!res.data.status) {
           ElMessage({
@@ -82,11 +88,12 @@ async function register() {
 
         ElNotification.success({
           title: t("register-succeeded"),
-          message: t("register-success-message", { username: res.data.username }),
+          message: t("register-success-message", { username: form.username }),
           showClose: false,
         });
 
         token.value = res.data.token;
+        axios.defaults.headers.common["Authorization"] = token.value;
         refreshState({
           callback: (value: number) => {
             app.exec();
@@ -149,16 +156,17 @@ async function register() {
         <h1>{{ t("sign-up-to-deeptrain") }}</h1>
         <el-card shadow="hover">
           <div class="tips">{{ t('continue', { username: form.username }) }}</div><br>
-          <el-form v-model="form" :rules="rules" ref="element" label-position="left">
-            <el-form-item :label="t('email-address')" prop="repassword">
+          <el-form :model="form" :rules="rules" ref="element" label-position="left">
+            <el-form-item :label="t('email-address')" prop="email">
               <el-input
                 v-model="form.email"
-                show-password
                 minlength="6"
                 maxlength="46"
+                type="email"
               />
             </el-form-item>
-            <el-button class="validate-button">{{
+            <div style="height: 6px" />
+            <el-button class="validate-button" @click="register">{{
                 t("sign-up")
               }}</el-button>
           </el-form>

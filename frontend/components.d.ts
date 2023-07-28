@@ -9,11 +9,11 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Date: typeof import('./src/components/icons/home/date.vue')['default']
     Edit: typeof import('./src/components/icons/home/edit.vue')['default']
-    ElAlert: typeof import("element-plus/es")["ElAlert"]
+    ElAlert: typeof import('element-plus/es')['ElAlert']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElContainer: typeof import('element-plus/es')['ElContainer']
-    ElDialog: typeof import("element-plus/es")["ElDialog"]
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDivider: typeof import('element-plus/es')['ElDivider']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
