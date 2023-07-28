@@ -132,14 +132,15 @@ async function submit() {
             <gee-test id="reset-captcha" v-model="captcha" />
           </el-form-item>
           <el-button class="validate-button" @click="submit">
-            {{ t('reset') }}
+            {{ t("reset") }}
           </el-button>
         </el-form>
       </el-card>
       <el-card shadow="never" class="help">
         <div>
-          {{ t('no-account-question') }}
-          <RouterLink to="/register">{{ t('create-one') }}</RouterLink>{{ t('en-dot') }}
+          {{ t("no-account-question") }}
+          <RouterLink to="/register">{{ t("create-one") }}</RouterLink
+          >{{ t("en-dot") }}
         </div>
       </el-card>
     </el-main>

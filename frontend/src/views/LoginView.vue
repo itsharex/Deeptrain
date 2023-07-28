@@ -4,7 +4,6 @@ import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import axios from "axios";
 import Github from "@/components/icons/github.vue";
-import Gitee from "@/components/icons/gitee.vue";
 import OLink from "@/components/oauth/olink.vue";
 import { validateForm } from "@/assets/script/utils";
 import { token } from "@/assets/script/user";
@@ -15,6 +14,7 @@ import GeeTest from "@/components/captcha/GeeTest.vue";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 import { useI18n } from "vue-i18n";
 import { language, oauth } from "@/config";
+import Google from "@/components/icons/google.vue";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
@@ -189,28 +189,37 @@ app.set();
           <el-form-item prop="captcha">
             <gee-test id="register-captcha" v-model="captcha" />
           </el-form-item>
-          <el-button class="validate-button" @click="submit">{{ t('sign-in') }}</el-button>
+          <el-button class="validate-button" @click="submit">{{
+            t("sign-in")
+          }}</el-button>
         </el-form>
         <el-divider />
         <div class="oauth">
-          <o-link :uri="'https://github.com/login/oauth/authorize?scope=user:email&client_id=' + oauth.github"><github /></o-link>
-          <o-link uri="https://gitee.com/"><gitee /></o-link>
+          <o-link
+            :uri="
+              'https://github.com/login/oauth/authorize?scope=user:email&client_id=' +
+              oauth.github
+            "
+            ><github
+          /></o-link>
+          <o-link uri="https://google.com/"><google /></o-link>
         </div>
       </el-card>
       <el-card shadow="never" class="help">
         <div>
-          {{ t('no-account-question') }}
-          <RouterLink to="/register">{{ t('create-one') }}</RouterLink>{{ t('en-dot') }}
+          {{ t("no-account-question") }}
+          <RouterLink to="/register">{{ t("create-one") }}</RouterLink
+          >{{ t("en-dot") }}
         </div>
         <div>
-          {{ t('forgot-password-question') }}
-          <RouterLink to="/forgot">{{ t('reset-password') }}</RouterLink>{{ t('en-dot') }}
+          {{ t("forgot-password-question") }}
+          <RouterLink to="/forgot">{{ t("reset-password") }}</RouterLink
+          >{{ t("en-dot") }}
         </div>
       </el-card>
     </el-main>
   </el-container>
 </template>
-
 
 <style scoped>
 @import "@/assets/style/user.css";

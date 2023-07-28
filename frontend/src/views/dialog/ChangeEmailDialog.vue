@@ -25,7 +25,7 @@ const verify = ref<boolean>(false);
 const form = reactive<Record<string, string | Record<string, any>>>({
   email: "",
   captcha: {},
-})
+});
 
 const rules = reactive<FormRules>({
   email: [
@@ -82,18 +82,29 @@ function close() {
 <template>
   <ChangeEmailVerifyDialog v-model="verify" />
   <el-dialog v-model="props.modelValue" @close="close">
-    <el-form label-width="80px" :model="form" :rules="rules" :label-position="'top'" ref="element">
+    <el-form
+      label-width="80px"
+      :model="form"
+      :rules="rules"
+      :label-position="'top'"
+      ref="element"
+    >
       <el-form-item :label="t('email')" prop="email">
-        <el-input v-model="form.email" :placeholder="t('please-input-email')"></el-input>
+        <el-input
+          v-model="form.email"
+          :placeholder="t('please-input-email')"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="captcha">
-        <GeeTest v-model="captcha"  id="change-captcha"/>
+        <GeeTest v-model="captcha" id="change-captcha" />
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button class="button" @click="close">{{ t('cancel') }}</el-button>
-        <el-button class="button" type="primary" @click="post">{{ t('confirm') }}</el-button>
+        <el-button class="button" @click="close">{{ t("cancel") }}</el-button>
+        <el-button class="button" type="primary" @click="post">{{
+          t("confirm")
+        }}</el-button>
       </span>
     </template>
   </el-dialog>

@@ -19,11 +19,11 @@ const loading = ref<boolean>(false);
 const form = reactive<Record<string, string | Record<string, any>>>({
   old: "",
   new: "",
-})
+});
 
 const rules = reactive<FormRules>({
-  old: [{ min: 6, max: 6, message: t('length-check'), trigger: "change" }],
-  new: [{ min: 6, max: 6, message: t('length-check'), trigger: "change" }],
+  old: [{ min: 6, max: 6, message: t("length-check"), trigger: "change" }],
+  new: [{ min: 6, max: 6, message: t("length-check"), trigger: "change" }],
 });
 
 async function post() {
@@ -66,7 +66,13 @@ function close() {
 
 <template>
   <el-dialog v-model="props.modelValue" @close="close">
-    <el-form label-width="80px" :model="form" :rules="rules" :label-position="'top'" ref="element">
+    <el-form
+      label-width="80px"
+      :model="form"
+      :rules="rules"
+      :label-position="'top'"
+      ref="element"
+    >
       <el-form-item :label="t('old')" prop="old">
         <el-input v-model="form.old" />
       </el-form-item>
@@ -76,8 +82,10 @@ function close() {
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button class="button" @click="close">{{ t('cancel') }}</el-button>
-        <el-button class="button" type="primary" @click="post">{{ t('confirm') }}</el-button>
+        <el-button class="button" @click="close">{{ t("cancel") }}</el-button>
+        <el-button class="button" type="primary" @click="post">{{
+          t("confirm")
+        }}</el-button>
       </span>
     </template>
   </el-dialog>

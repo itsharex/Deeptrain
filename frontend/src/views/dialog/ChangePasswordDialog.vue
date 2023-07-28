@@ -3,7 +3,11 @@ import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import GeeTest from "@/components/captcha/GeeTest.vue";
 import type { FormRules, FormInstance } from "element-plus";
-import { token, validateChangePassword, validateRePassword } from "@/assets/script/user";
+import {
+  token,
+  validateChangePassword,
+  validateRePassword,
+} from "@/assets/script/user";
 import { validateForm } from "@/assets/script/utils";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 import axios from "axios";
@@ -25,22 +29,25 @@ const form = reactive<Record<string, string | Record<string, any>>>({
   new_password: "",
   confirm_password: "",
   captcha: {},
-})
+});
 
 const rules = reactive<FormRules>({
   old_password: [
-    { required: true, message: t('rule-old-password'), trigger: "blur" },
-    { min: 6, max: 46, message: t('rule-password-length'), trigger: "change" },
+    { required: true, message: t("rule-old-password"), trigger: "blur" },
+    { min: 6, max: 46, message: t("rule-password-length"), trigger: "change" },
   ],
   new_password: [
-    { required: true, message: t('rule-new-password'), trigger: "blur" },
-    { min: 6, max: 46, message: t('rule-password-length'), trigger: "change" },
+    { required: true, message: t("rule-new-password"), trigger: "blur" },
+    { min: 6, max: 46, message: t("rule-password-length"), trigger: "change" },
     { validator: validateChangePassword(t, form), trigger: "change" },
   ],
   confirm_password: [
-    { required: true, message: t('rule-confirm-password'), trigger: "blur" },
-    { min: 6, max: 46, message: t('rule-password-length'), trigger: "change" },
-    { validator: validateRePassword(t, form, "new_password"), trigger: "change" },
+    { required: true, message: t("rule-confirm-password"), trigger: "blur" },
+    { min: 6, max: 46, message: t("rule-password-length"), trigger: "change" },
+    {
+      validator: validateRePassword(t, form, "new_password"),
+      trigger: "change",
+    },
   ],
   captcha: [{ required: true, message: "", trigger: "blur" }],
 });
@@ -91,7 +98,13 @@ function close() {
 
 <template>
   <el-dialog v-model="props.modelValue" @close="close">
-    <el-form label-width="80px" :model="form" :rules="rules" :label-position="'top'" ref="element">
+    <el-form
+      label-width="80px"
+      :model="form"
+      :rules="rules"
+      :label-position="'top'"
+      ref="element"
+    >
       <el-form-item :label="t('old-password')" prop="old_password">
         <el-input v-model="form.old_password" show-password></el-input>
       </el-form-item>
@@ -107,8 +120,10 @@ function close() {
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button class="button" @click="close">{{ t('cancel') }}</el-button>
-        <el-button class="button" type="primary" @click="post">{{ t('confirm') }}</el-button>
+        <el-button class="button" @click="close">{{ t("cancel") }}</el-button>
+        <el-button class="button" type="primary" @click="post">{{
+          t("confirm")
+        }}</el-button>
       </span>
     </template>
   </el-dialog>

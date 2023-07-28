@@ -24,10 +24,12 @@ async function submit() {
       </RouterLink>
     </el-header>
     <el-main class="main">
-      <h1>{{ t('logout') }}</h1>
+      <h1>{{ t("logout") }}</h1>
       <el-card shadow="hover">
-        <div class="tips">{{ t('tips') }}</div>
-        <el-button class="validate-button" @click="submit">{{ t('confirm') }}</el-button>
+        <div class="tips">{{ t("tips") }}</div>
+        <el-button class="validate-button" @click="submit">{{
+          t("confirm")
+        }}</el-button>
       </el-card>
     </el-main>
   </el-container>

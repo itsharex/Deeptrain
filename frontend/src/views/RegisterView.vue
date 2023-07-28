@@ -184,7 +184,8 @@ async function submit() {
             style="margin-bottom: 4px"
           >
             <p>
-              {{ t("supported-email-suffixes") }}:<br />&nbsp;&nbsp;@gmail.com, @qq.com, <br />&nbsp;&nbsp;@outlook.com, @163.com.
+              {{ t("supported-email-suffixes") }}:<br />&nbsp;&nbsp;@gmail.com,
+              @qq.com, <br />&nbsp;&nbsp;@outlook.com, @163.com.
             </p>
           </el-alert>
           <el-form-item :label="t('password')" prop="password">
@@ -209,13 +210,15 @@ async function submit() {
             <gee-test id="register-captcha" v-model="captcha" />
           </el-form-item>
           <el-button class="validate-button" @click="submit">
-            {{ t('sign-up') }}
+            {{ t("sign-up") }}
           </el-button>
         </el-form>
       </el-card>
       <el-card shadow="never" class="help">
         <div>
-          {{ t('no-account-question') }} <RouterLink to="/login">{{ t('sign-in-link') }}</RouterLink>{{ t('en-dot') }}
+          {{ t("no-account-question") }}
+          <RouterLink to="/login">{{ t("sign-in-link") }}</RouterLink
+          >{{ t("en-dot") }}
         </div>
       </el-card>
     </el-main>

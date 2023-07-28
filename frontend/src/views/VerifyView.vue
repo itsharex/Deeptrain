@@ -103,9 +103,9 @@ async function resend() {
       </RouterLink>
     </el-header>
     <el-main class="main">
-      <h1>{{ t('verify') }}</h1>
+      <h1>{{ t("verify") }}</h1>
       <el-card shadow="hover" v-loading="loading">
-        <div class="tips">{{ t('tips') }}</div>
+        <div class="tips">{{ t("tips") }}</div>
         <el-form
           ref="element"
           :model="form"
@@ -121,8 +121,9 @@ async function resend() {
             />
           </el-form-item>
           <div>
-            {{ t('resend-tips') }}
-            <a class="resend" @click="resend">{{ t('resend') }}</a>{{ t('en-dot') }}
+            {{ t("resend-tips") }}
+            <a class="resend" @click="resend">{{ t("resend") }}</a
+            >{{ t("en-dot") }}
           </div>
           <el-alert
             class="tips"

@@ -23,83 +23,99 @@ function i18n() {
 </script>
 <template>
   <main>
-    <header :class="{'chinese': locale === 'zh'}">
-      <img src="/favicon.ico" alt="" class="logo">
+    <header :class="{ chinese: locale === 'zh' }">
+      <img src="/favicon.ico" alt="" class="logo" />
       <div class="name">
-        <span class="cn">{{ t('title') }}</span>
+        <span class="cn">{{ t("title") }}</span>
         <span class="en">Deeptrain Team</span>
       </div>
       <div style="flex-grow: 1" />
       <div class="i18n" @click="i18n"><world /></div>
-      <div class="login" @click="login">{{ t('login') }}</div>
+      <div class="login" @click="login">{{ t("login") }}</div>
     </header>
     <div class="container">
       <div class="landing">
-        <img src="https://cdn.zmh-program.site/deeptrain/background.jpg" alt="" class="background" loading="lazy">
+        <img
+          src="https://cdn.zmh-program.site/deeptrain/background.jpg"
+          alt=""
+          class="background"
+          loading="lazy"
+        />
         <div class="left">
-          <div class="top">{{ t('title') }}</div>
-          <div class="title">{{ t('subtitle') }}</div>
-          <div class="subtitle">{{ t('slogan') }}</div>
+          <div class="top">{{ t("title") }}</div>
+          <div class="title">{{ t("subtitle") }}</div>
+          <div class="subtitle">{{ t("slogan") }}</div>
         </div>
       </div>
       <div class="circle" />
       <section class="product">
         <div class="line">
-          <span>{{ t('product') }}</span>
+          <span>{{ t("product") }}</span>
           <p>Our Products</p>
         </div>
         <div class="app-container">
           <a class="app" href="https://lightxi.com">
-            <img src="/lightxi.png" alt="">
+            <img src="/lightxi.png" alt="" />
             <div class="desc">
               <h1>LightXi Cloud</h1>
-              <p>{{ t('lightxi-cloud') }}</p>
+              <p>{{ t("lightxi-cloud") }}</p>
             </div>
           </a>
           <a class="app" href="https://fystart.cn">
-            <img src="/fystart.webp" alt="">
+            <img src="/fystart.webp" alt="" />
             <div class="desc">
               <h1>Fystart</h1>
-              <p>{{ t('fystart') }}</p>
+              <p>{{ t("fystart") }}</p>
             </div>
           </a>
           <a class="app" href="https://notes.lightxi.com">
-            <img src="/lightnotes.ico" alt="">
+            <img src="/lightnotes.ico" alt="" />
             <div class="desc">
               <h1>Light Notes</h1>
-              <p>{{ t('lightnotes') }}</p>
+              <p>{{ t("lightnotes") }}</p>
             </div>
           </a>
           <a class="app" href="https://nio.fystart.cn">
-            <img src="/chatnio.png" alt="">
+            <img src="/chatnio.png" alt="" />
             <div class="desc">
               <h1>Chat Nio</h1>
-              <p>{{ t('chatnio') }}</p>
+              <p>{{ t("chatnio") }}</p>
             </div>
           </a>
         </div>
       </section>
       <section class="team">
         <div class="line">
-          <span>{{ t('team') }}</span>
+          <span>{{ t("team") }}</span>
           <p>Our Team</p>
           <div class="app-container">
             <a class="app" href="https://zmh-program.site">
-              <img src="https://zmh-program.site/avatar/zmh-program.webp" alt="">
+              <img
+                src="https://zmh-program.site/avatar/zmh-program.webp"
+                alt=""
+              />
               <div class="desc">
                 <h1>zmh-program</h1>
-                <p>— {{ t('motto-zmh') }}</p>
-                <a href="https://github.com/zmh-program" target="_blank" class="github">
+                <p>— {{ t("motto-zmh") }}</p>
+                <a
+                  href="https://github.com/zmh-program"
+                  target="_blank"
+                  class="github"
+                >
                   <github />
                 </a>
               </div>
             </a>
             <a class="app" href="https://shinezz.cc">
-              <img src="https://zmh-program.site/friend/sh1n3zz.webp" alt="">
+              <img src="https://zmh-program.site/friend/sh1n3zz.webp" alt="" />
               <div class="desc">
                 <h1>Sh1n3zZ</h1>
-                <p>— {{ t('motto-zz') }}</p>
-                <a href="https://github.com/sh1n3zz" target="_blank" class="github">
+                <p>— {{ t("motto-zz") }}</p>
+                <a
+                  href="https://github.com/sh1n3zz"
+                  target="_blank"
+                  class="github"
+                >
                   <github />
                 </a>
               </div>
@@ -109,8 +125,12 @@ function i18n() {
       </section>
     </div>
     <footer>
-      <a class="copyright" href="https://www.baidu.com/baidu?ie=utf-8&wd=%E7%8F%A0%E6%B5%B7%E5%B8%82%E6%99%9E%E4%BA%91%E4%BA%91%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8" target="_blank">
-        © 2023 {{ t('copyright') }}
+      <a
+        class="copyright"
+        href="https://www.baidu.com/baidu?ie=utf-8&wd=%E7%8F%A0%E6%B5%B7%E5%B8%82%E6%99%9E%E4%BA%91%E4%BA%91%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8"
+        target="_blank"
+      >
+        © 2023 {{ t("copyright") }}
       </a>
     </footer>
   </main>
@@ -165,10 +185,10 @@ header {
   width: 100%;
   height: 84px;
   padding: 1px;
-  background: rgba(255, 255, 255, .12);
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(18px) blur(18px) saturate(50%);
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: row;
   z-index: 1;
@@ -195,7 +215,7 @@ header {
 }
 
 .name .cn {
-  font-family: Helvetica,PingFang SC,Microsoft YaHei,sans-serif;
+  font-family: Helvetica, PingFang SC, Microsoft YaHei, sans-serif;
   font-weight: 600;
 }
 
@@ -212,19 +232,19 @@ header {
   flex-direction: row;
   align-items: center;
   user-select: none;
-  background: rgba(255, 255, 255, .12);
+  background: rgba(255, 255, 255, 0.12);
   padding: 6px 16px;
   border-radius: 4px;
   cursor: pointer;
-  transition: .5s;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
-  color: rgba(255, 255, 255, .8);
+  transition: 0.5s;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.8);
   white-space: nowrap;
 }
 
 .login:hover {
   color: #fff;
-  background: rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .i18n {
@@ -233,19 +253,19 @@ header {
   flex-direction: row;
   align-items: center;
   user-select: none;
-  background: rgba(255, 255, 255, .12);
+  background: rgba(255, 255, 255, 0.12);
   padding: 6px 16px;
   border-radius: 4px;
   cursor: pointer;
-  transition: .5s;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
-  fill: rgba(255, 255, 255, .8);
+  transition: 0.5s;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  fill: rgba(255, 255, 255, 0.8);
   white-space: nowrap;
 }
 
 .i18n:hover {
   fill: #fff;
-  background: rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .container {
@@ -297,7 +317,7 @@ section {
   transform: translateX(-50%);
   border-radius: 50%;
   background: #1e1e20;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 @keyframes LandingAnimation {
@@ -320,7 +340,7 @@ section {
   text-align: left;
   user-select: none;
   white-space: pre-wrap;
-  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
   animation: LandingAnimation 1s forwards;
 }
 
@@ -328,10 +348,10 @@ section {
   padding: 16px 18px 0;
   font-size: 32px;
   font-weight: 600;
-  color: rgba(255, 255, 255, .95);
+  color: rgba(255, 255, 255, 0.95);
   user-select: none;
   white-space: pre-wrap;
-  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
   transform: translateY(12px);
 }
 
@@ -342,7 +362,7 @@ section {
   color: #fff;
   user-select: none;
   white-space: pre-wrap;
-  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
 }
 
 .landing .subtitle {
@@ -350,10 +370,10 @@ section {
   padding: 0 24px;
   font-size: 18px;
   font-weight: 400;
-  color: rgba(255, 255, 255, .75);
+  color: rgba(255, 255, 255, 0.75);
   user-select: none;
   white-space: pre-wrap;
-  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
 }
 
 .line {
@@ -364,13 +384,13 @@ section {
   color: #fff;
   user-select: none;
   white-space: pre-wrap;
-  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
   text-align: center;
 }
 
 section.white .line {
   color: #1e1e20;
-  text-shadow: 0 0 12px rgba(255, 255, 255, .6);
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
 }
 
 .line:before {
@@ -386,7 +406,8 @@ section.white .line {
 }
 
 .line span {
-  font-family: Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family: Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .app-container {
@@ -412,7 +433,7 @@ section.white .line {
   background: #252529;
   display: flex;
   flex-direction: column;
-  transition: .5s;
+  transition: 0.5s;
   cursor: pointer;
   color: #fff;
 }
@@ -420,7 +441,7 @@ section.white .line {
 .app:hover {
   border: 1px solid #252529;
   background: #232325;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .app img {
@@ -431,8 +452,8 @@ section.white .line {
   margin-bottom: 16px;
   user-select: none;
   border-radius: 12px;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
-  transition: .5s;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.5s;
 }
 
 .app:hover img {
@@ -447,7 +468,7 @@ section.white .line {
   text-align: left;
   user-select: none;
   white-space: nowrap;
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .app:hover .desc {
@@ -459,7 +480,7 @@ section.white .line {
   line-height: 24px;
   font-size: 22px;
   font-weight: 600;
-  color: rgba(255,255,255,.86);
+  color: rgba(255, 255, 255, 0.86);
   user-select: none;
   white-space: nowrap;
   font-family: "JetBrains Mono", monospace;
@@ -468,7 +489,7 @@ section.white .line {
 .app p {
   font-size: 16px;
   font-weight: 400;
-  color: rgba(255, 255, 255, .75);
+  color: rgba(255, 255, 255, 0.75);
   user-select: none;
   white-space: pre-wrap;
 }
@@ -487,8 +508,8 @@ section.white .line {
   transform: translate(8px, 2px);
   width: 24px;
   height: 24px;
-  fill: rgba(255, 255, 255, .75);
-  transition: .5s;
+  fill: rgba(255, 255, 255, 0.75);
+  transition: 0.5s;
   background: none;
 }
 
@@ -496,8 +517,8 @@ footer {
   width: 100%;
   height: 42px;
   padding: 1px;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .2);
-  border-top: 1px solid rgba(255, 255, 255, .1);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   justify-content: center;
   align-items: center;
   display: flex;
@@ -508,10 +529,10 @@ footer {
 footer .copyright {
   font-size: 14px;
   font-weight: 400;
-  color: rgba(255, 255, 255, .75);
+  color: rgba(255, 255, 255, 0.75);
   user-select: none;
   white-space: nowrap;
-  text-shadow: 0 0 12px rgba(0, 0, 0, .6);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
 }
 
 footer .copyright:hover {

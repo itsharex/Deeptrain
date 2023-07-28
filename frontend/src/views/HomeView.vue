@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="../assets/style/anim.css">
 <script setup lang="ts">
 import { reactive } from "vue";
 import { username } from "@/assets/script/global";
@@ -14,48 +13,59 @@ import { backend_url, language } from "@/config";
 import { useI18n } from "vue-i18n";
 
 function formatDate(time: string | Date, offset: boolean = true): string {
-  const now = new Date(), date = typeof time == 'string' ? new Date(time) : time;
-  const diff = (now.getTime() - date.getTime()) / 1000 + (offset ? 8 * 3600 : 0); // second
+  const now = new Date(),
+    date = typeof time == "string" ? new Date(time) : time;
+  const diff =
+    (now.getTime() - date.getTime()) / 1000 + (offset ? 8 * 3600 : 0); // second
 
   if (diff < 0) {
-    return t('time.none');
+    return t("time.none");
   } else if (diff < 60) {
-    return t('time.justNow');
+    return t("time.justNow");
   } else if (diff < 3600) {
     const minutes = Math.floor(diff / 60);
-    return t('time.minutesAgo', { minutes });
+    return t("time.minutesAgo", { minutes });
   } else if (diff < 86400) {
     const hours = Math.floor(diff / 3600);
-    return t('time.hoursAgo', { hours });
+    return t("time.hoursAgo", { hours });
   } else if (diff < 172800) {
-    return t('time.yesterday', { time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}` });
+    return t("time.yesterday", {
+      time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}`,
+    });
   } else if (diff < 259200) {
-    return t('time.beforeYesterday', { time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}` });
+    return t("time.beforeYesterday", {
+      time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}`,
+    });
   } else if (diff < 604800) {
     const days = Math.floor(diff / 86400);
-    return `${t('time.daysAgo', { days })} ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
+    return `${t("time.daysAgo", { days })} ${padZero(
+      date.getHours()
+    )}:${padZero(date.getMinutes())}`;
   } else if (date.getFullYear() === now.getFullYear()) {
-    return t('time.monthDay', {
+    return t("time.monthDay", {
       month: date.getMonth() + 1,
       day: date.getDate(),
-      time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}`
+      time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}`,
     });
   } else {
-    return t('time.yearMonthDay', {
+    return t("time.yearMonthDay", {
       year: date.getFullYear(),
       month: date.getMonth() + 1,
       day: date.getDate(),
-      time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}`
+      time: `${padZero(date.getHours())}:${padZero(date.getMinutes())}`,
     });
   }
 }
 
 function padZero(n: number): string {
-  return (n < 10 ? '0' : '') + n;
+  return (n < 10 ? "0" : "") + n;
 }
 
-function contain(el: HTMLElement | null | undefined, target: HTMLElement | null): boolean {
-  return (el && target) ? (el == target || el.contains(target)) : false;
+function contain(
+  el: HTMLElement | null | undefined,
+  target: HTMLElement | null
+): boolean {
+  return el && target ? el == target || el.contains(target) : false;
 }
 
 const { t, locale } = useI18n();
@@ -78,7 +88,8 @@ const dialog = reactive<Record<string, boolean>>({
 });
 
 function avatar() {
-  const file = (document.getElementById("avatar") as HTMLInputElement).files?.[0];
+  const file = (document.getElementById("avatar") as HTMLInputElement)
+    .files?.[0];
   if (!file) return;
   if (file.size > 1024 * 1024 * 2) {
     ElNotification.error({
@@ -90,34 +101,35 @@ function avatar() {
   }
   const formData = new FormData();
   formData.append("avatar", file);
-  axios.post("avatar", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  }).then((res) => {
-    if (res.data.status) {
-      ElNotification.success({
-        title: t("avatar-updated"),
-        message: t("avatar-updated-successfully"),
-        showClose: false,
-      });
-    } else {
-      ElNotification.error({
-        title: t("avatar-update-failed"),
-        message: res.data.reason,
-        showClose: false,
-      });
-    }
-  });
+  axios
+    .post("avatar", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((res) => {
+      if (res.data.status) {
+        ElNotification.success({
+          title: t("avatar-updated"),
+          message: t("avatar-updated-successfully"),
+          showClose: false,
+        });
+      } else {
+        ElNotification.error({
+          title: t("avatar-update-failed"),
+          message: res.data.reason,
+          showClose: false,
+        });
+      }
+    });
 }
 
-axios.get("info")
-  .then((res) => {
-    for (const key in res.data) {
-      form[key] = res.data[key];
-    }
-    form.created_at = formatDate(form.created_at);
-  })
+axios.get("info").then((res) => {
+  for (const key in res.data) {
+    form[key] = res.data[key];
+  }
+  form.created_at = formatDate(form.created_at);
+});
 </script>
 <template>
   <ChangePasswordDialog v-model="dialog.change" />
@@ -128,20 +140,35 @@ axios.get("info")
         <div class="header">
           <div class="logo">
             <img src="/favicon.ico" alt="" />
-            <span>{{ t('title') }}</span>
+            <span>{{ t("title") }}</span>
           </div>
           <div class="grow" />
           <div class="username">{{ username }}</div>
-          <div class="logout" @click="logout">{{ t('logout') }}</div>
+          <div class="logout" @click="logout">{{ t("logout") }}</div>
         </div>
       </el-card>
       <el-card class="card">
         <div class="image">
-          <img class="background" src="/home/background.jpg" alt="" loading="lazy">
+          <img
+            class="background"
+            src="/home/background.jpg"
+            alt=""
+            loading="lazy"
+          />
           <div class="avatar">
-            <input type="file" accept="image/*" style="display: none" id="avatar" @change="avatar" />
+            <input
+              type="file"
+              accept="image/*"
+              style="display: none"
+              id="avatar"
+              @change="avatar"
+            />
             <label class="before" for="avatar"><edit /></label>
-            <img :src="`${backend_url}avatar/${username}`" alt="" loading="lazy">
+            <img
+              :src="`${backend_url}avatar/${username}`"
+              alt=""
+              loading="lazy"
+            />
           </div>
         </div>
         <div class="info">
@@ -151,26 +178,41 @@ axios.get("info")
         <div class="setting">
           <div class="form general">
             <div class="title">
-              <span>{{ t('general') }}</span>
+              <span>{{ t("general") }}</span>
             </div>
             <div class="item">
-              <div class="label"><mail style="scale: 0.98; transform: translate(-2px, 7px)" /> {{ t('email') }}</div>
+              <div class="label">
+                <mail style="scale: 0.98; transform: translate(-2px, 7px)" />
+                {{ t("email") }}
+              </div>
               <div class="grow" />
               <div class="value">
                 <span>{{ form.email }}</span>
-                <div class="button" @click="dialog.email = true">{{ t('change') }}</div>
+                <div class="button" @click="dialog.email = true">
+                  {{ t("change") }}
+                </div>
               </div>
             </div>
             <div class="item">
-              <div class="label"><key style="scale: 0.98; transform: translate(-2px, 6px)" /> {{ t('password') }}</div>
+              <div class="label">
+                <key style="scale: 0.98; transform: translate(-2px, 6px)" />
+                {{ t("password") }}
+              </div>
               <div class="grow" />
               <div class="value">
                 <span>********</span>
-                <div class="button" @click="dialog.change = true">{{ t('change') }}</div>
+                <div class="button" @click="dialog.change = true">
+                  {{ t("change") }}
+                </div>
               </div>
             </div>
             <div class="item">
-              <div class="label"><date-icon style="scale: 0.98; transform: translate(-2px, 6px)" /> {{ t('created_at') }}</div>
+              <div class="label">
+                <date-icon
+                  style="scale: 0.98; transform: translate(-2px, 6px)"
+                />
+                {{ t("created_at") }}
+              </div>
               <div class="grow" />
               <div class="value">{{ form.created_at }}</div>
             </div>
@@ -278,7 +320,7 @@ axios.get("info")
   transform: translate(-20px, -20px);
   opacity: 0;
   animation: FadeInAnimation 1s forwards;
-  animation-delay: .25s;
+  animation-delay: 0.25s;
 }
 
 .image .background {
@@ -296,13 +338,13 @@ axios.get("info")
   height: 100px;
   border-radius: 8px;
   padding: 2px;
-  opacity: .9;
+  opacity: 0.9;
   backdrop-filter: blur(4px);
-  background: rgba(0,0,0,.15);
+  background: rgba(0, 0, 0, 0.15);
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   object-fit: cover;
   object-position: center;
-  transition: .5s;
+  transition: 0.5s;
   z-index: 64;
   user-select: none;
   cursor: pointer;
@@ -322,14 +364,14 @@ axios.get("info")
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  background: rgba(0,0,0,0);
-  transition: .5s;
+  background: rgba(0, 0, 0, 0);
+  transition: 0.5s;
   z-index: 64;
 }
 
 .image .avatar:hover .before,
 .image .avatar:active .before {
-  background: rgba(0,0,0,.15);
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .image .avatar svg {
@@ -347,7 +389,7 @@ axios.get("info")
   white-space: nowrap;
   flex-shrink: 1;
   z-index: 64;
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .image .avatar:hover svg,
@@ -369,7 +411,7 @@ axios.get("info")
   white-space: nowrap;
   opacity: 0;
   animation: FadeInAnimation 1s forwards;
-  animation-delay: .5s;
+  animation-delay: 0.5s;
 }
 
 .info .name {
@@ -379,7 +421,9 @@ axios.get("info")
   margin-right: 16px;
   user-select: none;
   white-space: nowrap;
-  font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 }
 
 .info .id:before {
@@ -417,7 +461,7 @@ axios.get("info")
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   padding: 8px 16px;
   border-radius: 4px;
-  transition: .5s;
+  transition: 0.5s;
   user-select: none;
   white-space: nowrap;
 }
@@ -437,7 +481,7 @@ axios.get("info")
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   opacity: 0;
   animation: FadeInAnimation 1s forwards;
-  animation-delay: .75s;
+  animation-delay: 0.75s;
 }
 
 .form {
@@ -520,7 +564,7 @@ axios.get("info")
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   padding: 4px 8px;
   border-radius: 4px;
-  transition: .5s;
+  transition: 0.5s;
   user-select: none;
   white-space: nowrap;
 }
