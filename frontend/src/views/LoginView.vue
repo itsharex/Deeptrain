@@ -196,7 +196,6 @@ app.set();
         <el-divider />
         <div class="oauth">
           <o-link :uri="oauth.github_url"><github /></o-link>
-          <o-link uri="https://google.com/"><google /></o-link>
         </div>
       </el-card>
       <el-card shadow="never" class="help">
