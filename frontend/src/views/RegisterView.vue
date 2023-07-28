@@ -117,7 +117,7 @@ async function submit() {
     "user.rule-password-not-same": "The password does not match",
     "user.email-format-error": "The format of the email is incorrect",
     "user.email-format-unsupported": "Please use a supported email suffix",
-    "en-dot": ".",
+    "en-dot": "."
   },
   "zh": {
     "rule-username": "请输入用户名",
@@ -145,7 +145,7 @@ async function submit() {
     "user.rule-password-not-same": "两次输入的密码不一致",
     "user.email-format-error": "邮箱格式不正确",
     "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀",
-    "en-dot": "",
+    "en-dot": ""
   }
 }
 </i18n>

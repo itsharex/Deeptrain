@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ref, watch } from "vue";
 
-export const deploy: boolean = true;
+export const deploy: boolean = false;
 export const language = ref(localStorage.getItem("language") || "zh");
 export let backend_url: string = "http://localhost:8080/";
 if (deploy) backend_url = "https://api.deeptrain.net/";
@@ -15,6 +15,9 @@ export namespace sitekey {
 
 export namespace oauth {
   export const github: string = "5d47a861704423cb30a9";
+  export const google: string = "";
+
+  export const github_url: string = "https://github.com/login/oauth/authorize?scope=user:email&client_id=" + github;
 }
 
 axios.defaults.baseURL = backend_url;

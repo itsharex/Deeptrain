@@ -124,7 +124,7 @@ func GithubRegisterView(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken()})
 }
 
-func GithubPreFightView(c *gin.Context) {
+func GithubPreFlightView(c *gin.Context) {
 	code := strings.TrimSpace(c.Query("code"))
 	if code == "" {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": "code is required"})
@@ -147,7 +147,7 @@ func GithubPreFightView(c *gin.Context) {
 	if IsOAuthExist(db, "github", user.Id) {
 		// login
 		instance := GetUserFromOAuth(db, "github", user.Id)
-		c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken(), "register": false})
+		c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken(), "username": instance.Username, "register": false})
 	}
 
 	cache := utils.GetCacheFromContext(c)
@@ -158,6 +158,11 @@ func GithubPreFightView(c *gin.Context) {
 	}
 	if err := cache.Set(c, fmt.Sprintf("oauth:github:%s", code), data, time.Minute*5).Err(); err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": "internal error"})
+		return
+	}
+
+	if auth.IsUserExists(db, user.Login) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": "The username is already registered"})
 		return
 	}
 

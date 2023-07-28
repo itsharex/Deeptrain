@@ -195,13 +195,7 @@ app.set();
         </el-form>
         <el-divider />
         <div class="oauth">
-          <o-link
-            :uri="
-              'https://github.com/login/oauth/authorize?scope=user:email&client_id=' +
-              oauth.github
-            "
-            ><github
-          /></o-link>
+          <o-link :uri="oauth.github_url"><github /></o-link>
           <o-link uri="https://google.com/"><google /></o-link>
         </div>
       </el-card>
