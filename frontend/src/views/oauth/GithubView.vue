@@ -4,7 +4,7 @@ import { useI18n } from "vue-i18n";
 import { language, oauth } from "@/config";
 import { reactive, ref } from "vue";
 import { RouterLink } from "vue-router";
-import { FormInstance, FormRules } from "element-plus";
+import type { FormInstance, FormRules } from "element-plus";
 import { token, validateEmail } from "@/assets/script/user";
 import { refreshState } from "@/assets/script/global";
 import { app } from "@/assets/script/allauth";
@@ -36,7 +36,7 @@ axios.get("oauth/github/preflight?code=" + code)
         message: res.data.error,
         type: "error",
       });
-      setTimeout(() => window.location.href = oauth.github_url, 1000);
+      setTimeout(() => router.push("/login"), 1000);
       return
     }
 
