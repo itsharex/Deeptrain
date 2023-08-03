@@ -99,8 +99,11 @@ func GetAvatarConfigWithCache(c *gin.Context, username string) string {
 		return ""
 	}
 
-	cache.Set(c, fmt.Sprintf("avatar:%s", username), config[username], time.Minute*30)
-	return config[username]
+	source := config[username]
+	if len(source) != 0 {
+		cache.Set(c, fmt.Sprintf("avatar:%s", username), source, time.Minute*30)
+	}
+	return source
 }
 
 func GetAvatarView(c *gin.Context) {
