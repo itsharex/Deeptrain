@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElLink: typeof import('element-plus/es')['ElLink']
     ElMain: typeof import('element-plus/es')['ElMain']
     GeeTest: typeof import('./src/components/captcha/GeeTest.vue')['default']
     Gitee: typeof import('./src/components/icons/gitee.vue')['default']

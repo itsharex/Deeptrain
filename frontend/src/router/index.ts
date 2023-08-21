@@ -30,6 +30,14 @@ const router = createRouter({
       },
     },
     {
+      path: "/mail",
+      name: "mail",
+      component: () => import("../views/MailLoginView.vue"),
+      meta: {
+        title: "Sign in | Deeptrain",
+      }
+    },
+    {
       path: "/verify",
       name: "verify",
       component: () => import("../views/VerifyView.vue"),
@@ -72,7 +80,7 @@ const router = createRouter({
   ],
 });
 
-const auth_pages = ["/login", "/register", "/forgot", "/oauth/github"];
+const auth_pages = ["/login", "/mail", "/register", "/forgot", "/oauth/github"];
 
 router.beforeEach(async (to) => {
   await blockUtilSetup();

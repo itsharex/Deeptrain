@@ -16,13 +16,14 @@ import { ready } from "@/assets/script/global";
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: 0.5s ease;
+  transition: 0.5s;
 }
 
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
   filter: blur(10px);
+  transition: 0.5s;
 }
 
 .fade-leave-to {

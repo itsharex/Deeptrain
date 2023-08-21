@@ -158,7 +158,7 @@ async function resend() {
     "rule-code": "请输入验证码",
     "rule-code-format": "请输入正确的格式",
     "resend-tips": "没有收到邮件？",
-    "en-dot": "",
+    "en-dot": ""
   },
   "en": {
     "verify": "Verify your account",
@@ -177,7 +177,7 @@ async function resend() {
     "rule-code": "Please input your verify code",
     "rule-code-format": "Please input the correct format",
     "resend-tips": "Didn't receive the email?",
-    "en-dot": ".",
+    "en-dot": "."
   }
 }
 </i18n>

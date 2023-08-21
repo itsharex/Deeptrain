@@ -16,6 +16,17 @@ type LoginForm struct {
 	Captcha  GeeTestRequest `form:"captcha" binding:"required"`
 }
 
+type EmailLoginForm struct {
+	Email   string         `form:"email" binding:"required"`
+	Captcha GeeTestRequest `form:"captcha" binding:"required"`
+}
+
+type EmailLoginVerifyForm struct {
+	Email string `form:"email" binding:"required"`
+	Key   string `form:"key" binding:"required"`
+	Code  string `form:"code" binding:"required"`
+}
+
 type RegisterForm struct {
 	Username   string         `form:"username" binding:"required"`
 	Password   string         `form:"password" binding:"required"`
@@ -76,6 +87,65 @@ func LoginView(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
+}
+
+func EmailLoginView(c *gin.Context) {
+	var form EmailLoginForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
+		return
+	}
+
+	email, captcha := strings.TrimSpace(form.Email), form.Captcha
+	if !utils.All(
+		ValidateEmail(email),
+		GeeTestCaptcha(captcha),
+	) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "We cannot verify your identity. Please check again to verify you are human."})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	if !IsEmailExists(db, email) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email does not exist. Please try another email."})
+		return
+	}
+
+	cache := utils.GetCacheFromContext(c)
+	if rate := cache.Get(c, fmt.Sprintf(":mailrate:%s", email)); rate.Val() != "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "You can only login once per 1 minutes."})
+		return
+	}
+
+	code := utils.GenerateCode(6)
+	key := utils.GenerateChar(128)
+	go SendVerifyMail(email, code)
+	cache.Set(context.Background(), fmt.Sprintf(":mailogin:%s:%s", key, email), code, 5*time.Minute)
+	cache.Set(context.Background(), fmt.Sprintf(":mailrate:%s", email), "1", 1*time.Minute)
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "key": key})
+}
+
+func EmailLoginVerifyView(c *gin.Context) {
+	var form EmailLoginVerifyForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
+		return
+	}
+
+	key, code, email := form.Key, form.Code, strings.TrimSpace(form.Email)
+
+	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
+
+	if code != cache.Get(c, fmt.Sprintf(":mailogin:%s:%s", key, email)).Val() {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your verification code is incorrect. Please check again."})
+		return
+	}
+
+	user := GetUserFromEmail(db, email)
+	cache.Del(c, fmt.Sprintf(":mailogin:%s:%s", key, email))
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken(), "username": user.Username})
 }
 
 func RegisterView(c *gin.Context) {

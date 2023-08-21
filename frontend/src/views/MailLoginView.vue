@@ -6,7 +6,7 @@ import axios from "axios";
 import Github from "@/components/icons/github.vue";
 import OLink from "@/components/oauth/olink.vue";
 import { validateForm } from "@/assets/script/utils";
-import { token } from "@/assets/script/user";
+import { token, validateEmail } from "@/assets/script/user";
 import { refreshState } from "@/assets/script/global";
 import router from "@/router";
 import { app } from "@/assets/script/allauth";
@@ -14,7 +14,6 @@ import GeeTest from "@/components/captcha/GeeTest.vue";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 import { useI18n } from "vue-i18n";
 import { language, oauth } from "@/config";
-import Google from "@/components/icons/google.vue";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
@@ -22,30 +21,41 @@ locale.value = language.value;
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
 const captcha = ref<Geetest.Geetest | null>(null);
+const exp = ref<string>("");
+const stamp = ref<number>(0);
+const key = ref<string>("");
 const form = reactive({
-  username: "",
-  password: "",
+  email: "",
+  code: "",
   captcha: {},
 });
 
 const rules = reactive<FormRules>({
-  username: [
-    { required: true, message: t("rule-username"), trigger: "blur" },
-    { min: 3, max: 24, message: t("rule-username-length"), trigger: "change" },
+  email: [
+    {
+      type: "email",
+      required: true,
+      message: t("rule-email"),
+      trigger: "blur",
+    },
+    { validator: validateEmail(t), trigger: "change" },
   ],
-  password: [
-    { required: true, message: t("rule-password"), trigger: "blur" },
-    { min: 6, max: 46, message: t("rule-password-length"), trigger: "change" },
+  code: [
+    { required: true, message: t("rule-code"), trigger: "blur" },
+    { min: 6, max: 6, message: t("rule-code-format"), trigger: "change" },
   ],
   captcha: [{ required: true, message: "", trigger: "blur" }],
 });
 
 async function submit() {
   if (await validateForm(element.value)) {
-    form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
-      const resp = await axios.post("login", form),
+      const resp = await axios.post("mail/verify", {
+          email: form.email,
+          code: form.code,
+          key: key.value,
+        }),
         data = resp.data;
       if (!data.status)
         ElNotification.error({
@@ -57,7 +67,7 @@ async function submit() {
         token.value = data.token;
         ElNotification.success({
           title: t("login-succeeded"),
-          message: t("login-success-message", { username: form.username }),
+          message: t("login-success-message", { username: data.username }),
           showClose: false,
         });
         captcha.value?.destroy();
@@ -79,7 +89,40 @@ async function submit() {
   }
 }
 
+async function post() {
+  form.captcha = await getValidateUtilSuccess(captcha.value);
+  try {
+    const resp = await axios.post("mail/send", form),
+      data = resp.data;
+    if (!data.status)
+      ElNotification.error({
+        title: t("login-failed"),
+        message: data.reason,
+        showClose: false,
+      });
+    else {
+      key.value = data.key;
+      stamp.value = Date.now() / 1000;
+      captcha.value?.destroy();
+    }
+  } catch (e) {
+    ElNotification.warning({
+      title: t("error-occurred"),
+      message: t("network-error"),
+      showClose: false,
+    });
+  }
+}
+
 app.set();
+
+setInterval(() => {
+  if (stamp.value + 60 > Date.now() / 1000) {
+    exp.value = `(${Math.floor(stamp.value + 60 - Date.now() / 1000)}s)`;
+  } else {
+    exp.value = "";
+  }
+}, 500);
 </script>
 
 <i18n>
@@ -91,6 +134,8 @@ app.set();
     "rule-password": "Please input password",
     "rule-re-password": "Please input password",
     "rule-password-length": "Length should be 6 to 46",
+    "rule-code": "Please input code",
+    "rule-code-format": "Code should be 6 digits",
     "register-failed": "Register failed",
     "register-succeeded": "Register succeeded",
     "register-success-message": "Welcome to Deeptrain, {username}!",
@@ -104,6 +149,8 @@ app.set();
     "sign-in-link": "Sign in",
     "username": "Username",
     "password": "Password",
+    "mail": "Email",
+    "code": "Code",
     "forgot-password-question": "Forgot password?",
     "reset-password": "Reset password",
     "create-one": "Create one",
@@ -115,7 +162,8 @@ app.set();
     "login-failed": "Login failed",
     "login-succeeded": "Login succeeded",
     "login-success-message": "Welcome back {username}!",
-    "mail-login": "Mail login",
+    "password-login": "Password login",
+    "send": "Send",
     "en-dot": "."
   },
   "zh": {
@@ -125,6 +173,8 @@ app.set();
     "rule-password": "请输入密码",
     "rule-re-password": "请输入密码",
     "rule-password-length": "长度应为 6 到 46",
+    "rule-code": "请输入验证码",
+    "rule-code-format": "验证码应为 6 位数字",
     "register-failed": "注册失败",
     "register-succeeded": "注册成功",
     "register-success-message": "欢迎加入 Deeptrain，{username}！",
@@ -137,6 +187,8 @@ app.set();
     "sign-in": "登录",
     "sign-in-link": "登录",
     "username": "用户名",
+    "mail": "邮箱",
+    "code": "验证码",
     "password": "密码",
     "forgot-password-question": "忘记密码?",
     "reset-password": "重置密码",
@@ -149,7 +201,8 @@ app.set();
     "login-failed": "登录失败",
     "login-succeeded": "登录成功",
     "login-success-message": "欢迎回来，{username}！",
-    "mail-login": "邮箱验证码登录",
+    "password-login": "用户名密码登录",
+    "send": "发送",
     "en-dot": ""
   }
 }
@@ -171,36 +224,32 @@ app.set();
           :rules="rules"
           :label-position="'top'"
         >
-          <el-form-item :label="t('username')" prop="username">
-            <el-input
-              v-model="form.username"
-              type="text"
-              :minlength="3"
-              :maxlength="24"
-            />
+          <el-form-item :label="t('mail')" prop="email">
+            <el-input v-model="form.email" />
           </el-form-item>
-          <el-form-item :label="t('password')" prop="password">
+          <el-form-item class="inline" :label="t('code')" prop="code">
             <el-input
-              v-model="form.password"
-              type="password"
-              show-password
+              v-model="form.code"
               :minlength="6"
-              :maxlength="46"
+              :maxlength="6"
             />
+            <el-button @click="post" :disabled="exp.length > 0">
+              {{ t("send") }} {{ exp }}
+            </el-button>
           </el-form-item>
           <el-form-item prop="captcha">
             <gee-test id="register-captcha" v-model="captcha" />
           </el-form-item>
           <el-button class="validate-button" @click="submit">{{
-            t("sign-in")
-          }}</el-button>
+              t("sign-in")
+            }}</el-button>
         </el-form>
         <el-divider />
         <div class="oauth">
           <o-link :uri="oauth.github_url"><github /></o-link>
         </div>
         <div class="prompt-box">
-          <RouterLink to="/mail">{{ t("mail-login") }}</RouterLink>
+          <RouterLink to="/login">{{ t("password-login") }}</RouterLink>
         </div>
       </el-card>
       <el-card shadow="never" class="help">

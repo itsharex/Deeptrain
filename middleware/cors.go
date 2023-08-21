@@ -11,6 +11,7 @@ var allowedOrigins = []string{
 	"https://www.deeptrain.net",
 	"https://deeptrain.vercel.app",
 	"http://localhost",
+	"http://localhost:5173",
 }
 
 func CORSMiddleware() gin.HandlerFunc {

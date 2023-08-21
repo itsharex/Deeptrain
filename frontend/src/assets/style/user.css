@@ -75,3 +75,25 @@
 .el-card {
     min-width: 320px;
 }
+
+.prompt-box {
+    display: flex;
+    justify-content: center;
+    margin: 6px 0;
+}
+
+.prompt-box a {
+    color: #fff;
+    background: none !important;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+
+.inline .el-input {
+    width: unset;
+    flex-grow: 1;
+}
+
+.inline .el-button {
+    margin-left: 8px;
+}

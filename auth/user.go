@@ -38,6 +38,26 @@ func IsEmailExists(db *sql.DB, email string) bool {
 	return count > 0
 }
 
+func IsUserAdmin(db *sql.DB, username string) bool {
+	var isAdmin bool
+	err := db.QueryRow("SELECT is_admin FROM auth WHERE username = ?", username).Scan(&isAdmin)
+	if err != nil {
+		return false
+	}
+	return isAdmin
+}
+
+func GetUserFromEmail(db *sql.DB, email string) *User {
+	user := &User{}
+	err := db.QueryRow("SELECT username, password, email, active, is_admin FROM auth WHERE email = ?", email).Scan(
+		&user.Username, &user.Password, &user.Email, &user.Active, &user.IsAdmin,
+	)
+	if err != nil {
+		return nil
+	}
+	return user
+}
+
 func ParseToken(ctx context.Context, db *sql.DB, token string) *User {
 	instance, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(viper.GetString("secret")), nil
