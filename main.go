@@ -6,6 +6,7 @@ import (
 	"deeptrain/auth/oauth"
 	"deeptrain/connection"
 	"deeptrain/middleware"
+	"deeptrain/pay"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"log"
@@ -25,6 +26,8 @@ func main() {
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	pay.InitPaymentClient()
 
 	app := gin.Default()
 	{

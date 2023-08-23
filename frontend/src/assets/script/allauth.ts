@@ -9,6 +9,7 @@ export namespace app {
     fymonitor: "https://fymonitor.deeptrain.net",
     vokkot: "https://vokkot.deeptrain.net",
     lightnotes: "https://notes.lightxi.com",
+    mgaide: "mgaide.cn",
   };
 
   export function set(): void {
