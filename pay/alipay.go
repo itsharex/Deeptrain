@@ -4,12 +4,22 @@ import (
 	"context"
 	"deeptrain/utils"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/go-pay/gopay"
 	"github.com/go-pay/gopay/alipay"
 	"github.com/spf13/viper"
 )
 
 var aliClient *alipay.Client
+
+type Notify struct {
+	Body        string `json:"body"`
+	BuyerId     string `json:"buyer_id"`
+	TotalAmount string `json:"total_amount"`
+	TradeNo     string `json:"trade_no"`
+	OutTradeNo  string `json:"out_trade_no"`
+	TradeStatus string `json:"trade_status"`
+}
 
 func InitAliClient() {
 	aliClient = utils.TryWithPanic(alipay.NewClient(viper.GetString("pay.alipay.app_id"), viper.GetString("pay.alipay.private_key"), viper.GetBool("pay.alipay.is_prod")))
@@ -41,4 +51,34 @@ func CreateAliPay(subject string, id string, amount float32, isMobile bool) (url
 	}
 
 	return url
+}
+
+func VerifyAliPayNotify(c *gin.Context) (*Notify, error) {
+	notify, err := alipay.ParseNotifyToBodyMap(c.Request)
+	if err != nil {
+		return nil, err
+	}
+
+	if ok, err := alipay.VerifySign(viper.GetString("pay.alipay.public_key"), notify); err != nil || !ok {
+		return nil, err
+	}
+
+	var result Notify
+	if err := notify.Unmarshal(&result); err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+func VerifyAliPayReturn(c *gin.Context) {
+	res, err := VerifyAliPayNotify(c)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.String(400, err.Error())
+	}
+
+	fmt.Println(res)
+
+	c.JSON(200, "success")
 }

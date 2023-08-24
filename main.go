@@ -26,7 +26,7 @@ func main() {
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
+	
 	pay.InitPaymentClient()
 
 	app := gin.Default()
@@ -54,6 +54,7 @@ func main() {
 		app.GET("/user/:username", auth.UserView)
 		app.GET("/avatar/:username", auth.GetAvatarView)
 		app.POST("/avatar", auth.PostAvatarView)
+		app.POST("/pay/alipay/notify", pay.VerifyAliPayReturn)
 
 		allauth.Register(app)
 	}
