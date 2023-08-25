@@ -10,6 +10,7 @@ import axios from "axios";
 import { useI18n } from "vue-i18n";
 import ChangeEmailDialog from "@/views/dialog/ChangeEmailDialog.vue";
 import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
+import { getWithCache } from "@/assets/script/cache";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
@@ -119,7 +120,7 @@ function avatar() {
     });
 }
 
-axios.get("info").then((res) => {
+getWithCache("info").then((res) => {
   for (const key in res.data) {
     form[key] = res.data[key];
   }
