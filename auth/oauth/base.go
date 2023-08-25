@@ -68,7 +68,7 @@ func IsUserConnected(db *sql.DB, userID int, provider string) bool {
 }
 
 func ListUserOAuth(db *sql.DB, userID int) map[string]map[string]interface{} {
-	var data map[string]map[string]interface{}
+	data := map[string]map[string]interface{}{}
 	for _, provider := range Providers {
 		rows, err := db.Query("SELECT provider_id, created_at FROM oauth WHERE user_id = ? AND provider = ?", userID, provider)
 		if err != nil {

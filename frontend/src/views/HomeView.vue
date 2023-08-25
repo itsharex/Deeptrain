@@ -6,12 +6,22 @@ import { useI18n } from "vue-i18n";
 import General from "@/components/icons/home/general.vue";
 import Tab from "@/components/Tab.vue";
 import Oauth from "@/components/icons/home/oauth.vue";
+import World from "@/components/icons/world.vue";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
 
 function logout() {
   router.push("/logout");
+}
+
+function toggleI18n() {
+  if (locale.value === "en") {
+    locale.value = "zh";
+  } else {
+    locale.value = "en";
+  }
+  language.value = locale.value;
 }
 </script>
 <template>
@@ -25,6 +35,7 @@ function logout() {
           </div>
           <div class="grow" />
           <div class="username">{{ username }}</div>
+          <div class="i18n" @click="toggleI18n"><world /></div>
           <div class="logout" @click="logout">{{ t("logout") }}</div>
         </div>
       </el-card>
@@ -57,7 +68,7 @@ function logout() {
 
 .card {
   width: 100%;
-  max-width: 820px;
+  max-width: 860px;
   margin: 8px auto 12px;
   animation: FadeInAnimation 1s;
 }
@@ -66,7 +77,7 @@ function logout() {
   display: flex;
   flex-direction: row;
   width: 100%;
-  max-width: 820px;
+  max-width: 860px;
   margin: 8px auto 12px;
 }
 
@@ -133,6 +144,23 @@ function logout() {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.i18n {
+  display: flex;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: 0.5s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 8px 10px;
+  border-radius: 4px;
+}
+
+.i18n svg {
+  width: 24px;
+  height: 24px;
+  fill: rgba(255, 255, 255, 0.9);
+}
+
 @media (max-width: 620px) {
   .logo span {
     display: none;
@@ -140,6 +168,15 @@ function logout() {
 }
 
 @media (max-width: 540px) {
+  .section {
+    flex-direction: column;
+  }
+
+  .router {
+    flex-direction: row;
+    transform: translate(-4px, -6px);
+  }
+
   .username {
     display: none;
   }

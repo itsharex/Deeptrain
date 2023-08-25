@@ -1,0 +1,107 @@
+.form .title {
+    margin-bottom: 16px;
+}
+
+.form .title span {
+    font-size: 24px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    user-select: none;
+}
+
+.form .title:before {
+    content: "";
+    display: inline-block;
+    top: 4px;
+    left: -2px;
+    width: 4px;
+    height: 24px;
+    background: #409eff;
+    margin-right: 8px;
+    border-radius: 2px;
+    user-select: none;
+}
+
+.form {
+    width: 100%;
+    margin: 0 16px;
+}
+
+.form .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.form .item svg {
+    width: 24px;
+    height: 24px;
+    transform: translateY(6px);
+    fill: rgba(255, 255, 255, 0.85);
+    user-select: none;
+    white-space: nowrap;
+    flex-shrink: 1;
+}
+
+.form .item .label {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-right: 16px;
+    width: 100px;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.form .item .value {
+    display: flex;
+    flex-direction: row;
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.75);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.form .item .value span {
+    margin-right: 16px;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.form .item .value .button {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: 0.5s;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.form .item .value .button:hover {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 620px) {
+    .form .item {
+        text-align: left;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form .item .label {
+        margin-right: 0;
+        text-align: left;
+    }
+
+    .form .item .value {
+        margin-top: 4px;
+        margin-left: 6px;
+        text-align: left;
+    }
+}

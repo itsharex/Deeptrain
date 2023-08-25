@@ -12,7 +12,7 @@ function login() {
   router.push("/login");
 }
 
-function i18n() {
+function toggleI18n() {
   if (locale.value === "en") {
     locale.value = "zh";
   } else {
@@ -30,7 +30,7 @@ function i18n() {
         <span class="en">Deeptrain Team</span>
       </div>
       <div style="flex-grow: 1" />
-      <div class="i18n" @click="i18n"><world /></div>
+      <div class="i18n" @click="toggleI18n"><world /></div>
       <div class="login" @click="login">{{ t("login") }}</div>
     </header>
     <div class="container">

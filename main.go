@@ -46,7 +46,7 @@ func main() {
 		app.GET("/info", auth.InfoView)
 		app.POST("/mail/send", auth.EmailLoginView)
 		app.POST("/mail/verify", auth.EmailLoginVerifyView)
-		app.POST("/oauth/list", oauth.ListView)
+		app.GET("/oauth/list", oauth.ListView)
 		app.GET("/oauth/github/preflight", oauth.GithubPreFlightView)
 		app.GET("/oauth/github/connect", oauth.GithubConnectView)
 		app.POST("/oauth/github/register", oauth.GithubRegisterView)

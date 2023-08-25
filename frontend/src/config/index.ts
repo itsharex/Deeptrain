@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ref, watch } from "vue";
 
-export const deploy: boolean = true;
+export const deploy: boolean = false;
 export const language = ref(localStorage.getItem("language") || "zh");
 export let backend_url: string = "http://localhost:8080/";
 if (deploy) backend_url = "https://api.deeptrain.net/";

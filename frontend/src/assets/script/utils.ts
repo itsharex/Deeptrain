@@ -1,6 +1,7 @@
 import type { Ref } from "vue";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import type { FormInstance } from "element-plus";
+import { language } from "@/config";
 
 function convertNode(el: Ref<HTMLElement> | HTMLElement): HTMLElement {
   return el instanceof HTMLElement ? el : el.value;
@@ -60,4 +61,13 @@ export async function validateForm(
   return new Promise((resolve) => {
     form.validate((valid) => resolve(valid));
   });
+}
+
+export function syncRefs(target: Ref<any>, source: Ref<any>) {
+  target.value = source.value;
+  watch(source, (val) => (target.value = val));
+}
+
+export function syncLangRef(locale: Ref<string>) {
+  syncRefs(locale, language);
 }

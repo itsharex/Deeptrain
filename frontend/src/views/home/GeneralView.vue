@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { backend_url, language } from "@/config";
+import { backend_url } from "@/config";
 import { username } from "@/assets/script/global";
 import Key from "@/components/icons/home/key.vue";
 import DateIcon from "@/components/icons/home/date.vue";
@@ -11,9 +11,10 @@ import { useI18n } from "vue-i18n";
 import ChangeEmailDialog from "@/views/dialog/ChangeEmailDialog.vue";
 import ChangePasswordDialog from "@/views/dialog/ChangePasswordDialog.vue";
 import { getWithCache } from "@/assets/script/cache";
+import { syncLangRef } from "@/assets/script/utils";
 
 const { t, locale } = useI18n();
-locale.value = language.value;
+syncLangRef(locale);
 
 function formatDate(time: string | Date, offset: boolean = true): string {
   const now = new Date(),
@@ -250,6 +251,8 @@ getWithCache("info").then((res) => {
 }
 </i18n>
 <style scoped>
+@import "@/assets/style/home.css";
+
 .image {
   width: calc(100% + 40px);
   height: 295px;
@@ -385,120 +388,14 @@ getWithCache("info").then((res) => {
   width: 100%;
   flex-direction: row;
   align-items: flex-start;
-  padding: 6px;
+  padding: 8px 10px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   animation-delay: 0.75s;
 }
 
-.form {
-  width: 100%;
-  margin: 0 16px;
-}
-
-.form .title {
-  margin-bottom: 16px;
-}
-
-.form .title span {
-  font-size: 24px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  user-select: none;
-}
-
-.form .title:before {
-  content: "";
-  display: inline-block;
-  top: 4px;
-  left: -2px;
-  width: 4px;
-  height: 24px;
-  background: #409eff;
-  margin-right: 8px;
-  border-radius: 2px;
-  user-select: none;
-}
-
-.form .item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.form .item svg {
-  width: 24px;
-  height: 24px;
-  transform: translateY(6px);
-  fill: rgba(255, 255, 255, 0.85);
-  user-select: none;
-  white-space: nowrap;
-  flex-shrink: 1;
-}
-
-.form .item .label {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
-  margin-right: 16px;
-  width: 100px;
-  user-select: none;
-  white-space: nowrap;
-}
-
-.form .item .value {
-  display: flex;
-  flex-direction: row;
-  font-size: 16px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.75);
-  user-select: none;
-  white-space: nowrap;
-}
-
-.form .item .value span {
-  margin-right: 16px;
-  user-select: none;
-  white-space: nowrap;
-}
-
-.form .item .value .button {
-  font-size: 16px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: 0.5s;
-  user-select: none;
-  white-space: nowrap;
-}
-
-.form .item .value .button:hover {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
 @media (max-width: 620px) {
-  .form .item {
-    text-align: left;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .form .item .label {
-    margin-right: 0;
-    text-align: left;
-  }
-
-  .form .item .value {
-    margin-top: 4px;
-    margin-left: 6px;
-    text-align: left;
-  }
-
   .image .avatar {
     width: 86px;
     height: 86px;
