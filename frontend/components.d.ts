@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Check: typeof import('./src/components/icons/home/check.vue')['default']
     Date: typeof import('./src/components/icons/home/date.vue')['default']
     Edit: typeof import('./src/components/icons/home/edit.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
