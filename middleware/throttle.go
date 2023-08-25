@@ -27,15 +27,19 @@ func (l *Limiter) RateLimit(ctx context.Context, ip string, path string) bool {
 }
 
 var limits = map[string]Limiter{
-	"/login":    {Duration: 60, Count: 5},
-	"/register": {Duration: 60, Count: 5},
-	"/reset":    {Duration: 600, Count: 3},
-	"/verify":   {Duration: 60, Count: 3},
-	"/resend":   {Duration: 60, Count: 1},
-	"/state":    {Duration: 1, Count: 5},
-	"/info":     {Duration: 1, Count: 2},
-	"/settings": {Duration: 600, Count: 12},
-	"/user":     {Duration: 1, Count: 2},
+	"/login":       {Duration: 60, Count: 5},
+	"/register":    {Duration: 60, Count: 5},
+	"/reset":       {Duration: 600, Count: 3},
+	"/verify":      {Duration: 60, Count: 3},
+	"/mail/send":   {Duration: 60, Count: 3},
+	"/mail/verify": {Duration: 60, Count: 10},
+	"/resend":      {Duration: 60, Count: 1},
+	"/state":       {Duration: 1, Count: 5},
+	"/info":        {Duration: 1, Count: 2},
+	"/settings":    {Duration: 600, Count: 12},
+	"/user":        {Duration: 1, Count: 2},
+	"/oauth":       {Duration: 10, Count: 25},
+	"/avatar":      {Duration: 1, Count: 5},
 }
 
 func ThrottleMiddleware() gin.HandlerFunc {

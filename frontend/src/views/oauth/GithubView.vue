@@ -6,7 +6,7 @@ import { reactive, ref } from "vue";
 import { RouterLink } from "vue-router";
 import type { FormInstance, FormRules } from "element-plus";
 import { token, validateEmail } from "@/assets/script/user";
-import { refreshState } from "@/assets/script/global";
+import { refreshState, state } from "@/assets/script/global";
 import { app } from "@/assets/script/allauth";
 import router from "@/router";
 import { validateForm } from "@/assets/script/utils";
@@ -30,7 +30,7 @@ const rules = reactive<FormRules>({
   ],
 });
 
-axios.get("oauth/github/preflight?code=" + code)
+if (state.value !== 2) axios.get("oauth/github/preflight?code=" + code)
   .then((res) => {
     if (!res.data.status) {
       ElMessage({
@@ -61,6 +61,32 @@ axios.get("oauth/github/preflight?code=" + code)
         },
       });
     }
+  })
+  .catch((err) => {
+    ElMessage({
+      message: t("network-error"),
+      type: "error",
+    });
+    console.debug(err);
+  });
+else axios.get("oauth/github/connect?code=" + code)
+  .then((res) => {
+    if (!res.data.status) {
+      ElMessage({
+        message: res.data.error,
+        type: "error",
+      });
+      setTimeout(() => router.push("/home"), 500);
+      return
+    }
+
+    ElNotification.success({
+      title: t("bind-succeeded"),
+      message: t("bind-success-message"),
+      showClose: false,
+    });
+
+    setTimeout(() => router.push("/home"), 500);
   })
   .catch((err) => {
     ElMessage({
@@ -125,6 +151,8 @@ async function register() {
     "register-success-message": "Welcome to Deeptrain, {username}!",
     "login-succeeded": "Login succeeded",
     "login-success-message": "Welcome back, {username}!",
+    "bind-succeeded": "Bind succeeded",
+    "bind-success-message": "Successfully binded acoount!",
     "user.email-format-error": "The format of the email is incorrect",
     "user.email-format-unsupported": "Please use a supported email suffix"
   },
@@ -139,6 +167,8 @@ async function register() {
     "register-success-message": "欢迎来到 Deeptrain，{username}！",
     "login-succeeded": "登录成功",
     "login-success-message": "欢迎回来，{username}！",
+    "bind-succeeded": "绑定成功",
+    "bind-success-message": "成功绑定账号！",
     "user.email-format-error": "邮箱格式不正确",
     "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀"
   }

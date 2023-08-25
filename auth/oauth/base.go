@@ -14,6 +14,8 @@ type OUser struct {
 	CreatedAt  time.Time
 }
 
+var Providers = []string{"github"}
+
 func IsOAuthExist(db *sql.DB, provider string, providerID int) bool {
 	var count int
 	err := db.QueryRow("SELECT COUNT(*) FROM oauth WHERE provider = ? AND provider_id = ?", provider, providerID).Scan(&count)
@@ -54,4 +56,40 @@ func GetUserFromOAuth(db *sql.DB, provider string, providerID int) *auth.User {
 	}
 
 	return &instance
+}
+
+func IsUserConnected(db *sql.DB, userID int, provider string) bool {
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM oauth WHERE user_id = ? AND provider = ?", userID, provider).Scan(&count)
+	if err != nil {
+		return false
+	}
+	return count > 0
+}
+
+func ListUserOAuth(db *sql.DB, userID int) map[string]map[string]interface{} {
+	var data map[string]map[string]interface{}
+	for _, provider := range Providers {
+		rows, err := db.Query("SELECT provider_id, created_at FROM oauth WHERE user_id = ? AND provider = ?", userID, provider)
+		if err != nil {
+			continue
+		}
+		for rows.Next() {
+			instance := OUser{}
+			err := rows.Scan(&instance.ProviderID, &instance.CreatedAt)
+			if err != nil {
+				data[provider] = map[string]interface{}{
+					"bind": false,
+				}
+			}
+
+			data[provider] = map[string]interface{}{
+				"bind": true,
+				"id":   instance.ProviderID,
+				"date": instance.CreatedAt,
+			}
+		}
+	}
+
+	return data
 }

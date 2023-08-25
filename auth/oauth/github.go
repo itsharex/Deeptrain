@@ -24,7 +24,7 @@ type GithubUser struct {
 	Email     string `json:"email"`
 }
 
-func Validate(code string) string {
+func ValidateGithubAPI(code string) string {
 	uri := fmt.Sprintf("%s/login/oauth/access_token", viper.GetString("oauth.github.endpoint"))
 	data, err := utils.PostForm(utils.PostFormRequest{
 		Uri:    uri,
@@ -131,7 +131,7 @@ func GithubPreFlightView(c *gin.Context) {
 		return
 	}
 
-	token := Validate(code)
+	token := ValidateGithubAPI(code)
 	if token == "" {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid code"})
 		return
@@ -173,4 +173,48 @@ func GithubPreFlightView(c *gin.Context) {
 		"username": user.Login,
 		"register": true,
 	})
+}
+
+func GithubConnectView(c *gin.Context) {
+	username := c.MustGet("user").(string)
+	code := strings.TrimSpace(c.Query("code"))
+
+	if username == "" || code == "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid token"})
+		return
+	}
+
+	token := ValidateGithubAPI(code)
+	if token == "" {
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid code"})
+		return
+	}
+
+	i := GetInfo(token)
+	if i == nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid token"})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	user := &auth.User{Username: username}
+
+	if IsUserConnected(db, user.GetID(db), "github") {
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": "The account is already connected"})
+		return
+	}
+
+	if IsOAuthExist(db, "github", i.Id) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": "The account is already connected"})
+		return
+	}
+
+	_, err := db.Exec("INSERT INTO oauth (user_id, provider, provider_id) VALUES (?, ?, ?)", user.GetID(db), "github", i.Id)
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": "internal error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true})
 }
