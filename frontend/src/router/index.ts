@@ -98,7 +98,7 @@ router.beforeEach(async (to) => {
   if (auth_pages.includes(to.path)) app.guard();
   if (auth_pages.includes(to.path) && state.value === 1)
     return await router.push("/verify");
-  if (auth_pages.includes(to.path) && state.value === 2)
+  if ((auth_pages.includes(to.path) && !to.path.startsWith("/oauth")) && state.value === 2)
     return await router.push("/home");
   if (to.path === "/logout" && state.value !== 2) return await router.push("/");
   if (to.path === "/verify" && state.value !== 1) return await router.push("/");

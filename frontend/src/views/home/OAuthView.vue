@@ -6,9 +6,11 @@ import { syncLangRef } from "@/assets/script/utils";
 import Github from "@/components/icons/github.vue";
 import { oauth } from "@/config";
 import Check from "@/components/icons/home/check.vue";
+import Google from "@/components/icons/google.vue";
 
 const info = ref({
-  "github": {bind: false},
+  "github": false,
+  "google": false,
 });
 const { t, locale } = useI18n();
 syncLangRef(locale);
@@ -33,8 +35,17 @@ getWithCache("oauth/list").then((resp) => {
         <div class="name">Github</div>
         <div class="grow" />
         <div class="state">
-          <check v-if="info['github'].bind" />
+          <check v-if="info['github']" />
           <a :href="oauth.github_url" v-else>{{ t('bind') }}</a>
+        </div>
+      </div>
+      <div class="app">
+        <div class="logo"><google /></div>
+        <div class="name">Google</div>
+        <div class="grow" />
+        <div class="state">
+          <check v-if="info['google']" />
+          <a :href="oauth.google_url" v-else>{{ t('bind') }}</a>
         </div>
       </div>
     </div>
@@ -85,7 +96,7 @@ getWithCache("oauth/list").then((resp) => {
 
 .name {
   margin-left: 8px;
-  font-size: 18px;
+  font-size: 16px;
   color: #fff;
 }
 

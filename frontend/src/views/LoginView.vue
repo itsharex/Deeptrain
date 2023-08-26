@@ -198,6 +198,7 @@ app.set();
         <el-divider />
         <div class="oauth">
           <o-link :uri="oauth.github_url"><github /></o-link>
+          <o-link :uri="oauth.google_url"><google /></o-link>
         </div>
         <div class="prompt-box">
           <RouterLink to="/mail">{{ t("mail-login") }}</RouterLink>

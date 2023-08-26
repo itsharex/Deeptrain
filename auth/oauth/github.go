@@ -3,13 +3,10 @@ package oauth
 import (
 	"deeptrain/auth"
 	"deeptrain/utils"
-	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
-	"strings"
-	"time"
 )
 
 type GithubRegisterForm struct {
@@ -45,17 +42,14 @@ func ValidateGithubAPI(code string) string {
 	return token
 }
 
-func GetInfo(token string) *GithubUser {
+func GetGithubInfo(token string) *GithubUser {
 	uri := fmt.Sprintf("%s/user", viper.GetString("oauth.github.api_endpoint"))
 	data, err := utils.Get(uri, map[string]string{"Authorization": fmt.Sprintf("token %s", token)})
 	if err != nil {
 		return nil
 	}
-	var user GithubUser
-	if err := utils.MapToStruct(data, &user); err != nil {
-		return nil
-	}
-	return &user
+
+	return AsStruct[GithubUser](data)
 }
 
 func GithubRegisterView(c *gin.Context) {
@@ -70,62 +64,23 @@ func GithubRegisterView(c *gin.Context) {
 		return
 	}
 
-	cache := utils.GetCacheFromContext(c)
-	data, err := cache.Get(c, fmt.Sprintf("oauth:github:%s", form.Code)).Result()
-	if err != nil || data == "" {
+	user := GetPreflightCode[GithubUser](c, "github", form.Code)
+	if user == nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid code"})
 		return
 	}
 
-	var user GithubUser
-	if err := json.Unmarshal([]byte(data), &user); err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid code"})
-		return
-	}
-
-	db := utils.GetDBFromContext(c)
-	if auth.IsEmailExists(db, form.Email) {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "The email is already registered"})
-		return
-	}
-
-	if auth.IsUserExists(db, user.Login) {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "The username is already registered"})
-		return
-	}
-
-	raw := utils.GenerateChar(16)
-	hash := utils.Sha2Encrypt(raw)
-
-	instance := &auth.User{
-		Username: user.Login,
-		Password: hash,
-		Email:    form.Email,
-		Active:   false,
-	}
-
-	instance.Save(db)
-	id := instance.GetID(db)
-
-	_, err = db.Exec("INSERT INTO oauth (user_id, provider, provider_id) VALUES (?, ?, ?)", id, "github", user.Id)
+	instance, err := CreateUser(c, "github", user.Login, form.Email, form.Code, user.Id)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "internal error"})
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": err.Error()})
 		return
 	}
-
-	cache.Del(c, fmt.Sprintf("oauth:github:%s", form.Code))
-
-	code := utils.GenerateCode(6)
-	cache.Set(c, fmt.Sprintf(":verify:%s", user.Login), code, 30*time.Minute)
-	cache.Set(c, fmt.Sprintf(":mailrate:%s", form.Email), "1", 1*time.Minute)
-	go auth.SendVerifyMail(form.Email, code)
-	go auth.SaveAvatar(user.Login)
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken()})
 }
 
 func GithubPreFlightView(c *gin.Context) {
-	code := strings.TrimSpace(c.Query("code"))
+	code := GetCode(c)
 	if code == "" {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": "code is required"})
 		return
@@ -137,47 +92,18 @@ func GithubPreFlightView(c *gin.Context) {
 		return
 	}
 
-	user := GetInfo(token)
+	user := GetGithubInfo(token)
 	if user == nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid token"})
 		return
 	}
 
-	db := utils.GetDBFromContext(c)
-	if IsOAuthExist(db, "github", user.Id) {
-		// login
-		instance := GetUserFromOAuth(db, "github", user.Id)
-		c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken(), "username": instance.Username, "register": false})
-		return
-	}
-
-	cache := utils.GetCacheFromContext(c)
-	data, err := json.Marshal(user)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "internal error"})
-		return
-	}
-	if err := cache.Set(c, fmt.Sprintf("oauth:github:%s", code), data, time.Minute*5).Err(); err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "internal error"})
-		return
-	}
-
-	if auth.IsUserExists(db, user.Login) {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "The username is already registered"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"status":   true,
-		"email":    user.Email,
-		"username": user.Login,
-		"register": true,
-	})
+	PreflightUser(c, user, "github", user.Login, user.Email, code, user.Id)
 }
 
 func GithubConnectView(c *gin.Context) {
 	username := c.MustGet("user").(string)
-	code := strings.TrimSpace(c.Query("code"))
+	code := GetCode(c)
 
 	if username == "" || code == "" {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid token"})
@@ -190,29 +116,15 @@ func GithubConnectView(c *gin.Context) {
 		return
 	}
 
-	i := GetInfo(token)
+	i := GetGithubInfo(token)
 	if i == nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": "invalid token"})
 		return
 	}
 
-	db := utils.GetDBFromContext(c)
-	user := &auth.User{Username: username}
-
-	if IsUserConnected(db, user.GetID(db), "github") {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "The account is already connected"})
-		return
-	}
-
-	if IsOAuthExist(db, "github", i.Id) {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "The account is already connected"})
-		return
-	}
-
-	_, err := db.Exec("INSERT INTO oauth (user_id, provider, provider_id) VALUES (?, ?, ?)", user.GetID(db), "github", i.Id)
-
+	err := ConnectUser(c, "github", username, i.Id)
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": "internal error"})
+		c.JSON(http.StatusOK, gin.H{"status": false, "error": err.Error()})
 		return
 	}
 

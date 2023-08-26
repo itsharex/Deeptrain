@@ -21,3 +21,15 @@ func GenerateChar(length int) string {
 	}
 	return string(result)
 }
+
+func GenerateCharWithCharset(length int, charset string) string {
+	result := make([]byte, length)
+	for i := 0; i < length; i++ {
+		result[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(result)
+}
+
+func GenerateCharWithSha256(length int) string {
+	return Sha2Encrypt(GenerateChar(length))
+}

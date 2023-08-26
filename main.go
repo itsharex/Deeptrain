@@ -46,10 +46,6 @@ func main() {
 		app.GET("/info", auth.InfoView)
 		app.POST("/mail/send", auth.EmailLoginView)
 		app.POST("/mail/verify", auth.EmailLoginVerifyView)
-		app.GET("/oauth/list", oauth.ListView)
-		app.GET("/oauth/github/preflight", oauth.GithubPreFlightView)
-		app.GET("/oauth/github/connect", oauth.GithubConnectView)
-		app.POST("/oauth/github/register", oauth.GithubRegisterView)
 		app.POST("/settings/password", auth.ChangePasswordView)
 		app.POST("/settings/email", auth.ChangeEmailView)
 		app.POST("/settings/verify", auth.ChangeEmailVerifyView)
@@ -58,6 +54,7 @@ func main() {
 		app.POST("/avatar", auth.PostAvatarView)
 		app.POST("/pay/alipay/notify", pay.VerifyAliPayReturn)
 
+		oauth.Register(app)
 		allauth.Register(app)
 	}
 
