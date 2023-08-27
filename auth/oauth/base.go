@@ -7,11 +7,12 @@ import (
 )
 
 type OUser struct {
-	ID         int
-	UserID     int
-	Provider   string
-	ProviderID string
-	CreatedAt  time.Time
+	ID           int
+	UserID       int
+	Provider     string
+	ProviderID   string
+	ProviderName string
+	CreatedAt    time.Time
 }
 
 var Providers = []string{"github", "google"}
@@ -25,8 +26,8 @@ func IsOAuthExist(db *sql.DB, provider string, providerID int) bool {
 	return count > 0
 }
 
-func AddOAuthConnection(db *sql.DB, userID int, provider string, providerID int) error {
-	_, err := db.Exec("INSERT INTO oauth (user_id, provider, provider_id) VALUES (?, ?, ?)", userID, provider, providerID)
+func AddOAuthConnection(db *sql.DB, userID int, provider string, providerID int, providerName string) error {
+	_, err := db.Exec("INSERT INTO oauth (user_id, provider, provider_id, provider_name) VALUES (?, ?, ?, ?)", userID, provider, providerID, providerName)
 	return err
 }
 

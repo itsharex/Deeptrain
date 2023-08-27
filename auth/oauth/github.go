@@ -122,7 +122,7 @@ func GithubConnectView(c *gin.Context) {
 		return
 	}
 
-	err := ConnectUser(c, "github", username, i.Id)
+	err := ConnectUser(c, "github", username, i.Id, i.Login)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": err.Error()})
 		return

@@ -139,7 +139,7 @@ func GoogleConnectView(c *gin.Context) {
 		return
 	}
 
-	err := ConnectUser(c, "google", username, GetId(i.Id))
+	err := ConnectUser(c, "google", username, GetId(i.Id), GetUsername(i.Email))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "error": err.Error()})
 		return

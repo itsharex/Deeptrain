@@ -72,7 +72,7 @@ func CreateUser(c *gin.Context, provider string, username string, email string, 
 	instance.Save(db)
 	id := instance.GetID(db)
 
-	if err := AddOAuthConnection(db, id, provider, providerId); err != nil {
+	if err := AddOAuthConnection(db, id, provider, providerId, username); err != nil {
 		return nil, errors.New("internal error")
 	}
 
@@ -123,7 +123,7 @@ func PreflightUser(c *gin.Context, instance interface{}, provider string, userna
 	})
 }
 
-func ConnectUser(c *gin.Context, provider string, username string, providerId int) error {
+func ConnectUser(c *gin.Context, provider string, username string, providerId int, providerName string) error {
 	db := utils.GetDBFromContext(c)
 	user := &auth.User{Username: username}
 
@@ -135,7 +135,7 @@ func ConnectUser(c *gin.Context, provider string, username string, providerId in
 		return errors.New("the account has been connected to " + provider)
 	}
 
-	if err := AddOAuthConnection(db, user.GetID(db), provider, providerId); err != nil {
+	if err := AddOAuthConnection(db, user.GetID(db), provider, providerId, providerName); err != nil {
 		return errors.New("internal error")
 	}
 
