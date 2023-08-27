@@ -19,7 +19,7 @@
     当您使用深能科创的服务时，即表示您已同意本协议的全部内容，本协议即在您与深能科创之间产生法律效力，成为对双方均具有约束力的法律文件。
     <strong>如果您违反本协议，深能科创团队有权随时中止或终止您对深能科创软件的使用资格（包括但不限于冻结、封禁账号）并保留追究相关法律责任的权利。</strong><br><br>
 
-    Thank you very much for your support of Deeptrain (formerly known as Deeptrain), a subsidiary of Zhuhai LightXi Technology Co., Ltd. In order to safeguard your rights, please carefully read and agree to the "Deeptrain Software Service Terms" (hereinafter referred to as "these Terms") before using Deeptrain software.
+    Thank you very much for your support of Deeptrain, a subsidiary of Zhuhai LightXi Technology Co., Ltd. In order to safeguard your rights, please carefully read and agree to the "Deeptrain Software Service Terms" (hereinafter referred to as "these Terms") before using Deeptrain software.
     <br><br>
     In case of any ambiguity in language expression, the Simplified Chinese version shall prevail. Your use of Deeptrain software will be considered as your acceptance of all the contents of these Terms.
     <br><br>
@@ -129,7 +129,7 @@
     请您遵守 <a href="https://github.com/zmh-program/Deeptrain/blob/main/LICENSE" target="_blank">GPL-3.0</a> 协议，不得以任何方式侵犯深能科创团队或相关权利人的知识产权，不得以任何违反本条款的方式使用和分发深能科创的软件。<br><br>
     Please abide by the <a href="https://github.com/zmh-program/Deeptrain/blob/main/LICENSE" target="_blank">GPL-3.0</a> license and do not infringe upon the intellectual property rights of the Deeptrain team or relevant rights holders in any way. You must not use or distribute Deeptrain's software in any way that violates these Terms.<br><br>
 
-    <h3>联系我们 Contact Us</h3>
+    <h3 id="contact">联系我们 Contact Us</h3>
     如果您对本条款有任何疑问，可以通过以下方式联系我们：<br>
     If you have any questions about these Terms, you can contact us in the following ways:<br><br>
     &nbsp;&nbsp;&nbsp;&nbsp;- Github: <a href="https://github.com/deeptrain-community" target="_blank">Deeptrain Community</a> <br>
