@@ -22,6 +22,13 @@ type GoogleUser struct {
 	Picture  string `json:"picture"`
 }
 
+func GetRedirectUri() string {
+	if viper.GetBool("debug") {
+		return "http://localhost:5173/oauth/google"
+	}
+	return fmt.Sprintf("%s/oauth/google", viper.GetString("oauth.google.redirect_uri"))
+}
+
 func ValidateGoogleAPI(code string) string {
 	uri := fmt.Sprintf("%s/token", viper.GetString("oauth.google.endpoint"))
 	data, err := utils.PostForm(utils.PostFormRequest{
@@ -32,7 +39,7 @@ func ValidateGoogleAPI(code string) string {
 			"client_secret": viper.GetString("oauth.google.client_secret"),
 			"code":          code,
 			"grant_type":    "authorization_code",
-			"redirect_uri":  viper.GetString("oauth.google.redirect_uri"),
+			"redirect_uri":  GetRedirectUri(),
 		},
 	})
 

@@ -37,3 +37,24 @@ oauth:
         client_secret: ...
         endpoint: https://github.com
         api_endpoint: https://api.github.com
+
+    google:
+        # require release application
+        client_id: ...
+        client_secret: ...
+        endpoint: https://oauth2.googleapis.com
+        api_endpoint: https://www.googleapis.com
+        redirect_uri: https://deeptrain.net
+
+pay:
+    cert:
+        return_url: https://deeptrain.net/pay/cert/return
+
+    alipay:
+        is_prod: true
+        app_id: ...
+        return_url: https://deeptrain.net/pay/alipay/return
+        notify_url: https://api.deeptrain.net/pay/alipay/notify
+        aes_key: ...
+        public_key: ...
+        private_key: ...
