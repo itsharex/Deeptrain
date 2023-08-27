@@ -92,6 +92,8 @@ async function submit() {
 <i18n>
 {
   "en": {
+    "accept": "By registering, you agree to the",
+    "tos": "Terms of Service",
     "rule-username": "Please input username",
     "rule-username-length": "Length should be 3 to 24",
     "rule-email": "Please input email",
@@ -120,6 +122,8 @@ async function submit() {
     "en-dot": "."
   },
   "zh": {
+    "accept": "注册即代表您同意",
+    "tos": "《服务条款》",
     "rule-username": "请输入用户名",
     "rule-username-length": "长度应为 3 到 24",
     "rule-email": "请输入电子邮箱",
@@ -206,6 +210,7 @@ async function submit() {
               maxlength="46"
             />
           </el-form-item>
+          <div class="tos">{{ t('accept') }} <router-link to="/service">{{ t("tos") }}</router-link></div>
           <el-form-item prop="captcha">
             <gee-test id="register-captcha" v-model="captcha" />
           </el-form-item>
@@ -227,4 +232,19 @@ async function submit() {
 
 <style scoped>
 @import "@/assets/style/user.css";
+
+.tos {
+  margin-top: 16px;
+  text-align: center;
+  user-select: none;
+}
+
+.tos a {
+  background: none;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 </style>
