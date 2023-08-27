@@ -1,6 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { blockUtilSetup, state } from "@/assets/script/global";
 import { app } from "@/assets/script/allauth";
+import IndexView from "@/views/IndexView.vue";
+import LoginView from "@/views/LoginView.vue";
+import MailLoginView from "@/views/MailLoginView.vue";
+import VerifyView from "@/views/VerifyView.vue";
+import LogoutView from "@/views/LogoutView.vue";
+import ResetPassword from "@/views/ResetPassword.vue";
+import RegisterView from "@/views/RegisterView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,15 +15,31 @@ const router = createRouter({
     {
       path: "/",
       name: "index",
-      component: () => import("../views/IndexView.vue"),
+      component: IndexView,
       meta: {
         title: "Deeptrain",
       },
     },
     {
+      path: "/service",
+      name: "service",
+      component: () => import("../views/ServiceView.vue"),
+      meta: {
+        title: "Terms of Service | Deeptrain",
+      }
+    },
+    {
+      path: "/privacy",
+      name: "privacy",
+      component: () => import("../views/PrivacyView.vue"),
+      meta: {
+        title: "Privacy Policy | Deeptrain",
+      }
+    },
+    {
       path: "/register",
       name: "register",
-      component: () => import("../views/RegisterView.vue"),
+      component: RegisterView,
       meta: {
         title: "Sign up | Deeptrain",
       },
@@ -24,7 +47,7 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      component: () => import("../views/LoginView.vue"),
+      component: LoginView,
       meta: {
         title: "Sign in | Deeptrain",
       },
@@ -32,7 +55,7 @@ const router = createRouter({
     {
       path: "/mail",
       name: "mail",
-      component: () => import("../views/MailLoginView.vue"),
+      component: MailLoginView,
       meta: {
         title: "Sign in | Deeptrain",
       }
@@ -40,7 +63,7 @@ const router = createRouter({
     {
       path: "/verify",
       name: "verify",
-      component: () => import("../views/VerifyView.vue"),
+      component: VerifyView,
       meta: {
         title: "Verify | Deeptrain",
       },
@@ -48,7 +71,7 @@ const router = createRouter({
     {
       path: "/logout",
       name: "logout",
-      component: () => import("../views/LogoutView.vue"),
+      component: LogoutView,
       meta: {
         title: "Logout | Deeptrain",
       },
@@ -56,7 +79,7 @@ const router = createRouter({
     {
       path: "/forgot",
       name: "forgot",
-      component: () => import("../views/ResetPassword.vue"),
+      component: ResetPassword,
       meta: {
         title: "Reset password | Deeptrain",
       },

@@ -125,11 +125,12 @@ function toggleI18n() {
       </section>
     </div>
     <footer>
-      <a
-        class="copyright"
-        href="https://www.baidu.com/baidu?ie=utf-8&wd=%E7%8F%A0%E6%B5%B7%E5%B8%82%E6%99%9E%E4%BA%91%E4%BA%91%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8"
-        target="_blank"
-      >
+      <div class="nav">
+        <router-link to="/service" style="transform: translateY(1px)">{{ t("service") }}</router-link>
+        <div class="split">|</div>
+        <router-link to="/privacy">{{ t("privacy") }}</router-link>
+      </div>
+      <a href="https://lightxi.com" style="padding: 2px 0; transform: translateY(6px)" target="_blank">
         © 2023 {{ t("copyright") }}
       </a>
     </footer>
@@ -142,7 +143,9 @@ function toggleI18n() {
     "subtitle": "Committed to a better experience",
     "slogan": "Stay passionate and explore mountains and seas together.",
     "login": "Login",
-    "copyright": "LightXi Cloud Technology Co., Ltd.",
+    "service": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "copyright": "LightXi Inc.",
     "product": "",
     "team": "",
     "lightxi-cloud": "Stay passionate and explore mountains and seas together.",
@@ -157,7 +160,9 @@ function toggleI18n() {
     "subtitle": "致力于更好的体验",
     "slogan": "保持热爱，共赴山海。",
     "login": "登录账号",
-    "copyright": "珠海市晞云云科技有限公司",
+    "copyright": "晞云",
+    "service": "服务条款",
+    "privacy": "隐私政策",
     "product": "我们的产品",
     "team": "开源团队",
     "lightxi-cloud": "晞云云计算 - 保持热爱，共赴山海。",
@@ -515,18 +520,33 @@ section.white .line {
 
 footer {
   width: 100%;
-  height: 42px;
-  padding: 1px;
+  height: max-content;
+  padding: 24px 8px;
+  gap: 4px;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   justify-content: center;
   align-items: center;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   z-index: 1;
 }
 
-footer .copyright {
+.nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  user-select: none;
+}
+
+.split {
+  content: "|";
+  margin: 0 4px;
+  user-select: none;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+footer a {
   font-size: 14px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.75);
@@ -535,7 +555,7 @@ footer .copyright {
   text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
 }
 
-footer .copyright:hover {
+footer a:hover {
   color: #fff;
   background: none;
 }

@@ -1,0 +1,76 @@
+.service-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: max-content;
+    min-height: 50vh;
+    width: calc(100% - 78px);
+    margin: 32px auto;
+    padding: 4px 8px;
+    max-width: 780px;
+    user-select: none;
+}
+
+.service-container h1 {
+    text-align: center;
+    font-size: 22px;
+}
+
+.service-container h2 {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.service-container .el-divider {
+    --el-border-color: rgba(255, 255, 255, 0.1) !important;
+    margin-top: 8px;
+}
+
+h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    user-select: none;
+    margin: 2px 0 10px;
+}
+
+h3:before {
+    content: "";
+    display: inline-block;
+    top: 4px;
+    left: -2px;
+    width: 4px;
+    height: 24px;
+    background: #409eff;
+    margin-right: 8px;
+    border-radius: 2px;
+    user-select: none;
+}
+
+.service-container .date {
+    text-align: right;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-26px);
+    margin-right: 6px;
+}
+
+.service-container strong {
+    font-weight: bold;
+}
+
+.service-container a {
+    background: none;
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.service-container .sign {
+    display: flex;
+    flex-direction: column;
+    margin: 8px 6px 16px;
+    text-align: right;
+}
