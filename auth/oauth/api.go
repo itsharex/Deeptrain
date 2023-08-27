@@ -14,6 +14,10 @@ func Register(app *gin.Engine) {
 	app.GET("/oauth/github/preflight", GithubPreFlightView)
 	app.GET("/oauth/github/connect", GithubConnectView)
 	app.POST("/oauth/github/register", GithubRegisterView)
+
+	app.GET("/oauth/google/preflight", GooglePreFlightView)
+	app.GET("/oauth/google/connect", GoogleConnectView)
+	app.POST("/oauth/google/register", GoogleRegisterView)
 }
 
 func ListView(c *gin.Context) {

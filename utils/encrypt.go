@@ -8,11 +8,21 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"io"
+	"math/big"
 )
 
 func Sha2Encrypt(raw string) string {
 	hash := sha256.Sum256([]byte(raw))
 	return hex.EncodeToString(hash[:])
+}
+
+func Sha2EncryptToInt(raw string) int {
+	hash := Sha2Encrypt(raw)
+
+	i := new(big.Int)
+	i.SetString(hash, 16)
+
+	return int(i.Int64())
 }
 
 func Sha2Compare(raw, encrypted string) bool {

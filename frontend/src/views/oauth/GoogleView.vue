@@ -30,7 +30,7 @@ const rules = reactive<FormRules>({
   ],
 });
 
-if (state.value !== 2) axios.get("oauth/github/preflight?code=" + code)
+if (state.value !== 2) axios.get("oauth/google/preflight?code=" + code)
   .then((res) => {
     if (!res.data.status) {
       ElMessage({
@@ -69,7 +69,7 @@ if (state.value !== 2) axios.get("oauth/github/preflight?code=" + code)
     });
     console.debug(err);
   });
-else axios.get("oauth/github/connect?code=" + code)
+else axios.get("oauth/google/connect?code=" + code)
   .then((res) => {
     if (!res.data.status) {
       ElMessage({
@@ -98,7 +98,7 @@ else axios.get("oauth/github/connect?code=" + code)
 
 async function register() {
   if (await validateForm(element.value)) {
-    axios.post("oauth/github/register", {
+    axios.post("oauth/google/register", {
       code: code,
       username: form.username,
       email: form.email,
@@ -111,12 +111,6 @@ async function register() {
           });
           return
         }
-
-        ElNotification.success({
-          title: t("register-succeeded"),
-          message: t("register-success-message", { username: form.username }),
-          showClose: false,
-        });
 
         token.value = res.data.token;
         axios.defaults.headers.common["Authorization"] = token.value;

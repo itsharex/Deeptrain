@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -17,6 +18,14 @@ func AsStruct[T comparable](data interface{}) *T {
 		return nil
 	}
 	return &result
+}
+
+func GetId(id string) int {
+	if v, err := strconv.Atoi(id); err == nil {
+		return utils.Abs(v)
+	}
+
+	return utils.Abs(utils.Sha2EncryptToInt(id))
 }
 
 func GetPreflightCodeFromCache(c *gin.Context, provider string, code string) string {

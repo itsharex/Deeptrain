@@ -112,12 +112,6 @@ async function register() {
           return
         }
 
-        ElNotification.success({
-          title: t("register-succeeded"),
-          message: t("register-success-message", { username: form.username }),
-          showClose: false,
-        });
-
         token.value = res.data.token;
         axios.defaults.headers.common["Authorization"] = token.value;
         refreshState({

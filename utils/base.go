@@ -15,6 +15,13 @@ func Contains[T comparable](value T, slice []T) bool {
 	return false
 }
 
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
 func Sum[N int | float64](m []N) N {
 	total := N(0)
 	for _, v := range m {
