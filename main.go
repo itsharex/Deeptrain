@@ -54,6 +54,7 @@ func main() {
 		app.POST("/avatar", auth.PostAvatarView)
 		app.POST("/pay/alipay/notify", pay.VerifyAliPayReturn)
 
+		pay.Register(app)
 		oauth.Register(app)
 		allauth.Register(app)
 	}

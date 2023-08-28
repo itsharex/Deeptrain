@@ -29,6 +29,10 @@ func ConnectMySQL() *sql.DB {
 	// initialize model
 	initializeUserModel(DB)
 	initializeOAuthModel(DB)
+	initializeCertModel(DB)
+	initializePackageModel(DB)
+	initializePaymentModel(DB)
+	initializePaymentLogModel(DB)
 
 	return DB
 }
@@ -58,6 +62,74 @@ func initializeOAuthModel(DB *sql.DB) {
 		    provider VARCHAR(24) NOT NULL,
 		    provider_id VARCHAR(100) NOT NULL,
 		    provider_name VARCHAR(100) NOT NULL,
+		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		    FOREIGN KEY (user_id) REFERENCES auth(id)
+		)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func initializeCertModel(DB *sql.DB) {
+	_, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS cert (
+		    id INT AUTO_INCREMENT PRIMARY KEY,
+		    user_id INT NOT NULL UNIQUE,
+		    verify_id VARCHAR(100) NOT NULL,
+		    cert_name VARCHAR(100) NOT NULL,
+		    cert_number VARCHAR(480) NOT NULL,
+		    cert_type INT NOT NULL DEFAULT 0,
+		    cert_status BOOLEAN NOT NULL DEFAULT FALSE,
+		    birth_date DATE NOT NULL,
+		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		    FOREIGN KEY (user_id) REFERENCES auth(id)
+		)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func initializePackageModel(DB *sql.DB) {
+	_, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS package (
+		    id INT AUTO_INCREMENT PRIMARY KEY,
+		    user_id INT NOT NULL,
+		    package_name VARCHAR(100) NOT NULL,
+		    package_expire DATE NOT NULL,
+		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		    FOREIGN KEY (user_id) REFERENCES auth(id)
+		)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func initializePaymentModel(DB *sql.DB) {
+	_, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS payment (
+		    id INT AUTO_INCREMENT PRIMARY KEY,
+		    user_id INT NOT NULL,
+		    amount DECIMAL(10,2) NOT NULL,
+		    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		    FOREIGN KEY (user_id) REFERENCES auth(id)
+		)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func initializePaymentLogModel(DB *sql.DB) {
+	_, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS payment_log (
+		    id INT AUTO_INCREMENT PRIMARY KEY,
+		    user_id INT NOT NULL,
+		    amount DECIMAL(10,2) NOT NULL,
+		    payment_type INT NOT NULL DEFAULT 0,
+		    payment_status BOOLEAN NOT NULL DEFAULT FALSE,
 		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		    FOREIGN KEY (user_id) REFERENCES auth(id)
 		)

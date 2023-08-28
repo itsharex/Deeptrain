@@ -71,3 +71,16 @@ export function syncRefs(target: Ref<any>, source: Ref<any>) {
 export function syncLangRef(locale: Ref<string>) {
   syncRefs(locale, language);
 }
+
+export function copyClipboard(text: string) {
+  if (!navigator.clipboard) {
+    const input = document.createElement("input");
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    document.body.removeChild(input);
+  } else {
+    navigator.clipboard.writeText(text);
+  }
+}
