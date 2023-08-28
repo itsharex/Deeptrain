@@ -16,7 +16,7 @@ const mailSuffixes: string[] = [
   "outlook.com",
   "163.com",
   "qq.com",
-  "deeptrain.net",
+  "lightxi.com",
 ];
 
 const isCommonEmailSuffix = (suffix: string): boolean => {

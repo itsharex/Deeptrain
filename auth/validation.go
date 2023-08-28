@@ -11,7 +11,7 @@ var mailSuffixes = []string{
 	"outlook.com",
 	"163.com",
 	"qq.com",
-	"deeptrain.net",
+	"lightxi.com",
 }
 
 func ValidateUsername(username string) bool {
