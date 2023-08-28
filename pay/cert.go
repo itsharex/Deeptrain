@@ -58,7 +58,8 @@ func HideName(name string) string {
 }
 
 func HideNo(no string) string {
-	return no[:4] + "***********" + no[15:]
+	// 3705************01
+	return no[:4] + "************" + no[16:]
 }
 
 func GetBirthDate(no string) time.Time {
