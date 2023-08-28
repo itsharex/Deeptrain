@@ -129,6 +129,7 @@ func GetCertStateView(c *gin.Context) {
 		} else {
 			state = 1
 			link, _ = CreateCertRequest(id)
+			link = utils.GetQRCode(id, link)
 		}
 	}
 
@@ -138,4 +139,8 @@ func GetCertStateView(c *gin.Context) {
 		"no":    no,
 		"link":  link,
 	})
+}
+
+func GetCertQRCodeView(c *gin.Context) {
+	utils.GetQRCodeResponse(c, c.Query("id"))
 }

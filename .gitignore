@@ -8,6 +8,8 @@ deeptrain.exe
 
 storage/avatar/*
 !storage/avatar/.gitkeep
+storage/qrcode/*
+!storage/qrcode/.gitkeep
 
 # Backend (Django)
 backend/.idea

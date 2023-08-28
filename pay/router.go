@@ -6,4 +6,5 @@ func Register(app *gin.Engine) {
 	app.GET("/cert/refresh", RefreshCertView)
 	app.POST("/cert/request", RequestCertView)
 	app.GET("/cert/state", GetCertStateView)
+	app.GET("/cert/qrcode", GetCertQRCodeView)
 }

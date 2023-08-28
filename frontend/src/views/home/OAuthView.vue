@@ -5,7 +5,7 @@ import { getWithCache } from "@/assets/script/cache";
 import { useI18n } from "vue-i18n";
 import { copyClipboard, syncLangRef, validateForm } from "@/assets/script/utils";
 import Github from "@/components/icons/github.vue";
-import { oauth } from "@/config";
+import { backend_url, oauth } from "@/config";
 import Check from "@/components/icons/home/check.vue";
 import Google from "@/components/icons/google.vue";
 import type { FormInstance, FormRules } from "element-plus";
@@ -94,7 +94,15 @@ function refreshState(updater = true) {
   axios.get("cert/state")
     .then((resp) => {
       const data = resp.data;
+      const old_state = state.state;
       for (const key in data) state[key] = data[key];
+      if (old_state === 1 && state.state === 2) {
+        ElMessage({
+          type: "success",
+          message: "您已成功完成实名认证！",
+          showClose: false,
+        });
+      }
     })
     .catch((err) => {
       ElMessage({
@@ -105,41 +113,11 @@ function refreshState(updater = true) {
     });
 }
 
-function copy() {
-  copyClipboard(state.link);
-  ElMessage({
-    type: "success",
-    message: "已复制到剪贴板",
-    showClose: false,
-  });
-
-  dialog.value = false;
-}
-
-function goto() {
-  location.href = state.link;
-  dialog.value = false;
-}
-
 refreshState(false);
 setInterval(refreshState, 1000 * 10);
 </script>
 
 <template>
-  <el-dialog
-    v-model="dialog"
-    title="前往身份认证"
-    width="30%"
-    align-center
-  >
-    <span>您将前往支付宝进行身份认证，请注意，认证功能需要在手机端进行，如果您当前的设备为电脑端，请复制下方链接到手机端进行认证。</span>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="copy">我是电脑，复制链接</el-button>
-        <el-button type="primary" @click="goto">我是手机，前往认证</el-button>
-      </span>
-    </template>
-  </el-dialog>
   <div class="form cert">
     <div class="title"><span>{{ t('cert') }}</span></div>
     <el-form class="cert-form" ref="element" :model="form" :rules="rules" :label-position="'left'" label-width="80px" v-if="state.state === 0">
@@ -164,14 +142,14 @@ setInterval(refreshState, 1000 * 10);
           <el-tag type="success" v-else>已实名</el-tag>
         </el-descriptions-item>
       </el-descriptions>
-      <div class="privacy">
-        认证即代表您同意
-        <a href="https://render.alipay.com/p/yuyan/180020010001196791/preview.html?agreementId=AG00000132" target="_blank">
-          《支付宝实名认证隐私政策》
-        </a>
+      <div class="qrcode" v-if="state.state === 1">
+        <img :src="`${backend_url}cert/qrcode?id=${state.link}`" alt="二维码" />
+      </div>
+      <div class="privacy" v-if="state.state === 1">
+        请使用「<strong>支付宝</strong>」扫描二维码进行实名认证
       </div>
       <div class="cert-button" v-if="state.state === 1">
-        <el-button type="primary" @click="dialog = true">前往认证</el-button>
+        <el-button type="primary" @click="refreshState">刷新状态</el-button>
         <el-button type="primary" plain @click="state.state = 0">重新认证</el-button>
       </div>
     </el-card>
@@ -239,7 +217,27 @@ setInterval(refreshState, 1000 * 10);
 
 .privacy {
   width: max-content;
-  margin: 24px auto 12px;
+  max-width: calc(100% - 32px);
+  margin: 12px auto;
+  text-align: center;
+}
+
+.qrcode {
+  margin: 24px auto 4px;
+  max-width: calc(100% - 32px);
+  width: max-content;
+  height: max-content;
+}
+
+.qrcode img {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.privacy strong {
+  font-weight: bold;
+  color: #fff;
 }
 
 .privacy a {

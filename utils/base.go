@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"os"
 	"strings"
 	"time"
 )
@@ -118,4 +119,9 @@ func MapToStruct(m interface{}, s interface{}) error {
 		return err
 	}
 	return json.Unmarshal(b, s)
+}
+
+func FileExists(filepath string) bool {
+	_, err := os.Stat(filepath)
+	return err == nil || os.IsExist(err)
 }
