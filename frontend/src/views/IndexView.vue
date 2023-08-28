@@ -125,14 +125,20 @@ function toggleI18n() {
       </section>
     </div>
     <footer>
-      <div class="nav">
-        <router-link to="/service" style="transform: translateY(1px)">{{ t("service") }}</router-link>
-        <div class="split">|</div>
-        <router-link to="/privacy">{{ t("privacy") }}</router-link>
-      </div>
-      <a href="https://lightxi.com" style="padding: 2px 0; transform: translateY(6px)" target="_blank">
+      <a href="https://lightxi.com" style="padding: 2px 0" target="_blank">
         © 2023 {{ t("copyright") }}
       </a>
+      <div class="nav">
+        <router-link to="/service" style="transform: translateY(2px)">{{ t("service") }}</router-link>
+        <div class="split">|</div>
+        <router-link to="/privacy" style="transform: translateY(1px)">{{ t("privacy") }}</router-link>
+      </div>
+      <div class="gov">
+        <a href="https://beian.miit.gov.cn/" target="_blank">
+          <img src="https://lightxi.com/themes/web/mfQloud/assets/images/gov.webp" alt="">
+          粤ICP备2023066011号-1
+        </a>
+      </div>
     </footer>
   </main>
 </template>
@@ -323,6 +329,19 @@ section {
   border-radius: 50%;
   background: #1e1e20;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.gov img {
+  width: 14px;
+  height: 14px;
+  margin: 2px;
+  transform: translateY(4px);
+  transition: .25s;
+  opacity: 0.8;
+}
+
+.gov:hover img {
+  opacity: 1;
 }
 
 @keyframes LandingAnimation {

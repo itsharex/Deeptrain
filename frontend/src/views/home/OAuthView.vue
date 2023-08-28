@@ -91,7 +91,7 @@ async function submit() {
 function refreshState(updater = true) {
   if (state.state === 2) return;
   if (updater && state.state === 0) return;
-  axios.get("cert/state")
+  getWithCache("cert/state", 8)
     .then((resp) => {
       const data = resp.data;
       const old_state = state.state;
