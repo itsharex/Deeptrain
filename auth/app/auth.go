@@ -23,6 +23,12 @@ type EmailRequest struct {
 	Body    string `json:"body" required:"true"`
 }
 
+type CertRequest struct {
+	Access string `json:"password" required:"true"`
+	User   string `json:"user" required:"true"`
+	Hash   string `json:"hash" required:"true"`
+}
+
 func ValidateUserAPI(ctx *gin.Context) {
 	var req ValidateUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -104,5 +110,34 @@ func EmailAPI(ctx *gin.Context) {
 		"status": true,
 		"user":   req.User,
 		"email":  email,
+	})
+}
+
+func CertAPI(ctx *gin.Context) {
+	var req CertRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	if req.Access != viper.GetString("allauth.access") || !utils.Sha2Compare(req.User+viper.GetString("allauth.salt"), req.Hash) {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status": false,
+			"error":  "invalid access password",
+		})
+		return
+	}
+
+	db := utils.GetDBFromContext(ctx)
+	user := auth.User{
+		Username: req.User,
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"cert":   user.IsCert(db, ctx),
 	})
 }

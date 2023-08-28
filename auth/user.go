@@ -180,3 +180,19 @@ func (u *User) Validate(db *sql.DB, ctx context.Context) bool {
 	cache.Set(ctx, fmt.Sprintf(":validate:%s", u.Username), u.Password, 30*time.Minute)
 	return true
 }
+
+func (u *User) IsCert(db *sql.DB, ctx context.Context) bool {
+	cache := connection.Cache
+	cert, err := cache.Get(ctx, fmt.Sprintf(":cert:%s", u.Username)).Result()
+	if err == nil && len(cert) > 0 {
+		return cert == "true"
+	}
+
+	var status bool
+	err = db.QueryRow("SELECT cert_status FROM cert WHERE user_id = ?", u.GetID(db)).Scan(&status)
+	if err != nil || !status {
+		return false
+	}
+	cache.Set(ctx, fmt.Sprintf(":cert:%s", u.Username), "true", 5*time.Second)
+	return true
+}
