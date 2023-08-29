@@ -7,6 +7,7 @@ export {};
 
 declare module "@vue/runtime-core" {
   export interface GlobalComponents {
+    BoxLoader: typeof import("./src/components/BoxLoader.vue")["default"];
     Check: typeof import("./src/components/icons/home/check.vue")["default"];
     Date: typeof import("./src/components/icons/home/date.vue")["default"];
     Edit: typeof import("./src/components/icons/home/edit.vue")["default"];
@@ -14,8 +15,6 @@ declare module "@vue/runtime-core" {
     ElButton: typeof import("element-plus/es")["ElButton"];
     ElCard: typeof import("element-plus/es")["ElCard"];
     ElContainer: typeof import("element-plus/es")["ElContainer"];
-    ElDescriptions: typeof import("element-plus/es")["ElDescriptions"];
-    ElDescriptionsItem: typeof import("element-plus/es")["ElDescriptionsItem"];
     ElDialog: typeof import("element-plus/es")["ElDialog"];
     ElDivider: typeof import("element-plus/es")["ElDivider"];
     ElForm: typeof import("element-plus/es")["ElForm"];

@@ -44,6 +44,10 @@ var limits = map[string]Limiter{
 	"/cert/state":   {Duration: 10, Count: 8},
 	"/cert/request": {Duration: 60, Count: 10},
 	"/cert/qrcode":  {Duration: 1, Count: 5},
+	"/pay/create":   {Duration: 1, Count: 2},
+	"/pay/log":      {Duration: 1, Count: 2},
+	"/pay/amount":   {Duration: 1, Count: 2},
+	"/pay/trade":    {Duration: 1, Count: 2},
 }
 
 func ThrottleMiddleware() gin.HandlerFunc {

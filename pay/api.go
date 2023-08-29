@@ -14,6 +14,12 @@ type RequestCertForm struct {
 	Captcha auth.GeeTestRequest `json:"captcha" binding:"required"`
 }
 
+type RequestPayForm struct {
+	Amount float32 `json:"amount" binding:"required"`
+	Mobile bool    `json:"mobile"`
+	Type   string  `json:"type" binding:"required"`
+}
+
 func RequireAuthByCtx(c *gin.Context) *auth.User {
 	user := c.MustGet("user").(string)
 	if user == "" {
@@ -143,4 +149,51 @@ func GetCertStateView(c *gin.Context) {
 
 func GetCertQRCodeView(c *gin.Context) {
 	utils.GetQRCodeResponse(c, c.Query("id"))
+}
+
+func CreatePaymentView(c *gin.Context) {
+	var form RequestPayForm
+	if err := c.ShouldBindJSON(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	user := RequireAuthByCtx(c)
+	if user == nil {
+		return
+	}
+
+	if form.Amount < 0.01 || form.Amount > 20000 {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "invalid amount",
+		})
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	if form.Type == "alipay" {
+		url, err := NewAlipayOrder(db, user, form.Amount, form.Mobile)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"status": false,
+				"error":  err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status": true,
+			"url":    url,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": false,
+		"error":  "invalid payment type",
+	})
 }

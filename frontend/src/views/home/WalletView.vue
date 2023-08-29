@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import axios from "axios";
 import { useI18n } from "vue-i18n";
 import { syncLangRef } from "@/assets/script/utils";
 import Money from "@/components/icons/home/money.vue";
 import { reactive, ref } from "vue";
+import { mobile } from "@/assets/script/global";
+import { getWithCache } from "@/assets/script/cache";
 
 const { t, locale } = useI18n();
 syncLangRef(locale);
@@ -17,8 +20,77 @@ const form = reactive({
 const quickAmount = ref<number[]>([5, 10, 50, 100, 200, 500]);
 
 function pay(amount: number) {
-  console.log(amount);
+  axios
+    .post("pay/create", {
+      amount: amount,
+      type: form.type,
+      mobile: mobile.value,
+    })
+    .then((res) => {
+      const data = res.data;
+      if (!data.status) {
+        ElMessage({
+          message: data.error,
+          type: "error",
+        });
+        return;
+      }
+      location.href = data.url;
+    })
+    .catch((err) => {
+      ElMessage({
+        message: err.message,
+        type: "error",
+      });
+    });
 }
+
+function refreshAmount() {
+  getWithCache("pay/amount", 5)
+    .then((res) => {
+      const data = res.data;
+      if (!data.status) {
+        ElMessage({
+          message: data.error,
+          type: "error",
+        });
+        return;
+      }
+      balance.value = data.amount;
+    })
+    .catch((err) => {
+      ElMessage({
+        message: err.message,
+        type: "error",
+      });
+    });
+}
+
+function updatePagination(current = 1) {
+  getWithCache("pay/log?page=" + current, 5)
+    .then((res) => {
+      const data = res.data;
+      if (!data.status) {
+        ElMessage({
+          message: data.error,
+          type: "error",
+        });
+        return;
+      }
+      history.value = data.data;
+      historyPage.value = data.total;
+    })
+    .catch((err) => {
+      ElMessage({
+        message: err.message,
+        type: "error",
+      });
+    });
+}
+
+refreshAmount();
+updatePagination();
+setInterval(refreshAmount, 1000 * 6);
 </script>
 
 <template>
@@ -79,13 +151,28 @@ function pay(amount: number) {
         <el-table-column prop="order" :label="t('order')" />
         <el-table-column prop="time" :label="t('time')" />
         <el-table-column prop="amount" :label="t('amount')" />
-        <el-table-column prop="type" :label="t('type')" />
-        <el-table-column prop="state" :label="t('state')" />
+        <el-table-column prop="type" :label="t('type')">
+          <template #default="{ row }">
+            <span>
+              {{ t(`${row.type}`) }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="state" :label="t('state')">
+          <template #default="{ row }">
+            <el-tag
+              :type="row.state == true ? 'success' : 'warning'"
+              size="small"
+              >{{ t(`pay-${row.state}`) }}</el-tag
+            >
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         class="pagination"
         layout="prev, pager, next"
         :page-count="historyPage"
+        @current-change="updatePagination"
       />
     </el-card>
   </div>
@@ -106,7 +193,9 @@ function pay(amount: number) {
     "amount": "Amount",
     "type": "Type",
     "state": "State",
-    "no-data": "No Data"
+    "no-data": "No Data",
+    "pay-true": "Paid",
+    "pay-false": "Unpaid"
   },
   "zh": {
     "wallet": "钱包",
@@ -122,7 +211,9 @@ function pay(amount: number) {
     "amount": "金额",
     "type": "类型",
     "state": "状态",
-    "no-data": "暂无数据"
+    "no-data": "暂无数据",
+    "pay-true": "已支付",
+    "pay-false": "未支付"
   }
 }
 </i18n>

@@ -134,6 +134,14 @@ const router = createRouter({
         title: "Google OAuth | Deeptrain",
       },
     },
+    {
+      path: "/pay/alipay/return",
+      name: "pay_alipay_return",
+      component: () => import("../views/pay/AlipayCallbackView.vue"),
+      meta: {
+        title: "Alipay Trade | Deeptrain",
+      },
+    },
   ],
 });
 

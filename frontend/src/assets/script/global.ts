@@ -6,7 +6,13 @@ import { token } from "@/assets/script/user";
 
 export const state = ref(-1);
 export const ready = ref(false);
-export const mobile = ref(window.innerWidth < 768);
+export const mobile = ref(
+  window.innerWidth < 768 ||
+    ("navigator" in window &&
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      ))
+);
 export const username = ref("");
 
 window.addEventListener("load", refreshState);
@@ -38,5 +44,11 @@ export function blockUtilSetup(): Promise<void> {
 
 window.addEventListener(
   "resize",
-  () => (mobile.value = window.innerWidth < 768)
+  () =>
+    (mobile.value =
+      window.innerWidth < 768 ||
+      ("navigator" in window &&
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )))
 );

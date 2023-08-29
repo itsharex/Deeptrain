@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -69,6 +70,15 @@ func Min[N int | float64](m []N) N {
 	return min
 }
 
+func Fix(n int, length int) string {
+	// 000034
+	s := strconv.Itoa(n)
+	if len(s) >= length {
+		return s
+	}
+	return strings.Repeat("0", length-len(s)) + s
+}
+
 func GetPrefixArray(s string, p []string) string {
 	for _, v := range p {
 		if strings.HasPrefix(s, v) {
@@ -124,4 +134,12 @@ func MapToStruct(m interface{}, s interface{}) error {
 func FileExists(filepath string) bool {
 	_, err := os.Stat(filepath)
 	return err == nil || os.IsExist(err)
+}
+
+func ParseInt(s string, def int) int {
+	val, err := strconv.Atoi(s)
+	if err != nil {
+		return def
+	}
+	return val
 }
