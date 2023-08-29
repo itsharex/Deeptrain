@@ -210,7 +210,10 @@ async function submit() {
               maxlength="46"
             />
           </el-form-item>
-          <div class="tos">{{ t('accept') }} <router-link to="/service">{{ t("tos") }}</router-link></div>
+          <div class="tos">
+            {{ t("accept") }}
+            <router-link to="/service">{{ t("tos") }}</router-link>
+          </div>
           <el-form-item prop="captcha">
             <gee-test id="register-captcha" v-model="captcha" />
           </el-form-item>

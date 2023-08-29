@@ -4,7 +4,7 @@ import axios from "axios";
 type Cache = {
   expiration: number;
   data: any;
-}
+};
 
 const cache: { [key: string]: Cache } = {};
 
@@ -24,12 +24,20 @@ function existsCache(key: string): boolean {
   return false;
 }
 
-export function getWithCache(url: string, expiration?: number, config?: AxiosRequestConfig) : Promise<any> {
+export function getWithCache(
+  url: string,
+  expiration?: number,
+  config?: AxiosRequestConfig
+): Promise<any> {
   if (existsCache(url)) return Promise.resolve(getCache(url));
-  else return new Promise((resolve, reject) => {
-    axios.get(url, config).then((res) => {
-      setCache(url, res, expiration ?? 120);
-      resolve(res);
-    }).catch(reject);
-  });
+  else
+    return new Promise((resolve, reject) => {
+      axios
+        .get(url, config)
+        .then((res) => {
+          setCache(url, res, expiration ?? 120);
+          resolve(res);
+        })
+        .catch(reject);
+    });
 }

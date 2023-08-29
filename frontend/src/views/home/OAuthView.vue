@@ -3,7 +3,7 @@ import "axios";
 import { reactive, ref } from "vue";
 import { getWithCache } from "@/assets/script/cache";
 import { useI18n } from "vue-i18n";
-import { copyClipboard, syncLangRef, validateForm } from "@/assets/script/utils";
+import { syncLangRef, validateForm } from "@/assets/script/utils";
 import Github from "@/components/icons/github.vue";
 import { backend_url, oauth } from "@/config";
 import Check from "@/components/icons/home/check.vue";
@@ -16,8 +16,8 @@ import { mobile } from "@/assets/script/global";
 
 const captcha = ref<Geetest.Geetest | null>(null);
 const info = ref({
-  "github": false,
-  "google": false,
+  github: false,
+  google: false,
 });
 const { t, locale } = useI18n();
 syncLangRef(locale);
@@ -28,13 +28,12 @@ const state = reactive<Record<string, any>>({
   no: "",
   link: "",
 });
-const dialog = ref(false);
 
 const form = reactive({
   name: "",
   id: "",
   captcha: {},
-})
+});
 
 const element = ref<FormInstance>();
 const rules = reactive<FormRules>({
@@ -51,40 +50,43 @@ const rules = reactive<FormRules>({
 
 getWithCache("oauth/list").then((resp) => {
   const data = resp.data;
-  if (!data.status) ElMessage({
-    type: "error",
-    message: data.reason,
-    showClose: false,
-  });
+  if (!data.status)
+    ElMessage({
+      type: "error",
+      message: data.reason,
+      showClose: false,
+    });
   else info.value = data.data;
 });
 
 async function submit() {
   if (await validateForm(element.value)) {
     form.captcha = await getValidateUtilSuccess(captcha.value);
-    axios.post("cert/request", form)
-    .then((resp) => {
-      const data = resp.data;
-      if (!data.status) ElMessage({
-        type: "error",
-        message: data.error,
-        showClose: false,
+    axios
+      .post("cert/request", form)
+      .then((resp) => {
+        const data = resp.data;
+        if (!data.status)
+          ElMessage({
+            type: "error",
+            message: data.error,
+            showClose: false,
+          });
+        else {
+          state.state = 1;
+          state.name = form.name;
+          state.no = form.id;
+          state.link = data.uri;
+          console.debug("cert: ", state.link);
+        }
+      })
+      .catch((err) => {
+        ElMessage({
+          type: "error",
+          message: err.message,
+          showClose: false,
+        });
       });
-      else {
-        state.state = 1;
-        state.name = form.name;
-        state.no = form.id;
-        state.link = data.uri;
-        console.debug("cert: ", state.link);
-      }
-    })
-    .catch((err) => {
-      ElMessage({
-        type: "error",
-        message: err.message,
-        showClose: false,
-      });
-    });
   }
 }
 
@@ -119,8 +121,18 @@ setInterval(refreshState, 1000 * 10);
 
 <template>
   <div class="form cert">
-    <div class="title"><span>{{ t('cert') }}</span></div>
-    <el-form class="cert-form" ref="element" :model="form" :rules="rules" :label-position="'left'" label-width="80px" v-if="state.state === 0">
+    <div class="title">
+      <span>{{ t("cert") }}</span>
+    </div>
+    <el-form
+      class="cert-form"
+      ref="element"
+      :model="form"
+      :rules="rules"
+      :label-position="'left'"
+      label-width="80px"
+      v-if="state.state === 0"
+    >
       <el-form-item label="姓名" prop="name">
         <el-input v-model="form.name" maxlength="26" />
       </el-form-item>
@@ -134,8 +146,12 @@ setInterval(refreshState, 1000 * 10);
     </el-form>
     <el-card v-else class="cert-card">
       <el-descriptions title="认证信息" :column="mobile ? 1 : 2">
-        <el-descriptions-item label="认证姓名">{{ state.name }}</el-descriptions-item>
-        <el-descriptions-item label="身份证号">{{ state.no }}</el-descriptions-item>
+        <el-descriptions-item label="认证姓名">{{
+          state.name
+        }}</el-descriptions-item>
+        <el-descriptions-item label="身份证号">{{
+          state.no
+        }}</el-descriptions-item>
         <el-descriptions-item label="认证类型">个人认证</el-descriptions-item>
         <el-descriptions-item label="认证状态">
           <el-tag type="warning" v-if="state.state === 1">未认证</el-tag>
@@ -150,13 +166,17 @@ setInterval(refreshState, 1000 * 10);
       </div>
       <div class="cert-button" v-if="state.state === 1">
         <el-button type="primary" @click="refreshState">刷新状态</el-button>
-        <el-button type="primary" plain @click="state.state = 0">重新认证</el-button>
+        <el-button type="primary" plain @click="state.state = 0"
+          >重新认证</el-button
+        >
       </div>
     </el-card>
   </div>
-  <br>
+  <br />
   <div class="form allauth">
-    <div class="title"><span>{{ t("allauth") }}</span></div>
+    <div class="title">
+      <span>{{ t("allauth") }}</span>
+    </div>
     <div class="oauth">
       <div class="app">
         <div class="logo"><github /></div>
@@ -164,7 +184,7 @@ setInterval(refreshState, 1000 * 10);
         <div class="grow" />
         <div class="state">
           <check v-if="info['github']" />
-          <a :href="oauth.github_url" v-else>{{ t('bind') }}</a>
+          <a :href="oauth.github_url" v-else>{{ t("bind") }}</a>
         </div>
       </div>
       <div class="app">
@@ -173,7 +193,7 @@ setInterval(refreshState, 1000 * 10);
         <div class="grow" />
         <div class="state">
           <check v-if="info['google']" />
-          <a :href="oauth.google_url" v-else>{{ t('bind') }}</a>
+          <a :href="oauth.google_url" v-else>{{ t("bind") }}</a>
         </div>
       </div>
     </div>
@@ -212,7 +232,7 @@ setInterval(refreshState, 1000 * 10);
 .cert-card {
   width: calc(100% - 16px);
   user-select: none;
-  background: rgba(255, 255, 255, .05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .privacy {
@@ -266,7 +286,7 @@ setInterval(refreshState, 1000 * 10);
   height: max-content;
   padding: 8px 12px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, .05);
+  background: rgba(255, 255, 255, 0.05);
   cursor: pointer;
 }
 

@@ -52,6 +52,7 @@ func main() {
 		app.GET("/user/:username", auth.UserView)
 		app.GET("/avatar/:username", auth.GetAvatarView)
 		app.POST("/avatar", auth.PostAvatarView)
+		app.GET("/package/state", auth.PackageView)
 
 		pay.Register(app)
 		oauth.Register(app)

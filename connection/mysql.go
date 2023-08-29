@@ -111,8 +111,9 @@ func initializePaymentModel(DB *sql.DB) {
 	_, err := DB.Exec(`
 		CREATE TABLE IF NOT EXISTS payment (
 		    id INT AUTO_INCREMENT PRIMARY KEY,
-		    user_id INT NOT NULL,
+		    user_id INT NOT NULL UNIQUE,
 		    amount DECIMAL(10,2) NOT NULL,
+		    total_amount DECIMAL(12,2) NOT NULL,
 		    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		    FOREIGN KEY (user_id) REFERENCES auth(id)
 		)
@@ -127,8 +128,9 @@ func initializePaymentLogModel(DB *sql.DB) {
 		CREATE TABLE IF NOT EXISTS payment_log (
 		    id INT AUTO_INCREMENT PRIMARY KEY,
 		    user_id INT NOT NULL,
+		    order_id VARCHAR(100) NOT NULL UNIQUE,
 		    amount DECIMAL(10,2) NOT NULL,
-		    payment_type INT NOT NULL DEFAULT 0,
+		    payment_type VARCHAR(100) NOT NULL,
 		    payment_status BOOLEAN NOT NULL DEFAULT FALSE,
 		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		    FOREIGN KEY (user_id) REFERENCES auth(id)

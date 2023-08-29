@@ -7,5 +7,6 @@ func Register(router *gin.Engine) {
 	{
 		app.POST("/validate", ValidateUserAPI)
 		app.POST("/email", EmailAPI)
+		app.POST("/cert", CertAPI)
 	}
 }

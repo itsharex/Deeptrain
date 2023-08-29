@@ -9,7 +9,11 @@ const path = router.currentRoute;
 </script>
 
 <template>
-  <router-link class="tab" :to="props.to" :class="{ active: path.path === props.to }">
+  <router-link
+    class="tab"
+    :to="props.to"
+    :class="{ active: path.path === props.to }"
+  >
     <slot />
   </router-link>
 </template>

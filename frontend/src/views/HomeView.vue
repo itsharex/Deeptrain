@@ -7,6 +7,8 @@ import General from "@/components/icons/home/general.vue";
 import Tab from "@/components/Tab.vue";
 import Oauth from "@/components/icons/home/oauth.vue";
 import World from "@/components/icons/world.vue";
+import Gift from "@/components/icons/home/gift.vue";
+import Wallet from "@/components/icons/home/wallet.vue";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
@@ -43,6 +45,8 @@ function toggleI18n() {
         <div class="router">
           <Tab to="/home"><general /></Tab>
           <Tab to="/home/oauth"><oauth /></Tab>
+          <Tab to="/home/wallet"><wallet /></Tab>
+          <Tab to="/home/package"><gift /></Tab>
         </div>
         <el-card class="view">
           <router-view />

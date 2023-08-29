@@ -26,7 +26,7 @@ const router = createRouter({
       component: () => import("../views/ServiceView.vue"),
       meta: {
         title: "Terms of Service | Deeptrain",
-      }
+      },
     },
     {
       path: "/privacy",
@@ -34,7 +34,7 @@ const router = createRouter({
       component: () => import("../views/PrivacyView.vue"),
       meta: {
         title: "Privacy Policy | Deeptrain",
-      }
+      },
     },
     {
       path: "/register",
@@ -58,7 +58,7 @@ const router = createRouter({
       component: MailLoginView,
       meta: {
         title: "Sign in | Deeptrain",
-      }
+      },
     },
     {
       path: "/verify",
@@ -88,17 +88,32 @@ const router = createRouter({
       path: "/home",
       name: "home",
       component: () => import("../views/HomeView.vue"),
-      children: [{
-        path: "",
-        name: "home_index",
-        component: () => import("../views/home/GeneralView.vue"),
-        meta: { title: "Home | Deeptrain" },
-      }, {
-        path: "oauth",
-        name: "home_oauth",
-        component: () => import("../views/home/OAuthView.vue"),
-        meta: { title: "OAuth | Deeptrain" },
-      }],
+      children: [
+        {
+          path: "",
+          name: "home_index",
+          component: () => import("../views/home/GeneralView.vue"),
+          meta: { title: "Home | Deeptrain" },
+        },
+        {
+          path: "oauth",
+          name: "home_oauth",
+          component: () => import("../views/home/OAuthView.vue"),
+          meta: { title: "OAuth | Deeptrain" },
+        },
+        {
+          path: "wallet",
+          name: "home_wallet",
+          component: () => import("../views/home/WalletView.vue"),
+          meta: { title: "Wallet | Deeptrain" },
+        },
+        {
+          path: "package",
+          name: "home_package",
+          component: () => import("../views/home/PackageView.vue"),
+          meta: { title: "Package | Deeptrain" },
+        },
+      ],
       meta: {
         title: "Home | Deeptrain",
       },
@@ -117,8 +132,8 @@ const router = createRouter({
       component: () => import("../views/oauth/GoogleView.vue"),
       meta: {
         title: "Google OAuth | Deeptrain",
-      }
-    }
+      },
+    },
   ],
 });
 
@@ -129,11 +144,16 @@ router.beforeEach(async (to) => {
   if (auth_pages.includes(to.path)) app.guard();
   if (auth_pages.includes(to.path) && state.value === 1)
     return await router.push("/verify");
-  if ((auth_pages.includes(to.path) && !to.path.startsWith("/oauth")) && state.value === 2)
+  if (
+    auth_pages.includes(to.path) &&
+    !to.path.startsWith("/oauth") &&
+    state.value === 2
+  )
     return await router.push("/home");
   if (to.path === "/logout" && state.value !== 2) return await router.push("/");
   if (to.path === "/verify" && state.value !== 1) return await router.push("/");
-  if (to.path.startsWith("/home") && state.value !== 2) return await router.push("/");
+  if (to.path.startsWith("/home") && state.value !== 2)
+    return await router.push("/");
 
   if (to.meta.title) document.title = to.meta.title as string;
 });

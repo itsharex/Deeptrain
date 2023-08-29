@@ -36,4 +36,7 @@ export function blockUtilSetup(): Promise<void> {
   else return Promise.resolve();
 }
 
-window.addEventListener("resize", () => (mobile.value = window.innerWidth < 768));
+window.addEventListener(
+  "resize",
+  () => (mobile.value = window.innerWidth < 768)
+);

@@ -137,7 +137,8 @@ func CertAPI(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"status": true,
-		"cert":   user.IsCert(db, ctx),
+		"status":   true,
+		"cert":     user.IsCert(db, ctx),
+		"teenager": user.IsTeenager(db, ctx),
 	})
 }

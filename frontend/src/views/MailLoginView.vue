@@ -229,11 +229,7 @@ setInterval(() => {
             <el-input v-model="form.email" />
           </el-form-item>
           <el-form-item class="inline" :label="t('code')" prop="code">
-            <el-input
-              v-model="form.code"
-              :minlength="6"
-              :maxlength="6"
-            />
+            <el-input v-model="form.code" :minlength="6" :maxlength="6" />
             <el-button @click="post" :disabled="exp.length > 0">
               {{ t("send") }} {{ exp }}
             </el-button>
@@ -242,8 +238,8 @@ setInterval(() => {
             <gee-test id="register-captcha" v-model="captcha" />
           </el-form-item>
           <el-button class="validate-button" @click="submit">{{
-              t("sign-in")
-            }}</el-button>
+            t("sign-in")
+          }}</el-button>
         </el-form>
         <el-divider />
         <div class="oauth">

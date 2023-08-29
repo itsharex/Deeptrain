@@ -19,7 +19,8 @@ export namespace sitekey {
 
 export namespace oauth {
   export const github: string = "5d47a861704423cb30a9";
-  export const google: string = "767514888852-vvtu4bve0l5u98klpofcliod33lug6fh.apps.googleusercontent.com";
+  export const google: string =
+    "767514888852-vvtu4bve0l5u98klpofcliod33lug6fh.apps.googleusercontent.com";
 
   export const github_url: string = `https://github.com/login/oauth/authorize?scope=user:email&client_id=${github}`;
   export const google_url: string = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=${callback_url}oauth/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email&client_id=${google}`;

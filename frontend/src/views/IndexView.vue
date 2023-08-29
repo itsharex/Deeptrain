@@ -129,13 +129,20 @@ function toggleI18n() {
         © 2023 {{ t("copyright") }}
       </a>
       <div class="nav">
-        <router-link to="/service" style="transform: translateY(2px)">{{ t("service") }}</router-link>
+        <router-link to="/service" style="transform: translateY(2px)">{{
+          t("service")
+        }}</router-link>
         <div class="split">|</div>
-        <router-link to="/privacy" style="transform: translateY(1px)">{{ t("privacy") }}</router-link>
+        <router-link to="/privacy" style="transform: translateY(1px)">{{
+          t("privacy")
+        }}</router-link>
       </div>
       <div class="gov">
         <a href="https://beian.miit.gov.cn/" target="_blank">
-          <img src="https://lightxi.com/themes/web/mfQloud/assets/images/gov.webp" alt="">
+          <img
+            src="https://lightxi.com/themes/web/mfQloud/assets/images/gov.webp"
+            alt=""
+          />
           粤ICP备2023066011号-1
         </a>
       </div>
@@ -336,7 +343,7 @@ section {
   height: 14px;
   margin: 2px;
   transform: translateY(4px);
-  transition: .25s;
+  transition: 0.25s;
   opacity: 0.8;
 }
 

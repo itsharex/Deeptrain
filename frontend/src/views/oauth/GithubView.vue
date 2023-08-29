@@ -21,95 +21,105 @@ const preflight = ref(false);
 const form = reactive({
   username: "",
   email: "",
-})
+});
 
 const rules = reactive<FormRules>({
   email: [
-    { type: "email", required: true, message: t("rule-email"), trigger: "blur", },
+    {
+      type: "email",
+      required: true,
+      message: t("rule-email"),
+      trigger: "blur",
+    },
     { validator: validateEmail(t), trigger: "change" },
   ],
 });
 
-if (state.value !== 2) axios.get("oauth/github/preflight?code=" + code)
-  .then((res) => {
-    if (!res.data.status) {
+if (state.value !== 2)
+  axios
+    .get("oauth/github/preflight?code=" + code)
+    .then((res) => {
+      if (!res.data.status) {
+        ElMessage({
+          message: res.data.error,
+          type: "error",
+        });
+        setTimeout(() => router.push("/login"), 500);
+        return;
+      }
+
+      if (res.data.register) {
+        form.username = res.data.username;
+        form.email = res.data.email;
+        preflight.value = true;
+      } else {
+        ElNotification.success({
+          title: t("login-succeeded"),
+          message: t("login-success-message", { username: res.data.username }),
+          showClose: false,
+        });
+
+        token.value = res.data.token;
+        axios.defaults.headers.common["Authorization"] = token.value;
+        refreshState({
+          callback: (value: number) => {
+            app.exec();
+            if (value === 2) router.push("/home");
+          },
+        });
+      }
+    })
+    .catch((err) => {
       ElMessage({
-        message: res.data.error,
+        message: t("network-error"),
         type: "error",
       });
-      setTimeout(() => router.push("/login"), 500);
-      return
-    }
+      console.debug(err);
+    });
+else
+  axios
+    .get("oauth/github/connect?code=" + code)
+    .then((res) => {
+      if (!res.data.status) {
+        ElMessage({
+          message: res.data.error,
+          type: "error",
+        });
+        setTimeout(() => router.push("/home"), 500);
+        return;
+      }
 
-    if (res.data.register) {
-      form.username = res.data.username;
-      form.email = res.data.email;
-      preflight.value = true;
-    } else {
       ElNotification.success({
-        title: t("login-succeeded"),
-        message: t("login-success-message", { username: res.data.username }),
+        title: t("bind-succeeded"),
+        message: t("bind-success-message"),
         showClose: false,
       });
 
-      token.value = res.data.token;
-      axios.defaults.headers.common["Authorization"] = token.value;
-      refreshState({
-        callback: (value: number) => {
-          app.exec();
-          if (value === 2) router.push("/home");
-        },
-      });
-    }
-  })
-  .catch((err) => {
-    ElMessage({
-      message: t("network-error"),
-      type: "error",
-    });
-    console.debug(err);
-  });
-else axios.get("oauth/github/connect?code=" + code)
-  .then((res) => {
-    if (!res.data.status) {
+      setTimeout(() => router.push("/home"), 500);
+    })
+    .catch((err) => {
       ElMessage({
-        message: res.data.error,
+        message: t("network-error"),
         type: "error",
       });
-      setTimeout(() => router.push("/home"), 500);
-      return
-    }
-
-    ElNotification.success({
-      title: t("bind-succeeded"),
-      message: t("bind-success-message"),
-      showClose: false,
+      console.debug(err);
     });
-
-    setTimeout(() => router.push("/home"), 500);
-  })
-  .catch((err) => {
-    ElMessage({
-      message: t("network-error"),
-      type: "error",
-    });
-    console.debug(err);
-  });
 
 async function register() {
   if (await validateForm(element.value)) {
-    axios.post("oauth/github/register", {
-      code: code,
-      username: form.username,
-      email: form.email,
-    })
+    axios
+      .post("oauth/github/register", {
+        code: code,
+        username: form.username,
+        email: form.email,
+      })
       .then((res) => {
         if (!res.data.status) {
           ElMessage({
             message: res.data.error,
             type: "error",
           });
-          return
+          return;
         }
 
         token.value = res.data.token;
@@ -179,8 +189,16 @@ async function register() {
       <el-main class="main">
         <h1>{{ t("sign-up-to-deeptrain") }}</h1>
         <el-card shadow="hover">
-          <div class="tips">{{ t('continue', { username: form.username }) }}</div><br>
-          <el-form :model="form" :rules="rules" ref="element" label-position="left">
+          <div class="tips">
+            {{ t("continue", { username: form.username }) }}
+          </div>
+          <br />
+          <el-form
+            :model="form"
+            :rules="rules"
+            ref="element"
+            label-position="left"
+          >
             <el-form-item :label="t('email-address')" prop="email">
               <el-input
                 v-model="form.email"
@@ -191,8 +209,8 @@ async function register() {
             </el-form-item>
             <div style="height: 6px" />
             <el-button class="validate-button" @click="register">{{
-                t("sign-up")
-              }}</el-button>
+              t("sign-up")
+            }}</el-button>
           </el-form>
         </el-card>
       </el-main>
@@ -252,7 +270,8 @@ async function register() {
   margin-bottom: 6px;
 }
 
-.banter-loader__box:nth-child(1):before, .banter-loader__box:nth-child(4):before {
+.banter-loader__box:nth-child(1):before,
+.banter-loader__box:nth-child(4):before {
   margin-left: 26px;
 }
 

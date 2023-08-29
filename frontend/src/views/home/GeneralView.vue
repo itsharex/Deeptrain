@@ -132,12 +132,7 @@ getWithCache("info").then((res) => {
   <ChangePasswordDialog v-model="dialog.change" />
   <ChangeEmailDialog v-model="dialog.email" />
   <div class="image">
-    <img
-      class="background"
-      src="/home/background.jpg"
-      alt=""
-      loading="lazy"
-    />
+    <img class="background" src="/home/background.jpg" alt="" loading="lazy" />
     <div class="avatar">
       <input
         type="file"
@@ -147,11 +142,7 @@ getWithCache("info").then((res) => {
         @change="avatar"
       />
       <label class="before" for="avatar"><edit /></label>
-      <img
-        :src="`${backend_url}avatar/${username}`"
-        alt=""
-        loading="lazy"
-      />
+      <img :src="`${backend_url}avatar/${username}`" alt="" loading="lazy" />
     </div>
   </div>
   <div class="info">
@@ -191,9 +182,7 @@ getWithCache("info").then((res) => {
       </div>
       <div class="item">
         <div class="label">
-          <date-icon
-            style="scale: 0.98; transform: translate(-2px, 6px)"
-          />
+          <date-icon style="scale: 0.98; transform: translate(-2px, 6px)" />
           {{ t("created_at") }}
         </div>
         <div class="grow" />
@@ -361,8 +350,8 @@ getWithCache("info").then((res) => {
   user-select: none;
   white-space: nowrap;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-  Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
-  Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
 }
 
 .info .id:before {

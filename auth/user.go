@@ -196,3 +196,39 @@ func (u *User) IsCert(db *sql.DB, ctx context.Context) bool {
 	cache.Set(ctx, fmt.Sprintf(":cert:%s", u.Username), "true", 5*time.Second)
 	return true
 }
+
+func (u *User) IsTeenager(db *sql.DB, ctx context.Context) bool {
+	if !u.IsCert(db, ctx) {
+		return false
+	}
+
+	cache := connection.Cache
+	teenager, err := cache.Get(ctx, fmt.Sprintf(":teenager:%s", u.Username)).Result()
+	if err == nil && len(teenager) > 0 {
+		return teenager == "true"
+	}
+
+	var birthDate string
+	err = db.QueryRow("SELECT birth_date FROM cert WHERE user_id = ?", u.GetID(db)).Scan(&birthDate)
+	if err != nil {
+		return false
+	}
+
+	birth, err := time.Parse("2006-01-02", birthDate)
+	if err != nil {
+		return false
+	}
+
+	now := time.Now()
+	age := now.Year() - birth.Year()
+	if now.Month() < birth.Month() || (now.Month() == birth.Month() && now.Day() < birth.Day()) {
+		age--
+	}
+
+	if age < 18 {
+		cache.Set(ctx, fmt.Sprintf(":teenager:%s", u.Username), "true", 5*time.Second)
+		return true
+	}
+	cache.Set(ctx, fmt.Sprintf(":teenager:%s", u.Username), "false", 5*time.Second)
+	return false
+}
