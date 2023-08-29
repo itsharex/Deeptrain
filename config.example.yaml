@@ -30,6 +30,7 @@ smtp:
 allauth:
     access: ...
     salt: ...
+    sign: ... # payment
 
 oauth:
     github:

@@ -121,6 +121,25 @@ func (u *User) GetID(db *sql.DB) int {
 	return id
 }
 
+func (u *User) GetBalance(db *sql.DB) (amount float32) {
+	err := db.QueryRow("SELECT amount FROM payment WHERE user_id = ?", u.GetID(db)).Scan(&amount)
+	if err != nil {
+		return 0.
+	}
+	return amount
+}
+
+func (u *User) Pay(db *sql.DB, prize float32) bool {
+	if u.GetBalance(db) < prize {
+		return false
+	}
+	_, err := db.Exec("UPDATE payment SET amount = amount - ? WHERE user_id = ?", prize, u.GetID(db))
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func (u *User) IsActive(db *sql.DB) bool {
 	var active bool
 	err := db.QueryRow("SELECT active FROM auth WHERE username = ?", u.Username).Scan(&active)
