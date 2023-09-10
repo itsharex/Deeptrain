@@ -184,7 +184,7 @@ func CreatePaymentView(c *gin.Context) {
 	if form.Type == "alipay" {
 		url, err = NewAlipayOrder(db, user, form.Amount, form.Mobile)
 	} else if form.Type == "wechat" {
-		url, err = NewWechatOrder(db, user, form.Amount， form.Mobile)
+		url, err = NewWechatOrder(db, user, form.Amount, form.Mobile)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
