@@ -75,19 +75,19 @@ func CreateWechatPay(subject string, id string, amount float32) (url string) {
 	return *resp.CodeUrl
 }
 
-func NewWechatOrder(db *sql.DB, user *auth.User, amount float32, isMobile bool) (string, error) {
+func NewWechatOrder(db *sql.DB, user *auth.User, amount float32, isMobile bool) (string, string, error) {
 	id, err := NewOrderExec("wechat", db, user, amount)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	uri := CreateWechatPay("DeepTrain", id, amount)
 	if uri == "" {
-		return "", fmt.Errorf("create wechat pay order failed")
+		return "", "", fmt.Errorf("create wechat pay order failed")
 	}
 
 	link := utils.GetQRCode(id, uri)
-	return link, nil
+	return link, id, nil
 }
 
 func VerifyWechatReturn(ctx *gin.Context) {
@@ -98,7 +98,22 @@ func VerifyWechatReturn(ctx *gin.Context) {
 		return
 	}
 
-	fmt.Println(notifyReq.Summary)
-	fmt.Println(transaction.TransactionId)
+	if *transaction.Appid != viper.GetString("pay.wechat.app_id") || *transaction.Mchid != viper.GetString("pay.wechat.merchant_id") {
+		fmt.Println("invalid appid or merchant id")
+		return
+	}
 
+	if notifyReq != nil {
+		if *transaction.TradeState == "SUCCESS" {
+			db := utils.GetDBFromContext(ctx)
+			amount := float32(*transaction.Amount.Total) / 100
+			err = FinishPayment(db, *transaction.OutTradeNo, fmt.Sprintf("%.2f", amount))
+			if err != nil {
+				fmt.Println(err.Error())
+				return
+			}
+		}
+	}
+
+	ctx.JSON(200, "success")
 }

@@ -2,16 +2,33 @@
 import { useI18n } from "vue-i18n";
 import { syncLangRef } from "@/assets/script/utils";
 import { backend_url } from "@/config";
+import axios from "axios";
+import router from "@/router";
 
 const { t, locale } = useI18n();
 syncLangRef(locale);
 
 const search = new URLSearchParams(location.search);
-const order = search.get("id") || "";
+const link = search.get("id") || "";
+const order = search.get("out_trade_no") || "";
 
 function goto_wechat() {
   location.href = "weixin://";
 }
+
+setInterval(() => {
+  axios
+    .get("pay/trade?id=" + order)
+    .then((res) => {
+      if (res.data.status) {
+        ElMessage({
+          type: "success",
+          message: t("pay_success"),
+        });
+        router.push("/home/wallet");
+      }
+    })
+}, 5000);
 </script>
 
 <template>
@@ -19,7 +36,7 @@ function goto_wechat() {
     <p>
       {{ t("wechat") }}
     </p>
-    <img :src="`${backend_url}qrcode/?id=${order}`" alt="qrcode" />
+    <img :src="`${backend_url}qrcode/?id=${link}`" alt="qrcode" />
     <el-button type="primary" @click="goto_wechat">
       {{ t("go") }}
     </el-button>
@@ -29,11 +46,13 @@ function goto_wechat() {
 {
   "zh": {
     "wechat": "请使用微信扫描下方二维码进行支付",
-    "go": "打开微信"
+    "go": "打开微信",
+    "pay_success": "支付成功！"
   },
   "en": {
     "wechat": "Please use WeChat to scan the QR code below to pay",
-    "go": "Open WeChat"
+    "go": "Open WeChat",
+    "pay_success": "Payment successful!"
   }
 }
 </i18n>

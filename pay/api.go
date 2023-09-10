@@ -178,13 +178,13 @@ func CreatePaymentView(c *gin.Context) {
 
 	db := utils.GetDBFromContext(c)
 
-	var url string
+	var url, order string
 	var err error
 
 	if form.Type == "alipay" {
-		url, err = NewAlipayOrder(db, user, form.Amount, form.Mobile)
+		url, order, err = NewAlipayOrder(db, user, form.Amount, form.Mobile)
 	} else if form.Type == "wechat" {
-		url, err = NewWechatOrder(db, user, form.Amount, form.Mobile)
+		url, order, err = NewWechatOrder(db, user, form.Amount, form.Mobile)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,
@@ -204,6 +204,7 @@ func CreatePaymentView(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": true,
 		"url":    url,
+		"order":  order,
 	})
 	return
 }

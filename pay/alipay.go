@@ -96,16 +96,16 @@ func VerifyAliPayReturn(c *gin.Context) {
 	c.JSON(200, "success")
 }
 
-func NewAlipayOrder(db *sql.DB, user *auth.User, amount float32, mobile bool) (string, error) {
+func NewAlipayOrder(db *sql.DB, user *auth.User, amount float32, mobile bool) (string, string, error) {
 	id, err := NewOrderExec("alipay", db, user, amount)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	uri := CreateAliPay("DeepTrain", id, amount, mobile)
 	if uri == "" {
-		return "", fmt.Errorf("create alipay order failed")
+		return "", "", fmt.Errorf("create alipay order failed")
 	}
 
-	return uri, nil
+	return uri, id, nil
 }

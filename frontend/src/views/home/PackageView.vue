@@ -4,6 +4,7 @@ import { useI18n } from "vue-i18n";
 import { syncLangRef } from "@/assets/script/utils";
 import { reactive } from "vue";
 import { getWithCache } from "@/assets/script/cache";
+import Chatnio from "@/components/icons/app/chatnio.vue";
 
 const { t, locale } = useI18n();
 syncLangRef(locale);
@@ -69,10 +70,9 @@ setInterval(refreshState, 1000 * 20);
       <div class="app">
         <div class="icon"><img src="/chatnio.png" alt="" /></div>
         <div class="content">
-          <div class="name">chatnio</div>
+          <a href="https://chatnio.net" target="_blank" class="name">chatnio</a>
           <div class="description">
-            <p>1 次 GPT-4 请求</p>
-            <p>20 次 DALL·E 画图次数</p>
+            <p>赠送 <chatnio /> 50</p>
           </div>
         </div>
       </div>
@@ -101,10 +101,9 @@ setInterval(refreshState, 1000 * 20);
       <div class="app">
         <div class="icon"><img src="/chatnio.png" alt="" /></div>
         <div class="content">
-          <div class="name">chatnio</div>
+          <a href="https://chatnio.net" target="_blank" class="name">chatnio</a>
           <div class="description">
-            <p>3 次 GPT-4 请求</p>
-            <p>100 次 DALL·E 画图次数</p>
+            <p>赠送 <chatnio /> 150</p>
           </div>
         </div>
       </div>
@@ -202,12 +201,28 @@ setInterval(refreshState, 1000 * 20);
   font-size: 20px;
   font-weight: bold;
   user-select: none;
+  background: none !important;
+  padding: 0 !important;
 }
 
 .app .content .description {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.app .content .description p {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  user-select: none;
+}
+
+.app .content .description p svg {
+  width: 18px;
+  height: 18px;
+  fill: #eee;
+  margin: 0 6px;
 }
 
 .description p {
@@ -218,7 +233,7 @@ setInterval(refreshState, 1000 * 20);
 .description p::before {
   content: "";
   display: inline-block;
-  top: 4px;
+  top: 1px;
   left: -2px;
   width: 3px;
   height: 18px;

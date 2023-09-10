@@ -38,7 +38,7 @@ function pay(amount: number) {
         return;
       }
       if (form.type === "alipay") location.href = data.url;
-      if (form.type === "wechat") router.push("/pay/wechat/order?id=" + data.url);
+      if (form.type === "wechat") router.push(`/pay/wechat/order?id=${data.url}&out_trade_no=${data.order}`);
     })
     .catch((err) => {
       ElMessage({

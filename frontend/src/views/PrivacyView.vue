@@ -202,7 +202,7 @@
       <a href="https://www.geetest.com/Private" target="_blank">隐私政策</a>
     </h4>
     <h4>
-      OpenAI (<a href="https://nio.fystart.cn" target="_blank">chatnio</a>)
+      OpenAI (<a href="https://chatnio.net" target="_blank">chatnio</a>)
       <a href="https://openai.com/privacy/" target="_blank">隐私政策</a>
     </h4>
     <h4>
@@ -233,7 +233,7 @@
       >
     </h4>
     <h4>
-      OpenAI (<a href="https://nio.fystart.cn" target="_blank">chatnio</a>)
+      OpenAI (<a href="https://chatnio.net" target="_blank">chatnio</a>)
       <a href="https://openai.com/privacy/" target="_blank">Privacy Policy</a>
     </h4>
     <h4>

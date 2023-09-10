@@ -8,6 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     BoxLoader: typeof import('./src/components/BoxLoader.vue')['default']
+    Chatnio: typeof import('./src/components/icons/app/chatnio.vue')['default']
     Check: typeof import('./src/components/icons/home/check.vue')['default']
     Date: typeof import('./src/components/icons/home/date.vue')['default']
     Edit: typeof import('./src/components/icons/home/edit.vue')['default']

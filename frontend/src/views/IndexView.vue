@@ -75,7 +75,7 @@ function toggleI18n() {
               <p>{{ t("lightnotes") }}</p>
             </div>
           </a>
-          <a class="app" href="https://nio.fystart.cn">
+          <a class="app" href="https://chatnio.net">
             <img src="/chatnio.png" alt="" />
             <div class="desc">
               <h1>Chat Nio</h1>
