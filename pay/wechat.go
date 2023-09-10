@@ -86,10 +86,6 @@ func NewWechatOrder(db *sql.DB, user *auth.User, amount float32, isMobile bool) 
 		return "", fmt.Errorf("create wechat pay order failed")
 	}
 
-	if isMobile {
-		return uri, nil
-	}
-
 	link := utils.GetQRCode(id, uri)
 	return link, nil
 }
@@ -97,12 +93,11 @@ func NewWechatOrder(db *sql.DB, user *auth.User, amount float32, isMobile bool) 
 func VerifyWechatReturn(ctx *gin.Context) {
 	transaction := new(payments.Transaction)
 	notifyReq, err := wechatHandler.ParseNotifyRequest(context.Background(), ctx.Request, transaction)
-	// 如果验签未通过，或者解密失败
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	// 处理通知内容
+
 	fmt.Println(notifyReq.Summary)
 	fmt.Println(transaction.TransactionId)
 
