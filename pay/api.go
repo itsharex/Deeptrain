@@ -3,8 +3,10 @@ package pay
 import (
 	"deeptrain/auth"
 	"deeptrain/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -175,25 +177,155 @@ func CreatePaymentView(c *gin.Context) {
 	}
 
 	db := utils.GetDBFromContext(c)
+
+	var url string
+	var err error
+
 	if form.Type == "alipay" {
-		url, err := NewAlipayOrder(db, user, form.Amount, form.Mobile)
+		url, err = NewAlipayOrder(db, user, form.Amount, form.Mobile)
+	} else if form.Type == "wechat" {
+		url, err = NewWechatOrder(db, user, form.Amount)
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  "invalid payment type",
+		})
+		return
+	}
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": true,
+		"url":    url,
+	})
+	return
+}
+
+func GetPaymentLogView(c *gin.Context) {
+	user := RequireAuthByCtx(c)
+	if user == nil {
+		return
+	}
+
+	page := utils.ParseInt(c.Query("page"), 1) - 1
+
+	var total int
+	db := utils.GetDBFromContext(c)
+	err := db.QueryRow(`SELECT COUNT(*) FROM payment_log WHERE user_id = ?`, user.GetID(db)).Scan(&total)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	totalPage := total / pageSize
+	if total%pageSize != 0 {
+		totalPage++
+	}
+
+	if page >= totalPage {
+		page = totalPage - 1
+	} else if page < 0 {
+		page = 0
+	}
+
+	logs := make([]gin.H, 0)
+	rows, err := db.Query(`
+		SELECT order_id, amount, payment_type, payment_status, created_at
+		FROM payment_log
+		WHERE user_id = ?
+		ORDER BY created_at DESC
+		LIMIT ?, 
+	`+strconv.Itoa(pageSize), user.GetID(db), page*pageSize)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  err.Error(),
+		})
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			orderId       string
+			amount        float32
+			paymentType   string
+			paymentStatus bool
+			createdAt     []uint8
+		)
+		err := rows.Scan(&orderId, &amount, &paymentType, &paymentStatus, &createdAt)
 		if err != nil {
-			c.JSON(http.StatusOK, gin.H{
+			c.JSON(200, gin.H{
 				"status": false,
 				"error":  err.Error(),
 			})
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{
-			"status": true,
-			"url":    url,
+		logs = append(logs, gin.H{
+			"order":  orderId,
+			"amount": amount,
+			"type":   paymentType,
+			"state":  paymentStatus,
+			"time":   utils.ConvertTime(createdAt).Format("2006-01-02 15:04:05"),
+		})
+	}
+
+	c.JSON(200, gin.H{
+		"status": true,
+		"data":   logs,
+		"total":  totalPage,
+	})
+}
+
+func GetTradeStatusView(c *gin.Context) {
+	db := utils.GetDBFromContext(c)
+	var id string
+	err := db.QueryRow(`SELECT order_id FROM payment_log WHERE order_id = ? AND payment_status = TRUE`, c.Query("id")).Scan(&id)
+	if err != nil {
+		c.JSON(200, gin.H{
+			"status": false,
+			"error":  err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status": false,
-		"error":  "invalid payment type",
+	c.JSON(200, gin.H{
+		"status": true,
+		"error":  "",
+	})
+}
+
+func GetAmountView(c *gin.Context) {
+	user := RequireAuthByCtx(c)
+	if user == nil {
+		return
+	}
+
+	db := utils.GetDBFromContext(c)
+	var amount float32
+	err := db.QueryRow(`SELECT amount FROM payment WHERE user_id = ?`, user.GetID(db)).Scan(&amount)
+	if err != nil {
+		fmt.Println(err.Error())
+		c.JSON(200, gin.H{
+			"status": true,
+			"amount": 0.,
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"status": true,
+		"amount": amount,
 	})
 }

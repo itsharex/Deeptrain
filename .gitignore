@@ -2,6 +2,9 @@
 .idea
 config.yaml
 
+secret/*
+!secret/.gitkeep
+
 # Build
 deeptrain
 deeptrain.exe

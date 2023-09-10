@@ -2,12 +2,13 @@ import type { Ref } from "vue";
 import { watch, ref } from "vue";
 import axios from "axios";
 import type { ComposerTranslation } from "vue-i18n";
+import { token_field } from "@/config";
 
-export const token: Ref<string> = ref(localStorage.getItem("token") || "");
+export const token: Ref<string> = ref(localStorage.getItem(token_field) || "");
 axios.defaults.headers.common["Authorization"] = token.value;
 watch(token, () => {
   const _token = token.value;
-  localStorage.setItem("token", _token);
+  localStorage.setItem(token_field, _token);
   axios.defaults.headers.common["Authorization"] = _token;
 });
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import { ref, watch } from "vue";
 
 export const deploy: boolean = true;
+export const token_field = deploy ? "token" : "token_dev";
 export const language = ref(localStorage.getItem("language") || "zh");
 export let backend_url: string = "http://localhost:8080/";
 export let callback_url: string = "http://localhost:5173/";

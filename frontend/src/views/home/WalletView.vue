@@ -6,6 +6,8 @@ import Money from "@/components/icons/home/money.vue";
 import { reactive, ref } from "vue";
 import { mobile } from "@/assets/script/global";
 import { getWithCache } from "@/assets/script/cache";
+import { backend_url } from "@/config";
+import router from "@/router";
 
 const { t, locale } = useI18n();
 syncLangRef(locale);
@@ -35,7 +37,10 @@ function pay(amount: number) {
         });
         return;
       }
-      location.href = data.url;
+      if (form.type === "alipay") location.href = data.url;
+      if (form.type === "wechat") {
+        mobile.value ? location.href = data.url : router.push("/pay/wechat/order?id=" + data.url);
+      }
     })
     .catch((err) => {
       ElMessage({
@@ -111,7 +116,7 @@ setInterval(refreshAmount, 1000 * 6);
       <div class="pay">
         <el-radio-group v-model="form.type" style="gap: 8px">
           <el-radio label="alipay" border>{{ t("alipay") }}</el-radio>
-          <el-radio label="wechat" border disabled>{{ t("wechat") }}</el-radio>
+          <el-radio label="wechat" border>{{ t("wechat") }}</el-radio>
           <el-radio label="qq" border disabled>{{ t("paypal") }}</el-radio>
         </el-radio-group>
         <div class="custom">

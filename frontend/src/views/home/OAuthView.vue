@@ -159,7 +159,7 @@ setInterval(refreshState, 1000 * 10);
         </el-descriptions-item>
       </el-descriptions>
       <div class="qrcode" v-if="state.state === 1">
-        <img :src="`${backend_url}cert/qrcode?id=${state.link}`" alt="二维码" />
+        <img :src="`${backend_url}qrcode?id=${state.link}`" alt="二维码" />
       </div>
       <div class="privacy" v-if="state.state === 1">
         请使用「<strong>支付宝</strong>」扫描二维码进行实名认证

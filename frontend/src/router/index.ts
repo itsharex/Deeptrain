@@ -135,6 +135,14 @@ const router = createRouter({
       },
     },
     {
+      path: "/pay/wechat/order",
+      name: "pay_wechat_order",
+      component: () => import("../views/pay/WechatPaymentView.vue"),
+      meta: {
+        title: "Wechat Order | Deeptrain",
+      },
+    },
+    {
       path: "/pay/alipay/return",
       name: "pay_alipay_return",
       component: () => import("../views/pay/AlipayCallbackView.vue"),
