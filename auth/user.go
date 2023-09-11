@@ -4,8 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"deeptrain/connection"
+	"deeptrain/utils"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"time"
 )
@@ -53,6 +55,30 @@ func GetUserFromEmail(db *sql.DB, email string) *User {
 		&user.Username, &user.Password, &user.Email, &user.Active, &user.IsAdmin,
 	)
 	if err != nil {
+		return nil
+	}
+	return user
+}
+
+func GetUserFormEmailOrUsername(db *sql.DB, key string) *User {
+	user := &User{}
+	err := db.QueryRow("SELECT username, password, email, active, is_admin FROM auth WHERE email = ? OR username = ?", key, key).Scan(
+		&user.Username, &user.Password, &user.Email, &user.Active, &user.IsAdmin,
+	)
+	if err != nil {
+		return nil
+	}
+	return user
+}
+
+func LoginByEmailOrUsername(c *gin.Context, db *sql.DB, key string, password string) *User {
+	user := GetUserFormEmailOrUsername(db, key)
+	if user == nil {
+		return nil
+	}
+
+	user.Password = utils.Sha2Encrypt(password)
+	if !user.Validate(db, c) {
 		return nil
 	}
 	return user

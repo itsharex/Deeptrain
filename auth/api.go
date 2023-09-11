@@ -36,8 +36,9 @@ type RegisterForm struct {
 }
 
 type ResetForm struct {
-	Email   string         `form:"email" binding:"required"`
-	Captcha GeeTestRequest `form:"captcha" binding:"required"`
+	Email string `form:"email" binding:"required"`
+	Key   string `form:"key" binding:"required"`
+	Code  string `form:"code" binding:"required"`
 }
 
 type VerifyForm struct {
@@ -68,7 +69,7 @@ func LoginView(c *gin.Context) {
 	}
 	username, password := strings.TrimSpace(form.Username), strings.TrimSpace(form.Password)
 	if !utils.All(
-		ValidateUsername(username),
+		len(username) > 0,
 		ValidatePassword(password),
 		GeeTestCaptcha(form.Captcha),
 	) {
@@ -77,12 +78,9 @@ func LoginView(c *gin.Context) {
 	}
 
 	db := utils.GetDBFromContext(c)
-	user := User{
-		Username: username,
-		Password: utils.Sha2Encrypt(password),
-	}
+	user := LoginByEmailOrUsername(c, db, username, password)
 
-	if !user.Validate(db, c) {
+	if user == nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Username or password is incorrect."})
 		return
 	}
@@ -120,7 +118,7 @@ func EmailLoginView(c *gin.Context) {
 	code := utils.GenerateCode(6)
 	key := utils.GenerateChar(128)
 	go SendVerifyMail(email, code)
-	cache.Set(context.Background(), fmt.Sprintf(":mailogin:%s:%s", key, email), code, 5*time.Minute)
+	cache.Set(context.Background(), fmt.Sprintf(":mailotp:%s:%s", key, email), code, 5*time.Minute)
 	cache.Set(context.Background(), fmt.Sprintf(":mailrate:%s", email), "1", 1*time.Minute)
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "key": key})
@@ -137,13 +135,13 @@ func EmailLoginVerifyView(c *gin.Context) {
 
 	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
 
-	if code != cache.Get(c, fmt.Sprintf(":mailogin:%s:%s", key, email)).Val() {
+	if code != cache.Get(c, fmt.Sprintf(":mailotp:%s:%s", key, email)).Val() {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your verification code is incorrect. Please check again."})
 		return
 	}
 
 	user := GetUserFromEmail(db, email)
-	cache.Del(c, fmt.Sprintf(":mailogin:%s:%s", key, email))
+	cache.Del(c, fmt.Sprintf(":mailotp:%s:%s", key, email))
 
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken(), "username": user.Username})
 }
@@ -202,35 +200,41 @@ func ResetView(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
 	}
-	email := strings.TrimSpace(form.Email)
+	email, key, code := strings.TrimSpace(form.Email), strings.TrimSpace(form.Key), strings.TrimSpace(form.Code)
+
 	if !utils.All(
+		key != "",
+		code != "",
 		ValidateEmail(email),
-		GeeTestCaptcha(form.Captcha),
 	) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "We cannot verify your identity. Please check again to verify you are human."})
 		return
 	}
+
+	if code != cache.Get(c, fmt.Sprintf(":mailotp:%s:%s", key, email)).Val() {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your verification code is incorrect. Please check again."})
+		return
+	}
+
+	cache.Del(c, fmt.Sprintf(":mailotp:%s:%s", key, email))
 
 	if !IsEmailExists(db, email) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email does not exist. Please try another email."})
 		return
 	}
 
-	code := utils.GenerateChar(12)
-	password := utils.Sha2Encrypt(code)
-	cache.Set(context.Background(), fmt.Sprintf(":reset:%s", email), code, 30*time.Minute)
-	cache.Set(context.Background(), fmt.Sprintf(":mailrate:%s", email), "1", 1*time.Minute)
+	char := utils.GenerateChar(12)
+	password := utils.Sha2Encrypt(char)
 
-	utils.GetDBFromContext(c).Query("UPDATE auth SET password = ? WHERE email = ?", password, email)
-
-	var username string
-	err := db.QueryRow("SELECT username FROM auth WHERE email = ?", email).Scan(&username)
+	user := GetUserFromEmail(db, email)
+	_, err := db.Query("UPDATE auth SET password = ? WHERE email = ?", password, email)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Server error. Please try again later or contact admin."})
 		return
 	}
-	cache.Set(c, fmt.Sprintf(":validate:%s", username), password, 30*time.Minute)
-	go SendResetMail(email, code)
+
+	cache.Set(c, fmt.Sprintf(":validate:%s", user.Username), password, 30*time.Minute)
+	go SendResetMail(email, char)
 
 	c.JSON(http.StatusOK, gin.H{"status": true})
 }

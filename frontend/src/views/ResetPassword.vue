@@ -17,11 +17,12 @@ locale.value = language.value;
 const element = ref<FormInstance>();
 const loading = ref<boolean>(false);
 const captcha = ref<Geetest.Geetest | null>(null);
+const exp = ref<string>("");
+const stamp = ref<number>(0);
+const key = ref<string>("");
 const form = reactive({
-  username: "",
   email: "",
-  password: "",
-  repassword: "",
+  code: "",
   captcha: {},
 });
 const rules = reactive<FormRules>({
@@ -34,15 +35,22 @@ const rules = reactive<FormRules>({
     },
     { validator: validateEmail(t), trigger: "change" },
   ],
+  code: [
+    { required: true, message: t("rule-code"), trigger: "blur" },
+    { min: 6, max: 6, message: t("rule-code-format"), trigger: "change" },
+  ],
   captcha: [{ required: true, message: "", trigger: "blur" }],
 });
 
 async function submit() {
   if (await validateForm(element.value)) {
-    form.captcha = await getValidateUtilSuccess(captcha.value);
     loading.value = true;
     try {
-      const resp = await axios.post("reset", form),
+      const resp = await axios.post("reset", {
+          email: form.email,
+          code: form.code,
+          key: key.value,
+        }),
         data = resp.data;
       if (!data.status)
         ElNotification.error({
@@ -70,6 +78,39 @@ async function submit() {
     loading.value = false;
   }
 }
+
+async function post() {
+  form.captcha = await getValidateUtilSuccess(captcha.value);
+  try {
+    const resp = await axios.post("mail/send", form),
+      data = resp.data;
+    if (!data.status)
+      ElNotification.error({
+        title: t("reset-failed"),
+        message: data.reason,
+        showClose: false,
+      });
+    else {
+      key.value = data.key;
+      stamp.value = Date.now() / 1000;
+      captcha.value?.destroy();
+    }
+  } catch (e) {
+    ElNotification.warning({
+      title: t("error-occurred"),
+      message: t("network-error"),
+      showClose: false,
+    });
+  }
+}
+
+setInterval(() => {
+  if (stamp.value + 60 > Date.now() / 1000) {
+    exp.value = `(${Math.floor(stamp.value + 60 - Date.now() / 1000)}s)`;
+  } else {
+    exp.value = "";
+  }
+}, 500);
 </script>
 
 <i18n>
@@ -77,8 +118,10 @@ async function submit() {
   "en": {
     "rule-email": "Please input email",
     "reset-failed": "Reset failed",
+    "rule-code": "Please input code",
+    "rule-code-format": "Code should be 6 digits",
     "reset-succeeded": "Reset succeeded",
-    "reset-success-message": "Your password has been reset. Please check your email for further instructions.",
+    "reset-success-message": "Your password has been reset. Please check your email for the new password.",
     "error-occurred": "Error occurred",
     "network-error": "There was an error while reset. Please check your network and try again.",
     "reset": "Reset",
@@ -88,13 +131,17 @@ async function submit() {
     "create-one": "Create one",
     "user.email-format-error": "The format of the email is incorrect",
     "user.email-format-unsupported": "Please use a supported email suffix",
-    "en-dot": "."
+    "en-dot": ".",
+    "send": "Send",
+    "code": "Code"
   },
   "zh": {
     "rule-email": "请输入电子邮箱",
+    "rule-code": "请输入验证码",
+    "rule-code-format": "验证码应为 6 位数字",
     "reset-failed": "重置失败",
     "reset-succeeded": "重置成功",
-    "reset-success-message": "您的密码已重置，请查看您的电子邮箱进行进一步验证。",
+    "reset-success-message": "您的密码已重置，请查看您的电子邮箱中查看新密码。",
     "error-occurred": "发生错误",
     "network-error": "重置时发生错误，请检查您的网络并重试。",
     "reset": "重置",
@@ -104,7 +151,9 @@ async function submit() {
     "create-one": "创建一个",
     "user.email-format-error": "邮箱格式不正确",
     "user.email-format-unsupported": "邮箱后缀不支持，请使用支持的邮箱后缀",
-    "en-dot": ""
+    "en-dot": "",
+    "send": "发送",
+    "code": "验证码"
   }
 }
 </i18n>
@@ -127,6 +176,12 @@ async function submit() {
         >
           <el-form-item :label="t('email-address')" prop="email">
             <el-input v-model="form.email" type="email" />
+          </el-form-item>
+          <el-form-item class="inline" :label="t('code')" prop="code">
+            <el-input v-model="form.code" :minlength="6" :maxlength="6" />
+            <el-button @click="post" :disabled="exp.length > 0">
+              {{ t("send") }} {{ exp }}
+            </el-button>
           </el-form-item>
           <el-form-item prop="captcha">
             <gee-test id="reset-captcha" v-model="captcha" />
