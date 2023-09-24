@@ -3,8 +3,6 @@ import type { FormInstance, FormRules } from "element-plus";
 import { RouterLink } from "vue-router";
 import { reactive, ref } from "vue";
 import axios from "axios";
-import Github from "@/components/icons/github.vue";
-import OLink from "@/components/oauth/olink.vue";
 import { validateForm } from "@/assets/script/utils";
 import { token } from "@/assets/script/user";
 import { refreshState } from "@/assets/script/global";
@@ -13,8 +11,8 @@ import { app } from "@/assets/script/allauth";
 import GeeTest from "@/components/captcha/GeeTest.vue";
 import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 import { useI18n } from "vue-i18n";
-import { language, oauth } from "@/config";
-import Google from "@/components/icons/google.vue";
+import { language } from "@/config";
+import OAuthComponent from "@/components/OAuthComponent.vue";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
@@ -196,10 +194,7 @@ app.set();
           }}</el-button>
         </el-form>
         <el-divider />
-        <div class="oauth">
-          <o-link :uri="oauth.github_url"><github /></o-link>
-          <o-link :uri="oauth.google_url"><google /></o-link>
-        </div>
+        <OAuthComponent />
         <div class="prompt-box">
           <RouterLink to="/mail">{{ t("mail-login") }}</RouterLink>
         </div>

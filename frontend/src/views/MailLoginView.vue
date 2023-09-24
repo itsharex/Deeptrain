@@ -15,6 +15,7 @@ import { getValidateUtilSuccess } from "@/assets/script/captcha/geetest";
 import { useI18n } from "vue-i18n";
 import { language, oauth } from "@/config";
 import Google from "@/components/icons/google.vue";
+import OAuthComponent from "@/components/OAuthComponent.vue";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
@@ -242,10 +243,7 @@ setInterval(() => {
           }}</el-button>
         </el-form>
         <el-divider />
-        <div class="oauth">
-          <o-link :uri="oauth.github_url"><github /></o-link>
-          <o-link :uri="oauth.google_url"><google /></o-link>
-        </div>
+        <OAuthComponent />
         <div class="prompt-box">
           <RouterLink to="/login">{{ t("password-login") }}</RouterLink>
         </div>

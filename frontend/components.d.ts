@@ -46,6 +46,7 @@ declare module '@vue/runtime-core' {
     Money: typeof import('./src/components/icons/home/money.vue')['default']
     Name: typeof import('./src/components/icons/home/name.vue')['default']
     Oauth: typeof import('./src/components/icons/home/oauth.vue')['default']
+    OAuthComponent: typeof import('./src/components/OAuthComponent.vue')['default']
     Olink: typeof import('./src/components/oauth/olink.vue')['default']
     ReCaptcha: typeof import('./src/components/captcha/ReCaptcha.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
