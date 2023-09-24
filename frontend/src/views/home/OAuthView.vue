@@ -273,6 +273,7 @@ setInterval(refreshState, 1000 * 10);
 .oauth {
   display: flex;
   flex-direction: column;
+  gap: 6px;
   width: 100%;
   margin: 0 6px;
   transform: translateX(-18px);
@@ -296,6 +297,11 @@ setInterval(refreshState, 1000 * 10);
   fill: #fff;
   color: #fff;
   padding: 4px;
+}
+
+.logo svg {
+  width: 100%;
+  height: 100%;
 }
 
 .name {
