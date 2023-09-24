@@ -3,12 +3,20 @@ import { ref, watch } from "vue";
 
 export const deploy: boolean = true;
 export const token_field = deploy ? "token" : "token_dev";
-export const language = ref(localStorage.getItem("language") || "zh");
+
+export const supportLanguages = ["zh", "en"];
+export const language = ref(getLanguage());
 export let backend_url: string = "http://localhost:8080/";
 export let callback_url: string = "http://localhost:5173/";
 if (deploy) {
   backend_url = "https://api.deeptrain.net/";
   callback_url = "https://deeptrain.lightxi.com/";
+}
+
+function getLanguage() {
+  const lang: string = localStorage.getItem("language") || navigator.language.slice(0, 2) || "zh";
+  if (supportLanguages.includes(lang)) return lang;
+  return "zh";
 }
 
 watch(language, () => localStorage.setItem("language", language.value));
