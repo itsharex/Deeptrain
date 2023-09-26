@@ -183,6 +183,18 @@ func (u *User) Activate(db *sql.DB) bool {
 	return true
 }
 
+func (u *User) Use(db *sql.DB) bool {
+	var created []uint8
+	err := db.QueryRow("SELECT email, active, is_admin, created_at, id FROM auth WHERE username = ?", u.Username).Scan(
+		&u.Email, &u.Active, &u.IsAdmin, created, &u.ID,
+	)
+	u.CreateAt = utils.ConvertTime(created).Format("2006-01-02T15:04:05Z")
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func (u *User) GetField(db *sql.DB, field string) (data string, err error) {
 	err = db.QueryRow("SELECT "+field+" FROM auth WHERE username = ?", u.Username).Scan(&data)
 	return data, err

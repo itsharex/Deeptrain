@@ -29,6 +29,7 @@ func ConnectMySQL() *sql.DB {
 	// initialize model
 	initializeUserModel(DB)
 	initializeOAuthModel(DB)
+	Initialize2FAModel(DB)
 	initializeCertModel(DB)
 	initializePackageModel(DB)
 	initializePaymentModel(DB)
@@ -47,6 +48,22 @@ func initializeUserModel(DB *sql.DB) {
 		    active BOOLEAN NOT NULL DEFAULT FALSE,
 		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		    is_admin BOOLEAN NOT NULL DEFAULT FALSE
+		)
+	`)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func Initialize2FAModel(DB *sql.DB) {
+	_, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS factor (
+		    id INT AUTO_INCREMENT PRIMARY KEY,
+		    user_id INT NOT NULL UNIQUE,
+		    secret VARCHAR(100) NOT NULL,
+		    enable BOOLEAN NOT NULL DEFAULT FALSE,
+		    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		    FOREIGN KEY (user_id) REFERENCES auth(id)
 		)
 	`)
 	if err != nil {

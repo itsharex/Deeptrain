@@ -240,19 +240,18 @@ func ResetView(c *gin.Context) {
 }
 
 func VerifyView(c *gin.Context) {
+	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
 	var form VerifyForm
 	if err := c.ShouldBind(&form); err != nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again."})
 		return
 	}
 
-	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
-	username := c.MustGet("user")
-	if username == "" {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
 		return
 	}
-	instance := &User{Username: username.(string)}
+
 	code := cache.Get(c, fmt.Sprintf(":verify:%s", instance.Username))
 	if form.Code != code.Val() {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your verification code is incorrect. Please check again."})
@@ -270,13 +269,10 @@ func VerifyView(c *gin.Context) {
 
 func ResendView(c *gin.Context) {
 	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
-	username := c.MustGet("user")
-	if username == "" {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
 		return
 	}
-
-	instance := &User{Username: username.(string)}
 	if instance.IsActive(db) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is already activated."})
 		return
@@ -303,13 +299,14 @@ func ResendView(c *gin.Context) {
 }
 
 func StateView(c *gin.Context) {
-	username := c.MustGet("user")
-	if username == "" {
+	var username string
+	if username = IsLogin(c); username == "" {
 		c.JSON(http.StatusOK, gin.H{"status": 0, "username": username})
 		return
 	}
-	instance := &User{Username: username.(string)}
-	if instance.IsActive(utils.GetDBFromContext(c)) {
+
+	var instance *User
+	if instance = IsActive(c); instance != nil {
 		c.JSON(http.StatusOK, gin.H{"status": 2, "username": username})
 		return
 	}
@@ -317,33 +314,22 @@ func StateView(c *gin.Context) {
 }
 
 func InfoView(c *gin.Context) {
-	username := c.MustGet("user")
-	if username == "" {
-		c.JSON(http.StatusOK, gin.H{"status": false})
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
 		return
 	}
-	instance := &User{Username: username.(string)}
-	if !instance.IsActive(utils.GetDBFromContext(c)) {
-		c.JSON(http.StatusOK, gin.H{"status": false})
+	if !instance.Use(utils.GetDBFromContext(c)) {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "internal server error"})
 		return
 	}
 
-	var id int64
-	var email string
-	var isAdmin bool
-	var createdAt []uint8
-	err := utils.GetDBFromContext(c).QueryRow("SELECT id, email, is_admin, created_at FROM auth WHERE username = ?", instance.Username).Scan(&id, &email, &isAdmin, &createdAt)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"status": false, "error": err.Error()})
-		return
-	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":     true,
 		"username":   instance.Username,
-		"id":         id,
-		"email":      email,
-		"is_admin":   isAdmin,
-		"created_at": utils.ConvertTime(createdAt),
+		"id":         instance.ID,
+		"email":      instance.Email,
+		"is_admin":   instance.IsAdmin,
+		"created_at": instance.CreateAt,
 	})
 }
 
@@ -368,9 +354,8 @@ func UserView(c *gin.Context) {
 }
 
 func ChangePasswordView(c *gin.Context) {
-	username := c.MustGet("user")
-	if username == "" {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+	var instance *User
+	if instance = RequireAuth(c); instance == nil {
 		return
 	}
 
@@ -390,7 +375,7 @@ func ChangePasswordView(c *gin.Context) {
 	}
 
 	db := utils.GetDBFromContext(c)
-	instance := &User{Username: username.(string), Password: utils.Sha2Encrypt(oldPassword)}
+	instance.Password = utils.Sha2Encrypt(oldPassword)
 	if !instance.Validate(db, c) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Old password is incorrect."})
 		return
@@ -414,9 +399,8 @@ func ChangePasswordView(c *gin.Context) {
 }
 
 func ChangeEmailView(c *gin.Context) {
-	username := c.MustGet("user")
-	if username == "" {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
 		return
 	}
 
@@ -435,11 +419,6 @@ func ChangeEmailView(c *gin.Context) {
 	}
 
 	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
-	instance := &User{Username: username.(string)}
-	if !instance.IsActive(db) {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not activated."})
-		return
-	}
 
 	if IsEmailExists(db, email) {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Email already exists. Please try another email."})
@@ -490,15 +469,8 @@ func ChangeEmailVerifyView(c *gin.Context) {
 	}
 
 	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
-	username := c.MustGet("user")
-	if username == "" {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not logged in."})
-		return
-	}
-
-	instance := &User{Username: username.(string)}
-	if !instance.IsActive(db) {
-		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "User is not activated."})
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
 		return
 	}
 
@@ -533,6 +505,56 @@ func ChangeEmailVerifyView(c *gin.Context) {
 	cache.Del(c, fmt.Sprintf(":changeemail!mail:%s", instance.Username))
 	cache.Del(c, fmt.Sprintf(":changeemail!new:%s:%s", instance.Username, newEmail))
 	cache.Del(c, fmt.Sprintf(":changeemail!old:%s:%s", instance.Username, oldEmail))
+
+	c.JSON(http.StatusOK, gin.H{"status": true})
+}
+
+func Enable2FAView(c *gin.Context) {
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
+		return
+	}
+
+	url, err := instance.Generate2FA(utils.GetDBFromContext(c))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "url": url})
+}
+
+func Activate2FAView(c *gin.Context) {
+	var secret string
+	if secret = RequireQuery(c, "secret"); secret == "" {
+		return
+	}
+
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
+		return
+	}
+
+	err := instance.Activate2FA(utils.GetDBFromContext(c), secret)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": true})
+}
+
+func Disable2FAView(c *gin.Context) {
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
+		return
+	}
+
+	err := instance.Disable2FA(utils.GetDBFromContext(c))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"status": true})
 }
