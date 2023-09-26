@@ -61,6 +61,11 @@ type ChangeEmailVerifyForm struct {
 	New string `form:"new" binding:"required"`
 }
 
+type Verify2FAForm struct {
+	Key  string `form:"key" binding:"required"`
+	Code string `form:"code" binding:"required"`
+}
+
 func LoginView(c *gin.Context) {
 	var form LoginForm
 	if err := c.ShouldBind(&form); err != nil {
@@ -83,8 +88,15 @@ func LoginView(c *gin.Context) {
 	if user == nil {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Username or password is incorrect."})
 		return
+	} else if user.Is2FAEnabled(db) {
+		cache := utils.GetCacheFromContext(c)
+		key := utils.GenerateChar(128)
+		cache.Set(context.Background(), fmt.Sprintf(":2faotp:%s", key), user.Username, 5*time.Minute)
+		c.JSON(http.StatusOK, gin.H{"status": true, "2fa": true, "key": key})
+		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": true, "token": user.GenerateToken()})
+
+	c.JSON(http.StatusOK, gin.H{"status": true, "2fa": false, "token": user.GenerateToken()})
 }
 
 func EmailLoginView(c *gin.Context) {
@@ -542,6 +554,34 @@ func Activate2FAView(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": true})
+}
+
+func Verify2FAView(c *gin.Context) {
+	var form Verify2FAForm
+	if err := c.ShouldBind(&form); err != nil {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Form is not valid. Please check again.", "message": err.Error()})
+		return
+	}
+
+	cache := utils.GetCacheFromContext(c)
+	username := cache.Get(c, fmt.Sprintf(":2faotp:%s", form.Key)).Val()
+	if username == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"status": false, "reason": "Your key is expired or invalid. Please try again with new key in 5 minutes."})
+		return
+	}
+
+	instance := User{
+		Username: username,
+	}
+
+	res := instance.Verify2FA(utils.GetDBFromContext(c), form.Code)
+	if !res {
+		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your code is incorrect. Please check again."})
+		return
+	}
+
+	cache.Del(c, fmt.Sprintf(":2faotp:%s", form.Key))
+	c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken()})
 }
 
 func Disable2FAView(c *gin.Context) {
