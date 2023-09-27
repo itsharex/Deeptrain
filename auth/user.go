@@ -185,8 +185,8 @@ func (u *User) Activate(db *sql.DB) bool {
 
 func (u *User) Use(db *sql.DB) bool {
 	var created []uint8
-	if err := db.QueryRow("SELECT email, active, is_admin, created_at, id FROM auth WHERE username = ?", u.Username).Scan(
-		&u.Email, &u.Active, &u.IsAdmin, &created, &u.ID,
+	if err := db.QueryRow("SELECT email, active, is_admin, created_at, id, password FROM auth WHERE username = ?", u.Username).Scan(
+		&u.Email, &u.Active, &u.IsAdmin, &created, &u.ID, &u.Password,
 	); err != nil {
 		return false
 	}
