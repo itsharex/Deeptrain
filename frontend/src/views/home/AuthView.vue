@@ -21,7 +21,7 @@ const dialog = ref<boolean>(false);
 
 async function tfaChanged(value: boolean) {
   if (value) {
-    const resp = await getWithCache("2fa/enable", 60), data = resp.data;
+    const resp = await getWithCache("2fa/enable", 10), data = resp.data;
     if (data.status) {
       state.fa_qrcode = data.url;
     } else {
@@ -30,7 +30,16 @@ async function tfaChanged(value: boolean) {
         message: data.reason,
       });
     }
-  }
+  } else {
+    const resp = await getWithCache("2fa/disable", 10), data = resp.data;
+    if (!data.status) {
+      ElMessage({
+        type: "error",
+        message: data.reason,
+      });
+    } else {
+      state.tfa = false;
+    }
 }
 
 async function tfaActivate() {
