@@ -574,13 +574,15 @@ func Verify2FAView(c *gin.Context) {
 		Username: username,
 	}
 
-	res := instance.Verify2FA(utils.GetDBFromContext(c), form.Code)
+	db := utils.GetDBFromContext(c)
+	res := instance.Verify2FA(db, form.Code)
 	if !res {
 		c.JSON(http.StatusOK, gin.H{"status": false, "reason": "Your code is incorrect. Please check again."})
 		return
 	}
 
 	cache.Del(c, fmt.Sprintf(":2faotp:%s", form.Key))
+	instance.Use(db)
 	c.JSON(http.StatusOK, gin.H{"status": true, "token": instance.GenerateToken()})
 }
 

@@ -61,7 +61,6 @@ async function factorVerify() {
           message: t("login-success-message", { username: form.username }),
           showClose: false,
         });
-        captcha.value?.destroy();
         refreshState({
           callback: (value: number) => {
             app.exec();
