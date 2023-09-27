@@ -40,6 +40,7 @@ async function tfaChanged(value: boolean) {
     } else {
       state.tfa = false;
     }
+  }
 }
 
 async function tfaActivate() {
