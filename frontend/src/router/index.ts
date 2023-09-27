@@ -96,6 +96,12 @@ const router = createRouter({
           meta: { title: "Home | Deeptrain" },
         },
         {
+          path: "auth",
+          name: "home_auth",
+          component: () => import("../views/home/AuthView.vue"),
+          meta: { title: "Auth | Deeptrain" },
+        },
+        {
           path: "oauth",
           name: "home_oauth",
           component: () => import("../views/home/OAuthView.vue"),

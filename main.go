@@ -49,6 +49,7 @@ func main() {
 		app.POST("/2fa/verify", auth.Verify2FAView)
 		app.GET("/2fa/enable", auth.Enable2FAView)
 		app.GET("/2fa/disable", auth.Disable2FAView)
+		app.GET("/2fa/state", auth.State2FAView)
 		app.GET("/2fa/activate", auth.Activate2FAView)
 		app.POST("/settings/password", auth.ChangePasswordView)
 		app.POST("/settings/email", auth.ChangeEmailView)

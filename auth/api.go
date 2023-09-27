@@ -598,3 +598,15 @@ func Disable2FAView(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": true})
 }
+
+func State2FAView(c *gin.Context) {
+	var instance *User
+	if instance = RequireActive(c); instance == nil {
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  true,
+		"enabled": instance.Is2FAEnabled(utils.GetDBFromContext(c)),
+	})
+}

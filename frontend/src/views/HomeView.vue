@@ -9,6 +9,7 @@ import Oauth from "@/components/icons/home/oauth.vue";
 import World from "@/components/icons/world.vue";
 import Gift from "@/components/icons/home/gift.vue";
 import Wallet from "@/components/icons/home/wallet.vue";
+import Passcode from "@/components/icons/home/passcode.vue";
 
 const { t, locale } = useI18n();
 locale.value = language.value;
@@ -44,6 +45,7 @@ function toggleI18n() {
       <el-container class="section">
         <div class="router">
           <Tab to="/home"><general /></Tab>
+          <Tab to="/home/auth"><passcode /></Tab>
           <Tab to="/home/oauth"><oauth /></Tab>
           <Tab to="/home/wallet"><wallet /></Tab>
           <Tab to="/home/package"><gift /></Tab>
@@ -86,6 +88,7 @@ function toggleI18n() {
 }
 
 .view {
+  height: max-content;
   flex-grow: 1;
 }
 

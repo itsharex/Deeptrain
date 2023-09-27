@@ -40,6 +40,7 @@ var limits = map[string]Limiter{
 	"/2fa/enable":   {Duration: 60, Count: 5},
 	"/2fa/disable":  {Duration: 60, Count: 5},
 	"/2fa/activate": {Duration: 60, Count: 10},
+	"/2fa/state":    {Duration: 1, Count: 2},
 	"/settings":     {Duration: 600, Count: 12},
 	"/user":         {Duration: 1, Count: 2},
 	"/oauth":        {Duration: 10, Count: 25},

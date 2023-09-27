@@ -26,6 +26,12 @@ const form = reactive({
   captcha: {},
 });
 
+const dialog = ref<boolean>(false);
+const factor = reactive({
+  key: "",
+  code: "",
+})
+
 const rules = reactive<FormRules>({
   username: [
     { required: true, message: t("rule-username"), trigger: "blur" },
@@ -37,6 +43,42 @@ const rules = reactive<FormRules>({
   ],
   captcha: [{ required: true, message: "", trigger: "blur" }],
 });
+
+async function factorVerify() {
+    try {
+      const resp = await axios.post("2fa/verify", factor),
+        data = resp.data;
+      if (!data.status)
+        ElNotification.error({
+          title: t("login-failed"),
+          message: data.reason,
+          showClose: false,
+        });
+      else {
+        token.value = data.token;
+        ElNotification.success({
+          title: t("login-succeeded"),
+          message: t("login-success-message", { username: form.username }),
+          showClose: false,
+        });
+        captcha.value?.destroy();
+        refreshState({
+          callback: (value: number) => {
+            app.exec();
+            if (value === 2) router.push("/home");
+          },
+        });
+      }
+    } catch (e) {
+      ElNotification.warning({
+        title: t("error-occurred"),
+        message: t("network-error"),
+        showClose: false,
+      });
+    } finally {
+      dialog.value = false;
+    }
+}
 
 async function submit() {
   if (await validateForm(element.value)) {
@@ -52,6 +94,12 @@ async function submit() {
           showClose: false,
         });
       else {
+        if (data["2fa"] === true) {
+          factor.key = data.key;
+          dialog.value = true;
+          return;
+        }
+
         token.value = data.token;
         ElNotification.success({
           title: t("login-succeeded"),
@@ -114,7 +162,11 @@ app.set();
     "login-succeeded": "Login succeeded",
     "login-success-message": "Welcome back {username}!",
     "mail-login": "Mail login",
-    "en-dot": "."
+    "en-dot": ".",
+    "2fa-title": "Two-factor authentication",
+    "2fa-description": "Please enter the code from your authenticator app",
+    "2fa-code": "Code",
+    "2fa-submit": "Submit"
   },
   "zh": {
     "rule-username": "请输入用户名",
@@ -148,12 +200,39 @@ app.set();
     "login-succeeded": "登录成功",
     "login-success-message": "欢迎回来，{username}！",
     "mail-login": "邮箱验证码登录",
-    "en-dot": ""
+    "en-dot": "",
+    "2fa-title": "2FA 验证",
+    "2fa-description": "请输入您的 2FA 验证器中的验证码",
+    "2fa-code": "验证码",
+    "2fa-submit": "提交"
   }
 }
 </i18n>
 
 <template>
+  <el-dialog v-model="dialog" :title="t('2fa-title')">
+    <el-form :model="factor">
+      <el-form-item :label="t('2fa-code')">
+        <el-input
+          class="tfa-input"
+          v-model="factor.code"
+          maxlength="6"
+          minlength="6"
+          :parser="(value: string) => value.replace(/[^0-9]/g, '')"
+          :formatter="(value: string) => value.replace(/[^0-9]/g, '')"
+          :placeholder="t('2fa-code')"
+        />
+      </el-form-item>
+      <span class="tfa">{{ t('2fa-description') }}</span>
+    </el-form>
+    <template #footer>
+      <span>
+        <el-button type="primary" @click="factorVerify" :disabled="factor.code.length !== 6">
+          {{ t("2fa-submit") }}
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
   <el-container>
     <el-header>
       <RouterLink to="/" class="header">
@@ -217,4 +296,16 @@ app.set();
 
 <style scoped>
 @import "@/assets/style/user.css";
+
+.tfa {
+  display: flex;
+  user-select: none;
+  justify-content: center;
+  text-align: center;
+  margin: 12px auto;
+}
+
+.tfa-input {
+  margin: 0 6px;
+}
 </style>

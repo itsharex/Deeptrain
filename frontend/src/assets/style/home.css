@@ -1,3 +1,32 @@
+.flex-form .el-form-item__label {
+    flex-grow: 1 !important;
+    flex-shrink: 0 !important;
+}
+
+.flex-form .el-form-item__content {
+    flex: none !important;
+    flex-shrink: 0 !important;
+}
+
+.action {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 8px;
+}
+
+.action span {
+    font-size: 14px !important;
+    font-weight: normal !important;
+}
+
+.action button {
+    padding: 16px 24px !important;
+}
+
 .form .title {
     margin-bottom: 16px;
 }
