@@ -260,7 +260,7 @@ func VerifyView(c *gin.Context) {
 	}
 
 	var instance *User
-	if instance = RequireActive(c); instance == nil {
+	if instance = RequireAuth(c); instance == nil {
 		return
 	}
 
@@ -282,7 +282,7 @@ func VerifyView(c *gin.Context) {
 func ResendView(c *gin.Context) {
 	db, cache := utils.GetDBFromContext(c), utils.GetCacheFromContext(c)
 	var instance *User
-	if instance = RequireActive(c); instance == nil {
+	if instance = RequireAuth(c); instance == nil {
 		return
 	}
 	if instance.IsActive(db) {
