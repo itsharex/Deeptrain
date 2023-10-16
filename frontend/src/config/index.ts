@@ -10,7 +10,7 @@ export let backend_url: string = "http://localhost:8080/";
 export let callback_url: string = "http://localhost:5173/";
 if (deploy) {
   backend_url = "https://api.deeptrain.net/";
-  callback_url = "https://deeptrain.lightxi.com/";
+  callback_url = "https://deeptrain.net/";
 }
 
 function getLanguage() {
