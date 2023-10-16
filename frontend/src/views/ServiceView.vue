@@ -245,14 +245,14 @@
     <br />
     请您遵守
     <a
-      href="https://github.com/zmh-program/Deeptrain/blob/main/LICENSE"
+      href="https://github.com/Deeptrain-Community/Deeptrain/blob/main/LICENSE"
       target="_blank"
       >GPL-3.0</a
     >
     协议，不得以任何方式侵犯深能科创团队或相关权利人的知识产权，不得以任何违反本条款的方式使用和分发深能科创的软件。<br /><br />
     Please abide by the
     <a
-      href="https://github.com/zmh-program/Deeptrain/blob/main/LICENSE"
+      href="https://github.com/Deeptrain-Community/Deeptrain/blob/main/LICENSE"
       target="_blank"
       >GPL-3.0</a
     >

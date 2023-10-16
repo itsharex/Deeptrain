@@ -36,7 +36,7 @@ function toggleI18n() {
     <div class="container">
       <div class="landing">
         <img
-          src="https://cdn.zmh-program.site/deeptrain/background.jpg"
+          src="/background.jpg"
           alt=""
           class="background"
           loading="lazy"
@@ -61,7 +61,7 @@ function toggleI18n() {
               <p>{{ t("lightxi-cloud") }}</p>
             </div>
           </a>
-          <a class="app" href="https://fystart.cn">
+          <a class="app" href="https://fystart.com">
             <img src="/fystart.webp" alt="" />
             <div class="desc">
               <h1>Fystart</h1>
@@ -143,7 +143,14 @@ function toggleI18n() {
             src="https://lightxi.com/themes/web/mfQloud/assets/images/gov.webp"
             alt=""
           />
-          粤ICP备2023066011号-1
+          粤ICP备2023066011号-3
+        </a>
+        <a href="https://dxzhgl.miit.gov.cn/dxxzsp/xkz/xkzgl/resource/qiyesearch.jsp?num=B1-20234898&type=xuke" target="_blank">
+          <img
+            src="https://lightxi.com/themes/web/mfQloud/assets/images/cert.webp"
+            alt=""
+          />
+          增值电信业务经营许可证 B1-20234898
         </a>
       </div>
     </footer>
@@ -336,6 +343,13 @@ section {
   border-radius: 50%;
   background: #1e1e20;
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.gov {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
 }
 
 .gov img {
