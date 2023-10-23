@@ -4,6 +4,9 @@ import { watch } from "vue";
 
 export namespace app {
   const apps: Record<string, string> = {
+    dev: "http://localhost:5173",
+
+    // production apps
     fystart: "https://fystart.com",
     chatnio: "https://chatnio.net",
     fymonitor: "https://fymonitor.deeptrain.net",
