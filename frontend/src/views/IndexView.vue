@@ -106,7 +106,7 @@ function toggleI18n() {
                 </a>
               </div>
             </a>
-            <a class="app" href="https://shinezz.cc">
+            <a class="app" href="https://akihitomi.com">
               <img src="https://zmh-program.site/friend/sh1n3zz.webp" alt="" />
               <div class="desc">
                 <h1>Sh1n3zZ</h1>
