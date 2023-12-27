@@ -9,7 +9,6 @@ import (
 var allowedOrigins = []string{
 	"https://deeptrain.net",
 	"https://www.deeptrain.net",
-	"https://deeptrain.lightxi.com",
 	"https://deeptrain.vercel.app",
 	"http://localhost",
 	"http://localhost:5173",
