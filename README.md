@@ -1,8 +1,8 @@
 <div align="center">
 
 # <a href="https://deeptrain.net"><img height='44px' width='44px' src='favicon.ico' style="transform: translateY(10px)"></img></a> <a href="https://deeptrain.net"><span>Deeptrain<span></a>
-###  🔥 An Open Source Deep Reinforcement Learning training platform
-###  🔥 一个开源深度强化学习训练平台
+###  🔥 An Open Source Deep Reinforcement Learning training platform X Unified Account Management System
+###  🔥 一个开源深度强化学习训练平台 X 
 </div>
 
 ---
@@ -186,9 +186,7 @@
   - django 3.2 -> 4.1
 
 ### ⚡ version `3.x.x`
-- Zh-Website -> Deeptrain
-- Vue3 + Django REST
-- MAIL
+- Golang + Vue
 
 
 ## License
